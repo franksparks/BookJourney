@@ -9,6 +9,52 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  username       String
+  hashedPassword String
+  email          String
+  profilePicture String?
+  createdAt      DateTime @default(now())
+  reviews        Review[]
+  lists          List[]
+}
+
+model Book {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  author        String
+  pages         Int?
+  publisher     String?
+  publishYear   Int?
+  language      String?
+  cover         String?
+  ratingAverage Int?
+  reviews       Review[]
+  lists         List?    @relation(fields: [listId], references: [id])
+  listId        String?  @db.ObjectId
+}
+
+model Review {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  bookId    String   @db.ObjectId
+  book      Book     @relation(fields: [bookId], references: [id])
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model List {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  createdAt DateTime @default(now())
+  books     Book[]
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
 }
