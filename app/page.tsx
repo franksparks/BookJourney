@@ -1,7 +1,9 @@
-import Image from "next/image";
+import SearchBox from "@/components/SearchBox";
 
 export default function Home() {
   return (
-  <div>HOLI</div>
+    <main>
+      <SearchBox></SearchBox>
+    </main>
   );
 }
