@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Input } from './ui/input';
 import { actionSearchBooks, Book } from '@/actions/search-books';
 
@@ -10,20 +10,25 @@ type SearchBoxProps = {
 
 export default function SearchBox({ onSearch }: SearchBoxProps) {
     const [query, setQuery] = useState('');
-    const handleKeyDown = (event: { key: string; }) => {
+    const handleKeyDown = useCallback((event: { key: string; }) => {
         if (event.key === 'Enter') {
             actionSearchBooks(query).then(books => {
                 onSearch(books);
             })
         }
-    };
+    }, [query, onSearch]);
+
+    const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+        setQuery(event.target.value);
+    }, []);
+
     return (
         <Input
             className="mt-2.5 ml-2.5 w-96"
             type="search"
             placeholder="Search..."
             value={query}
-            onChange={(input) => setQuery(input.target.value)}
+            onChange={handleChange}
             onKeyDown={handleKeyDown}
         />
     )
