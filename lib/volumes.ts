@@ -17,6 +17,6 @@ export type VolumesResponse = {
 }
 
 export const searchVolumes = async (search: string) => {
-    const books = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${search}`);
+    const books = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${search}&maxResults=40`);
     return await books.json() as VolumesResponse;
 }
