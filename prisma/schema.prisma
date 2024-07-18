@@ -26,17 +26,30 @@ model User {
 
 model Book {
   id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  isbn          String
+  googleBooksId String  // for sync process
   title         String
   author        String
+  description   String?
+  categories    String[]
   pages         Int?
   publisher     String?
   publishYear   Int?
   language      String?
   cover         String?
   ratingAverage Int?
+  authorIDs     String[]  @db.ObjectId
+  authors       Author[]  @relation(fields: [authorIDs], references: [id])
   reviews       Review[]
-  lists         List?    @relation(fields: [listId], references: [id])
-  listId        String?  @db.ObjectId
+  lists         List[]    @relation(fields: [listIDs], references: [id])
+  listIDs       String[]  @db.ObjectId
+}
+
+model Author {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  bookIDs   String[]  @db.ObjectId
+  books     Book[]  @relation(fields: [bookIDs], references: [id])
 }
 
 model Review {
@@ -54,7 +67,8 @@ model List {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   createdAt DateTime @default(now())
-  books     Book[]
+  bookIDs   String[]  @db.ObjectId
+  books     Book[]  @relation(fields: [bookIDs], references: [id])
   userId    String   @db.ObjectId
   user      User     @relation(fields: [userId], references: [id])
 }
