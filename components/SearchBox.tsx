@@ -6,10 +6,12 @@ import { actionSearchBooks, Book } from '@/actions/search-books';
 
 type SearchBoxProps = {
     onSearch: (books: Book[]) => void
+    query: string,
+    setQuery: (query: string) => void
 }
 
-export default function SearchBox({ onSearch }: SearchBoxProps) {
-    const [query, setQuery] = useState('');
+export default function SearchBox({ onSearch, query, setQuery }: SearchBoxProps) {
+
     const handleKeyDown = useCallback((event: { key: string; }) => {
         if (event.key === 'Enter') {
             actionSearchBooks(query).then(books => {
