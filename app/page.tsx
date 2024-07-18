@@ -4,6 +4,7 @@ import { actionSearchBooks, Book } from "@/actions/search-books";
 import SearchBox from "@/components/SearchBox";
 import SearchResults from "@/components/SearchResults";
 import { useCallback, useState } from "react";
+import SearchPagination from '../components/SearchPagination';
 
 export default function Home() {
   const [results, setResults] = useState<Book[]>([]);
@@ -11,16 +12,17 @@ export default function Home() {
 
   const handleSearch = useCallback((event: { key: string; }) => {
     if (event.key === 'Enter') {
-        actionSearchBooks(query).then(books => {
-          setResults(books);
-        })
+      actionSearchBooks(query).then(books => {
+        setResults(books);
+      })
     }
-}, [query]);
+  }, [query]);
 
   return (
     <main>
       <SearchBox onSearch={handleSearch} query={query} setQuery={setQuery} />
       <SearchResults results={results} />
+      <>{results.length !== 0 && <SearchPagination />}</>
     </main>
   );
 }

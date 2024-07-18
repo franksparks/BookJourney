@@ -1,8 +1,7 @@
 "use client";
 
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { Input } from './ui/input';
-import { actionSearchBooks, Book } from '@/actions/search-books';
 
 type SearchBoxProps = {
     onSearch: (event: { key: string }) => void
