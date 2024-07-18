@@ -5,20 +5,12 @@ import { Input } from './ui/input';
 import { actionSearchBooks, Book } from '@/actions/search-books';
 
 type SearchBoxProps = {
-    onSearch: (books: Book[]) => void
+    onSearch: (event: { key: string }) => void
     query: string,
     setQuery: (query: string) => void
 }
 
 export default function SearchBox({ onSearch, query, setQuery }: SearchBoxProps) {
-
-    const handleKeyDown = useCallback((event: { key: string; }) => {
-        if (event.key === 'Enter') {
-            actionSearchBooks(query).then(books => {
-                onSearch(books);
-            })
-        }
-    }, [query, onSearch]);
 
     const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         setQuery(event.target.value);
@@ -31,7 +23,7 @@ export default function SearchBox({ onSearch, query, setQuery }: SearchBoxProps)
             placeholder="Search..."
             value={query}
             onChange={handleChange}
-            onKeyDown={handleKeyDown}
+            onKeyDown={onSearch}
         />
     )
 }
