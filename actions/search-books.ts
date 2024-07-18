@@ -7,8 +7,8 @@ export interface Book {
     authors: string[];
   }
 
-export async function actionSearchBooks(query: string){
-  const result = await searchVolumes(query);
+export async function actionSearchBooks(query: string, index: number){
+  const result = await searchVolumes(query, index);
 
   const books: Book[] = result.items.map((item) => {
     return {

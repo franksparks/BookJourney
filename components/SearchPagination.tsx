@@ -1,11 +1,17 @@
 import Pagination from "@mui/material/Pagination";
 import { useState } from "react";
 
-export default function SearchPagination() {
-    const [page, setPage] = useState(1);
+type SearchPaginationProps = {
+    setPage: (page: number) => void,
+    page: number,
+}
+
+export default function SearchPagination({setPage, page}: SearchPaginationProps) {
+
     const handleChange = (_event: React.ChangeEvent<unknown>, value: number) => {
-      setPage(value);
+        setPage(value);
     };
+
     return (
         <Pagination count={10} page={page} onChange={handleChange} />
     )

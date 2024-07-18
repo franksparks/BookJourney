@@ -3,26 +3,46 @@
 import { actionSearchBooks, Book } from "@/actions/search-books";
 import SearchBox from "@/components/SearchBox";
 import SearchResults from "@/components/SearchResults";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import SearchPagination from '../components/SearchPagination';
 
 export default function Home() {
   const [results, setResults] = useState<Book[]>([]);
   const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
 
-  const handleSearch = useCallback((event: { key: string; }) => {
+  const handleSearch = useCallback(() => {
+    const index = (page - 1)*10;
+
+    if(!query) return
+    actionSearchBooks(query, index).then(books => {
+      setResults(books);
+    });
+  }, [query, page]);
+
+  const handleKeyDown = useCallback((event: { key: string; }) => {
     if (event.key === 'Enter') {
-      actionSearchBooks(query).then(books => {
-        setResults(books);
-      })
+      handleSearch();
+    } else if (event.key === 'Backspace') {
+      setResults([]);
     }
-  }, [query]);
+    handlePageChange(1);
+  }, [handleSearch]);
+
+  const handlePageChange = useCallback((newPage: number) => {
+    console.log('NewPage', newPage)
+    setPage(newPage);
+  }, [handleSearch]);
+
+  useEffect (() => {
+    handleSearch();
+  }, [page])
 
   return (
     <main>
-      <SearchBox onSearch={handleSearch} query={query} setQuery={setQuery} />
-      <SearchResults results={results} />
-      <>{results.length !== 0 && <SearchPagination />}</>
+      <SearchBox onSearch={handleKeyDown} query={query} setQuery={setQuery} />
+      <>{query && <SearchResults results={results} />}</>
+      <>{results.length !== 0 && query && <SearchPagination setPage={handlePageChange} page={page} />}</>
     </main>
   );
 }
