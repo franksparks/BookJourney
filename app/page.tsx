@@ -30,7 +30,6 @@ export default function Home() {
   }, [handleSearch]);
 
   const handlePageChange = useCallback((newPage: number) => {
-    console.log('NewPage', newPage)
     setPage(newPage);
   }, [handleSearch]);
 

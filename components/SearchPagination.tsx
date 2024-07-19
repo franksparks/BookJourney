@@ -13,6 +13,6 @@ export default function SearchPagination({setPage, page}: SearchPaginationProps)
     };
 
     return (
-        <Pagination count={10} page={page} onChange={handleChange} />
+        <Pagination className="flex justify-center" count={10} page={page} onChange={handleChange} />
     )
 }
