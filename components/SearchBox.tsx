@@ -15,13 +15,16 @@ export default function SearchBox({ onSearch, query, setQuery }: SearchBoxProps)
     }, []);
 
     return (
-        <Input
-            className="mt-2.5 ml-2.5 w-96"
+        <div className="flex"><Input
+            className="mt-2.5 ml-2.5 mr-2.5 w-96"
             type="search"
             placeholder="Search..."
             value={query}
             onChange={handleChange}
-            onKeyDown={onSearch}
-        />
+            onKeyDown={onSearch} />
+            <a href="https://books.google.com/">
+                <img className="mt-5" src={"https://books.google.com/googlebooks/images/poweredby.png"} />
+            </a>
+        </div>
     )
 }
