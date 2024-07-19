@@ -6,8 +6,7 @@ type SearchPaginationProps = {
     page: number,
 }
 
-export default function SearchPagination({setPage, page}: SearchPaginationProps) {
-
+export default function SearchPagination({ setPage, page }: SearchPaginationProps) {
     const handleChange = (_event: React.ChangeEvent<unknown>, value: number) => {
         setPage(value);
     };

@@ -12,8 +12,8 @@ export default function Home() {
   const [page, setPage] = useState(1);
 
   const handleSearch = useCallback(() => {
-    const index = (page - 1)*10;
-    if(!query) return
+    const index = (page - 1) * 10;
+    if (!query) return
     actionSearchBooks(query, index).then(books => {
       setResults(books);
     });
@@ -32,7 +32,7 @@ export default function Home() {
     setPage(newPage);
   }, [handleSearch]);
 
-  useEffect (() => {
+  useEffect(() => {
     handleSearch();
   }, [page])
 

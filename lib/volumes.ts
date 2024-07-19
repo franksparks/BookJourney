@@ -1,28 +1,24 @@
 type Item = {
-    kind: string,
-    id: string,
-    etag: string,
-    selfLink: string,
-    volumeInfo: VolumeInfo
-}
+  volumeInfo: VolumeInfo;
+};
 
 type ImageLinks = {
-    smallThumbnail: string,
-    thumbnail: string
-}
+  smallThumbnail: string;
+};
 
 type VolumeInfo = {
-    title: string,
-    authors: string[],
-    categories: string[],
-    imageLinks: ImageLinks
-}
+  title: string;
+  authors: string[];
+  imageLinks: ImageLinks;
+};
 
 export type VolumesResponse = {
-    items: [Item]
-}
+  items: [Item];
+};
 
 export const searchVolumes = async (search: string, index: number) => {
-    const books = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${search}&startIndex=${index.toString()}`);
-    return await books.json() as VolumesResponse;
-}
+  const books = await fetch(
+    `https://www.googleapis.com/books/v1/volumes?q=${search}&startIndex=${index.toString()}`
+  );
+  return (await books.json()) as VolumesResponse;
+};

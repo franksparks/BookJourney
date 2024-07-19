@@ -7,14 +7,13 @@ type SearchResultProps = {
 }
 
 export default function SearchResult({ results }: SearchResultProps) {
-
     return (
         <Table className="mt-5">
             <TableBody>
                 {results.map((result, index) => (
 
                     <TableRow key={index}>
-                        <>{result.smallThumbnail && <TableCell><img src={result.smallThumbnail}/></TableCell>}
+                        <>{result.smallThumbnail && <TableCell><img src={result.smallThumbnail} /></TableCell>}
                         </>
                         <TableCell>{capitalizeFirstLetter(result.title)}</TableCell>
                         <TableCell>
