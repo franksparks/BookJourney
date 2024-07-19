@@ -14,6 +14,8 @@ export default function SearchResult({ results }: SearchResultProps) {
                 {results.map((result, index) => (
 
                     <TableRow key={index}>
+                        <>{result.smallThumbnail && <TableCell><img src={result.smallThumbnail}/></TableCell>}
+                        </>
                         <TableCell>{capitalizeFirstLetter(result.title)}</TableCell>
                         <TableCell>
                             {result.authors && (

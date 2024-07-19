@@ -13,7 +13,6 @@ export default function Home() {
 
   const handleSearch = useCallback(() => {
     const index = (page - 1)*10;
-
     if(!query) return
     actionSearchBooks(query, index).then(books => {
       setResults(books);

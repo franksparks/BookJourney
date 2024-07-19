@@ -6,10 +6,16 @@ type Item = {
     volumeInfo: VolumeInfo
 }
 
+type ImageLinks = {
+    smallThumbnail: string,
+    thumbnail: string
+}
+
 type VolumeInfo = {
     title: string,
     authors: string[],
     categories: string[],
+    imageLinks: ImageLinks
 }
 
 export type VolumesResponse = {
