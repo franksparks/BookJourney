@@ -10,12 +10,16 @@ export default function Home() {
   const [results, setResults] = useState<Book[]>([]);
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
 
   const handleSearch = useCallback(() => {
     const index = (page - 1) * 10;
     if (!query) return
-    actionSearchBooks(query, index).then(books => {
-      setResults(books);
+    actionSearchBooks(query, index).then(result => {
+      setResults(result.books);
+      if (totalItems === 0) {
+        setTotalItems(result.totalItems);
+      }
     });
   }, [query, page]);
 
@@ -24,6 +28,7 @@ export default function Home() {
       handleSearch();
     } else if (event.key === 'Backspace') {
       setResults([]);
+      setTotalItems(0);
     }
     handlePageChange(1);
   }, [handleSearch]);
@@ -40,7 +45,7 @@ export default function Home() {
     <main>
       <SearchBox onSearch={handleKeyDown} query={query} setQuery={setQuery} />
       <>{query && <SearchResults results={results} />}</>
-      <>{results.length !== 0 && query && <SearchPagination setPage={handlePageChange} page={page} />}</>
+      <>{results.length !== 0 && query && <SearchPagination setPage={handlePageChange} page={page} totalItems={totalItems} />}</>
     </main>
   );
 }

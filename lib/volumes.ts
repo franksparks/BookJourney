@@ -14,6 +14,7 @@ type VolumeInfo = {
 
 export type VolumesResponse = {
   items: [Item];
+  totalItems: number
 };
 
 export const searchVolumes = async (search: string, index: number) => {

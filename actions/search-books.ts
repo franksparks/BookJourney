@@ -10,7 +10,7 @@ export interface Book {
 
 export async function actionSearchBooks(query: string, index: number) {
   const result = await searchVolumes(query, index);
-
+  const totalItems = result.totalItems;
   const books: Book[] = result.items.map(item => {
     return {
       title: item.volumeInfo.title,
@@ -18,5 +18,5 @@ export async function actionSearchBooks(query: string, index: number) {
       smallThumbnail: item.volumeInfo.imageLinks?.smallThumbnail
     };
   });
-  return books;
+  return { books, totalItems };
 }
