@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -38,18 +32,15 @@ model Book {
   language      String?
   cover         String?
   ratingAverage Int?
-  authorIDs     String[]  @db.ObjectId
-  authors       Author[]  @relation(fields: [authorIDs], references: [id])
+  authors       BookAuthor[]
   reviews       Review[]
-  lists         List[]    @relation(fields: [listIDs], references: [id])
-  listIDs       String[]  @db.ObjectId
+  lists         ListBook[]
 }
 
 model Author {
-  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
-  bookIDs   String[]  @db.ObjectId
-  books     Book[]  @relation(fields: [bookIDs], references: [id])
+  books     BookAuthor[]
 }
 
 model Review {
@@ -67,8 +58,25 @@ model List {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   createdAt DateTime @default(now())
-  bookIDs   String[]  @db.ObjectId
-  books     Book[]  @relation(fields: [bookIDs], references: [id])
+  books     ListBook[]
   userId    String   @db.ObjectId
   user      User     @relation(fields: [userId], references: [id])
+}
+
+model BookAuthor {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  bookId    String   @db.ObjectId
+  authorId  String   @db.ObjectId
+
+  book      Book     @relation(fields: [bookId], references: [id])
+  author    Author   @relation(fields: [authorId], references: [id])
+}
+
+model ListBook {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  listId    String   @db.ObjectId
+  bookId    String   @db.ObjectId
+
+  list      List     @relation(fields: [listId], references: [id])
+  book      Book     @relation(fields: [bookId], references: [id])
 }
