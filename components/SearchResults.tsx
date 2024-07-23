@@ -6,6 +6,7 @@ type SearchResultProps = {
     results: (Book[]);
 }
 
+// Todo: Change the img for the next.js Image component
 export default function SearchResult({ results }: SearchResultProps) {
     return (
         <Table className="mt-5">

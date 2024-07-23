@@ -9,6 +9,7 @@ type SearchBoxProps = {
     setQuery: (query: string) => void
 }
 
+// Todo: Change the img for the next.js Image component
 export default function SearchBox({ onSearch, query, setQuery }: SearchBoxProps) {
     const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         setQuery(event.target.value);
