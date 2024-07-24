@@ -17,9 +17,9 @@ export type VolumesResponse = {
   totalItems: number
 };
 
-export const searchVolumes = async (search: string, index: number) => {
+export const searchVolumes = async (search: string, index: number, maxResults: number) => {
   const books = await fetch(
-    `https://www.googleapis.com/books/v1/volumes?q=${search}&startIndex=${index.toString()}`
+    `https://www.googleapis.com/books/v1/volumes?q=${search}&maxResults=${maxResults}&startIndex=${index.toString()}`
   );
   return (await books.json()) as VolumesResponse;
 };

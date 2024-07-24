@@ -8,8 +8,8 @@ export interface Book {
   smallThumbnail?: string;
 }
 
-export async function actionSearchBooks(query: string, index: number) {
-  const result = await searchVolumes(query, index);
+export async function actionSearchBooks(query: string, index: number, maxResults: number) {
+  const result = await searchVolumes(query, index, maxResults);
   const totalItems = result.totalItems;
   const books: Book[] = result.items.map(item => {
     return {

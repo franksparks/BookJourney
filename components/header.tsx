@@ -9,6 +9,7 @@ import {
 import { Loader } from "lucide-react";
 import Image from "next/image";
 import { Button } from "./ui/button";
+import PreviewSearchBox from "./PreviewSearchBox";
 
 export const Header = () => {
   return (
@@ -24,6 +25,7 @@ export const Header = () => {
           <Loader className="h-6 w-6 text-white animate-spin" />
         </ClerkLoading>
         <ClerkLoaded>
+        <PreviewSearchBox/>
           <SignedIn>
             <UserButton></UserButton>
           </SignedIn>
