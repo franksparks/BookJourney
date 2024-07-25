@@ -8,22 +8,19 @@ datasource db {
 }
 
 model User {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  username       String
-  hashedPassword String
-  email          String
-  profilePicture String?
-  createdAt      DateTime @default(now())
-  reviews        Review[]
-  lists          List[]
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId   String
+  email     String? // F:To confirm
+  createdAt DateTime @default(now())
+  reviews   Review[]
+  lists     List[]
 }
 
 model Book {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  isbn          String
-  googleBooksId String  // for sync process
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  isbn          String?
+  googleBooksId String? // M:for sync process
   title         String
-  author        String
   description   String?
   categories    String[]
   pages         Int?
@@ -32,20 +29,13 @@ model Book {
   language      String?
   cover         String?
   ratingAverage Int?
-  authors       BookAuthor[]
   reviews       Review[]
-  lists         ListBook[]
-}
-
-model Author {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  books     BookAuthor[]
+  lists         BookList[]
 }
 
 model Review {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  rating    Int
+  rating    Int?
   comment   String?
   createdAt DateTime @default(now())
   bookId    String   @db.ObjectId
@@ -55,28 +45,18 @@ model Review {
 }
 
 model List {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
   name      String
-  createdAt DateTime @default(now())
-  books     ListBook[]
-  userId    String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime   @default(now())
+  books     BookList[]
+  userId    String     @db.ObjectId
+  user      User       @relation(fields: [userId], references: [id])
 }
 
-model BookAuthor {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  bookId    String   @db.ObjectId
-  authorId  String   @db.ObjectId
-
-  book      Book     @relation(fields: [bookId], references: [id])
-  author    Author   @relation(fields: [authorId], references: [id])
-}
-
-model ListBook {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  listId    String   @db.ObjectId
-  bookId    String   @db.ObjectId
-
-  list      List     @relation(fields: [listId], references: [id])
-  book      Book     @relation(fields: [bookId], references: [id])
+model BookList {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  listId String @db.ObjectId
+  list   List   @relation(fields: [listId], references: [id])
+  bookId String @db.ObjectId
+  book   Book   @relation(fields: [bookId], references: [id])
 }
