@@ -13,7 +13,6 @@ interface Option {
 
 export default function PreviewSearchBox() {
   const [options, setOptions] = useState<Option[]>([]);
-  const [noOptionsText, setNoOptionsText] = useState("Waiting for your input!");
   const [inputValue, setInputValue] = useState('')
 
   const handleInputChange = useCallback(
@@ -34,7 +33,6 @@ export default function PreviewSearchBox() {
         setOptions(mappedOptions.length > 0 ? mappedOptions : []);
       } catch (error) {
         console.error("Error fetching books:", error);
-        setNoOptionsText("Error fetching results. Please try again.");
       }
     },
     []
@@ -62,7 +60,6 @@ export default function PreviewSearchBox() {
     <Autocomplete
       filterOptions={(x) => x}
       className="bg-white"
-      noOptionsText={noOptionsText}
       size="small"
       disablePortal
       forcePopupIcon={false}
