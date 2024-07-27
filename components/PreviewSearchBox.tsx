@@ -19,18 +19,22 @@ export default function PreviewSearchBox() {
     async (_event: React.SyntheticEvent, query: string) => {
       setInputValue(query);
       try {
-        const result = await actionSearchBooks(query, 0, 5);
-        const mappedOptions = result.books.map((book, index) => ({
-          label: `${book.title} by ${book.authors}`,
-          imageUrl: book.smallThumbnail,
-          index,
-        }));
-        mappedOptions.push({
-          label: "See all results",
-          imageUrl: "",
-          index: 5,
-        });
-        setOptions(mappedOptions.length > 0 ? mappedOptions : []);
+        if (query) {
+          const result = await actionSearchBooks(query, 0, 5);
+          const mappedOptions = result.books.map((book, index) => ({
+            label: `${book.title} by ${book.authors}`,
+            imageUrl: book.smallThumbnail,
+            index,
+          }));
+          mappedOptions.push({
+            label: "See all results",
+            imageUrl: "",
+            index: 5,
+          });
+          setOptions(mappedOptions.length > 0 ? mappedOptions : []);
+        } else {
+          setOptions([]);
+        }
       } catch (error) {
         console.error("Error fetching books:", error);
       }
