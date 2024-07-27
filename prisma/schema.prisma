@@ -9,7 +9,7 @@ datasource db {
 
 model User {
   id           String       @id @default(auto()) @map("_id") @db.ObjectId
-  clerkId      String
+  clerkId      String       @unique
   email        String? // F:To confirm
   createdAt    DateTime     @default(now())
   reviews      Review[]
