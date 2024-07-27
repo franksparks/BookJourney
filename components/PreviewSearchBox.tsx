@@ -13,7 +13,6 @@ interface Option {
 }
 
 export default function PreviewSearchBox() {
-
   const [options, setOptions] = useState<Option[]>([]);
   const [inputValue, setInputValue] = useState("");
 
@@ -64,11 +63,17 @@ export default function PreviewSearchBox() {
       } else {
         return (
           <li {...props}>
-            {option.imageUrl && (
+            {option.imageUrl ? (
               <img
                 src={option.imageUrl}
                 alt={option.label}
-                style={{ width: 50, height: 75, marginRight: 10 }}
+                style={{ width: 50, height: 75, marginRight: 10, objectFit: 'cover' }}
+              />
+            ) : (
+              <img
+                src="../default_cover.jpg"
+                alt={`Unknown cover for: ${option.label}`}
+                style={{ width: 50, height: 75, marginRight: 10, objectFit: 'cover' }}
               />
             )}
             {option.label}
