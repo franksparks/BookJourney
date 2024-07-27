@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { actionSearchBooks } from '@/actions/search-books';
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
-import { useState, useCallback, HTMLAttributes } from 'react';
+import { actionSearchBooks } from "@/actions/search-books";
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import { useState, useCallback, HTMLAttributes } from "react";
 
 interface Option {
   label: string;
@@ -13,11 +13,11 @@ interface Option {
 
 export default function PreviewSearchBox() {
   const [options, setOptions] = useState<Option[]>([]);
-  const [inputValue, setInputValue] = useState('')
+  const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = useCallback(
     async (_event: React.SyntheticEvent, query: string) => {
-      setInputValue(query)
+      setInputValue(query);
       try {
         const result = await actionSearchBooks(query, 0, 5);
         const mappedOptions = result.books.map((book, index) => ({
@@ -28,7 +28,7 @@ export default function PreviewSearchBox() {
         mappedOptions.push({
           label: "See all results",
           imageUrl: "",
-          index: 5
+          index: 5,
         });
         setOptions(mappedOptions.length > 0 ? mappedOptions : []);
       } catch (error) {
@@ -38,23 +38,31 @@ export default function PreviewSearchBox() {
     []
   );
 
-  const handleOptionsRendering = useCallback((props: HTMLAttributes<HTMLLIElement>, option: Option) => {
-
-    if (option.index === 5) {
-      return (<div className='flex justify-center'><li {...props}>{"See all results"}</li></div>)
-    } else {
-      return (<li {...props}>
-        {option.imageUrl && (
-          <img
-            src={option.imageUrl}
-            alt={option.label}
-            style={{ width: 50, height: 75, marginRight: 10 }}
-          />
-        )}
-        {option.label}
-      </li>)
-    }
-  }, [])
+  const handleOptionsRendering = useCallback(
+    (props: HTMLAttributes<HTMLLIElement>, option: Option) => {
+      if (option.index === 5) {
+        return (
+          <div className="flex justify-center">
+            <li {...props}>{"See all results"}</li>
+          </div>
+        );
+      } else {
+        return (
+          <li {...props}>
+            {option.imageUrl && (
+              <img
+                src={option.imageUrl}
+                alt={option.label}
+                style={{ width: 50, height: 75, marginRight: 10 }}
+              />
+            )}
+            {option.label}
+          </li>
+        );
+      }
+    },
+    []
+  );
 
   return (
     <Autocomplete
@@ -73,15 +81,15 @@ export default function PreviewSearchBox() {
           {...params}
           placeholder="Search..."
           sx={{
-            '& .MuiOutlinedInput-root': {
-              '& fieldset': {
-                borderColor: 'white',
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderColor: "white",
               },
-              '&:hover fieldset': {
-                borderColor: 'white',
+              "&:hover fieldset": {
+                borderColor: "white",
               },
-              '&.Mui-focused fieldset': {
-                borderColor: 'white',
+              "&.Mui-focused fieldset": {
+                borderColor: "white",
               },
             },
           }}
