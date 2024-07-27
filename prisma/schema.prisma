@@ -48,13 +48,13 @@ model Review {
 }
 
 model Rating {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  comment   String?
-  createdAt DateTime @default(now())
-  bookId    String   @db.ObjectId
-  book      Book     @relation(fields: [bookId], references: [id])
-  userId    String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id])
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  rating    RatingValue
+  createdAt DateTime    @default(now())
+  bookId    String      @db.ObjectId
+  book      Book        @relation(fields: [bookId], references: [id])
+  userId    String      @db.ObjectId
+  user      User        @relation(fields: [userId], references: [id])
 }
 
 model List {
@@ -75,9 +75,26 @@ model BookList {
 }
 
 model BookStatus {
-  id     String @id @default(auto()) @map("_id") @db.ObjectId
-  userId String @db.ObjectId
-  user   User   @relation(fields: [userId], references: [id])
-  bookId String @db.ObjectId
-  book   Book   @relation(fields: [bookId], references: [id])
+  id     String     @id @default(auto()) @map("_id") @db.ObjectId
+  status ReadStatus
+  userId String     @db.ObjectId
+  user   User       @relation(fields: [userId], references: [id])
+  bookId String     @db.ObjectId
+  book   Book       @relation(fields: [bookId], references: [id])
+}
+
+enum RatingValue {
+  ONE
+  TWO
+  THREE
+  FOUR
+  FIVE
+}
+
+enum ReadStatus {
+  NULL
+  WANT_TO_READ @map("WANT TO READ")
+  READING
+  READ
+  ABANDONED
 }
