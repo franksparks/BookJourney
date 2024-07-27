@@ -24,7 +24,7 @@ export default function PreviewSearchBox() {
         const result = await actionSearchBooks(query, 0, 5);
         setOptions([]);
         let mappedOptions = result.books.map((book, index) => ({
-          label: `${book.title} by ${book.authors}`,
+          label: `${book.title} by ${book.authors ?? 'Unknown Author'}`,
           imageUrl: book.smallThumbnail,
           index,
         }));
