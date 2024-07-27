@@ -80,39 +80,45 @@ export default function PreviewSearchBox() {
   );
 
   return (
-    <Autocomplete
-      filterOptions={(x) => x}
-      className="bg-white"
-      size="small"
-      disablePortal
-      forcePopupIcon={false}
-      onInputChange={handleInputChange}
-      options={options}
-      open={inputValue.length > 0 && options.length > 0}
-      renderOption={handleOptionsRendering}
-      sx={{ width: 500 }}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          placeholder="Search..."
-          sx={{
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "white",
+    <div className="flex">
+      <Autocomplete
+        filterOptions={(x) => x}
+        className="bg-white mt-4 mb-4 mr-4"
+        size="small"
+        disablePortal
+        forcePopupIcon={false}
+        onInputChange={handleInputChange}
+        options={options}
+        open={inputValue.length > 0 && options.length > 0}
+        renderOption={handleOptionsRendering}
+        sx={{ width: 500 }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            placeholder="Search..."
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "white",
+                },
+                "&:hover fieldset": {
+                  borderColor: "white",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "white",
+                },
               },
-              "&:hover fieldset": {
-                borderColor: "white",
-              },
-              "&.Mui-focused fieldset": {
-                borderColor: "white",
-              },
-            },
-          }}
-          InputLabelProps={{
-            shrink: false,
-          }}
-        />
-      )}
-    />
+            }}
+            InputLabelProps={{
+              shrink: false,
+            }}
+          />
+
+        )}
+      />
+      <a href="https://books.google.com/">
+        <img className="mt-5" src={"https://books.google.com/googlebooks/images/poweredby.png"} />
+      </a>
+    </div>
   );
 }
