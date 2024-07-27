@@ -8,16 +8,18 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  clerkId   String
-  email     String? // F:To confirm
-  createdAt DateTime @default(now())
-  reviews   Review[]
-  lists     List[]
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId      String
+  email        String? // F:To confirm
+  createdAt    DateTime     @default(now())
+  reviews      Review[]
+  lists        List[]
+  ratings      Rating[]
+  bookStatuses BookStatus[]
 }
 
 model Book {
-  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
   isbn          String?
   googleBooksId String? // M:for sync process
   title         String
@@ -30,18 +32,29 @@ model Book {
   cover         String?
   ratingAverage Int?
   reviews       Review[]
+  ratings       Rating[]
   lists         BookList[]
+  bookStatuses  BookStatus[]
 }
 
 model Review {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  rating    Int?
   comment   String?
   createdAt DateTime @default(now())
   bookId    String   @db.ObjectId
   book      Book     @relation(fields: [bookId], references: [id])
   userId    String   @db.ObjectId
   user      User     @relation(fields: [userId], references: [id])
+}
+
+model Rating {
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  rating    RatingValue
+  createdAt DateTime    @default(now())
+  bookId    String      @db.ObjectId
+  book      Book        @relation(fields: [bookId], references: [id])
+  userId    String      @db.ObjectId
+  user      User        @relation(fields: [userId], references: [id])
 }
 
 model List {
@@ -59,4 +72,29 @@ model BookList {
   list   List   @relation(fields: [listId], references: [id])
   bookId String @db.ObjectId
   book   Book   @relation(fields: [bookId], references: [id])
+}
+
+model BookStatus {
+  id     String     @id @default(auto()) @map("_id") @db.ObjectId
+  status ReadStatus
+  userId String     @db.ObjectId
+  user   User       @relation(fields: [userId], references: [id])
+  bookId String     @db.ObjectId
+  book   Book       @relation(fields: [bookId], references: [id])
+}
+
+enum RatingValue {
+  ONE
+  TWO
+  THREE
+  FOUR
+  FIVE
+}
+
+enum ReadStatus {
+  NULL
+  WANT_TO_READ @map("WANT TO READ")
+  READING
+  READ
+  ABANDONED
 }
