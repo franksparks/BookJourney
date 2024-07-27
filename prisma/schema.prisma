@@ -1,14 +1,100 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId      String
+  email        String? // F:To confirm
+  createdAt    DateTime     @default(now())
+  reviews      Review[]
+  lists        List[]
+  ratings      Rating[]
+  bookStatuses BookStatus[]
+}
+
+model Book {
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  isbn          String?
+  googleBooksId String? // M:for sync process
+  title         String
+  description   String?
+  categories    String[]
+  pages         Int?
+  publisher     String?
+  publishYear   Int?
+  language      String?
+  cover         String?
+  ratingAverage Int?
+  reviews       Review[]
+  ratings       Rating[]
+  lists         BookList[]
+  bookStatuses  BookStatus[]
+}
+
+model Review {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  comment   String?
+  createdAt DateTime @default(now())
+  bookId    String   @db.ObjectId
+  book      Book     @relation(fields: [bookId], references: [id])
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Rating {
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  rating    RatingValue
+  createdAt DateTime    @default(now())
+  bookId    String      @db.ObjectId
+  book      Book        @relation(fields: [bookId], references: [id])
+  userId    String      @db.ObjectId
+  user      User        @relation(fields: [userId], references: [id])
+}
+
+model List {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  createdAt DateTime   @default(now())
+  books     BookList[]
+  userId    String     @db.ObjectId
+  user      User       @relation(fields: [userId], references: [id])
+}
+
+model BookList {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  listId String @db.ObjectId
+  list   List   @relation(fields: [listId], references: [id])
+  bookId String @db.ObjectId
+  book   Book   @relation(fields: [bookId], references: [id])
+}
+
+model BookStatus {
+  id     String     @id @default(auto()) @map("_id") @db.ObjectId
+  status ReadStatus
+  userId String     @db.ObjectId
+  user   User       @relation(fields: [userId], references: [id])
+  bookId String     @db.ObjectId
+  book   Book       @relation(fields: [bookId], references: [id])
+}
+
+enum RatingValue {
+  ONE
+  TWO
+  THREE
+  FOUR
+  FIVE
+}
+
+enum ReadStatus {
+  NULL
+  WANT_TO_READ @map("WANT TO READ")
+  READING
+  READ
+  ABANDONED
 }
