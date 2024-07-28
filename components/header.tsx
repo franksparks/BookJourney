@@ -1,6 +1,7 @@
 import {
   ClerkLoaded,
   ClerkLoading,
+  ClerkProvider,
   SignedIn,
   SignedOut,
   SignInButton,
@@ -22,19 +23,21 @@ export const Header = () => {
         </div>
         <PreviewSearchBox />
         <div style={{ minWidth: '150px' }}>
-          <ClerkLoading>
-            <Loader className="h-6 w-6 text-white animate-spin" />
-          </ClerkLoading>
-          <ClerkLoaded>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-            <SignedOut>
-              <SignInButton mode="modal">
-                <Button>Login</Button>
-              </SignInButton>
-            </SignedOut>
-          </ClerkLoaded>
+          <ClerkProvider>
+            <ClerkLoading>
+              <Loader className="h-6 w-6 text-white animate-spin" />
+            </ClerkLoading>
+            <ClerkLoaded>
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
+              <SignedOut>
+                <SignInButton mode="modal">
+                  <Button>Login</Button>
+                </SignInButton>
+              </SignedOut>
+            </ClerkLoaded>
+          </ClerkProvider>
         </div>
       </div>
     </header>
