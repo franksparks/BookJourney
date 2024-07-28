@@ -2,6 +2,7 @@
 
 import { useCallback } from 'react';
 import { Input } from './ui/input';
+import SearchRadioButtons from './SearchRadioButtons';
 
 type SearchBoxProps = {
     onSearch: (event: { key: string }) => void
@@ -16,16 +17,13 @@ export default function SearchBox({ onSearch, query, setQuery }: SearchBoxProps)
     }, []);
 
     return (
-        <div className="flex"><Input
-            className="mt-2.5 ml-2.5 mr-2.5 w-96"
+        <><Input
+            className="mt-5 ml-5 w-96 rounded-none bg-white border-black"
             type="search"
-            placeholder="Search..."
+            placeholder="Search by book title, author or ISBN"
             value={query}
             onChange={handleChange}
             onKeyDown={onSearch} />
-            <a href="https://books.google.com/">
-                <img className="mt-5" src={"https://books.google.com/googlebooks/images/poweredby.png"} />
-            </a>
-        </div>
+            <SearchRadioButtons /></>
     )
 }

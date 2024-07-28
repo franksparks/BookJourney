@@ -120,7 +120,7 @@ export default function PreviewSearchBox() {
           <TextField
             {...params}
             inputRef={inputRef}
-            placeholder="Search..."
+            placeholder="Search books"
             sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
