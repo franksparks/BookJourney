@@ -5,6 +5,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { useState, useCallback, HTMLAttributes } from "react";
 import debounce from "lodash/debounce";
+import { useRouter } from "next/navigation";
 
 interface Option {
   label: string;
@@ -15,10 +16,11 @@ interface Option {
 export default function PreviewSearchBox() {
   const [options, setOptions] = useState<Option[]>([]);
   const [inputValue, setInputValue] = useState("");
+  const router = useRouter();
+
 
   const searchBooks = async (query: string) => {
     try {
-      setInputValue(query);
       if (query) {
         const result = await actionSearchBooks(query, 0, 5);
         setOptions([]);
@@ -52,11 +54,15 @@ export default function PreviewSearchBox() {
     debouncedSearchBooks(query);
   }
 
+  const handleAllResultsClick = () => {
+    router.push(`/search?query=${encodeURIComponent(inputValue)}`);
+  };
+
   const handleOptionsRendering = useCallback(
     (props: HTMLAttributes<HTMLLIElement>, option: Option) => {
       if (option.index === 5) {
         return (
-          <div className="flex justify-center">
+          <div className="flex justify-center" onClick={()=> handleAllResultsClick()}>
             <li {...props}>{"See all results"}</li>
           </div>
         );
@@ -81,7 +87,7 @@ export default function PreviewSearchBox() {
         );
       }
     },
-    []
+    [inputValue]
   );
 
   return (
