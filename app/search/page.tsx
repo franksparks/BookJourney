@@ -43,7 +43,7 @@ export default function Home() {
 
     return (
         <main className="flex justify-center">
-            <div className="bg-slate-300s w-1/3 mt-10" >
+            <div className="bg-slate-300 w-1/3 mt-10" >
                 <SearchBox onSearch={handleKeyDown} query={query} setQuery={setQuery} />
             </div>
             <>{query && <SearchResults results={results} />}</>
