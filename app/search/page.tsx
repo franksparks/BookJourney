@@ -12,6 +12,14 @@ export default function Home() {
     const [page, setPage] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
 
+    useEffect(() => {
+        const query = new URLSearchParams(window.location.search).get('q');
+        if (query) {
+            setQuery(query);
+            handleSearch();
+        }       
+    }, [query]);
+
     const handleSearch = useCallback(() => {
         const index = (page - 1) * 10;
         if (!query) return
@@ -42,7 +50,7 @@ export default function Home() {
     }, [page])
 
     return (
-        <main className="flex justify-center">
+        <main className="flex justify-center flex-col items-center">
             <div className="bg-slate-300 w-1/3 mt-10" >
                 <SearchBox onSearch={handleKeyDown} query={query} setQuery={setQuery} />
             </div>

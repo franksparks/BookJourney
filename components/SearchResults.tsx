@@ -9,7 +9,7 @@ type SearchResultProps = {
 // Todo: Change the img for the next.js Image component
 export default function SearchResult({ results }: SearchResultProps) {
     return (
-        <Table className="mt-5">
+        <Table className="mt-5 flex justify-center">
             <TableBody>
                 {results.map((result, index) => (
 

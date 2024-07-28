@@ -56,7 +56,7 @@ export default function PreviewSearchBox() {
   }
 
   const handleRedirect = () => {
-    router.push(`/search?query=${encodeURIComponent(inputValue)}`);
+    router.push(`/search?q=${encodeURIComponent(inputValue)}`);
     if (inputRef.current) {
       inputRef.current.blur();
     }
