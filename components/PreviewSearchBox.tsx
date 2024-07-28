@@ -3,7 +3,7 @@
 import { actionSearchBooks } from "@/actions/search-books";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
-import { useState, useCallback, HTMLAttributes } from "react";
+import { useState, useCallback, HTMLAttributes, useRef } from "react";
 import debounce from "lodash/debounce";
 import { useRouter } from "next/navigation";
 
@@ -17,6 +17,7 @@ export default function PreviewSearchBox() {
   const [options, setOptions] = useState<Option[]>([]);
   const [inputValue, setInputValue] = useState("");
   const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
 
 
   const searchBooks = async (query: string) => {
@@ -54,15 +55,27 @@ export default function PreviewSearchBox() {
     debouncedSearchBooks(query);
   }
 
-  const handleAllResultsClick = () => {
+  const handleRedirect = () => {
     router.push(`/search?query=${encodeURIComponent(inputValue)}`);
+    if (inputRef.current) {
+      inputRef.current.blur();
+    }
   };
+
+  const clearValues = useCallback(() => {
+    setInputValue("");
+    setOptions([]);
+  }, []);
 
   const handleOptionsRendering = useCallback(
     (props: HTMLAttributes<HTMLLIElement>, option: Option) => {
       if (option.index === 5) {
         return (
-          <div className="flex justify-center" onClick={()=> handleAllResultsClick()}>
+          <div className="flex justify-center" onMouseDown={(event) => {
+            event.preventDefault();
+            handleRedirect();
+            clearValues();
+          }}>
             <li {...props}>{"See all results"}</li>
           </div>
         );
@@ -106,6 +119,7 @@ export default function PreviewSearchBox() {
         renderInput={(params) => (
           <TextField
             {...params}
+            inputRef={inputRef}
             placeholder="Search..."
             sx={{
               "& .MuiOutlinedInput-root": {
@@ -124,7 +138,6 @@ export default function PreviewSearchBox() {
               shrink: false,
             }}
           />
-
         )}
       />
       <a href="https://books.google.com/">
