@@ -16,7 +16,6 @@ export default function SearchBox({ onSearch, query, setQuery }: SearchBoxProps)
 
     const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         setQuery(event.target.value); 
-        onSearch();
     }, [setQuery]); 
 
     return (

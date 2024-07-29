@@ -14,7 +14,6 @@ export default function Home() {
 
     useEffect(() => {
         const urlQuery = new URLSearchParams(window.location.search).get('q');
-        console.log("lo de la url", urlQuery)
         if (urlQuery) {
             setQuery(urlQuery);
             handleSearch();
@@ -23,11 +22,10 @@ export default function Home() {
 
     useEffect(() => {
         handleSearch();
-    }, [query, page])
+    }, [page, query])
 
     const handleSearch = useCallback(() => {
         const index = (page - 1) * 10;
-        console.log("query", query)
         if (!query) return
         actionSearchBooks(query, index, 10).then(result => {
             setResults(result.books);
