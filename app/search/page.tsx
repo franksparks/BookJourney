@@ -13,15 +13,21 @@ export default function Home() {
     const [totalItems, setTotalItems] = useState(0);
 
     useEffect(() => {
-        const query = new URLSearchParams(window.location.search).get('q');
-        if (query) {
-            setQuery(query);
+        const urlQuery = new URLSearchParams(window.location.search).get('q');
+        console.log("lo de la url", urlQuery)
+        if (urlQuery) {
+            setQuery(urlQuery);
             handleSearch();
         }       
-    }, [query]);
+    }, []);
+
+    useEffect(() => {
+        handleSearch();
+    }, [query, page])
 
     const handleSearch = useCallback(() => {
         const index = (page - 1) * 10;
+        console.log("query", query)
         if (!query) return
         actionSearchBooks(query, index, 10).then(result => {
             setResults(result.books);
@@ -31,28 +37,14 @@ export default function Home() {
         });
     }, [query, page]);
 
-    const handleKeyDown = useCallback((event: { key: string; }) => {
-        if (event.key === 'Enter') {
-            handleSearch();
-        } else if (event.key === 'Backspace') {
-            setResults([]);
-            setTotalItems(0);
-        }
-        handlePageChange(1);
-    }, [handleSearch]);
-
     const handlePageChange = useCallback((newPage: number) => {
         setPage(newPage);
     }, [handleSearch]);
 
-    useEffect(() => {
-        handleSearch();
-    }, [page])
-
     return (
         <main className="flex justify-center flex-col items-center">
-            <div className="bg-slate-300 w-1/3 mt-10" >
-                <SearchBox onSearch={handleKeyDown} query={query} setQuery={setQuery} />
+            <div className="bg-slate-300 mt-10" >
+                <SearchBox onSearch={handleSearch} query={query} setQuery={setQuery}/>
             </div>
             <>{query && <SearchResults results={results} />}</>
             <>{results.length !== 0 && query && <SearchPagination setPage={handlePageChange} page={page} totalItems={totalItems} />}</>
