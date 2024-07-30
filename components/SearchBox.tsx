@@ -17,6 +17,8 @@ type SearchBoxProps = {
 
 // Todo: Change the img for the next.js Image component
 export default function SearchBox({ query, advancedQuery, setAdvancedQuery, handleAdvancedSearch, setPage, setTotalItems, setAvoidSearch }: SearchBoxProps) {
+    const [radioValue, setRadioValue] = useState('all');
+
     useEffect(() => {
         setAdvancedQuery(query);
     }, []);
@@ -24,6 +26,12 @@ export default function SearchBox({ query, advancedQuery, setAdvancedQuery, hand
     const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         setAdvancedQuery(event.target.value);
     }, [setAdvancedQuery]);
+
+    const handleRadioButtonChange = useCallback((event: React.SyntheticEvent)=> {
+        setRadioValue((event.target as HTMLInputElement).value);
+    }, [])
+
+    useEffect(() => {console.log(radioValue)}, [radioValue])
 
     return (
         <>
@@ -37,7 +45,7 @@ export default function SearchBox({ query, advancedQuery, setAdvancedQuery, hand
                 />
                 <Button onMouseDown={() => {setTotalItems(0); setPage(1); setAvoidSearch(true)}} onClick={handleAdvancedSearch} className='mt-5 ml-5'>Search</Button>
             </div>
-            <SearchRadioButtons />
+            <SearchRadioButtons handleRadioButtonChange={handleRadioButtonChange} />
         </>
     )
 }

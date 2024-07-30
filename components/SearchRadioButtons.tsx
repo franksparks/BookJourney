@@ -5,7 +5,12 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 
-export default function SearchRadioButtons() {
+type searchRadioButtonsProps = {
+  handleRadioButtonChange: (event: React.SyntheticEvent) => void
+}
+
+export default function SearchRadioButtons({handleRadioButtonChange}: searchRadioButtonsProps) {
+
   const radioStyles = {
     color: common.black,
     '&.Mui-checked': {
@@ -28,6 +33,7 @@ export default function SearchRadioButtons() {
             value={option.value}
             control={<Radio sx={radioStyles} />}
             label={option.label}
+            onChange={handleRadioButtonChange}
           />
         ))}
       </RadioGroup>
