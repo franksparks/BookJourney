@@ -4,25 +4,26 @@ import { Book, actionSearchBooks } from "@/actions/search-books";
 import SearchBox from "@/components/SearchBox";
 import SearchPagination from "@/components/SearchPagination";
 import SearchResults from "@/components/SearchResults";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useLayoutEffect, useRef } from "react";
+
 
 export default function Home() {
     const [results, setResults] = useState<Book[]>([]);
-    const [query, setQuery] = useState('');
+    const [query, setQuery] = useState(''); 
     const [page, setPage] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
 
     useEffect(() => {
-        const urlQuery = new URLSearchParams(window.location.search).get('q');
-        if (urlQuery) {
+        const urlQuery = new URLSearchParams(window.location.search).get('q');  
+        if (urlQuery && urlQuery!=='') {
             setQuery(urlQuery);
-            handleSearch();
         }       
-    }, []);
-
+        console.log('QUERY', query)
+    }, [window.location.search, query, results]); 
+    
     useEffect(() => {
         handleSearch();
-    }, [page, query])
+    }, [page, query]) 
 
     const handleSearch = useCallback(() => {
         const index = (page - 1) * 10;
@@ -37,14 +38,14 @@ export default function Home() {
 
     const handlePageChange = useCallback((newPage: number) => {
         setPage(newPage);
-    }, [handleSearch]);
+    }, []);
 
     return (
         <main className="flex justify-center flex-col items-center">
             <div className="bg-slate-300 mt-10" >
-                <SearchBox onSearch={handleSearch} query={query} setQuery={setQuery}/>
+                <SearchBox query={query} setResults={setResults} setTotalItems={setTotalItems} totalItems={totalItems}  />
             </div>
-            <>{query && <SearchResults results={results} />}</>
+            <>{query && <SearchResults results={results}/>}</>
             <>{results.length !== 0 && query && <SearchPagination setPage={handlePageChange} page={page} totalItems={totalItems} />}</>
         </main>
     );
