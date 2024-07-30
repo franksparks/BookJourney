@@ -4,37 +4,25 @@ import { useCallback, useEffect, useState } from 'react';
 import { Input } from './ui/input';
 import SearchRadioButtons from './SearchRadioButtons';
 import { Button } from "@/components/ui/button"
-import { actionSearchBooks, Book } from '@/actions/search-books';
 
 type SearchBoxProps = {
     query: string,
-    setResults: (results: Book[]) => {},
-    setTotalItems: (item: number) => {},
-    totalItems: number
+    advancedQuery: string
+    setAdvancedQuery: (advancedQuery: string) => void,
+    handleAdvancedSearch: () => void,
+    setPage: (page: number) => void,
+    setTotalItems: (items: number) => void
 }
 
 // Todo: Change the img for the next.js Image component
-export default function SearchBox({query, setResults, setTotalItems, totalItems }: SearchBoxProps) {
-    const [advancedQuery, setAdvancedQuery] = useState(query);
+export default function SearchBox({ query, advancedQuery, setAdvancedQuery, handleAdvancedSearch, setPage, setTotalItems }: SearchBoxProps) {
     useEffect(() => {
         setAdvancedQuery(query);
-    }, [query]);
-    
+    }, []);
+
     const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-        setAdvancedQuery(event.target.value); 
-    }, [setAdvancedQuery]); 
-
-    const handleSearch = useCallback(() => {
-        //const index = (page - 1) * 10;
-        if (!advancedQuery) return
-        actionSearchBooks(advancedQuery, 1, 10).then(result => {
-            setResults(result.books);
-            if (totalItems === 0) {
-                setTotalItems(result.totalItems);
-            }
-        });
-    }, [advancedQuery]);
-
+        setAdvancedQuery(event.target.value);
+    }, [setAdvancedQuery]);
 
     return (
         <>
@@ -45,8 +33,8 @@ export default function SearchBox({query, setResults, setTotalItems, totalItems 
                     placeholder="Search by book title, author or ISBN"
                     value={advancedQuery}
                     onChange={handleChange}
-                 />
-                <Button onClick={handleSearch} className='mt-5 ml-5'>Search</Button>
+                />
+                <Button onMouseDown={() => {setTotalItems(0); setPage(1)}} onClick={handleAdvancedSearch} className='mt-5 ml-5'>Search</Button>
             </div>
             <SearchRadioButtons />
         </>
