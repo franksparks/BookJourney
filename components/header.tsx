@@ -10,7 +10,6 @@ import {
 } from "@clerk/nextjs";
 import { Loader } from "lucide-react";
 import { Button } from "./ui/button";
-import UserCheck from "./UserCheck";
 
 export const Header = () => {
   return (
@@ -28,7 +27,6 @@ export const Header = () => {
         <ClerkLoaded>
           <SignedIn>
             <UserButton />
-            <UserCheck />
           </SignedIn>
           <SignedOut>
             <SignInButton mode="modal">

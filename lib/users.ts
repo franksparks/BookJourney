@@ -17,3 +17,9 @@ export async function getOneUser(id: string) {
     where: { id },
   });
 }
+
+export async function checkClerkId(clerkId: string) {
+  return await prisma.user.findUnique({
+    where: { clerkId },
+  });
+}
