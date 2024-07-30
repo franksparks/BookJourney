@@ -19,7 +19,6 @@ export default function PreviewSearchBox() {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
 
-
   const searchBooks = async (query: string) => {
     try {
       if (query) {

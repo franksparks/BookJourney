@@ -4,6 +4,7 @@ import { Book, actionSearchBooks } from "@/actions/search-books";
 import SearchBox from "@/components/SearchBox";
 import SearchPagination from "@/components/SearchPagination";
 import SearchResults from "@/components/SearchResults";
+import { useRouter } from "next/navigation";
 import { useState, useCallback, useEffect } from "react";
 
 
@@ -14,6 +15,7 @@ export default function Home() {
     const [totalItems, setTotalItems] = useState(0);
     const [advancedQuery, setAdvancedQuery] = useState('');
     const [avoidSearch, setAvoidSearch] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         const urlQuery = new URLSearchParams(window.location.search).get('q');  
@@ -47,6 +49,7 @@ export default function Home() {
         const index = (page - 1) * 10;
         if (!advancedQuery) return
         actionSearchBooks(advancedQuery, index, 10).then(result => {
+            router.push(`/search?q=${encodeURIComponent(advancedQuery)}`)
             setResults(result.books);
             if (totalItems === 0) {
                 setTotalItems(result.totalItems);
