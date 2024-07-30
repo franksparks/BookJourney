@@ -2,7 +2,7 @@ import { dbInsertList } from "@/db/lists";
 import { Prisma } from "@prisma/client";
 
 if (process.argv.length != 4) {
-  console.error("Usage: bun insert-lits.ts <list_name> <user-id>");
+  console.error("Usage: bun insert-list.ts <list_name> <user-id>");
   process.exit(1);
 }
 
