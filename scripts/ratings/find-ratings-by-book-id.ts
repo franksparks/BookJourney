@@ -1,4 +1,3 @@
-import { dbGetListsByUserId } from "@/db/lists";
 import { dbGetRatingsbyBookId } from "@/db/rating";
 
 if (process.argv.length != 3) {

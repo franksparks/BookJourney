@@ -3,7 +3,7 @@ import { Prisma } from "@prisma/client";
 
 if (process.argv.length != 5) {
   console.error(
-    "Usage: bun insert-list.ts <new_list_name> <new_user-id> <list_id>"
+    "Usage: bun update-list.ts <new_list_name> <new_user-id> <list_id>"
   );
   process.exit(1);
 }

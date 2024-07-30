@@ -3,7 +3,7 @@ import { Prisma, RatingValue } from "@prisma/client";
 
 if (process.argv.length != 6) {
   console.error(
-    "Usage: bun insert-rating.ts <user_id> <book-id> <rating_value>"
+    "Usage: bun update-rating.ts <user_id> <book-id> <rating_value> <rating_id>"
   );
   process.exit(1);
 }
