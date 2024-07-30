@@ -13,6 +13,7 @@ export default function Home() {
     const [page, setPage] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
     const [advancedQuery, setAdvancedQuery] = useState('');
+    const [avoidSearch, setAvoidSearch] = useState(false);
 
     useEffect(() => {
         const urlQuery = new URLSearchParams(window.location.search).get('q');  
@@ -33,6 +34,7 @@ export default function Home() {
     const handleSearch = useCallback(() => {
         const index = (page - 1) * 10;
         if (!query) return
+        if (avoidSearch) return
         actionSearchBooks(query, index, 10).then(result => {
             setResults(result.books);
             if (totalItems === 0) {
@@ -43,7 +45,6 @@ export default function Home() {
 
     const handleAdvancedSearch = useCallback(() => {
         const index = (page - 1) * 10;
-        setQuery('');
         if (!advancedQuery) return
         actionSearchBooks(advancedQuery, index, 10).then(result => {
             setResults(result.books);
@@ -60,7 +61,7 @@ export default function Home() {
     return (
         <main className="flex justify-center flex-col items-center">
             <div className="bg-slate-300 mt-10" >
-                <SearchBox query={query} advancedQuery={advancedQuery} setAdvancedQuery={setAdvancedQuery} handleAdvancedSearch={handleAdvancedSearch} setPage={setPage} setTotalItems={setTotalItems}/>
+                <SearchBox query={query} advancedQuery={advancedQuery} setAdvancedQuery={setAdvancedQuery} handleAdvancedSearch={handleAdvancedSearch} setPage={setPage} setTotalItems={setTotalItems} setAvoidSearch={setAvoidSearch}/>
             </div>
             <>{(query || advancedQuery) && <SearchResults results={results}/>}</>
             <>{(query || advancedQuery) && results.length !== 0 && <SearchPagination setPage={handlePageChange} page={page} totalItems={totalItems} />}</>

@@ -12,10 +12,11 @@ type SearchBoxProps = {
     handleAdvancedSearch: () => void,
     setPage: (page: number) => void,
     setTotalItems: (items: number) => void
+    setAvoidSearch: (status: boolean) => void
 }
 
 // Todo: Change the img for the next.js Image component
-export default function SearchBox({ query, advancedQuery, setAdvancedQuery, handleAdvancedSearch, setPage, setTotalItems }: SearchBoxProps) {
+export default function SearchBox({ query, advancedQuery, setAdvancedQuery, handleAdvancedSearch, setPage, setTotalItems, setAvoidSearch }: SearchBoxProps) {
     useEffect(() => {
         setAdvancedQuery(query);
     }, []);
@@ -34,7 +35,7 @@ export default function SearchBox({ query, advancedQuery, setAdvancedQuery, hand
                     value={advancedQuery}
                     onChange={handleChange}
                 />
-                <Button onMouseDown={() => {setTotalItems(0); setPage(1)}} onClick={handleAdvancedSearch} className='mt-5 ml-5'>Search</Button>
+                <Button onMouseDown={() => {setTotalItems(0); setPage(1); setAvoidSearch(true)}} onClick={handleAdvancedSearch} className='mt-5 ml-5'>Search</Button>
             </div>
             <SearchRadioButtons />
         </>
