@@ -7,11 +7,28 @@ import {
   SignedOut,
   SignInButton,
   UserButton,
+  useUser,
 } from "@clerk/nextjs";
 import { Loader } from "lucide-react";
 import { Button } from "./ui/button";
+import { checkUser } from "@/lib/checkUser";
+import { useEffect } from "react";
 
-export const Header = () => {
+export default function Header() {
+  const { user } = useUser();
+
+  useEffect(() => {
+    if (user && user.id) {
+      const verifyUser = async () => {
+        await checkUser(user.id);
+      };
+
+      verifyUser().catch((error) => {
+        console.error("Error checking user:", error);
+      });
+    }
+  }, [user]);
+
   return (
     <header className="h-16 w-full bg-sky-700">
       <div className="mx-12 flex items-center justify-between h-full">
@@ -37,4 +54,4 @@ export const Header = () => {
       </div>
     </header>
   );
-};
+}

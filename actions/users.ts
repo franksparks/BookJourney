@@ -12,7 +12,7 @@ export async function actionGetOneUser(id: string) {
   return user;
 }
 
-export async function actionClerkUser(clerkId: string) {
+export async function actionGetOneUserByClerkId(clerkId: string) {
   const user = await checkClerkId(clerkId);
   return user;
 }
