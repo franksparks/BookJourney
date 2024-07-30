@@ -23,3 +23,11 @@ export async function checkClerkId(clerkId: string) {
     where: { clerkId },
   });
 }
+
+export async function createUser(clerkId: string) {
+  return await prisma.user.create({
+    data: {
+      clerkId,
+    },
+  });
+}

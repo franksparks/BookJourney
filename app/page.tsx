@@ -1,5 +1,6 @@
 import {
   actionClerkUser,
+  actionCreateUser,
   actionGetOneUser,
   actionGetUsers,
 } from "@/actions/users";
@@ -10,10 +11,13 @@ import { User } from "@/lib/users";
 export default async function Home() {
   const userId = "66a215369b094441662c0322";
   const clerkId = "LUIS";
+  const newClerkId = "newClerkId";
 
   let users: User[] = await actionGetUsers();
   let userById: User | null = await actionGetOneUser(userId);
   let userByClerkId: User | null = await actionClerkUser(clerkId);
+
+  let newUser: User | null = await actionCreateUser(newClerkId);
 
   return (
     <>
@@ -56,6 +60,18 @@ export default async function Home() {
         </div>
       ) : (
         <h1>userClerkId not found</h1>
+      )}
+      <h1>New User</h1>
+      {newUser ? (
+        <div className="flex flex-wrap p-5 justify-around">
+          <div key={newUser.id} className="user-card">
+            <p>{newUser.id}</p>
+            <p>{newUser.clerkId}</p>
+            <p>{newUser.email}</p>
+          </div>
+        </div>
+      ) : (
+        <h1>newUser not found</h1>
       )}
     </>
   );
