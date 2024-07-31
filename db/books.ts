@@ -2,42 +2,45 @@ import { Prisma } from "@prisma/client";
 import { db } from "./db";
 
 export const dbInsertBook = async (book: Prisma.BookCreateInput) => {
-    const result = await db.book.create({ data: book });
-    return result;
-}
+  const result = await db.book.create({ data: book });
+  return result;
+};
 
 export const dbGetBookById = async (id: string) => {
-    const result = await db.book.findUnique({ where: { id } });
-    return result;
-}
+  const result = await db.book.findUnique({ where: { id } });
+  return result;
+};
 
-export const dbGetBooksInList =  async (listId: string) => {
-    const list = await db.list.findUnique({
-        where: { id: listId },
+export const dbGetBooksInList = async (listId: string) => {
+  const list = await db.list.findUnique({
+    where: { id: listId },
+    include: {
+      books: {
         include: {
-          books: {
-            include: {
-              book: true,
-            },
-          },
+          book: true,
         },
-      });
+      },
+    },
+  });
 
-      if (!list) {
-        return [];
-      }
+  if (!list) {
+    return [];
+  }
 
-      const books = list.books.map(bookList => bookList.book);
+  const result = list.books.map((bookList) => bookList.book);
 
-      return books;
-}
+  return result;
+};
 
-export const dbUpdateBook = async (book: Prisma.BookUpdateInput, id: string) => {
-    const result = await db.book.update({ where: { id }, data: book });
-    return result;
-}
+export const dbUpdateBook = async (
+  book: Prisma.BookUpdateInput,
+  id: string
+) => {
+  const result = await db.book.update({ where: { id }, data: book });
+  return result;
+};
 
 export const dbDeleteBook = async (id: string) => {
-    const result = await db.book.delete({ where: { id } });
-    return result;
-}
+  const result = await db.book.delete({ where: { id } });
+  return result;
+};
