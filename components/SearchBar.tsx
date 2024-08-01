@@ -15,7 +15,7 @@ export default function SearchBar() {
   const handleSearch = useCallback(() => {
     const index = (page - 1) * 10;
     if (!query) return
-    actionSearchBooks(query, index).then(result => {
+    actionSearchBooks(query, index, 10).then(result => {
       setResults(result.books);
       if (totalItems === 0) {
         setTotalItems(result.totalItems);
