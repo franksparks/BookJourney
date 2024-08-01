@@ -13,6 +13,7 @@ import { Loader } from "lucide-react";
 import { Button } from "./ui/button";
 import { checkUser } from "@/lib/checkUser";
 import { useEffect } from "react";
+import PreviewSearchBox from "./PreviewSearchBox";
 
 export default function Header() {
   const { user } = useUser();

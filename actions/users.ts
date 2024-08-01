@@ -1,23 +1,28 @@
 "use server";
 
-import { checkClerkId, createUser, getOneUser, getUsers } from "@/lib/users";
+import {
+  dbGetUserByClerkId,
+  dbCreateUser,
+  dbGetUser,
+  dbGetUsers,
+} from "@/db/users";
 
 export async function actionGetUsers() {
-  const users = await getUsers();
+  const users = await dbGetUsers();
   return users;
 }
 
-export async function actionGetOneUser(id: string) {
-  const user = await getOneUser(id);
+export async function actionGetUser(id: string) {
+  const user = await dbGetUser(id);
   return user;
 }
 
 export async function actionGetOneUserByClerkId(clerkId: string) {
-  const user = await checkClerkId(clerkId);
+  const user = await dbGetUserByClerkId(clerkId);
   return user;
 }
 
 export async function actionCreateUser(clerkId: string) {
-  const user = await createUser(clerkId);
+  const user = await dbCreateUser(clerkId);
   return user;
 }

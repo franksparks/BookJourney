@@ -6,25 +6,25 @@ export type User = {
   email: string | null;
 };
 
-export async function getUsers() {
+export async function dbGetUsers() {
   return await prisma.user.findMany({
     orderBy: { id: "asc" },
   });
 }
 
-export async function getOneUser(id: string) {
+export async function dbGetUser(id: string) {
   return await prisma.user.findUnique({
     where: { id },
   });
 }
 
-export async function checkClerkId(clerkId: string) {
+export async function dbGetUserByClerkId(clerkId: string) {
   return await prisma.user.findUnique({
     where: { clerkId },
   });
 }
 
-export async function createUser(clerkId: string) {
+export async function dbCreateUser(clerkId: string) {
   return await prisma.user.create({
     data: {
       clerkId,
