@@ -1,4 +1,5 @@
-import { dbInsertRating } from "@/db/ratings";
+import { actionInsertRating } from "@/actions/ratings";
+
 import { Prisma, RatingValue } from "@prisma/client";
 
 if (process.argv.length != 5) {
@@ -42,7 +43,7 @@ const new_rating: Prisma.RatingCreateInput = {
 };
 
 try {
-  const result = await dbInsertRating(new_rating);
+  const result = await actionInsertRating(new_rating);
 
   if (result != null) {
     console.log("Rating added");

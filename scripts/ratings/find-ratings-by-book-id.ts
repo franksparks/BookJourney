@@ -1,4 +1,4 @@
-import { dbGetRatingsbyBookId } from "@/db/rating";
+import { dbGetRatingsbyBookId } from "@/db/ratings";
 
 if (process.argv.length != 3) {
   console.error("Usage: bun find-ratings-by-book-id.ts <book-id>");
