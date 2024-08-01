@@ -1,7 +1,7 @@
-import { actionCreateUser, actionGetOneUserByClerkId } from "@/actions/users";
+import { actionCreateUser, actionGetUserByClerkId } from "@/actions/users";
 
 export async function checkUser(id: string) {
-  const user = await actionGetOneUserByClerkId(id);
+  const user = await actionGetUserByClerkId(id);
   if (user === null) {
     actionCreateUser(id);
   }
