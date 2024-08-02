@@ -11,6 +11,14 @@ export const dbGetReviewsByBookId = async (bookId: string) => {
   return result;
 };
 
+export const dbGetReviewsByBookIdAndUserId = async (
+  bookId: string,
+  userId: string
+) => {
+  const result = await db.review.findMany({ where: { bookId, userId } });
+  return result;
+};
+
 export const dbUpdateReview = async (
   review: Prisma.ReviewUpdateInput,
   id: string

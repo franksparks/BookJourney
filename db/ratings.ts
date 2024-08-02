@@ -6,8 +6,16 @@ export const dbInsertRating = async (rating: Prisma.RatingCreateInput) => {
   return result;
 };
 
-export const dbGetRatingsbyBookId = async (bookId: string) => {
+export const dbGetRatingsByBookId = async (bookId: string) => {
   const result = await db.rating.findMany({ where: { bookId } });
+  return result;
+};
+
+export const dbGetRatingsByBookIdAndUserId = async (
+  bookId: string,
+  userId: string
+) => {
+  const result = await db.rating.findMany({ where: { bookId, userId } });
   return result;
 };
 

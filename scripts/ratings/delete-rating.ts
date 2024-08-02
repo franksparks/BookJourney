@@ -1,4 +1,4 @@
-import { dbDeleteRating } from "@/db/rating";
+import { dbDeleteRating } from "@/db/ratings";
 
 if (process.argv.length != 3) {
   console.error("Usage: bun delete-rating.ts <rating-id>");

@@ -1,4 +1,4 @@
-import { dbUpdateRating } from "@/db/rating";
+import { dbUpdateRating } from "@/db/ratings";
 import { Prisma, RatingValue } from "@prisma/client";
 
 if (process.argv.length != 6) {

@@ -2,21 +2,29 @@
 
 import {
   dbDeleteRating,
-  dbGetRatingsbyBookId,
+  dbGetRatingsByBookId,
+  dbGetRatingsByBookIdAndUserId,
   dbInsertRating,
   dbUpdateRating,
-} from "@/db/rating";
+} from "@/db/ratings";
 import { Prisma } from "@prisma/client";
 
-export const actionInserRating = async (
+export const actionInsertRating = async (
   rating: Prisma.RatingCreateInput
 ) => {
-  const result = await dbInsertRating(rating);
-  return result;
+  const existingRating = await dbGetRatingsByBookIdAndUserId(
+    rating.book.connect?.id!,
+    rating.user.connect?.id!
+  );
+  if (existingRating.length == 0) {
+    const result = await dbInsertRating(rating);
+    return result;
+  }
+  console.log("This user has already introduced a rating for this Book.");
 };
 
 export const actionGetRatingByBook = async (id: string) => {
-  const result = await dbGetRatingsbyBookId(id);
+  const result = await dbGetRatingsByBookId(id);
   return result;
 };
 

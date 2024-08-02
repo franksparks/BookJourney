@@ -39,7 +39,7 @@ model Book {
 
 model Review {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  comment   String?
+  comment   String
   createdAt DateTime @default(now())
   bookId    String   @db.ObjectId
   book      Book     @relation(fields: [bookId], references: [id])
