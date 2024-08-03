@@ -10,9 +10,9 @@ if (process.argv.length != 4) {
 const [_bun, _script, bookId, userId] = process.argv;
 
 const result = await dbGetReviewsByBookIdAndUserId(bookId, userId);
-console.log(
-  `Requested reviews of book with id ${bookId} from user with id ${bookId}`
-);
-if (result != null) {
+
+if (result != null && result.length == 0)
+  console.log("User left no review for this Book");
+else {
   console.log(JSON.stringify(result, null, 2));
 }

@@ -8,7 +8,9 @@ if (process.argv.length != 3) {
 const [_bun, _script, identifier] = process.argv;
 
 const result = await dbGetRatingsByBookId(identifier);
-console.log("Requested ratings of book with id:", identifier);
-if (result != null) {
+
+if (result != null && result.length == 0)
+  console.log("Book has no ratings");
+else {
   console.log(JSON.stringify(result, null, 2));
 }

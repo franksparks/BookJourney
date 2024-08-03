@@ -19,13 +19,11 @@ const new_list: Prisma.ListCreateInput = {
   user: list_user,
 };
 
-try {
-  const result = await dbInsertList(new_list);
+const result = await dbInsertList(new_list);
 
-  if (result != null) {
-    console.log("List added");
-  }
-} catch (error) {
-  console.error("Error adding list:", error);
+if (result != null) {
+  console.log(result);
+  process.exit(0);
+} else {
   process.exit(1);
 }

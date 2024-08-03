@@ -21,13 +21,6 @@ const new_list: Prisma.ListCreateInput = {
   user: list_user,
 };
 
-try {
-  const result = await dbUpdateList(new_list, list_id);
+const result = await dbUpdateList(new_list, list_id);
 
-  if (result != null) {
-    console.log("List updated");
-  }
-} catch (error) {
-  console.error("Error updating list:", error);
-  process.exit(1);
-}
+console.log(result);

@@ -29,13 +29,6 @@ const new_review: Prisma.ReviewCreateInput = {
   book: rating_book,
 };
 
-try {
-  const result = await dbUpdateReview(new_review, review_id);
+const result = await dbUpdateReview(new_review, review_id);
 
-  if (result != null) {
-    console.log("Review updated");
-  }
-} catch (error) {
-  console.error("Error updating review:", error);
-  process.exit(1);
-}
+console.log(result);

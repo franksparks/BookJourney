@@ -42,13 +42,6 @@ const new_rating: Prisma.RatingCreateInput = {
   book: rating_book,
 };
 
-try {
-  const result = await dbUpdateRating(new_rating, rating_id);
+const result = await dbUpdateRating(new_rating, rating_id);
 
-  if (result != null) {
-    console.log("Rating updated");
-  }
-} catch (error) {
-  console.error("Error updating rating:", error);
-  process.exit(1);
-}
+console.log(result);

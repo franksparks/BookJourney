@@ -16,7 +16,7 @@ export const actionInsertRating = async (
     rating.book.connect?.id!,
     rating.user.connect?.id!
   );
-  if (existingRating.length == 0) {
+  if (existingRating!.length == 0) {
     const result = await dbInsertRating(rating);
     return result;
   }

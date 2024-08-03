@@ -16,11 +16,13 @@ export const actionInsertReview = async (
     review.book.connect?.id!,
     review.user.connect?.id!
   );
-  if (existingReview.length == 0) {
+  if (existingReview!.length == 0) {
     const result = await dbInsertReview(review);
     return result;
   }
-  console.log("This user has already introduced a review for this Book.");
+  return console.log(
+    "This user has already introduced a review for this Book."
+  );
 };
 
 export const actionGetReviewByBook = async (id: string) => {

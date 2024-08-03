@@ -6,13 +6,7 @@ if (process.argv.length != 3) {
 }
 
 const [_bun, _script, identifier] = process.argv;
-try {
-  const result = await dbDeleteList(identifier);
-  console.log("List to delete:", identifier);
-  if (result != null) {
-    console.log("List deleted");
-  }
-} catch (error) {
-  console.error("Error deleting list:", error);
-  process.exit(1);
-}
+
+const result = await dbDeleteList(identifier);
+
+console.log(result);

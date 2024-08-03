@@ -28,13 +28,13 @@ const new_review: Prisma.ReviewCreateInput = {
   book: rating_book,
 };
 
-try {
-  const result = await dbInsertReview(new_review);
+const result = await dbInsertReview(new_review);
 
-  if (result != null) {
-    console.log("Review added");
-  }
-} catch (error) {
-  console.error("Error adding review:", error);
-  process.exit(1);
+if (result != null) {
+  console.log("Review added");
+  console.log(result);
+  process.exit(0);
+} else {
+  console.log("Review could not be added");
+  process.exit(0);
 }
