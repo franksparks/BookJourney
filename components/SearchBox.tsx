@@ -8,17 +8,17 @@ import { Button } from "@/components/ui/button"
 type SearchBoxProps = {
     query: string,
     advancedQuery: string
+    radioValue: string,
     setAdvancedQuery: (advancedQuery: string) => void,
     handleAdvancedSearch: () => void,
     setPage: (page: number) => void,
-    setTotalItems: (items: number) => void
-    setAvoidSearch: (status: boolean) => void
+    setTotalItems: (items: number) => void,
+    setAvoidSearch: (status: boolean) => void,
+    setRadioValue: (option: string) => void,
 }
 
 // Todo: Change the img for the next.js Image component
-export default function SearchBox({ query, advancedQuery, setAdvancedQuery, handleAdvancedSearch, setPage, setTotalItems, setAvoidSearch }: SearchBoxProps) {
-    const [radioValue, setRadioValue] = useState('all');
-
+export default function SearchBox({ query, advancedQuery, setAdvancedQuery, handleAdvancedSearch, setPage, setTotalItems, setAvoidSearch, setRadioValue, radioValue }: SearchBoxProps) {
     useEffect(() => {
         setAdvancedQuery(query);
     }, []);
@@ -27,11 +27,10 @@ export default function SearchBox({ query, advancedQuery, setAdvancedQuery, hand
         setAdvancedQuery(event.target.value);
     }, [setAdvancedQuery]);
 
+
     const handleRadioButtonChange = useCallback((event: React.SyntheticEvent)=> {
         setRadioValue((event.target as HTMLInputElement).value);
-    }, [])
-
-    useEffect(() => {console.log(radioValue)}, [radioValue])
+    }, []) 
 
     return (
         <>

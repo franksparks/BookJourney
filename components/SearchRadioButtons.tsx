@@ -6,7 +6,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 
 type searchRadioButtonsProps = {
-  handleRadioButtonChange: (event: React.SyntheticEvent) => void
+  handleRadioButtonChange: (event: React.SyntheticEvent) => void,
 }
 
 export default function SearchRadioButtons({handleRadioButtonChange}: searchRadioButtonsProps) {
@@ -33,7 +33,7 @@ export default function SearchRadioButtons({handleRadioButtonChange}: searchRadi
             value={option.value}
             control={<Radio sx={radioStyles} />}
             label={option.label}
-            onChange={handleRadioButtonChange}
+            onClick={handleRadioButtonChange}
           />
         ))}
       </RadioGroup>
