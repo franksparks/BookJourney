@@ -92,7 +92,6 @@ enum RatingValue {
 }
 
 enum ReadStatus {
-  NULL
   WANT_TO_READ @map("WANT TO READ")
   READING
   READ
