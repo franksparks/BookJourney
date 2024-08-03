@@ -63,7 +63,7 @@ export default function Home() {
                 setTotalItems(result.totalItems);
             }
         });
-    }, [advancedQuery, page, radioValue]);
+    }, [advancedQuery, page, radioValue, totalItems]);
 
     const handlePageChange = useCallback((newPage: number) => {
         setPage(newPage);
