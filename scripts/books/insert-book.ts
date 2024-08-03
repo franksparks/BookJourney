@@ -1,7 +1,7 @@
 import { dbInsertBook } from "@/db/books";
 import { Prisma } from "@prisma/client";
 
-if (process.argv.length < 5 || process.argv.length > 13) {
+if (process.argv.length < 3 || process.argv.length > 13) {
   console.error(
     "Usage: bun insert-book.ts <title> <categories> [isbn] [googleBooksId] [description] [pages] [publisher] [publishYear] [language] [cover] [ratingAverage]"
   );
