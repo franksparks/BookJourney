@@ -24,7 +24,7 @@ export default function Home() {
             setQuery(urlQuery);
             setAdvancedQuery(urlQuery);
         }
-    }, [window.location.search]);
+    }, []);
 
     useEffect(() => {
         handleSearch();
