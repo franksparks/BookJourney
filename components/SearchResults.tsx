@@ -13,7 +13,7 @@ export default function SearchResult({ results }: SearchResultProps) {
         <Table className="mt-5 flex justify-center">
             <TableBody>
                 {results.map((result, index) => (
-                    <TableRow key={index}>
+                    <TableRow className="items-center w-3/4" key={index}>
                         <TableCell><img src={result.smallThumbnail || "../default_cover.jpg"} alt={`{result.title}cover`} style={{ width: '125px', height: '200px' }} /></TableCell>
                         <TableCell><b className="text-base">{capitalizeFirstLetter(result.title)}</b><br />by {result.authors && result.authors.length > 0
                             ? capitalizeFirstLetter(result.authors.join(" "))
