@@ -7,6 +7,4 @@ if (process.argv.length != 3) {
 
 const [_bun, _script, identifier] = process.argv;
 
-const result = await dbDeleteList(identifier);
-
-console.log(result);
+await dbDeleteList(identifier);

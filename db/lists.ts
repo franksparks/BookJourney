@@ -1,6 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { db } from "./db";
-import { defaultErrorHandler } from "@/lib/errors";
+import { catchErrors, defaultErrorHandler } from "@/lib/errors";
 
 export const dbInsertList = async (list: Prisma.ListCreateInput) => {
   try {
@@ -33,11 +33,7 @@ export const dbUpdateList = async (
   }
 };
 
-export const dbDeleteList = async (id: string) => {
-  try {
-    const result = await db.list.delete({ where: { id } });
-    return result;
-  } catch (err) {
-    defaultErrorHandler(err);
-  }
-};
+export const dbDeleteList = catchErrors(async (id: string) => {
+  const result = await db.list.delete({ where: { id } });
+  return result;
+});

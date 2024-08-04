@@ -11,7 +11,7 @@ export const defaultErrorHandler = (err: any) => {
             "Expected element id must be exactly 12 bytes"
           );
         case "P2025":
-          return console.log("Element not found: " + err.message);
+          return console.log("Element not found.");
 
         default:
           return console.log(err.code);
@@ -19,4 +19,14 @@ export const defaultErrorHandler = (err: any) => {
     default:
       return console.log("Internal error, please investigate.");
   }
+};
+
+export const catchErrors = (fn: Function) => {
+  return async (...args: any[]) => {
+    try {
+      await fn(...args);
+    } catch (err) {
+      return defaultErrorHandler(err);
+    }
+  };
 };
