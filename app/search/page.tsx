@@ -56,8 +56,9 @@ export default function Home() {
 
     useEffect(() => {
         const urlQuery = searchParams.get('q');
-        setAvoidAdvancedSearch(false)
-        setAvoidSearch(false)
+        setAvoidAdvancedSearch(false);
+        setAvoidSearch(false);
+        setPage(1);
         if (urlQuery && urlQuery !== '') {
             setQuery(urlQuery);
             setAdvancedQuery(urlQuery);
