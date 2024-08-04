@@ -17,6 +17,8 @@ const calculateIndex = (page: number): number => {
     return (page - 1) * 10
 }
 
+const MAX_NUMBER_RESULTS = 10;
+
 export default function Home() {
     const [results, setResults] = useState<Book[]>([]);
     const [query, setQuery] = useState('');
@@ -47,7 +49,7 @@ export default function Home() {
         const index = calculateIndex(page);
         if (!query) return
         if (avoidSearch) return
-        actionSearchBooks(query, index, 10).then(result => {
+        actionSearchBooks(query, index, MAX_NUMBER_RESULTS).then(result => {
             setResults(result.books);
             if (totalItems === 0) {
                 setTotalItems(result.totalItems);
@@ -59,7 +61,7 @@ export default function Home() {
         const queryParameter = queryMap[radioValue];
         const index = calculateIndex(page);
         if (!advancedQuery) return
-        actionSearchBooks(`${queryParameter}${advancedQuery}`, index, 10).then(result => {
+        actionSearchBooks(`${queryParameter}${advancedQuery}`, index, MAX_NUMBER_RESULTS).then(result => {
             router.push(`/search?q=${encodeURIComponent(advancedQuery)}`)
             setResults(result.books);
             if (totalItems === 0) {
