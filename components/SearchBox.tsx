@@ -55,13 +55,11 @@ export default function SearchBox({
                     type="search"
                     placeholder="Search by book title, author or ISBN"
                     value={advancedQuery}
-                    onChange={handleChange}
-                />
+                    onChange={handleChange} />
                 <Button onMouseDown={onSearchMouseDown} onClick={onSearchButtonClick} className='mt-5 ml-5'>
                     Search
                 </Button>
-            </div>
-            <SearchRadioButtons handleRadioButtonChange={handleRadioButtonChange} />
+            </div><SearchRadioButtons handleRadioButtonChange={handleRadioButtonChange} />
         </>
     );
 }
