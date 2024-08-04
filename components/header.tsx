@@ -1,3 +1,5 @@
+"use client"
+
 import {
   ClerkLoaded,
   ClerkLoading,
@@ -10,13 +12,16 @@ import {
 import { Loader } from "lucide-react";
 import { Button } from "./ui/button";
 import PreviewSearchBox from "./PreviewSearchBox";
+import { useRouter } from "next/navigation";
 
 export const Header = () => {
+  const router = useRouter();
+
   return (
     <header className="h-16 w-full bg-sky-700">
       <div className="mx-12 flex items-center justify-between h-full">
         <div className="flex items-center gap-x-3">
-          <div className="flex items-center gap-x-1 cursor-default">
+          <div onClick={() => router.push('/')} className="flex items-center gap-x-1 cursor-pointer">
             <h1 className="text-white text-3xl font-thin">book</h1>
             <h1 className="text-orange-500 text-3xl tracking-wide">journey</h1>
           </div>
