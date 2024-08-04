@@ -9,7 +9,7 @@ type searchRadioButtonsProps = {
   handleRadioButtonChange: (event: React.SyntheticEvent) => void,
 }
 
-export default function SearchRadioButtons({handleRadioButtonChange}: searchRadioButtonsProps) {
+export default function SearchRadioButtons({ handleRadioButtonChange }: searchRadioButtonsProps) {
 
   const radioStyles = {
     color: common.black,

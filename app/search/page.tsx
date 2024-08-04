@@ -31,15 +31,15 @@ export default function Home() {
     const router = useRouter();
 
     const performSearch = async (
-        query: string, 
-        queryMap?: { [key: string]: string }, 
+        query: string,
+        queryMap?: { [key: string]: string },
     ) => {
         try {
             const index = calculateIndex(page);
-            const queryString = queryMap 
-                ? `${queryMap[radioValue]}${query}` 
+            const queryString = queryMap
+                ? `${queryMap[radioValue]}${query}`
                 : query;
-    
+
             const result = await actionSearchBooks(queryString, index, MAX_NUMBER_RESULTS);
             setResults(result.books);
             if (totalItems === 0) {
