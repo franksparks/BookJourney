@@ -1,5 +1,6 @@
 "use client";
 
+import { actionGetUserByClerkId, actionInsertUser } from "@/actions/users";
 import {
   ClerkLoaded,
   ClerkLoading,
@@ -10,18 +11,20 @@ import {
   useUser,
 } from "@clerk/nextjs";
 import { Loader } from "lucide-react";
-import { Button } from "./ui/button";
-import { checkUser } from "@/lib/checkUser";
 import { useEffect } from "react";
 import PreviewSearchBox from "./PreviewSearchBox";
+import { Button } from "./ui/button";
 
 export default function Header() {
   const { user } = useUser();
 
   useEffect(() => {
-    if (user && user.id) {
+    if (user) {
       const verifyUser = async () => {
-        await checkUser(user.id);
+        const userInDB = await actionGetUserByClerkId(user.id);
+        if (userInDB === null) {
+          actionInsertUser(user.id, user.emailAddresses[0].emailAddress);
+        }
       };
 
       verifyUser().catch((error) => {
@@ -36,7 +39,9 @@ export default function Header() {
         <div className="flex items-center gap-x-3">
           <div className="flex items-center gap-x-1 cursor-default">
             <h1 className="text-white text-3xl font-thin">book</h1>
-            <h1 className="text-orange-500 text-3xl tracking-wide">journey</h1>
+            <h1 className="text-orange-500 text-3xl tracking-wide">
+              journey
+            </h1>
           </div>
         </div>
         <PreviewSearchBox />

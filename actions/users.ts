@@ -2,9 +2,9 @@
 
 import {
   dbGetUserByClerkId,
-  dbCreateUser,
-  dbGetUser,
+  dbGetUserByUserId,
   dbGetUsers,
+  dbInsertUser,
 } from "@/db/users";
 
 export async function actionGetUsers() {
@@ -12,8 +12,8 @@ export async function actionGetUsers() {
   return result;
 }
 
-export async function actionGetUser(id: string) {
-  const result = await dbGetUser(id);
+export async function actionGetUserByUserId(id: string) {
+  const result = await dbGetUserByUserId(id);
   return result;
 }
 
@@ -22,7 +22,7 @@ export async function actionGetUserByClerkId(clerkId: string) {
   return result;
 }
 
-export async function actionCreateUser(clerkId: string) {
-  const result = await dbCreateUser(clerkId);
+export async function actionInsertUser(clerkId: string, email: string) {
+  const result = await dbInsertUser(clerkId, email);
   return result;
 }
