@@ -27,6 +27,7 @@ export default function Home() {
     const [advancedQuery, setAdvancedQuery] = useState('');
     const [radioValue, setRadioValue] = useState('all');
     const [avoidSearch, setAvoidSearch] = useState(false);
+    const [avoidAdvancedSearch, setAvoidAdvancedSearch] = useState(false);
     const router = useRouter();
 
     const performSearch = async (
@@ -75,7 +76,7 @@ export default function Home() {
     }, [query, page]);
 
     const handleAdvancedSearch = useCallback(() => {
-        if (advancedQuery) {
+        if (advancedQuery && !avoidAdvancedSearch) {
             performSearch(advancedQuery, queryMap);
         }
     }, [advancedQuery, page, radioValue, totalItems]);
@@ -87,9 +88,9 @@ export default function Home() {
     return (
         <main className="flex justify-center flex-col items-center">
             <div className="bg-slate-300 mt-10" >
-                <SearchBox query={query} advancedQuery={advancedQuery} setAdvancedQuery={setAdvancedQuery} handleAdvancedSearch={handleAdvancedSearch} setPage={setPage} setTotalItems={setTotalItems} setAvoidSearch={setAvoidSearch} setRadioValue={setRadioValue} radioValue={radioValue} />
+                <SearchBox query={query} advancedQuery={advancedQuery} setAdvancedQuery={setAdvancedQuery} handleAdvancedSearch={handleAdvancedSearch} setPage={setPage} setTotalItems={setTotalItems} setAvoidSearch={setAvoidSearch} setAvoidAdvancedSearch={setAvoidAdvancedSearch} setRadioValue={setRadioValue} radioValue={radioValue} />
             </div>
-            <>{(query || advancedQuery) && <SearchResults results={results} />}</>
+            <>{(query || advancedQuery) && results.length !== 0 && <SearchResults results={results} />}</>
             <>{(query || advancedQuery) && results.length !== 0 && <SearchPagination setPage={handlePageChange} page={page} totalItems={totalItems} />}</>
         </main>
     );

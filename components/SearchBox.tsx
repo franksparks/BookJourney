@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Input } from './ui/input';
 import SearchRadioButtons from './SearchRadioButtons';
 import { Button } from "@/components/ui/button"
@@ -14,23 +14,38 @@ type SearchBoxProps = {
     setPage: (page: number) => void,
     setTotalItems: (items: number) => void,
     setAvoidSearch: (status: boolean) => void,
+    setAvoidAdvancedSearch: (status: boolean) => void,
     setRadioValue: (option: string) => void,
 }
 
 // Todo: Change the img for the next.js Image component
-export default function SearchBox({ query, advancedQuery, setAdvancedQuery, handleAdvancedSearch, setPage, setTotalItems, setAvoidSearch, setRadioValue, radioValue }: SearchBoxProps) {
+export default function SearchBox({
+    query, advancedQuery, setAdvancedQuery, handleAdvancedSearch,
+    setPage, setTotalItems, setAvoidSearch, setAvoidAdvancedSearch, setRadioValue, radioValue
+}: SearchBoxProps) {
     useEffect(() => {
         setAdvancedQuery(query);
-    }, []);
+    }, [query, setAdvancedQuery]);
 
     const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         setAdvancedQuery(event.target.value);
-    }, [setAdvancedQuery]);
+        setAvoidAdvancedSearch(true);
+    }, [setAdvancedQuery, setAvoidAdvancedSearch]);
 
-
-    const handleRadioButtonChange = useCallback((event: React.SyntheticEvent)=> {
+    const handleRadioButtonChange = useCallback((event: React.SyntheticEvent) => {
         setRadioValue((event.target as HTMLInputElement).value);
-    }, []) 
+    }, [setRadioValue]);
+
+    const onSearchButtonClick = useCallback(() => {
+        handleAdvancedSearch();
+    }, [handleAdvancedSearch]);
+
+    const onSearchMouseDown = useCallback(() => {
+        setTotalItems(0);
+        setPage(1);
+        setAvoidSearch(true);
+        setAvoidAdvancedSearch(false);
+    }, [setTotalItems, setPage, setAvoidSearch, setAvoidAdvancedSearch]);
 
     return (
         <>
@@ -42,9 +57,11 @@ export default function SearchBox({ query, advancedQuery, setAdvancedQuery, hand
                     value={advancedQuery}
                     onChange={handleChange}
                 />
-                <Button onMouseDown={() => {setTotalItems(0); setPage(1); setAvoidSearch(true)}} onClick={handleAdvancedSearch} className='mt-5 ml-5'>Search</Button>
+                <Button onMouseDown={onSearchMouseDown} onClick={onSearchButtonClick} className='mt-5 ml-5'>
+                    Search
+                </Button>
             </div>
             <SearchRadioButtons handleRadioButtonChange={handleRadioButtonChange} />
         </>
-    )
+    );
 }
