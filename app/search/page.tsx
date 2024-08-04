@@ -58,28 +58,30 @@ export default function Home() {
         if (urlQuery && urlQuery !== '') {
             setQuery(urlQuery);
             setAdvancedQuery(urlQuery);
+        } else {
+            router.push('/');
         }
     }, []);
 
     useEffect(() => {
         handleSearch();
-    }, [page, query])
+    }, [page, query, avoidSearch])
 
     useEffect(() => {
         handleAdvancedSearch();
-    }, [page])
+    }, [page, avoidAdvancedSearch])
 
     const handleSearch = useCallback(() => {
         if (query && !avoidSearch) {
             performSearch(query);
         }
-    }, [query, page]);
+    }, [query, page, avoidSearch]);
 
     const handleAdvancedSearch = useCallback(() => {
         if (advancedQuery && !avoidAdvancedSearch) {
             performSearch(advancedQuery, queryMap);
         }
-    }, [advancedQuery, page, radioValue, totalItems]);
+    }, [advancedQuery, page, radioValue, totalItems, avoidAdvancedSearch]);
 
     const handlePageChange = useCallback((newPage: number) => {
         setPage(newPage);

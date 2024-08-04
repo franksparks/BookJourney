@@ -53,7 +53,7 @@ export default function SearchBox({
                 <Input
                     className="mt-5 ml-5 w-96 rounded-none bg-white border-black"
                     type="search"
-                    placeholder="Search by book title, author or ISBN"
+                    placeholder="Search by book title or author"
                     value={advancedQuery}
                     onChange={handleChange} />
                 <Button onMouseDown={onSearchMouseDown} onClick={onSearchButtonClick} className='mt-5 ml-5'>
