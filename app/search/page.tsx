@@ -61,7 +61,6 @@ export default function Home() {
         setPage(1);
         if (urlQuery && urlQuery !== '') {
             setQuery(urlQuery);
-            setAdvancedQuery(urlQuery);
         } else {
             router.push('/');
         }
