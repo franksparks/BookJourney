@@ -82,7 +82,7 @@ export default function Home() {
 
     const handlePageChange = useCallback((newPage: number) => {
         setPage(newPage);
-    }, [page]);
+    }, []);
 
     return (
         <main className="flex justify-center flex-col items-center">
