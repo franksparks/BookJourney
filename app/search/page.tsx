@@ -7,6 +7,11 @@ import SearchResults from "@/components/SearchResults";
 import { useRouter } from "next/navigation";
 import { useState, useCallback, useEffect } from "react";
 
+const queryMap: { [key: string]: string } = {
+    "author": ":inauthor:",
+    "title": ":intitle:",
+    "all": "",
+};
 
 export default function Home() {
     const [results, setResults] = useState<Book[]>([]);
@@ -47,12 +52,6 @@ export default function Home() {
     }, [query, page]);
 
     const handleAdvancedSearch = useCallback(() => {
-        const queryMap: { [key: string]: string } = {
-            "author": ":inauthor:",
-            "title": ":intitle:",
-            "all": "",
-        };
-
         const queryParameter = queryMap[radioValue];
         const index = (page - 1) * 10;
         if (!advancedQuery) return
