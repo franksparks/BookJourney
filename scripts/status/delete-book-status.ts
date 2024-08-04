@@ -1,4 +1,4 @@
-import { dbDeleteBookStatus } from "@/db/book-status";
+import { actionDeleteBookStatus } from "@/actions/book-status";
 
 if (process.argv.length != 3) {
   console.error("Usage: bun delete-book-status.ts <status_id>");
@@ -8,7 +8,7 @@ if (process.argv.length != 3) {
 const [_bun, _script, status_id] = process.argv;
 
 try {
-  const result = await dbDeleteBookStatus(status_id);
+  const result = await actionDeleteBookStatus(status_id);
 
   if (result != null) {
     console.log("Book status deleted");

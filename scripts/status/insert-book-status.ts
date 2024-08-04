@@ -1,4 +1,4 @@
-import { dbInsertBookStatus } from "@/db/book-status";
+import { actionInsertBookStatus } from "@/actions/book-status";
 import { Prisma, ReadStatus } from "@prisma/client";
 
 if (process.argv.length != 5) {
@@ -40,7 +40,7 @@ const new_book_status: Prisma.BookStatusCreateInput = {
 };
 
 try {
-  const result = await dbInsertBookStatus(new_book_status);
+  const result = await actionInsertBookStatus(new_book_status);
 
   if (result != null) {
     console.log("Book status added");

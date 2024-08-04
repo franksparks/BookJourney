@@ -1,4 +1,4 @@
-import { dbGetBookStatusById } from "@/db/book-status";
+import { actionGetBookStatusById } from "@/actions/book-status";
 
 if (process.argv.length != 3) {
   console.error("Usage: bun get-book-status-by-id.ts <status_id>");
@@ -8,7 +8,7 @@ if (process.argv.length != 3) {
 const [_bun, _script, status_id] = process.argv;
 
 try {
-  const bookStatus = await dbGetBookStatusById(status_id);
+  const bookStatus = await actionGetBookStatusById(status_id);
 
   if (bookStatus != null) {
     console.log("Book status found:", bookStatus);

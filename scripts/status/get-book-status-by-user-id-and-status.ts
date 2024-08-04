@@ -1,4 +1,4 @@
-import { dbGetBooksByUserIdAndReadingStatus } from "@/db/book-status";
+import { actionGetBooksByUserIdAndReadingStatus } from "@/actions/book-status";
 import { ReadStatus } from "@prisma/client";
 
 if (process.argv.length != 4) {
@@ -24,7 +24,7 @@ if (!isValidReadStatus(status)) {
 }
 
 try {
-  const bookStatuses = await dbGetBooksByUserIdAndReadingStatus(
+  const bookStatuses = await actionGetBooksByUserIdAndReadingStatus(
     user_id,
     status as ReadStatus
   );
