@@ -13,6 +13,10 @@ const queryMap: { [key: string]: string } = {
     "all": "",
 };
 
+const calculateIndex = (page: number): number => {
+    return (page - 1) * 10
+}
+
 export default function Home() {
     const [results, setResults] = useState<Book[]>([]);
     const [query, setQuery] = useState('');
@@ -40,7 +44,7 @@ export default function Home() {
     }, [page])
 
     const handleSearch = useCallback(() => {
-        const index = (page - 1) * 10;
+        const index = calculateIndex(page);
         if (!query) return
         if (avoidSearch) return
         actionSearchBooks(query, index, 10).then(result => {
@@ -53,7 +57,7 @@ export default function Home() {
 
     const handleAdvancedSearch = useCallback(() => {
         const queryParameter = queryMap[radioValue];
-        const index = (page - 1) * 10;
+        const index = calculateIndex(page);
         if (!advancedQuery) return
         actionSearchBooks(`${queryParameter}${advancedQuery}`, index, 10).then(result => {
             router.push(`/search?q=${encodeURIComponent(advancedQuery)}`)
