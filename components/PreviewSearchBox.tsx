@@ -20,25 +20,26 @@ export default function PreviewSearchBox() {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const searchBooks = async (query: string) => {
+    if (!query) {
+      setOptions([]);
+      return;
+    }
+
     try {
-      if (query) {
-        const result = await actionSearchBooks(query, 0, 5);
-        setOptions([]);
-        let mappedOptions = result.books.map((book, index) => ({
-          label: `${book.title} by ${book.authors ?? 'Unknown Author'}`,
-          imageUrl: book.smallThumbnail,
-          index,
-        }));
-        mappedOptions.push({
-          label: "See all results",
-          imageUrl: "",
-          index: 5,
-        });
-        mappedOptions = mappedOptions.length > 0 ? mappedOptions : []
-        setOptions(mappedOptions);
-      } else {
-        setOptions([]);
-      }
+      const result = await actionSearchBooks(query, 0, 5);
+      const mappedOptions = result.books.map((book, index) => ({
+        label: `${book.title} by ${book.authors?.length ? book.authors.join(", ") : 'Unknown Author'}`,
+        imageUrl: book.smallThumbnail,
+        index,
+      }));
+
+      mappedOptions.push({
+        label: "See all results",
+        imageUrl: "",
+        index: 5,
+      });
+
+      setOptions(mappedOptions);
     } catch (error) {
       console.error("Error fetching books:", error);
     }
@@ -81,19 +82,11 @@ export default function PreviewSearchBox() {
       } else {
         return (
           <li {...props}>
-            {option.imageUrl ? (
-              <img
-                src={option.imageUrl}
-                alt={option.label}
-                style={{ width: 50, height: 75, marginRight: 10, objectFit: 'cover' }}
-              />
-            ) : (
-              <img
-                src="../default_cover.jpg"
-                alt={`Unknown cover for: ${option.label}`}
-                style={{ width: 50, height: 75, marginRight: 10, objectFit: 'cover' }}
-              />
-            )}
+            <img
+              src={option.imageUrl || "../default_cover.jpg"}
+              alt={option.label}
+              style={{ width: 50, height: 75, marginRight: 10, objectFit: 'cover' }}
+            />
             {option.label}
           </li>
         );
@@ -139,7 +132,7 @@ export default function PreviewSearchBox() {
           />
         )}
       />
-      <a href="https://books.google.com/">
+      <a href="https://books.google.com/" target="_blank" rel="noopener noreferrer">
         <img className="mt-5" src={"https://books.google.com/googlebooks/images/poweredby.png"} />
       </a>
     </div>
