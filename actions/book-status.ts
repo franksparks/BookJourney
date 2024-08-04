@@ -6,8 +6,9 @@ import {
   dbGetBookStatusByBookIdAndUserId,
   dbInsertBookStatus,
   dbUpdateBookStatus,
+  dbGetBooksByUserIdAndReadingStatus,
 } from "@/db/book-status";
-import { Prisma } from "@prisma/client";
+import { Prisma, ReadStatus } from "@prisma/client";
 
 export const actionInsertBookStatus = async (
   bookStatus: Prisma.BookStatusCreateInput
@@ -23,8 +24,8 @@ export const actionInsertBookStatus = async (
   console.log("This user has already introduced a status for this Book.");
 };
 
-export const actionGetBookStatusById = async (id: string) => {
-  const result = await dbGetBookStatusById(id);
+export const actionGetBookStatusById = async (bookStatusId: string) => {
+  const result = await dbGetBookStatusById(bookStatusId);
   return result;
 };
 
@@ -33,6 +34,14 @@ export const actionGetBookStatusByBookIdAndUserId = async (
   userId: string
 ) => {
   const result = await dbGetBookStatusByBookIdAndUserId(bookId, userId);
+  return result;
+};
+
+export const actionGetBooksByUserIdAndReadingStatus = async (
+  userId: string,
+  status: ReadStatus
+) => {
+  const result = await dbGetBooksByUserIdAndReadingStatus(userId, status);
   return result;
 };
 

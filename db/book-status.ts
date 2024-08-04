@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { Prisma, ReadStatus } from "@prisma/client";
 import { db } from "./db";
 
 export const dbInsertBookStatus = async (
@@ -8,8 +8,8 @@ export const dbInsertBookStatus = async (
   return result;
 };
 
-export const dbGetBookStatusById = async (id: string) => {
-  const result = await db.bookStatus.findUnique({ where: { id } });
+export const dbGetBookStatusById = async (bookStatusId: string) => {
+  const result = await db.bookStatus.findUnique({ where: { id: bookStatusId } });
   return result;
 };
 
@@ -20,6 +20,16 @@ export const dbGetBookStatusByBookIdAndUserId = async (
   const result = await db.bookStatus.findMany({ where: { bookId, userId } });
   return result;
 };
+
+export const dbGetBooksByUserIdAndReadingStatus = async (
+  userId: string,
+  status: ReadStatus
+) => {
+  const result = await db.bookStatus.findMany({
+    where: { userId, status },
+  });
+  return result;
+}
 
 export const dbUpdateBookStatus = async (
   bookStatus: Prisma.BookStatusUpdateInput,

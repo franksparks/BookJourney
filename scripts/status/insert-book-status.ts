@@ -10,8 +10,6 @@ if (process.argv.length != 5) {
 
 const [_bun, _script, user_id, book_id, status] = process.argv;
 
-console.log(process.argv, process.argv.length);
-
 const isValidReadStatus = (value: string): value is ReadStatus => {
   return Object.values(ReadStatus).includes(value as ReadStatus);
 };
