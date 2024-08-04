@@ -29,6 +29,29 @@ export default function Home() {
     const [avoidSearch, setAvoidSearch] = useState(false);
     const router = useRouter();
 
+    const performSearch = async (
+        query: string, 
+        queryMap?: { [key: string]: string }, 
+    ) => {
+        try {
+            const index = calculateIndex(page);
+            const queryString = queryMap 
+                ? `${queryMap[radioValue]}${query}` 
+                : query;
+    
+            const result = await actionSearchBooks(queryString, index, MAX_NUMBER_RESULTS);
+            setResults(result.books);
+            if (totalItems === 0) {
+                setTotalItems(result.totalItems);
+            }
+            if (queryMap && query) {
+                router.push(`/search?q=${encodeURIComponent(query)}`);
+            }
+        } catch (error) {
+            console.error('Error fetching books:', error);
+        }
+    };
+
     useEffect(() => {
         const urlQuery = new URLSearchParams(window.location.search).get('q');
         if (urlQuery && urlQuery !== '') {
@@ -46,28 +69,15 @@ export default function Home() {
     }, [page])
 
     const handleSearch = useCallback(() => {
-        const index = calculateIndex(page);
-        if (!query) return
-        if (avoidSearch) return
-        actionSearchBooks(query, index, MAX_NUMBER_RESULTS).then(result => {
-            setResults(result.books);
-            if (totalItems === 0) {
-                setTotalItems(result.totalItems);
-            }
-        });
+        if (query && !avoidSearch) {
+            performSearch(query);
+        }
     }, [query, page]);
 
     const handleAdvancedSearch = useCallback(() => {
-        const queryParameter = queryMap[radioValue];
-        const index = calculateIndex(page);
-        if (!advancedQuery) return
-        actionSearchBooks(`${queryParameter}${advancedQuery}`, index, MAX_NUMBER_RESULTS).then(result => {
-            router.push(`/search?q=${encodeURIComponent(advancedQuery)}`)
-            setResults(result.books);
-            if (totalItems === 0) {
-                setTotalItems(result.totalItems);
-            }
-        });
+        if (advancedQuery) {
+            performSearch(advancedQuery, queryMap);
+        }
     }, [advancedQuery, page, radioValue, totalItems]);
 
     const handlePageChange = useCallback((newPage: number) => {
