@@ -1,4 +1,4 @@
-import { dbDeleteBookList } from "@/db/book-list";
+import { actionDeleteBookList } from "@/actions/book-list";
 
 if (process.argv.length != 3) {
   console.error("Usage: bun delete-book-list.ts <booklist_id>");
@@ -8,7 +8,7 @@ if (process.argv.length != 3) {
 const [_bun, _script, booklist_id] = process.argv;
 
 try {
-  const result = await dbDeleteBookList(booklist_id);
+  const result = await actionDeleteBookList(booklist_id);
 
   if (result != null) {
     console.log("BookList entry deleted:", result);

@@ -1,4 +1,4 @@
-import { dbInsertBookList } from "@/db/book-list";
+import { actionInsertBookList } from "@/actions/book-list";
 import { Prisma } from "@prisma/client";
 
 if (process.argv.length != 4) {
@@ -14,7 +14,7 @@ const new_book_list: Prisma.BookListCreateInput = {
 };
 
 try {
-  const result = await dbInsertBookList(new_book_list);
+  const result = await actionInsertBookList(new_book_list);
 
   if (result != null) {
     console.log("BookList entry added:", result);
