@@ -4,7 +4,7 @@ import { Book, actionSearchBooks } from "@/actions/search-books";
 import SearchBox from "@/components/SearchBox";
 import SearchPagination from "@/components/SearchPagination";
 import SearchResults from "@/components/SearchResults";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useCallback, useEffect } from "react";
 
 const queryMap: { [key: string]: string } = {
@@ -29,6 +29,7 @@ export default function Home() {
     const [avoidSearch, setAvoidSearch] = useState(false);
     const [avoidAdvancedSearch, setAvoidAdvancedSearch] = useState(false);
     const router = useRouter();
+    const searchParams = useSearchParams();
 
     const performSearch = async (
         query: string,
@@ -54,14 +55,16 @@ export default function Home() {
     };
 
     useEffect(() => {
-        const urlQuery = new URLSearchParams(window.location.search).get('q');
+        const urlQuery = searchParams.get('q');
+        setAvoidAdvancedSearch(false)
+        setAvoidSearch(false)
         if (urlQuery && urlQuery !== '') {
             setQuery(urlQuery);
             setAdvancedQuery(urlQuery);
         } else {
             router.push('/');
         }
-    }, []);
+    }, [searchParams, router]);
 
     useEffect(() => {
         handleSearch();
