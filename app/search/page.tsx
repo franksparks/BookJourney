@@ -95,8 +95,8 @@ export default function Home() {
             <div className="bg-slate-300 mt-10" >
                 <SearchBox query={query} advancedQuery={advancedQuery} setAdvancedQuery={setAdvancedQuery} handleAdvancedSearch={handleAdvancedSearch} setPage={setPage} setTotalItems={setTotalItems} setAvoidSearch={setAvoidSearch} setAvoidAdvancedSearch={setAvoidAdvancedSearch} setRadioValue={setRadioValue} radioValue={radioValue} />
             </div>
-            <>{(query || advancedQuery) && results.length !== 0 && <SearchResults results={results} />}</>
-            <>{(query || advancedQuery) && results.length !== 0 && <SearchPagination setPage={handlePageChange} page={page} totalItems={totalItems} />}</>
+            {(query || advancedQuery) && results.length !== 0 && <SearchResults results={results} />}
+            {(query || advancedQuery) && results.length !== 0 && <SearchPagination setPage={handlePageChange} page={page} totalItems={totalItems} />}
         </main>
     );
 }
