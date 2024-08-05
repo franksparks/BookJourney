@@ -12,6 +12,7 @@ try {
 
   if (result != null) {
     console.log("BookList entry deleted:", result);
+    process.exit(0);
   }
 } catch (error) {
   console.error("Error deleting BookList entry:", error);

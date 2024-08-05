@@ -12,6 +12,7 @@ try {
 
   if (result != null) {
     console.log("Book status deleted");
+    process.exit(0);
   }
 } catch (error) {
   console.error("Error deleting book status:", error);

@@ -44,6 +44,7 @@ try {
 
   if (result != null) {
     console.log("Book status added");
+    process.exit(0);
   }
 } catch (error) {
   console.error("Error adding book status:", error);

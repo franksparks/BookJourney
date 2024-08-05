@@ -1,7 +1,6 @@
 import { catchErrors } from "@/lib/errors";
 import { Prisma } from "@prisma/client";
 import { db } from "./db";
-import { ratingClasses } from "@mui/material";
 
 export const dbInsertBook = catchErrors(
   async (book: Prisma.BookCreateInput) => {

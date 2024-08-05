@@ -10,12 +10,17 @@ if (process.argv.length != 4) {
 const [_bun, _script, book_id, user_id] = process.argv;
 
 try {
-  const bookStatuses = await actionGetBookStatusByBookIdAndUserId(book_id, user_id);
+  const bookStatuses = await actionGetBookStatusByBookIdAndUserId(
+    book_id,
+    user_id
+  );
 
   if (bookStatuses.length > 0) {
     console.log("Book statuses found:", bookStatuses);
+    process.exit(0);
   } else {
     console.log("No book statuses found");
+    process.exit(0);
   }
 } catch (error) {
   console.error("Error getting book statuses:", error);

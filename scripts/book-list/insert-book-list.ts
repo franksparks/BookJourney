@@ -18,6 +18,7 @@ try {
 
   if (result != null) {
     console.log("BookList entry added:", result);
+    process.exit(0);
   }
 } catch (error) {
   console.error("Error adding BookList entry:", error);

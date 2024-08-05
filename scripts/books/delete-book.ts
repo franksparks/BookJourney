@@ -1,4 +1,4 @@
-import { dbDeleteBook } from "@/db/books";
+import { actionDeleteBook } from "@/actions/books";
 
 if (process.argv.length != 3) {
   console.error("Usage: bun delete-book.ts <book_id>");
@@ -8,10 +8,11 @@ if (process.argv.length != 3) {
 const [_bun, _script, book_id] = process.argv;
 
 try {
-  const result = await dbDeleteBook(book_id);
+  const result = await actionDeleteBook(book_id);
 
   if (result != null) {
     console.log("Book deleted");
+    process.exit(0);
   }
 } catch (error) {
   console.error("Error deleting book:", error);

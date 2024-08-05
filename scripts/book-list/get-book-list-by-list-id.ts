@@ -12,8 +12,10 @@ try {
 
   if (bookLists.length > 0) {
     console.log("BookLists found:", bookLists);
+    process.exit(0);
   } else {
     console.log("No BookLists found for this list");
+    process.exit(0);
   }
 } catch (error) {
   console.error("Error getting BookLists:", error);

@@ -31,8 +31,10 @@ try {
 
   if (bookStatuses.length > 0) {
     console.log("Book statuses found:", bookStatuses);
+    process.exit(0);
   } else {
     console.log("No book statuses found");
+    process.exit(0);
   }
 } catch (error) {
   console.error("Error getting book statuses:", error);

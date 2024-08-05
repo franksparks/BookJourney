@@ -12,8 +12,10 @@ try {
 
   if (bookStatus != null) {
     console.log("Book status found:", bookStatus);
+    process.exit(0);
   } else {
     console.log("Book status not found");
+    process.exit(0);
   }
 } catch (error) {
   console.error("Error getting book status:", error);
