@@ -1,5 +1,5 @@
 import { catchErrors } from "@/lib/errors";
-import { Prisma } from "@prisma/client";
+import { Prisma, RatingValue } from "@prisma/client";
 import { db } from "./db";
 
 export const dbInsertRating = catchErrors(
@@ -22,8 +22,11 @@ export const dbGetRatingsByBookIdAndUserId = catchErrors(
 );
 
 export const dbUpdateRating = catchErrors(
-  async (rating: Prisma.RatingUpdateInput, id: string) => {
-    const result = await db.rating.update({ where: { id }, data: rating });
+  async (rating: RatingValue, id: string) => {
+    const result = await db.rating.update({
+      where: { id },
+      data: { rating },
+    });
     return result;
   }
 );

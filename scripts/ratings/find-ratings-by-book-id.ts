@@ -8,9 +8,12 @@ if (process.argv.length != 3) {
 const [_bun, _script, identifier] = process.argv;
 
 const result = await actionGetRatingsByBook(identifier);
-
-if (result != null && result.length == 0)
+if (result == null) {
+  process.exit(1);
+} else if (result != null && result.length == 0) {
   console.log("Book has no ratings");
-else {
+  process.exit(0);
+} else {
   console.log(JSON.stringify(result, null, 2));
+  process.exit(0);
 }
