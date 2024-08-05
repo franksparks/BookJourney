@@ -18,11 +18,8 @@ export const actionGetListsByUserId = async (id: string) => {
   return result;
 };
 
-export const actionUpdateList = async (
-  list: Prisma.ListUpdateInput,
-  id: string
-) => {
-  const result = await dbUpdateList(list, id);
+export const actionUpdateList = async (name: string, id: string) => {
+  const result = await dbUpdateList(name, id);
   return result;
 };
 

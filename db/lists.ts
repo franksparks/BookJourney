@@ -15,8 +15,8 @@ export const dbGetListsByUserId = catchErrors(async (userId: string) => {
 });
 
 export const dbUpdateList = catchErrors(
-  async (list: Prisma.ListUpdateInput, id: string) => {
-    const result = await db.list.update({ where: { id }, data: list });
+  async (name: string, id: string) => {
+    const result = await db.list.update({ where: { id }, data: { name } });
     return result;
   }
 );
