@@ -15,7 +15,7 @@ export const dbGetListsByUserId = catchErrors(async (userId: string) => {
 });
 
 export const dbUpdateList = catchErrors(
-  async (name: string, id: string) => {
+  async (id: string, name: string) => {
     const result = await db.list.update({ where: { id }, data: { name } });
     return result;
   }
