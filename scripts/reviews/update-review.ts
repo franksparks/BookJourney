@@ -1,4 +1,4 @@
-import { dbUpdateReview } from "@/db/reviews";
+import { actionUpdateReview } from "@/actions/reviews";
 import { Prisma } from "@prisma/client";
 
 if (process.argv.length != 6) {
@@ -29,6 +29,12 @@ const new_review: Prisma.ReviewCreateInput = {
   book: rating_book,
 };
 
-const result = await dbUpdateReview(new_review, review_id);
+const result = await actionUpdateReview(new_review, review_id);
 
-console.log(result);
+if (result != null) {
+  console.log(result);
+  process.exit(0);
+} else {
+  console.log("Review could not be updated");
+  process.exit(1);
+}

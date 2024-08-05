@@ -1,4 +1,4 @@
-import { dbDeleteList } from "@/db/lists";
+import { actionDeleteList } from "@/actions/lists";
 
 if (process.argv.length != 3) {
   console.error("Usage: bun delete-list.ts <list-id>");
@@ -7,4 +7,11 @@ if (process.argv.length != 3) {
 
 const [_bun, _script, identifier] = process.argv;
 
-await dbDeleteList(identifier);
+const result = await actionDeleteList(identifier);
+
+if (result != null) {
+  console.log(result);
+  process.exit(0);
+} else {
+  process.exit(1);
+}

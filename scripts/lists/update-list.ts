@@ -1,4 +1,4 @@
-import { dbUpdateList } from "@/db/lists";
+import { actionUpdateList } from "@/actions/lists";
 import { Prisma } from "@prisma/client";
 
 if (process.argv.length != 5) {
@@ -21,6 +21,11 @@ const new_list: Prisma.ListCreateInput = {
   user: list_user,
 };
 
-const result = await dbUpdateList(new_list, list_id);
+const result = await actionUpdateList(new_list, list_id);
 
-console.log(result);
+if (result != null) {
+  console.log(result);
+  process.exit(0);
+} else {
+  process.exit(1);
+}

@@ -1,4 +1,4 @@
-import { dbInsertList } from "@/db/lists";
+import { actionInsertList } from "@/actions/lists";
 import { Prisma } from "@prisma/client";
 
 if (process.argv.length != 4) {
@@ -19,7 +19,7 @@ const new_list: Prisma.ListCreateInput = {
   user: list_user,
 };
 
-const result = await dbInsertList(new_list);
+const result = await actionInsertList(new_list);
 
 if (result != null) {
   console.log(result);

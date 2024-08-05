@@ -1,4 +1,4 @@
-import { dbUpdateRating } from "@/db/ratings";
+import { actionUpdateRating } from "@/actions/ratings";
 import { Prisma, RatingValue } from "@prisma/client";
 
 if (process.argv.length != 6) {
@@ -42,6 +42,11 @@ const new_rating: Prisma.RatingCreateInput = {
   book: rating_book,
 };
 
-const result = await dbUpdateRating(new_rating, rating_id);
+const result = await actionUpdateRating(new_rating, rating_id);
 
-console.log(result);
+if (result != null) {
+  console.log(result);
+  process.exit(0);
+} else {
+  process.exit(1);
+}

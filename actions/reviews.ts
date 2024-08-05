@@ -25,7 +25,7 @@ export const actionInsertReview = async (
   );
 };
 
-export const actionGetReviewByBook = async (id: string) => {
+export const actionGetReviewByBookId = async (id: string) => {
   const result = await dbGetReviewsByBookId(id);
   return result;
 };

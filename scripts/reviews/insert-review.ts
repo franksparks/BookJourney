@@ -1,4 +1,4 @@
-import { dbInsertReview } from "@/db/reviews";
+import { actionInsertReview } from "@/actions/reviews";
 import { Prisma } from "@prisma/client";
 
 if (process.argv.length != 5) {
@@ -28,13 +28,12 @@ const new_review: Prisma.ReviewCreateInput = {
   book: rating_book,
 };
 
-const result = await dbInsertReview(new_review);
+const result = await actionInsertReview(new_review);
 
 if (result != null) {
-  console.log("Review added");
   console.log(result);
   process.exit(0);
 } else {
   console.log("Review could not be added");
-  process.exit(0);
+  process.exit(1);
 }
