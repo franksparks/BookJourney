@@ -24,7 +24,7 @@ export const defaultErrorHandler = (err: any) => {
 export const catchErrors = (fn: Function) => {
   return async (...args: any[]) => {
     try {
-      await fn(...args);
+      return await fn(...args);
     } catch (err) {
       return defaultErrorHandler(err);
     }
