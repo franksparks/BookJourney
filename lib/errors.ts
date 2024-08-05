@@ -17,7 +17,7 @@ export const defaultErrorHandler = (err: any) => {
           return console.log(err.code);
       }
     default:
-      return console.log("Internal error, please investigate.");
+      return console.log("Internal error, please investigate." + err);
   }
 };
 

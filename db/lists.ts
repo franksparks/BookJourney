@@ -1,37 +1,25 @@
+import { catchErrors } from "@/lib/errors";
 import { Prisma } from "@prisma/client";
 import { db } from "./db";
-import { catchErrors, defaultErrorHandler } from "@/lib/errors";
 
-export const dbInsertList = async (list: Prisma.ListCreateInput) => {
-  try {
+export const dbInsertList = catchErrors(
+  async (list: Prisma.ListCreateInput) => {
     const result = await db.list.create({ data: list });
     return result;
-  } catch (err) {
-    defaultErrorHandler(err);
-    console.log("List could no be added");
   }
-};
+);
 
-export const dbGetListsByUserId = async (userId: string) => {
-  try {
-    const result = await db.list.findMany({ where: { userId } });
-    return result;
-  } catch (err) {
-    defaultErrorHandler(err);
-  }
-};
+export const dbGetListsByUserId = catchErrors(async (userId: string) => {
+  const result = await db.list.findMany({ where: { userId } });
+  return result;
+});
 
-export const dbUpdateList = async (
-  list: Prisma.ListUpdateInput,
-  id: string
-) => {
-  try {
+export const dbUpdateList = catchErrors(
+  async (list: Prisma.ListUpdateInput, id: string) => {
     const result = await db.list.update({ where: { id }, data: list });
     return result;
-  } catch (err) {
-    defaultErrorHandler(err);
   }
-};
+);
 
 export const dbDeleteList = catchErrors(async (id: string) => {
   const result = await db.list.delete({ where: { id } });

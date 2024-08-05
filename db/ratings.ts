@@ -1,54 +1,34 @@
+import { catchErrors } from "@/lib/errors";
 import { Prisma } from "@prisma/client";
 import { db } from "./db";
-import { defaultErrorHandler } from "@/lib/errors";
 
-export const dbInsertRating = async (rating: Prisma.RatingCreateInput) => {
-  try {
+export const dbInsertRating = catchErrors(
+  async (rating: Prisma.RatingCreateInput) => {
     const result = await db.rating.create({ data: rating });
     return result;
-  } catch (err) {
-    defaultErrorHandler(err);
   }
-};
+);
 
-export const dbGetRatingsByBookId = async (bookId: string) => {
-  try {
-    const result = await db.rating.findMany({ where: { bookId } });
-    return result;
-  } catch (err) {
-    defaultErrorHandler(err);
-  }
-};
+export const dbGetRatingsByBookId = catchErrors(async (bookId: string) => {
+  const result = await db.rating.findMany({ where: { bookId } });
+  return result;
+});
 
-export const dbGetRatingsByBookIdAndUserId = async (
-  bookId: string,
-  userId: string
-) => {
-  try {
+export const dbGetRatingsByBookIdAndUserId = catchErrors(
+  async (bookId: string, userId: string) => {
     const result = await db.rating.findMany({ where: { bookId, userId } });
     return result;
-  } catch (err) {
-    defaultErrorHandler(err);
   }
-};
+);
 
-export const dbUpdateRating = async (
-  rating: Prisma.RatingUpdateInput,
-  id: string
-) => {
-  try {
+export const dbUpdateRating = catchErrors(
+  async (rating: Prisma.RatingUpdateInput, id: string) => {
     const result = await db.rating.update({ where: { id }, data: rating });
     return result;
-  } catch (err) {
-    defaultErrorHandler(err);
   }
-};
+);
 
-export const dbDeleteRating = async (id: string) => {
-  try {
-    const result = await db.rating.delete({ where: { id } });
-    return result;
-  } catch (err) {
-    defaultErrorHandler(err);
-  }
-};
+export const dbDeleteRating = catchErrors(async (id: string) => {
+  const result = await db.rating.delete({ where: { id } });
+  return result;
+});
