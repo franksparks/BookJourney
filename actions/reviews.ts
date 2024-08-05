@@ -8,6 +8,7 @@ import {
   dbUpdateReview,
 } from "@/db/reviews";
 import { Prisma } from "@prisma/client";
+import { comment } from "postcss";
 
 export const actionInsertReview = async (
   review: Prisma.ReviewCreateInput
@@ -30,11 +31,8 @@ export const actionGetReviewByBookId = async (id: string) => {
   return result;
 };
 
-export const actionUpdateReview = async (
-  review: Prisma.ReviewUpdateInput,
-  id: string
-) => {
-  const result = await dbUpdateReview(review, id);
+export const actionUpdateReview = async (id: string, comment: string) => {
+  const result = await dbUpdateReview(id, comment);
   return result;
 };
 

@@ -22,8 +22,11 @@ export const dbGetReviewsByBookIdAndUserId = catchErrors(
 );
 
 export const dbUpdateReview = catchErrors(
-  async (review: Prisma.ReviewUpdateInput, id: string) => {
-    const result = await db.review.update({ where: { id }, data: review });
+  async (id: string, comment: string) => {
+    const result = await db.review.update({
+      where: { id },
+      data: { comment },
+    });
     return result;
   }
 );
