@@ -7,9 +7,10 @@ import FormControl from '@mui/material/FormControl';
 
 type searchRadioButtonsProps = {
   handleRadioButtonChange: (event: React.SyntheticEvent) => void,
+  value: string,
 }
 
-export default function SearchRadioButtons({ handleRadioButtonChange }: searchRadioButtonsProps) {
+export default function SearchRadioButtons({ handleRadioButtonChange, value }: searchRadioButtonsProps) {
 
   const radioStyles = {
     color: common.black,
@@ -26,14 +27,13 @@ export default function SearchRadioButtons({ handleRadioButtonChange }: searchRa
 
   return (
     <FormControl>
-      <RadioGroup className="ml-7" defaultValue="all" row>
+      <RadioGroup className="ml-7" defaultValue="all" row value={value} onChange={handleRadioButtonChange}>
         {options.map((option) => (
           <FormControlLabel
             key={option.value}
             value={option.value}
             control={<Radio sx={radioStyles} />}
             label={option.label}
-            onClick={handleRadioButtonChange}
           />
         ))}
       </RadioGroup>

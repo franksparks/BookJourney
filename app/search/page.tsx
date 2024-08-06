@@ -57,9 +57,10 @@ export default function Home() {
 
     useEffect(() => {
         const urlQuery = searchParams.get('q');
-        setAvoidAdvancedSearch(false);
+        setAvoidAdvancedSearch(true);
         setAvoidSearch(false);
         setPage(1);
+        setRadioValue('all');
         if (urlQuery && urlQuery !== '') {
             setQuery(urlQuery);
         } else {
@@ -73,7 +74,7 @@ export default function Home() {
 
     useEffect(() => {
         handleAdvancedSearch();
-    }, [page, avoidAdvancedSearch])
+    }, [page, advancedQuery, avoidAdvancedSearch])
 
     const handleSearch = useCallback(() => {
         if (query && !avoidSearch) {

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 
 type SearchBoxProps = {
     query: string,
-    advancedQuery: string
+    advancedQuery: string,
     radioValue: string,
     setAdvancedQuery: (advancedQuery: string) => void,
     handleAdvancedSearch: () => void,
@@ -20,8 +20,8 @@ type SearchBoxProps = {
 
 // Todo: Change the img for the next.js Image component
 export default function SearchBox({
-    query, advancedQuery, setAdvancedQuery, handleAdvancedSearch,
-    setPage, setTotalItems, setAvoidSearch, setAvoidAdvancedSearch, setRadioValue, radioValue
+    query, advancedQuery, radioValue, setAdvancedQuery, handleAdvancedSearch,
+    setPage, setTotalItems, setAvoidSearch, setAvoidAdvancedSearch, setRadioValue
 }: SearchBoxProps) {
     useEffect(() => {
         setAdvancedQuery(query);
@@ -59,7 +59,7 @@ export default function SearchBox({
                 <Button onMouseDown={onSearchMouseDown} onClick={onSearchButtonClick} className='mt-5 ml-5'>
                     Search
                 </Button>
-            </div><SearchRadioButtons handleRadioButtonChange={handleRadioButtonChange} />
+            </div><SearchRadioButtons handleRadioButtonChange={handleRadioButtonChange} value={radioValue} />
         </>
     );
 }
