@@ -7,17 +7,12 @@ if (process.argv.length != 3) {
 
 const [_bun, _script, status_id] = process.argv;
 
-try {
-  const bookStatus = await actionGetBookStatusById(status_id);
+const bookStatus = await actionGetBookStatusById(status_id);
 
-  if (bookStatus != null) {
-    console.log("Book status found:", bookStatus);
-    process.exit(0);
-  } else {
-    console.log("Book status not found");
-    process.exit(0);
-  }
-} catch (error) {
-  console.error("Error getting book status:", error);
-  process.exit(1);
+if (bookStatus != null) {
+  console.log("Book status found:", bookStatus);
+  process.exit(0);
+} else {
+  console.log("Book status not found");
+  process.exit(0);
 }

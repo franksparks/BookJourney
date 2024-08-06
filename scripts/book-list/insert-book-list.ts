@@ -13,14 +13,11 @@ const new_book_list: Prisma.BookListCreateInput = {
   book: { connect: { id: book_id } },
 };
 
-try {
-  const result = await actionInsertBookList(new_book_list);
+const result = await actionInsertBookList(new_book_list);
 
-  if (result != null) {
-    console.log("BookList entry added:", result);
-    process.exit(0);
-  }
-} catch (error) {
-  console.error("Error adding BookList entry:", error);
+if (result != null) {
+  console.log("BookList entry added:", result);
+  process.exit(0);
+} else {
   process.exit(1);
 }

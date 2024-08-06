@@ -23,20 +23,15 @@ if (!isValidReadStatus(status)) {
   process.exit(1);
 }
 
-try {
-  const bookStatuses = await actionGetBooksByUserIdAndReadingStatus(
-    user_id,
-    status as ReadStatus
-  );
+const bookStatuses = await actionGetBooksByUserIdAndReadingStatus(
+  user_id,
+  status as ReadStatus
+);
 
-  if (bookStatuses.length > 0) {
-    console.log("Book statuses found:", bookStatuses);
-    process.exit(0);
-  } else {
-    console.log("No book statuses found");
-    process.exit(0);
-  }
-} catch (error) {
-  console.error("Error getting book statuses:", error);
-  process.exit(1);
+if (bookStatuses.length > 0) {
+  console.log("Book statuses found:", bookStatuses);
+  process.exit(0);
+} else {
+  console.log("No book statuses found");
+  process.exit(0);
 }

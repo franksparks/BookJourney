@@ -38,14 +38,11 @@ const new_book: Prisma.BookCreateInput = {
   ...(ratingAverage && { ratingAverage: parseInt(ratingAverage) }),
 };
 
-try {
-  const result = await actionInsertBook(new_book);
+const result = await actionInsertBook(new_book);
 
-  if (result != null) {
-    console.log("Book added");
-    process.exit(0);
-  }
-} catch (error) {
-  console.error("Error adding book:", error);
+if (result != null) {
+  console.log("Book added", result);
+  process.exit(0);
+} else {
   process.exit(1);
 }

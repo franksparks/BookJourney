@@ -40,14 +40,11 @@ const updated_book: Prisma.BookUpdateInput = {
   ...(ratingAverage && { ratingAverage: parseInt(ratingAverage) }),
 };
 
-try {
-  const result = await actionUpdateBook(updated_book, book_id);
+const result = await actionUpdateBook(updated_book, book_id);
 
-  if (result != null) {
-    console.log("Book updated");
-    process.exit(0);
-  }
-} catch (error) {
-  console.error("Error updating book:", error);
+if (result != null) {
+  console.log("Book updated");
+  process.exit(0);
+} else {
   process.exit(1);
 }

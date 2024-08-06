@@ -25,17 +25,14 @@ const updated_book_status: Prisma.BookStatusUpdateInput = {
   status: status as ReadStatus,
 };
 
-try {
-  const result = await actionUpdateBookStatus(
-    updated_book_status,
-    status_id
-  );
+const result = await actionUpdateBookStatus(
+  updated_book_status,
+  status_id
+);
 
-  if (result != null) {
-    console.log("Book status updated");
-    process.exit(0);
-  }
-} catch (error) {
-  console.error("Error updating book status:", error);
+if (result != null) {
+  console.log("Book status updated");
+  process.exit(0);
+} else {
   process.exit(1);
 }
