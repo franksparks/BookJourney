@@ -8,7 +8,6 @@ import {
   dbUpdateReview,
 } from "@/db/reviews";
 import { Prisma } from "@prisma/client";
-import { comment } from "postcss";
 
 export const actionInsertReview = async (
   review: Prisma.ReviewCreateInput
@@ -21,7 +20,7 @@ export const actionInsertReview = async (
     const result = await dbInsertReview(review);
     return result;
   }
-  return console.log(
+  return console.error(
     "This user has already introduced a review for this Book."
   );
 };

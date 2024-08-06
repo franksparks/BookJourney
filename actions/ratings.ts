@@ -20,7 +20,7 @@ export const actionInsertRating = async (
     const result = await dbInsertRating(rating);
     return result;
   }
-  return console.log(
+  return console.error(
     "This user has already introduced a rating for this Book."
   );
 };

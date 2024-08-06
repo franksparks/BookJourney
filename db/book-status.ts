@@ -1,4 +1,4 @@
-import { catchErrors } from "@/lib/errors";
+import { catchErrors } from "@/lib/error-handling";
 import { Prisma, ReadStatus } from "@prisma/client";
 import { db } from "./db";
 
