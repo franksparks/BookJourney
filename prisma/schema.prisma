@@ -9,8 +9,8 @@ datasource db {
 
 model User {
   id           String       @id @default(auto()) @map("_id") @db.ObjectId
-  clerkId      String
-  email        String? // F:To confirm
+  clerkId      String       @unique
+  email        String
   createdAt    DateTime     @default(now())
   reviews      Review[]
   lists        List[]
@@ -92,7 +92,6 @@ enum RatingValue {
 }
 
 enum ReadStatus {
-  NULL
   WANT_TO_READ @map("WANT TO READ")
   READING
   READ

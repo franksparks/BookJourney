@@ -1,10 +1,8 @@
-import { dbUpdateRating } from "@/db/ratings";
-import { Prisma, RatingValue } from "@prisma/client";
+import { actionUpdateRating } from "@/actions/ratings";
+import { RatingValue } from "@prisma/client";
 
-if (process.argv.length != 6) {
-  console.error(
-    "Usage: bun update-rating.ts <user_id> <book-id> <rating_value> <rating_id>"
-  );
+if (process.argv.length != 4) {
+  console.error("Usage: bun update-rating.ts <rating_id>  <rating_value>");
   process.exit(1);
 }
 
@@ -12,8 +10,7 @@ const isValidRatingValue = (value: string): value is RatingValue => {
   return Object.values(RatingValue).includes(value as RatingValue);
 };
 
-const [_bun, _script, user_id, book_id, rating_value, rating_id] =
-  process.argv;
+const [_bun, _script, rating_id, rating_value] = process.argv;
 
 if (!isValidRatingValue(rating_value)) {
   console.error(
@@ -24,31 +21,11 @@ if (!isValidRatingValue(rating_value)) {
   process.exit(1);
 }
 
-const rating_user: Prisma.UserCreateNestedOneWithoutListsInput = {
-  connect: {
-    id: user_id,
-  },
-};
+const result = await actionUpdateRating(rating_value, rating_id);
 
-const rating_book: Prisma.BookCreateNestedOneWithoutListsInput = {
-  connect: {
-    id: book_id,
-  },
-};
-
-const new_rating: Prisma.RatingCreateInput = {
-  rating: rating_value,
-  user: rating_user,
-  book: rating_book,
-};
-
-try {
-  const result = await dbUpdateRating(new_rating, rating_id);
-
-  if (result != null) {
-    console.log("Rating updated");
-  }
-} catch (error) {
-  console.error("Error updating rating:", error);
+if (result != null) {
+  console.log(result);
+  process.exit(0);
+} else {
   process.exit(1);
 }

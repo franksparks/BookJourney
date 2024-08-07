@@ -1,4 +1,4 @@
-import { dbGetReviewsByBookId } from "@/db/reviews";
+import { actionGetReviewByBookId } from "@/actions/reviews";
 
 if (process.argv.length != 3) {
   console.error("Usage: bun find-reviews-by-book-id.ts <book-id>");
@@ -7,8 +7,14 @@ if (process.argv.length != 3) {
 
 const [_bun, _script, identifier] = process.argv;
 
-const result = await dbGetReviewsByBookId(identifier);
-console.log("Requested reviews of book with id:", identifier);
-if (result != null) {
+const result = await actionGetReviewByBookId(identifier);
+
+if (result == null) {
+  process.exit(1);
+} else if (result != null && result.length == 0) {
+  console.log("Book has no reviews");
+  process.exit(0);
+} else {
   console.log(JSON.stringify(result, null, 2));
+  process.exit(0);
 }

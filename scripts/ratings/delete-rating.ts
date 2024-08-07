@@ -1,4 +1,4 @@
-import { dbDeleteRating } from "@/db/ratings";
+import { actionDeleteRating } from "@/actions/ratings";
 
 if (process.argv.length != 3) {
   console.error("Usage: bun delete-rating.ts <rating-id>");
@@ -6,13 +6,12 @@ if (process.argv.length != 3) {
 }
 
 const [_bun, _script, identifier] = process.argv;
-try {
-  const result = await dbDeleteRating(identifier);
-  console.log("Rating to delete:", identifier);
-  if (result != null) {
-    console.log("Rating deleted");
-  }
-} catch (error) {
-  console.error("Error deleting rating:", error);
+
+const result = await actionDeleteRating(identifier);
+
+if (result != null) {
+  console.log(result);
+  process.exit(0);
+} else {
   process.exit(1);
 }

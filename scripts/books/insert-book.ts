@@ -1,4 +1,4 @@
-import { dbInsertBook } from "@/db/books";
+import { actionInsertBook } from "@/actions/books";
 import { Prisma } from "@prisma/client";
 
 if (process.argv.length < 3 || process.argv.length > 13) {
@@ -21,7 +21,7 @@ const [
   publishYear,
   language,
   cover,
-  ratingAverage
+  ratingAverage,
 ] = process.argv;
 
 const new_book: Prisma.BookCreateInput = {
@@ -38,13 +38,11 @@ const new_book: Prisma.BookCreateInput = {
   ...(ratingAverage && { ratingAverage: parseInt(ratingAverage) }),
 };
 
-try {
-  const result = await dbInsertBook(new_book);
+const result = await actionInsertBook(new_book);
 
-  if (result != null) {
-    console.log("Book added");
-  }
-} catch (error) {
-  console.error("Error adding book:", error);
+if (result != null) {
+  console.log("Book added", result);
+  process.exit(0);
+} else {
   process.exit(1);
 }

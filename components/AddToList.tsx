@@ -16,8 +16,8 @@ export default function AddToList() {
                     <Button className="rounded-l-none">&#9660;</Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                    {menuItems.map(item => (
-                        <DropdownMenuCheckboxItem key={item.value}>
+                    {menuItems.map((item, index) => (
+                        <DropdownMenuCheckboxItem key={index}>
                             {item.label}
                         </DropdownMenuCheckboxItem>
                     ))}
