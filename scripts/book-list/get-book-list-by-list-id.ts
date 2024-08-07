@@ -7,15 +7,12 @@ if (process.argv.length != 3) {
 
 const [_bun, _script, list_id] = process.argv;
 
-try {
-  const bookLists = await actionGetBookListsByListId(list_id);
+const bookLists = await actionGetBookListsByListId(list_id);
 
-  if (bookLists.length > 0) {
-    console.log("BookLists found:", bookLists);
-  } else {
-    console.log("No BookLists found for this list");
-  }
-} catch (error) {
-  console.error("Error getting BookLists:", error);
-  process.exit(1);
+if (bookLists.length > 0) {
+  console.log("BookLists found:", bookLists);
+  process.exit(0);
+} else {
+  console.log("No BookLists found for this list");
+  process.exit(0);
 }

@@ -1,8 +1,8 @@
-import { dbUpdateBook } from "@/db/books";
+import { actionUpdateBook } from "@/actions/books";
 import { Prisma } from "@prisma/client";
 
 if (process.argv.length < 4 || process.argv.length > 14) {
-  console.log(process.argv, process.argv.length)
+  console.log(process.argv, process.argv.length);
   console.error(
     "Usage: bun update-book.ts <book_id> [title] [categories] [isbn] [googleBooksId] [description] [pages] [publisher] [publishYear] [language] [cover] [ratingAverage]"
   );
@@ -23,7 +23,7 @@ const [
   publishYear,
   language,
   cover,
-  ratingAverage
+  ratingAverage,
 ] = process.argv;
 
 const updated_book: Prisma.BookUpdateInput = {
@@ -40,13 +40,11 @@ const updated_book: Prisma.BookUpdateInput = {
   ...(ratingAverage && { ratingAverage: parseInt(ratingAverage) }),
 };
 
-try {
-  const result = await dbUpdateBook(updated_book, book_id);
+const result = await actionUpdateBook(updated_book, book_id);
 
-  if (result != null) {
-    console.log("Book updated");
-  }
-} catch (error) {
-  console.error("Error updating book:", error);
+if (result != null) {
+  console.log("Book updated");
+  process.exit(0);
+} else {
   process.exit(1);
 }

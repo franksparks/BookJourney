@@ -1,10 +1,10 @@
 "use server";
 
 import {
-  dbInsertBookList,
-  dbGetBookListsByListId,
-  dbGetBookListsByBookIdAndListId,
   dbDeleteBookList,
+  dbGetBookListsByBookIdAndListId,
+  dbGetBookListsByListId,
+  dbInsertBookList,
 } from "@/db/book-list";
 import { Prisma } from "@prisma/client";
 
@@ -19,7 +19,7 @@ export const actionInsertBookList = async (
     const result = await dbInsertBookList(bookList);
     return result;
   }
-  console.log("This book is already in the list.");
+  return console.log("This book is already in the list.");
 };
 
 export const actionGetBookListsByListId = async (listId: string) => {

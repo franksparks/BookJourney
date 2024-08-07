@@ -12,6 +12,7 @@ try {
 
   if (result != null) {
     console.log("User added");
+    process.exit(0);
   }
 } catch (error) {
   console.error("Error adding review:", error);

@@ -1,4 +1,4 @@
-import { dbInsertRating } from "@/db/ratings";
+import { actionInsertRating } from "@/actions/ratings";
 import { Prisma, RatingValue } from "@prisma/client";
 
 if (process.argv.length != 5) {
@@ -41,13 +41,13 @@ const new_rating: Prisma.RatingCreateInput = {
   book: rating_book,
 };
 
-try {
-  const result = await dbInsertRating(new_rating);
+const result = await actionInsertRating(new_rating);
 
-  if (result != null) {
-    console.log("Rating added");
-  }
-} catch (error) {
-  console.error("Error adding rating:", error);
-  process.exit(1);
+if (result != null) {
+  console.log("Rating added");
+  console.log(result);
+  process.exit(0);
+} else {
+  console.log("Rating could not be added");
+  process.exit(0);
 }

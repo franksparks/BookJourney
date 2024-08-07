@@ -39,13 +39,11 @@ const new_book_status: Prisma.BookStatusCreateInput = {
   book: book_status,
 };
 
-try {
-  const result = await actionInsertBookStatus(new_book_status);
+const result = await actionInsertBookStatus(new_book_status);
 
-  if (result != null) {
-    console.log("Book status added");
-  }
-} catch (error) {
-  console.error("Error adding book status:", error);
+if (result != null) {
+  console.log("Book status added");
+  process.exit(0);
+} else {
   process.exit(1);
 }

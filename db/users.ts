@@ -25,10 +25,14 @@ export async function dbGetUserByClerkId(clerkId: string) {
 }
 
 export async function dbInsertUser(clerkId: string, email: string) {
-  return await db.user.create({
-    data: {
-      clerkId,
-      email,
-    },
-  });
+  const user = await dbGetUserByClerkId(clerkId);
+  if (user === null) {
+    return await db.user.create({
+      data: {
+        clerkId,
+        email,
+      },
+    });
+  }
+  return console.log("User already exists on database");
 }

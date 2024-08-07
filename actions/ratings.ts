@@ -7,7 +7,7 @@ import {
   dbInsertRating,
   dbUpdateRating,
 } from "@/db/ratings";
-import { Prisma } from "@prisma/client";
+import { Prisma, RatingValue } from "@prisma/client";
 
 export const actionInsertRating = async (
   rating: Prisma.RatingCreateInput
@@ -20,16 +20,18 @@ export const actionInsertRating = async (
     const result = await dbInsertRating(rating);
     return result;
   }
-  console.log("This user has already introduced a rating for this Book.");
+  return console.error(
+    "This user has already introduced a rating for this Book."
+  );
 };
 
-export const actionGetRatingByBook = async (id: string) => {
+export const actionGetRatingsByBook = async (id: string) => {
   const result = await dbGetRatingsByBookId(id);
   return result;
 };
 
 export const actionUpdateRating = async (
-  rating: Prisma.RatingUpdateInput,
+  rating: RatingValue,
   id: string
 ) => {
   const result = await dbUpdateRating(rating, id);

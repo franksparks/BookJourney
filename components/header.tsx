@@ -20,16 +20,7 @@ export default function Header() {
 
   useEffect(() => {
     if (user) {
-      const verifyUser = async () => {
-        const userInDB = await actionGetUserByClerkId(user.id);
-        if (userInDB === null) {
-          actionInsertUser(user.id, user.emailAddresses[0].emailAddress);
-        }
-      };
-
-      verifyUser().catch((error) => {
-        console.error("Error checking user:", error);
-      });
+      actionInsertUser(user.id, user.emailAddresses[0].emailAddress);
     }
   }, [user]);
 

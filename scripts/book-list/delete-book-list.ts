@@ -7,13 +7,11 @@ if (process.argv.length != 3) {
 
 const [_bun, _script, booklist_id] = process.argv;
 
-try {
-  const result = await actionDeleteBookList(booklist_id);
+const result = await actionDeleteBookList(booklist_id);
 
-  if (result != null) {
-    console.log("BookList entry deleted:", result);
-  }
-} catch (error) {
-  console.error("Error deleting BookList entry:", error);
+if (result != null) {
+  console.log("BookList entry deleted:", result);
+  process.exit(0);
+} else {
   process.exit(1);
 }

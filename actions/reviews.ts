@@ -16,23 +16,22 @@ export const actionInsertReview = async (
     review.book.connect?.id!,
     review.user.connect?.id!
   );
-  if (existingReview.length == 0) {
+  if (existingReview!.length == 0) {
     const result = await dbInsertReview(review);
     return result;
   }
-  console.log("This user has already introduced a review for this Book.");
+  return console.error(
+    "This user has already introduced a review for this Book."
+  );
 };
 
-export const actionGetReviewByBook = async (id: string) => {
+export const actionGetReviewByBookId = async (id: string) => {
   const result = await dbGetReviewsByBookId(id);
   return result;
 };
 
-export const actionUpdateReview = async (
-  review: Prisma.ReviewUpdateInput,
-  id: string
-) => {
-  const result = await dbUpdateReview(review, id);
+export const actionUpdateReview = async (id: string, comment: string) => {
+  const result = await dbUpdateReview(id, comment);
   return result;
 };
 
