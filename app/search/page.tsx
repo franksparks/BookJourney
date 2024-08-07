@@ -4,7 +4,6 @@ import { Book, actionSearchBooks } from "@/actions/search-books";
 import SearchBox from "@/components/SearchBox";
 import SearchPagination from "@/components/SearchPagination";
 import SearchResults from "@/components/SearchResults";
-import SuspenseBoundary from "@/components/SuspenseBoundary";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useCallback, useEffect, Suspense } from "react";
 
