@@ -6,7 +6,7 @@ import SearchPagination from "@/components/SearchPagination";
 import SearchResults from "@/components/SearchResults";
 import SuspenseBoundary from "@/components/SuspenseBoundary";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, Suspense } from "react";
 
 const queryMap: { [key: string]: string } = {
     "author": ":inauthor:",
@@ -93,7 +93,7 @@ export default function Home() {
     }, []);
 
     return (
-        <SuspenseBoundary>
+        <Suspense>
             <main className="flex justify-center flex-col items-center">
                 <div className="bg-slate-300 mt-10" >
                     <SearchBox query={query} advancedQuery={advancedQuery} setAdvancedQuery={setAdvancedQuery} handleAdvancedSearch={handleAdvancedSearch} setPage={setPage} setTotalItems={setTotalItems} setAvoidSearch={setAvoidSearch} setAvoidAdvancedSearch={setAvoidAdvancedSearch} setRadioValue={setRadioValue} radioValue={radioValue} />
@@ -101,6 +101,6 @@ export default function Home() {
                 {(query || advancedQuery) && results.length !== 0 && <SearchResults results={results} />}
                 {(query || advancedQuery) && results.length !== 0 && <SearchPagination setPage={handlePageChange} page={page} totalItems={totalItems} />}
             </main>
-        </SuspenseBoundary>
+        </Suspense>
     );
 }
