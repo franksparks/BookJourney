@@ -14,10 +14,14 @@ type VolumeInfo = {
 
 export type VolumesResponse = {
   items: [Item];
-  totalItems: number
+  totalItems: number;
 };
 
-export const searchVolumes = async (search: string, index: number, maxResults: number) => {
+export const searchVolumes = async (
+  search: string,
+  index: number,
+  maxResults: number
+) => {
   const books = await fetch(
     `https://www.googleapis.com/books/v1/volumes?q=${search}&maxResults=${maxResults}&startIndex=${index.toString()}`
   );

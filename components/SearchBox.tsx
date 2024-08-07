@@ -1,31 +1,65 @@
 "use client";
 
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Input } from './ui/input';
+import SearchRadioButtons from './SearchRadioButtons';
+import { Button } from "@/components/ui/button"
 
 type SearchBoxProps = {
-    onSearch: (event: { key: string }) => void
     query: string,
-    setQuery: (query: string) => void
+    advancedQuery: string,
+    radioValue: string,
+    setAdvancedQuery: (advancedQuery: string) => void,
+    handleAdvancedSearch: () => void,
+    setPage: (page: number) => void,
+    setTotalItems: (items: number) => void,
+    setAvoidSearch: (status: boolean) => void,
+    setAvoidAdvancedSearch: (status: boolean) => void,
+    setRadioValue: (option: string) => void,
 }
 
 // Todo: Change the img for the next.js Image component
-export default function SearchBox({ onSearch, query, setQuery }: SearchBoxProps) {
+export default function SearchBox({
+    query, advancedQuery, radioValue, setAdvancedQuery, handleAdvancedSearch,
+    setPage, setTotalItems, setAvoidSearch, setAvoidAdvancedSearch, setRadioValue
+}: SearchBoxProps) {
+    useEffect(() => {
+        setAdvancedQuery(query);
+    }, [query, setAdvancedQuery]);
+
     const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-        setQuery(event.target.value);
-    }, []);
+        setAdvancedQuery(event.target.value);
+        setAvoidAdvancedSearch(true);
+    }, [setAdvancedQuery, setAvoidAdvancedSearch]);
+
+    const handleRadioButtonChange = useCallback((event: React.SyntheticEvent) => {
+        setRadioValue((event.target as HTMLInputElement).value);
+    }, [setRadioValue]);
+
+    const onSearchButtonClick = useCallback(() => {
+        handleAdvancedSearch();
+    }, [handleAdvancedSearch]);
+
+    const onSearchMouseDown = useCallback(() => {
+        setTotalItems(0);
+        setPage(1);
+        setAvoidSearch(true);
+        setAvoidAdvancedSearch(false);
+    }, [setTotalItems, setPage, setAvoidSearch, setAvoidAdvancedSearch]);
 
     return (
-        <div className="flex"><Input
-            className="mt-2.5 ml-2.5 mr-2.5 w-96"
-            type="search"
-            placeholder="Search..."
-            value={query}
-            onChange={handleChange}
-            onKeyDown={onSearch} />
-            <a href="https://books.google.com/">
-                <img className="mt-5" src={"https://books.google.com/googlebooks/images/poweredby.png"} />
-            </a>
-        </div>
-    )
+        <>
+            <div className='flex flex-row pr-5'>
+                <Input
+                    className="mt-5 ml-5 w-96 rounded-none bg-white border-black"
+                    type="search"
+                    placeholder="Search by book title or author"
+                    value={advancedQuery}
+                    onChange={handleChange} />
+                <Button onMouseDown={onSearchMouseDown} onClick={onSearchButtonClick} className='mt-5 ml-5'>
+                    Search
+                </Button>
+            </div><SearchRadioButtons handleRadioButtonChange={handleRadioButtonChange} value={radioValue} />
+        </>
+    );
 }

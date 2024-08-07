@@ -1,6 +1,6 @@
 "use client";
 
-import { actionGetUserByClerkId, actionInsertUser } from "@/actions/users";
+import { actionInsertUser } from "@/actions/users";
 import {
   ClerkLoaded,
   ClerkLoading,
@@ -14,9 +14,11 @@ import { Loader } from "lucide-react";
 import { useEffect } from "react";
 import PreviewSearchBox from "./PreviewSearchBox";
 import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
   const { user } = useUser();
+  const router = useRouter();
 
   useEffect(() => {
     if (user) {
@@ -28,7 +30,7 @@ export default function Header() {
     <header className="h-16 w-full bg-sky-700">
       <div className="mx-12 flex items-center justify-between h-full">
         <div className="flex items-center gap-x-3">
-          <div className="flex items-center gap-x-1 cursor-default">
+          <div onClick={() => router.push('/')} className="flex items-center gap-x-1 cursor-pointer">
             <h1 className="text-white text-3xl font-thin">book</h1>
             <h1 className="text-orange-500 text-3xl tracking-wide">
               journey
