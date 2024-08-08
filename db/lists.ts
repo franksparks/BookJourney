@@ -2,6 +2,13 @@ import { catchErrors } from "@/lib/error-handling";
 import { Prisma } from "@prisma/client";
 import { db } from "./db";
 
+export type List = {
+  id: string;
+  name: string;
+  createdAt: Date;
+  userId: string;
+};
+
 export const dbInsertList = catchErrors(
   async (list: Prisma.ListCreateInput) => {
     const result = await db.list.create({ data: list });

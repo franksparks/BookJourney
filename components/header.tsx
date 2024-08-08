@@ -1,6 +1,6 @@
 "use client";
 
-import { actionInsertUser } from "@/actions/users";
+import { actionGetUserByClerkId, actionInsertUser } from "@/actions/users";
 import { useDbUser } from "@/app/context/DbUserContext";
 import {
   ClerkLoaded,
@@ -23,13 +23,18 @@ export default function Header() {
   const { setDbUser } = useDbUser();
 
   useEffect(() => {
+    getLocalUser();
+  }, [user]);
+
+  const getLocalUser = async () => {
     if (user != null) {
-      actionInsertUser(user.id, user.emailAddresses[0].emailAddress);
-      setDbUser(user);
+      await actionInsertUser(user.id, user.emailAddresses[0].emailAddress);
+      const MyUser = await actionGetUserByClerkId(user.id);
+      setDbUser(MyUser);
     } else {
       setDbUser(null);
     }
-  }, [user, setDbUser]);
+  };
 
   return (
     <header className="h-16 w-full bg-sky-700">

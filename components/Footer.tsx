@@ -5,7 +5,6 @@ import React from "react";
 
 export default function Footer() {
   const { dbUser } = useDbUser();
-  console.log(dbUser);
 
   return (
     <div>

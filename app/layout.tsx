@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import UserLists from "@/components/UserLists";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +26,7 @@ export default function RootLayout({
           <body className="flex flex-col bg-neutral-100">
             <Header />
             <main className={inter.className}>{children}</main>
+            <UserLists />
             <Footer />
           </body>
         </html>
