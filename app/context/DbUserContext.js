@@ -1,9 +1,7 @@
 "use client";
 
-// context/DbUserContext.js
 import React, { createContext, useContext, useState } from "react";
 
-// Crear el contexto
 const DbUserContext = createContext();
 
 // Crear el proveedor del contexto

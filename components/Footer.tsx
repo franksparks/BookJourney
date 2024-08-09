@@ -7,13 +7,9 @@ export default function Footer() {
   const { dbUser } = useDbUser();
 
   return (
-    <div>
+    <div className="bg-slate-400 h-20">
       <h1>Usuario Actual:</h1>
-      {dbUser && (
-        <>
-          <p>{dbUser.id}</p>
-        </>
-      )}
+      {dbUser && <p>{dbUser.id}</p>}
     </div>
   );
 }

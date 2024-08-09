@@ -5,7 +5,6 @@ import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import UserLists from "@/components/UserLists";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,9 +22,9 @@ export default function RootLayout({
     <ClerkProvider>
       <DbUserProvider>
         <html lang="en">
-          <body className=" h-screen flex flex-col bg-neutral-100">
+          <body className=" h-screen flex flex-col bg-neutral-300">
             <Header />
-            <main className={`flex-1 ${inter.className}`}>{children}</main>
+            <main className="flex-grow">{children}</main>
             <Footer />
           </body>
         </html>
