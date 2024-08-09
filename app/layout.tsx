@@ -1,6 +1,6 @@
 import { DbUserProvider } from "@/app/context/DbUserContext";
 import Footer from "@/components/Footer";
-import Header from "@/components/Header";
+import Header from "@/components/header";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
