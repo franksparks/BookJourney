@@ -10,6 +10,10 @@ type VolumeInfo = {
   title: string;
   authors: string[];
   imageLinks: ImageLinks;
+  description: string;
+  categories: string[];
+  pages: number;
+
 };
 
 export type VolumesResponse = {
