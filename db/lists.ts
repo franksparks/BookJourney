@@ -1,12 +1,14 @@
 import { catchErrors } from "@/lib/error-handling";
 import { Prisma } from "@prisma/client";
 import { db } from "./db";
+import { Book } from "@/actions/search-books";
 
 export type List = {
   id: string;
   name: string;
   createdAt: Date;
   userId: string;
+  books: Book[];
 };
 
 export const dbInsertList = catchErrors(
@@ -17,7 +19,12 @@ export const dbInsertList = catchErrors(
 );
 
 export const dbGetListsByUserId = catchErrors(async (userId: string) => {
-  const result = await db.list.findMany({ where: { userId } });
+  const result = await db.list.findMany({
+    where: { userId },
+    include: {
+      books: true,
+    },
+  });
   return result;
 });
 

@@ -28,10 +28,12 @@ export default function UserLists() {
 
   return (
     <div>
-      <div>UserLists</div>
+      <h1>UserLists</h1>
       <div>
         {lists.map((list, index) => (
-          <div key={index}>{JSON.stringify(list.name)}</div>
+          <div key={index}>
+            {list.name} ({list.books.length} book/s)
+          </div>
         ))}
       </div>
     </div>

@@ -1,8 +1,10 @@
+import UserLists from "@/components/UserLists";
+
 export default function Home() {
   return (
     <main>
-      <div className="h-screen bg-sky-50 flex items-center justify-center">
-        <h1 className="text-4xl text-slate-500">Welcome to BookJourney</h1>
+      <div className="h-full bg-sky-50 flex justify-center m-10">
+        <UserLists />
       </div>
     </main>
   );

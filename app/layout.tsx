@@ -23,10 +23,9 @@ export default function RootLayout({
     <ClerkProvider>
       <DbUserProvider>
         <html lang="en">
-          <body className="flex flex-col bg-neutral-100">
+          <body className=" h-screen flex flex-col bg-neutral-100">
             <Header />
-            <main className={inter.className}>{children}</main>
-            <UserLists />
+            <main className={`flex-1 ${inter.className}`}>{children}</main>
             <Footer />
           </body>
         </html>
