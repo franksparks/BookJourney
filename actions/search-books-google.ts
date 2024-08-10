@@ -14,8 +14,8 @@ export async function actionSearchBooksGoogle(query: string, index: number, maxR
     const isbn13Identifier = item.volumeInfo.industryIdentifiers.find(identifier => identifier.type === ISBN13);
 
     return {
-      isbn10: isbn10Identifier ? String(isbn10Identifier.identifier)  : '',
-      isbn13: isbn13Identifier ? String(isbn13Identifier.identifier) : '',
+      isbn10: isbn10Identifier ? isbn10Identifier.identifier : 0,
+      isbn13: isbn13Identifier ? isbn13Identifier.identifier : 0,
       authors: item.volumeInfo.authors,
       googleBooksId: item.id,
       title: item.volumeInfo.title,
