@@ -29,7 +29,7 @@ export default function PreviewSearchBox() {
       const result = await actionSearchBooksGoogle(query, 0, 5);
       const mappedOptions = result.books.map((book, index) => ({
         label: `${book.title} by ${book.authors?.length ? book.authors.join(", ") : 'Unknown Author'}`,
-        imageUrl: book.smallThumbnail,
+        imageUrl: book.cover,
         index,
       }));
 

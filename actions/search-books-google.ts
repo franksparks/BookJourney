@@ -1,27 +1,31 @@
 "use server";
 
 import { searchVolumes } from "@/lib/search-volumes";
+import { Book } from "@/models/book";
 
-export interface Book {
-  title: string;
-  authors: string[];
-  smallThumbnail?: string;
-  description: string;
-  genres: string[];
-  numPages: number;
-}
+const ISBN10 = 'ISBN_10';
+const ISBN13 = 'ISBN_13';
 
 export async function actionSearchBooksGoogle(query: string, index: number, maxResults: number) {
   const result = await searchVolumes(query, index, maxResults);
   const totalItems = result.totalItems;
   const books: Book[] = result.items.map(item => {
+    const isbn10Identifier = item.volumeInfo.industryIdentifiers.find(identifier => identifier.type === ISBN10);
+    const isbn13Identifier = item.volumeInfo.industryIdentifiers.find(identifier => identifier.type === ISBN13);
+
     return {
-      title: item.volumeInfo.title,
+      isbn10: isbn10Identifier ? String(isbn10Identifier.identifier)  : '',
+      isbn13: isbn13Identifier ? String(isbn13Identifier.identifier) : '',
       authors: item.volumeInfo.authors,
-      smallThumbnail: item.volumeInfo.imageLinks?.smallThumbnail,
+      googleBooksId: item.id,
+      title: item.volumeInfo.title,
       description: item.volumeInfo.description,
-      numPages: item.volumeInfo.pages,
-      genres: item.volumeInfo.categories
+      categories: item.volumeInfo.categories,
+      pages: item.volumeInfo.pages,
+      publisher: item.volumeInfo.publiser,
+      publishDate: item.volumeInfo.publishedDate,
+      language: item.volumeInfo.language,
+      cover: item.volumeInfo.imageLinks?.smallThumbnail,
     };
   });
   return { books, totalItems };

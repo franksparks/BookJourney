@@ -1,9 +1,10 @@
 "use client"
 
-import { Book, actionSearchBooksGoogle } from "@/actions/search-books-google";
+import { actionSearchBooksGoogle } from "@/actions/search-books-google";
 import SearchBox from "@/components/SearchBox";
 import SearchPagination from "@/components/SearchPagination";
 import SearchResults from "@/components/SearchResults";
+import { Book } from "@/models/book";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useCallback, useEffect, Suspense } from "react";
 
