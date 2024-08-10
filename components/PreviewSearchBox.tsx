@@ -15,7 +15,8 @@ interface Option {
 }
 
 export default function PreviewSearchBox() {
-  const { results, setResults } = useBooksContext();
+  const {results, setResults } = useBooksContext();
+  const [ previewResults, setPreviewResults] = useState<Option[]>([]);;
   const [inputValue, setInputValue] = useState("");
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -27,8 +28,13 @@ export default function PreviewSearchBox() {
     }
 
     try {
-      const result = await actionSearchBooks(query, 0, 5);
-      const mappedOptions = result.books.map((book, index) => ({
+      const result = await actionSearchBooks(query, 0, 10);
+      setResults(result.books);
+
+      console.log(results);
+
+      const firstFiveBooks = result.books.slice(0, 5);
+      const mappedOptions = firstFiveBooks.map((book, index) => ({
         label: `${book.title} by ${book.authors?.length ? book.authors.join(", ") : 'Unknown Author'}`,
         imageUrl: book.smallThumbnail,
         index,
@@ -40,7 +46,7 @@ export default function PreviewSearchBox() {
         index: 5,
       });
 
-      setResults(mappedOptions);
+      setPreviewResults(mappedOptions);
     } catch (error) {
       console.error("Error fetching books:", error);
     }
@@ -65,7 +71,7 @@ export default function PreviewSearchBox() {
 
   const clearValues = useCallback(() => {
     setInputValue("");
-    setResults([]);
+    setPreviewResults([]);
   }, []);
 
   const handleOptionsRendering = useCallback(
@@ -105,8 +111,8 @@ export default function PreviewSearchBox() {
         disablePortal
         forcePopupIcon={false}
         onInputChange={handleInputChange}
-        options={results}
-        open={inputValue.length > 0 && results.length > 0}
+        options={previewResults}
+        open={inputValue.length > 0 && previewResults.length > 0}
         renderOption={handleOptionsRendering}
         sx={{ width: 500 }}
         renderInput={(params) => (
