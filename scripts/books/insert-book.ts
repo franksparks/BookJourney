@@ -22,10 +22,12 @@ const [
   cover,
 ] = process.argv;
 
+const parsedIsbn = isbn ? Number(isbn) : undefined;
+
 const new_book: Prisma.BookCreateInput = {
   title,
   categories: categories.split(","),
-  ...(isbn && { isbn }),
+  ...(parsedIsbn && { isbn: parsedIsbn }),
   ...(googleBooksId && { googleBooksId }),
   ...(description && { description }),
   ...(pages && { pages: parseInt(pages) }),
