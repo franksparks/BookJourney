@@ -18,10 +18,8 @@ const [
   description,
   pages,
   publisher,
-  publishYear,
   language,
   cover,
-  ratingAverage,
 ] = process.argv;
 
 const new_book: Prisma.BookCreateInput = {
@@ -32,10 +30,8 @@ const new_book: Prisma.BookCreateInput = {
   ...(description && { description }),
   ...(pages && { pages: parseInt(pages) }),
   ...(publisher && { publisher }),
-  ...(publishYear && { publishYear: parseInt(publishYear) }),
   ...(language && { language }),
   ...(cover && { cover }),
-  ...(ratingAverage && { ratingAverage: parseInt(ratingAverage) }),
 };
 
 const result = await actionInsertBook(new_book);
