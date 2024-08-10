@@ -39,12 +39,13 @@ export default function UserLists() {
           readingList.map((element: BookStatus, index) => (
             <BookCard key={index} book={element.book} />
           ))}
+        {dbUser && readingList.length == 0 && (
+          <div>Start reading to see something here!</div>
+        )}
+        {!dbUser && (
+          <div>Login to see the books you are reading here!</div>
+        )}
       </div>
-
-      {dbUser && readingList.length == 0 && (
-        <div>Start reading to see something here!</div>
-      )}
-      {!dbUser && <div>Login to see the books you are reading here!</div>}
     </div>
   );
 }
