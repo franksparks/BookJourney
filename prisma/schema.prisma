@@ -20,17 +20,19 @@ model User {
 
 model Book {
   id            String       @id @default(auto()) @map("_id") @db.ObjectId
-  isbn          String?
+  isbn10        String?
+  isbn13        String?
+  authors       String[]
   googleBooksId String? // M:for sync process
   title         String
   description   String?
   categories    String[]
   pages         Int?
   publisher     String?
-  publishYear   Int?
+  publishYear   DateTime?
   language      String?
   cover         String?
-  ratingAverage Int?
+  ratingAverage Float?
   reviews       Review[]
   ratings       Rating[]
   lists         BookList[]
