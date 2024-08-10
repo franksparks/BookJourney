@@ -9,10 +9,10 @@ export const BooksSearchProvider = ({ children }) => {
     const [resetRadio, setResetRadio] = useState(true);
 
     return (
-        <BooksSearchContext.Provider value={{results, setResults, resetRadio, setResetRadio}}>
+        <BooksSearchContext.Provider value={{ results, setResults, resetRadio, setResetRadio }}>
             {children}
         </BooksSearchContext.Provider>
     );
 };
 
-export const useBooksSearchContext = () => useContext(BooksSearchContextx);
+export const useBooksSearchContext = () => useContext(BooksSearchContext);
