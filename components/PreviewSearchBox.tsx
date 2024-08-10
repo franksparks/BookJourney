@@ -6,6 +6,7 @@ import TextField from "@mui/material/TextField";
 import { useState, useCallback, HTMLAttributes, useRef } from "react";
 import debounce from "lodash/debounce";
 import { useRouter } from "next/navigation";
+import { useBooksContext } from "@/app/context/books-context";
 
 interface Option {
   label: string;
@@ -14,14 +15,14 @@ interface Option {
 }
 
 export default function PreviewSearchBox() {
-  const [options, setOptions] = useState<Option[]>([]);
+  const { results, setResults } = useBooksContext();
   const [inputValue, setInputValue] = useState("");
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const searchBooks = async (query: string) => {
     if (!query) {
-      setOptions([]);
+      setResults([]);
       return;
     }
 
@@ -39,7 +40,7 @@ export default function PreviewSearchBox() {
         index: 5,
       });
 
-      setOptions(mappedOptions);
+      setResults(mappedOptions);
     } catch (error) {
       console.error("Error fetching books:", error);
     }
@@ -64,7 +65,7 @@ export default function PreviewSearchBox() {
 
   const clearValues = useCallback(() => {
     setInputValue("");
-    setOptions([]);
+    setResults([]);
   }, []);
 
   const handleOptionsRendering = useCallback(
@@ -104,8 +105,8 @@ export default function PreviewSearchBox() {
         disablePortal
         forcePopupIcon={false}
         onInputChange={handleInputChange}
-        options={options}
-        open={inputValue.length > 0 && options.length > 0}
+        options={results}
+        open={inputValue.length > 0 && results.length > 0}
         renderOption={handleOptionsRendering}
         sx={{ width: 500 }}
         renderInput={(params) => (
