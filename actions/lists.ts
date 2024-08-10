@@ -5,8 +5,8 @@ import {
   dbGetListsByUserId,
   dbInsertList,
   dbUpdateList,
-  List,
 } from "@/db/lists";
+import { List } from "@/models/list";
 import { Prisma } from "@prisma/client";
 
 export const actionInsertList = async (list: Prisma.ListCreateInput) => {
