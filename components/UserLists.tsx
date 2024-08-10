@@ -5,6 +5,8 @@ import { useDbUser } from "@/app/context/DbUserContext";
 import { useEffect, useState } from "react";
 
 import { List } from "@/db/lists";
+import { Book } from "@/db/books";
+import { BookList } from "@/db/book-list";
 
 const initialState: List[] = [];
 
@@ -31,24 +33,28 @@ export default function UserLists() {
   return (
     <div className="flex flex-row gap-40">
       {dbUser &&
-        lists.map((list, index) => (
+        lists.map((list: List, index) => (
           <div
             key={index}
             className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-sky-600 text-slate-200 min-w-80"
           >
             <h1 className="font-light text-sky-300">{list.name}</h1>
 
-            {list.books.map((bookList, bookIndex) => (
-              <div
-                key={bookIndex}
-                className="p-6 text-xl border m-4 rounded-2xl border-slate-200 shadow-sm shadow-white hover:scale-105 hover:bg-sky-500 hover:shadow hover:shadow-white transition duration-500 cursor-pointer"
-              >
-                {bookList.book.title}
-              </div>
-            ))}
+            <div>
+              {list.books.length == 0 && (
+                <p>There are no books in this list.</p>
+              )}
+              {list.books.map((bookList: BookList, index) => (
+                <div key={index}>
+                  <p>{bookList.book.title}</p>
+                </div>
+              ))}
+            </div>
           </div>
         ))}
-      {dbUser && lists.length == 0 && <div>Create a list to store books!</div>}
+      {dbUser && lists.length == 0 && (
+        <div>Create a list to store books!</div>
+      )}
       {!dbUser && <div>Login to see your lists here!</div>}
     </div>
   );

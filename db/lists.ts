@@ -1,14 +1,14 @@
 import { catchErrors } from "@/lib/error-handling";
 import { Prisma } from "@prisma/client";
+import { BookList } from "./book-list";
 import { db } from "./db";
-import { Book } from "@/actions/search-books";
 
 export type List = {
   id: string;
   name: string;
   createdAt: Date;
   userId: string;
-  books: Book[];
+  books: BookList[];
 };
 
 export const dbInsertList = catchErrors(
@@ -32,10 +32,12 @@ export const dbGetListsByUserId = catchErrors(async (userId: string) => {
   return result;
 });
 
-export const dbUpdateList = catchErrors(async (id: string, name: string) => {
-  const result = await db.list.update({ where: { id }, data: { name } });
-  return result;
-});
+export const dbUpdateList = catchErrors(
+  async (id: string, name: string) => {
+    const result = await db.list.update({ where: { id }, data: { name } });
+    return result;
+  }
+);
 
 export const dbDeleteList = catchErrors(async (id: string) => {
   const result = await db.list.delete({ where: { id } });
