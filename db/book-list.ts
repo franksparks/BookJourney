@@ -9,12 +9,15 @@ export const dbInsertBookList = catchErrors(
   }
 );
 
-export const dbGetBookListsByListId = catchErrors(
-  async (listId: string) => {
-    const result = await db.bookList.findMany({ where: { listId } });
-    return result;
-  }
-);
+export const dbGetBookListsByListId = catchErrors(async (listId: string) => {
+  const result = await db.bookList.findMany({
+    where: { listId },
+    include: {
+      book: true,
+    },
+  });
+  return result;
+});
 
 export const dbGetBookListsByBookIdAndListId = catchErrors(
   async (bookId: string, listId: string) => {

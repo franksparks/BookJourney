@@ -45,9 +45,7 @@ export default function Header() {
             className="flex items-center gap-x-1 cursor-pointer"
           >
             <h1 className="text-white text-3xl font-thin">book</h1>
-            <h1 className="text-orange-500 text-3xl tracking-wide">
-              journey
-            </h1>
+            <h1 className="text-orange-500 text-3xl tracking-wide">journey</h1>
           </div>
         </div>
         <PreviewSearchBox />

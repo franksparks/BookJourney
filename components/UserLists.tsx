@@ -29,21 +29,27 @@ export default function UserLists() {
   //TODO: Add a loading for this component
 
   return (
-    <div>
-      <h1>My lists of books</h1>
-      <div>
-        {dbUser &&
-          lists.map((list, index) => (
-            <div key={index}>
-              {list.name} ({list.books.length} book
-              {list.books.length !== 1 && "s"})
-            </div>
-          ))}
-        {dbUser && lists.length == 0 && (
-          <div>Create a list to store books!</div>
-        )}
-        {!dbUser && <div>Login to see your lists here!</div>}
-      </div>
+    <div className="flex flex-row gap-40">
+      {dbUser &&
+        lists.map((list, index) => (
+          <div
+            key={index}
+            className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-white min-w-80"
+          >
+            <h1 className="font-light text-sky-500">{list.name}</h1>
+
+            {list.books.map((bookList, bookIndex) => (
+              <div
+                key={bookIndex}
+                className="p-6 text-lg border m-4 rounded-2xl border-sky-500 hover:scale-105 hover:bg-sky-500 hover:text-white transition duration-500"
+              >
+                {bookList.book.title}
+              </div>
+            ))}
+          </div>
+        ))}
+      {dbUser && lists.length == 0 && <div>Create a list to store books!</div>}
+      {!dbUser && <div>Login to see your lists here!</div>}
     </div>
   );
 }
