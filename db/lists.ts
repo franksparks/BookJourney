@@ -1,15 +1,6 @@
 import { catchErrors } from "@/lib/error-handling";
 import { Prisma } from "@prisma/client";
-import { BookList } from "./book-list";
 import { db } from "./db";
-
-export type List = {
-  id: string;
-  name: string;
-  createdAt: Date;
-  userId: string;
-  books: BookList[];
-};
 
 export const dbInsertList = catchErrors(
   async (list: Prisma.ListCreateInput) => {

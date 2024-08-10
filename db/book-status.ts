@@ -31,6 +31,7 @@ export const dbGetBooksByUserIdAndReadingStatus = catchErrors(
   async (userId: string, status: ReadStatus) => {
     const result = await db.bookStatus.findMany({
       where: { userId, status },
+      include: { book: true },
     });
     return result;
   }

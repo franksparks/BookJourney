@@ -4,9 +4,8 @@ import { actionGetListsByUserId } from "@/actions/lists";
 import { useDbUser } from "@/app/context/DbUserContext";
 import { useEffect, useState } from "react";
 
-import { List } from "@/db/lists";
-import { Book } from "@/db/books";
-import { BookList } from "@/db/book-list";
+import { BookList } from "@/models/bookList";
+import { List } from "@/models/list";
 
 const initialState: List[] = [];
 

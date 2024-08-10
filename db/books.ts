@@ -2,21 +2,6 @@ import { catchErrors } from "@/lib/error-handling";
 import { Prisma } from "@prisma/client";
 import { db } from "./db";
 
-export type Book = {
-  id: string;
-  isbn: string;
-  googleBooksId: Date;
-  title: string;
-  description: string;
-  categories: string[];
-  pages: number;
-  publisher: string;
-  publishYear: number;
-  language: string;
-  cover: string;
-  ratingAverage: number;
-};
-
 export const dbInsertBook = catchErrors(
   async (book: Prisma.BookCreateInput) => {
     const result = await db.book.create({ data: book });
