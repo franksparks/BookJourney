@@ -1,5 +1,5 @@
 import AdvancedSearch from "@/components/AdvancedSearch";
-import { BooksProvider } from "../context/books-context";
+import { BooksSearchProvider } from "../context/books-search-context";
 
 export default function Home() {
     return (

@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header";
 import { ClerkProvider } from "@clerk/nextjs";
-import { BooksProvider } from "./context/books-context";
+import { BooksSearchProvider } from "./context/books-search-context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,14 +19,14 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <BooksProvider>
+      <BooksSearchProvider>
         <html lang="en">
           <body className="flex flex-col bg-neutral-100">
             <Header />
             <body className={inter.className}>{children}</body>
           </body>
         </html>
-      </BooksProvider>
+      </BooksSearchProvider>
     </ClerkProvider>
   );
 }

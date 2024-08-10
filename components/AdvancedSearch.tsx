@@ -1,7 +1,7 @@
 "use client"
 
-import { Book, actionSearchBooks } from "@/actions/search-books";
-import { useBooksContext } from "@/app/context/books-context";
+import { actionSearchBooks } from "@/actions/search-books";
+import { useBooksSearchContext } from "@/app/context/books-search-context";
 import SearchBox from "@/components/SearchBox";
 import SearchPagination from "@/components/SearchPagination";
 import SearchResults from "@/components/SearchResults";
@@ -21,7 +21,7 @@ const calculateIndex = (page: number): number => {
 const MAX_NUMBER_RESULTS = 10;
 
 export default function AdvancedSearch() {
-    const { results, setResults } = useBooksContext();
+    const { results, setResults, resetRadio } = useBooksSearchContext();
     const [query, setQuery] = useState('');
     const [page, setPage] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
@@ -60,7 +60,9 @@ export default function AdvancedSearch() {
         setAvoidAdvancedSearch(true);
         setAvoidSearch(false);
         setPage(1);
-        setRadioValue('all');
+        if(resetRadio) {
+            setRadioValue('all');
+        }
         if (urlQuery && urlQuery !== '') {
             setQuery(urlQuery);
         } else {

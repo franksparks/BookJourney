@@ -6,8 +6,7 @@ import TextField from "@mui/material/TextField";
 import { useState, useCallback, HTMLAttributes, useRef } from "react";
 import debounce from "lodash/debounce";
 import { useRouter } from "next/navigation";
-import { useBooksContext } from "@/app/context/books-context";
-
+import { useBooksSearchContext } from "@/app/context/books-search-context";
 interface Option {
   label: string;
   imageUrl?: string;
@@ -15,26 +14,21 @@ interface Option {
 }
 
 export default function PreviewSearchBox() {
-  const {results, setResults } = useBooksContext();
-  const [ previewResults, setPreviewResults] = useState<Option[]>([]);;
+  const [previewResults, setPreviewResults] = useState<Option[]>([]);;
   const [inputValue, setInputValue] = useState("");
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
+  const { setResetRadio } = useBooksSearchContext()
 
   const searchBooks = async (query: string) => {
     if (!query) {
-      setResults([]);
+      setPreviewResults([]);
       return;
     }
 
     try {
-      const result = await actionSearchBooks(query, 0, 10);
-      setResults(result.books);
-
-      console.log(results);
-
-      const firstFiveBooks = result.books.slice(0, 5);
-      const mappedOptions = firstFiveBooks.map((book, index) => ({
+      const result = await actionSearchBooks(query, 0, 5);
+      const mappedOptions = result.books.map((book, index) => ({
         label: `${book.title} by ${book.authors?.length ? book.authors.join(", ") : 'Unknown Author'}`,
         imageUrl: book.smallThumbnail,
         index,
@@ -63,6 +57,7 @@ export default function PreviewSearchBox() {
   }
 
   const handleRedirect = () => {
+    setResetRadio(true);
     router.push(`/search?q=${encodeURIComponent(inputValue)}`);
     if (inputRef.current) {
       inputRef.current.blur();

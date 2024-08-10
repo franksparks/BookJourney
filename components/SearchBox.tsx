@@ -4,6 +4,7 @@ import { useCallback, useEffect } from 'react';
 import { Input } from './ui/input';
 import SearchRadioButtons from './SearchRadioButtons';
 import { Button } from "@/components/ui/button"
+import { useBooksSearchContext } from '@/app/context/books-search-context';
 
 type SearchBoxProps = {
     query: string,
@@ -23,6 +24,9 @@ export default function SearchBox({
     query, advancedQuery, radioValue, setAdvancedQuery, handleAdvancedSearch,
     setPage, setTotalItems, setAvoidSearch, setAvoidAdvancedSearch, setRadioValue
 }: SearchBoxProps) {
+
+    const {setResetRadio} = useBooksSearchContext()
+
     useEffect(() => {
         setAdvancedQuery(query);
     }, [query, setAdvancedQuery]);
@@ -45,6 +49,8 @@ export default function SearchBox({
         setPage(1);
         setAvoidSearch(true);
         setAvoidAdvancedSearch(false);
+        setResetRadio(false);
+
     }, [setTotalItems, setPage, setAvoidSearch, setAvoidAdvancedSearch]);
 
     return (
