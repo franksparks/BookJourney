@@ -1,6 +1,6 @@
 "use client"
 
-import { Book, actionSearchBooks } from "@/actions/search-books";
+import { Book, actionSearchBooksGoogle } from "@/actions/search-books-google";
 import SearchBox from "@/components/SearchBox";
 import SearchPagination from "@/components/SearchPagination";
 import SearchResults from "@/components/SearchResults";
@@ -41,7 +41,7 @@ export default function Home() {
                 ? `${queryMap[radioValue]}${query}`
                 : query;
 
-            const result = await actionSearchBooks(queryString, index, MAX_NUMBER_RESULTS);
+            const result = await actionSearchBooksGoogle(queryString, index, MAX_NUMBER_RESULTS);
             setResults(result.books);
             if (totalItems === 0) {
                 setTotalItems(result.totalItems);

@@ -1,6 +1,6 @@
 "use server";
 
-import { searchVolumes } from "@/lib/volumes";
+import { searchVolumes } from "@/lib/search-volumes";
 
 export interface Book {
   title: string;
@@ -11,7 +11,7 @@ export interface Book {
   numPages: number;
 }
 
-export async function actionSearchBooks(query: string, index: number, maxResults: number) {
+export async function actionSearchBooksGoogle(query: string, index: number, maxResults: number) {
   const result = await searchVolumes(query, index, maxResults);
   const totalItems = result.totalItems;
   const books: Book[] = result.items.map(item => {
