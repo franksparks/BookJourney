@@ -37,16 +37,14 @@ export default function Header() {
   };
 
   return (
-    <header className="h-16 w-full bg-sky-700">
+    <header className="h-16 w-full bg-sky-600">
       <div className="mx-12 flex items-center justify-between h-full">
-        <div className="flex items-center gap-x-3">
-          <div
-            onClick={() => router.push("/")}
-            className="flex items-center gap-x-1 cursor-pointer"
-          >
-            <h1 className="text-white text-3xl font-thin">book</h1>
-            <h1 className="text-orange-500 text-3xl tracking-wide">journey</h1>
-          </div>
+        <div
+          onClick={() => router.push("/")}
+          className="flex items-center gap-x-1 cursor-pointer mt-2"
+        >
+          <h1 className="text-white text-4xl font-thin">book</h1>
+          <h1 className="text-orange-500 text-4xl tracking-wide">journey</h1>
         </div>
         <PreviewSearchBox />
         <div style={{ minWidth: "150px" }}>

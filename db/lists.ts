@@ -24,7 +24,7 @@ export const dbGetListsByUserId = catchErrors(async (userId: string) => {
     include: {
       books: {
         include: {
-          book: true, // Ensure Book details are included
+          book: true,
         },
       },
     },

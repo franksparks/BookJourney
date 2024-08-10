@@ -34,14 +34,14 @@ export default function UserLists() {
         lists.map((list, index) => (
           <div
             key={index}
-            className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-white min-w-80"
+            className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-sky-600 text-slate-200 min-w-80"
           >
-            <h1 className="font-light text-sky-500">{list.name}</h1>
+            <h1 className="font-light text-sky-300">{list.name}</h1>
 
             {list.books.map((bookList, bookIndex) => (
               <div
                 key={bookIndex}
-                className="p-6 text-lg border m-4 rounded-2xl border-sky-500 hover:scale-105 hover:bg-sky-500 hover:text-white transition duration-500"
+                className="p-6 text-xl border m-4 rounded-2xl border-slate-200 shadow-sm shadow-white hover:scale-105 hover:bg-sky-500 hover:shadow hover:shadow-white transition duration-500 cursor-pointer"
               >
                 {bookList.book.title}
               </div>
