@@ -31,16 +31,17 @@ export const dbGetBooksByUserIdAndReadingStatus = catchErrors(
   async (userId: string, status: ReadStatus) => {
     const result = await db.bookStatus.findMany({
       where: { userId, status },
+      include: { book: true },
     });
     return result;
   }
 );
 
 export const dbUpdateBookStatus = catchErrors(
-  async (bookStatus: Prisma.BookStatusUpdateInput, id: string) => {
+  async (id: string, status: ReadStatus) => {
     const result = await db.bookStatus.update({
       where: { id },
-      data: bookStatus,
+      data: { status },
     });
     return result;
   }
