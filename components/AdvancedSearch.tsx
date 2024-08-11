@@ -24,9 +24,8 @@ const MAX_NUMBER_RESULTS = 10;
 export default function AdvancedSearch() {
     const { results, setResults, resetRadio, previewSearch, setPreviewSearch} = useBooksSearchContext();
     const [advancedResults, setAdvancedResults] = useState<Book[]>([]);
-    const [query, setQuery] = useState('');
-    const [page, setPage] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
+    const [page, setPage] = useState(1);
     const [advancedQuery, setAdvancedQuery] = useState('');
     const [radioValue, setRadioValue] = useState('all');
     const [avoidAdvancedSearch, setAvoidAdvancedSearch] = useState(false);
@@ -66,7 +65,7 @@ export default function AdvancedSearch() {
             setRadioValue('all');
         }
         if (urlQuery && urlQuery !== '') {
-            setQuery(urlQuery);
+            setAdvancedQuery(urlQuery);
         } else {
             router.push('/');
         }
@@ -91,10 +90,10 @@ export default function AdvancedSearch() {
         <Suspense>
             <main className="flex justify-center flex-col items-center">
                 <div className="bg-slate-300 mt-10" >
-                    <SearchBox query={query} advancedQuery={advancedQuery} setAdvancedQuery={setAdvancedQuery} handleAdvancedSearch={handleAdvancedSearch} setPage={setPage} setTotalItems={setTotalItems} setAvoidAdvancedSearch={setAvoidAdvancedSearch} setRadioValue={setRadioValue} radioValue={radioValue} />
+                    <SearchBox advancedQuery={advancedQuery} setAdvancedQuery={setAdvancedQuery} handleAdvancedSearch={handleAdvancedSearch} setPage={setPage} setTotalItems={setTotalItems} setAvoidAdvancedSearch={setAvoidAdvancedSearch} setRadioValue={setRadioValue} radioValue={radioValue} />
                 </div>
-                {(query || advancedQuery) && !previewSearch && advancedResults.length !== 0 && <SearchResults results={advancedResults}/>}
-                {(query || advancedQuery) && advancedResults.length !== 0 && <SearchPagination setPage={handlePageChange} page={page} totalItems={totalItems} />}
+                {advancedQuery && !previewSearch && advancedResults.length !== 0 && <SearchResults results={advancedResults}/>}
+                {advancedQuery && advancedResults.length !== 0 && <SearchPagination setPage={handlePageChange} page={page} totalItems={totalItems} />}
             </main>
         </Suspense>
     );

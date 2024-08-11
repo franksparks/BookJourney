@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import { useBooksSearchContext } from '@/app/context/books-search-context';
 
 type SearchBoxProps = {
-    query: string,
     advancedQuery: string,
     radioValue: string,
     setAdvancedQuery: (advancedQuery: string) => void,
@@ -20,15 +19,11 @@ type SearchBoxProps = {
 
 // Todo: Change the img for the next.js Image component
 export default function SearchBox({
-    query, advancedQuery, radioValue, setAdvancedQuery, handleAdvancedSearch,
+    advancedQuery, radioValue, setAdvancedQuery, handleAdvancedSearch,
     setPage, setTotalItems,setAvoidAdvancedSearch, setRadioValue
 }: SearchBoxProps) {
 
     const {setResetRadio, setPreviewSearch} = useBooksSearchContext()
-
-    useEffect(() => {
-        setAdvancedQuery(query);
-    }, [query, setAdvancedQuery]);
 
     const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         setAdvancedQuery(event.target.value);
