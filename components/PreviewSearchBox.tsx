@@ -106,7 +106,7 @@ export default function PreviewSearchBox() {
     <div className="flex">
       <Autocomplete
         filterOptions={(x) => x}
-        className="bg-slate-200 mt-4 mb-4 mr-4 rounded-md border-none"
+        className="bg-orange-100 mt-4 mb-4 mr-4 rounded-md border-none"
         size="small"
         disablePortal
         forcePopupIcon={false}
