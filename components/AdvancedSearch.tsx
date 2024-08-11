@@ -61,7 +61,6 @@ export default function AdvancedSearch() {
         const urlQuery = searchParams.get('q');
         setAdvancedResults(results);
         setPreviewSearch(false);
-        setAvoidAdvancedSearch(true);
         setPage(1);
         if(resetRadio) {
             setRadioValue('all');
