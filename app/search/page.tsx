@@ -1,6 +1,7 @@
 "use client"
 
 import { actionSearchBooksGoogle } from "@/actions/search-books-google";
+import { useBooksSearchContext } from "@/app/context/books-search-context";
 import SearchBox from "@/components/SearchBox";
 import SearchPagination from "@/components/SearchPagination";
 import SearchResults from "@/components/SearchResults";
@@ -18,16 +19,13 @@ const calculateIndex = (page: number): number => {
     return (page - 1) * 10
 }
 
-const MAX_NUMBER_RESULTS = 10;
-
 export default function Home() {
-    const [results, setResults] = useState<Book[]>([]);
-    const [query, setQuery] = useState('');
+    const { results, setResults, resetRadio, previewSearch, setPreviewSearch, setTotalItems, totalItems} = useBooksSearchContext();
+    const [advancedResults, setAdvancedResults] = useState<Book[]>([]);
+    const [advancedTotalItems, setAdvancedTotalItems] = useState(0);
     const [page, setPage] = useState(1);
-    const [totalItems, setTotalItems] = useState(0);
     const [advancedQuery, setAdvancedQuery] = useState('');
     const [radioValue, setRadioValue] = useState('all');
-    const [avoidSearch, setAvoidSearch] = useState(false);
     const [avoidAdvancedSearch, setAvoidAdvancedSearch] = useState(false);
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -42,10 +40,12 @@ export default function Home() {
                 ? `${queryMap[radioValue]}${query}`
                 : query;
 
-            const result = await actionSearchBooksGoogle(queryString, index, MAX_NUMBER_RESULTS);
+            const result = await actionSearchBooksGoogle(queryString, index);
             setResults(result.books);
-            if (totalItems === 0) {
-                setTotalItems(result.totalItems);
+            setTotalItems(result.totalItems);
+            setAdvancedResults(result.books);
+            if (advancedTotalItems === 0) {
+                setAdvancedTotalItems(result.totalItems)
             }
             if (queryMap && query) {
                 router.push(`/search?q=${encodeURIComponent(query)}`);
@@ -56,39 +56,34 @@ export default function Home() {
     };
 
     useEffect(() => {
-        const urlQuery = searchParams.get('q');
-        setAvoidAdvancedSearch(true);
-        setAvoidSearch(false);
+        const urlQuery = searchParams?.get('q');
+        setAdvancedResults(results);
+        setAdvancedTotalItems(totalItems);
         setPage(1);
-        setRadioValue('all');
+        if(resetRadio) {
+            setRadioValue('all');
+        }
         if (urlQuery && urlQuery !== '') {
-            setQuery(urlQuery);
+            setAdvancedQuery(urlQuery);
         } else {
             router.push('/');
         }
     }, [searchParams, router]);
 
-    useEffect(() => {
-        handleSearch();
-    }, [page, query, avoidSearch])
-
-    useEffect(() => {
-        handleAdvancedSearch();
-    }, [page, advancedQuery, avoidAdvancedSearch])
-
-    const handleSearch = useCallback(() => {
-        if (query && !avoidSearch) {
-            performSearch(query);
-        }
-    }, [query, page, avoidSearch]);
-
     const handleAdvancedSearch = useCallback(() => {
-        if (advancedQuery && !avoidAdvancedSearch) {
+        if (advancedQuery && !avoidAdvancedSearch && !previewSearch ) {
             performSearch(advancedQuery, queryMap);
         }
     }, [advancedQuery, page, radioValue, totalItems, avoidAdvancedSearch]);
 
+
+    useEffect(() => {
+        handleAdvancedSearch();
+    }, [handleAdvancedSearch])
+
+
     const handlePageChange = useCallback((newPage: number) => {
+        setPreviewSearch(false);
         setPage(newPage);
     }, []);
 
@@ -96,10 +91,10 @@ export default function Home() {
         <Suspense>
             <main className="flex justify-center flex-col items-center">
                 <div className="bg-slate-300 mt-10" >
-                    <SearchBox query={query} advancedQuery={advancedQuery} setAdvancedQuery={setAdvancedQuery} handleAdvancedSearch={handleAdvancedSearch} setPage={setPage} setTotalItems={setTotalItems} setAvoidSearch={setAvoidSearch} setAvoidAdvancedSearch={setAvoidAdvancedSearch} setRadioValue={setRadioValue} radioValue={radioValue} />
+                    <SearchBox advancedQuery={advancedQuery} setAdvancedQuery={setAdvancedQuery} handleAdvancedSearch={handleAdvancedSearch} setPage={setPage} setTotalItems={setAdvancedTotalItems} setAvoidAdvancedSearch={setAvoidAdvancedSearch} setRadioValue={setRadioValue} radioValue={radioValue} />
                 </div>
-                {(query || advancedQuery) && results.length !== 0 && <SearchResults results={results} />}
-                {(query || advancedQuery) && results.length !== 0 && <SearchPagination setPage={handlePageChange} page={page} totalItems={totalItems} />}
+                {advancedResults.length !== 0 && <SearchResults results={advancedResults}/>}
+                {advancedResults.length !== 0 && <SearchPagination setPage={handlePageChange} page={page} totalItems={advancedTotalItems} />}
             </main>
         </Suspense>
     );

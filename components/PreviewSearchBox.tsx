@@ -6,7 +6,7 @@ import TextField from "@mui/material/TextField";
 import { useState, useCallback, HTMLAttributes, useRef } from "react";
 import debounce from "lodash/debounce";
 import { useRouter } from "next/navigation";
-
+import { useBooksSearchContext } from "@/app/context/books-search-context";
 interface Option {
   label: string;
   imageUrl?: string;
@@ -14,20 +14,25 @@ interface Option {
 }
 
 export default function PreviewSearchBox() {
-  const [options, setOptions] = useState<Option[]>([]);
+  const { setResults, setPreviewSearch, setTotalItems } = useBooksSearchContext();
+  const [previewResults, setPreviewResults] = useState<Option[]>([]);;
   const [inputValue, setInputValue] = useState("");
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
+  const { setResetRadio } = useBooksSearchContext()
 
   const searchBooks = async (query: string) => {
     if (!query) {
-      setOptions([]);
+      setPreviewResults([]);
       return;
     }
 
     try {
-      const result = await actionSearchBooksGoogle(query, 0, 5);
-      const mappedOptions = result.books.map((book, index) => ({
+      const result = await actionSearchBooksGoogle(query, 0);
+      setResults(result.books);
+      setTotalItems(result.totalItems);
+      const firstFiveBooks = result.books.slice(0, 5);
+      const mappedOptions = firstFiveBooks.map((book, index) => ({
         label: `${book.title} by ${book.authors?.length ? book.authors.join(", ") : 'Unknown Author'}`,
         imageUrl: book.cover,
         index,
@@ -39,7 +44,7 @@ export default function PreviewSearchBox() {
         index: 5,
       });
 
-      setOptions(mappedOptions);
+      setPreviewResults(mappedOptions);
     } catch (error) {
       console.error("Error fetching books:", error);
     }
@@ -53,6 +58,8 @@ export default function PreviewSearchBox() {
   };
 
   const handleRedirect = () => {
+    setPreviewSearch(true);
+    setResetRadio(true);
     router.push(`/search?q=${encodeURIComponent(inputValue)}`);
     if (inputRef.current) {
       inputRef.current.blur();
@@ -61,7 +68,7 @@ export default function PreviewSearchBox() {
 
   const clearValues = useCallback(() => {
     setInputValue("");
-    setOptions([]);
+    setPreviewResults([]);
   }, []);
 
   const handleOptionsRendering = useCallback(
@@ -109,8 +116,8 @@ export default function PreviewSearchBox() {
         disablePortal
         forcePopupIcon={false}
         onInputChange={handleInputChange}
-        options={options}
-        open={inputValue.length > 0 && options.length > 0}
+        options={previewResults}
+        open={inputValue.length > 0 && previewResults.length > 0}
         renderOption={handleOptionsRendering}
         sx={{ width: 500 }}
         renderInput={(params) => (

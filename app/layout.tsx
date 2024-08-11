@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header";
+import { BooksSearchProvider } from "./context/books-search-context";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,13 +22,15 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <DbUserProvider>
+      <BooksSearchProvider>
         <html lang="en">
-          <body className=" h-screen flex flex-col bg-neutral-300">
+        <body className=" h-screen flex flex-col bg-neutral-300">
             <Header />
             <main className="flex-grow">{children}</main>
-            <Footer />
+            <Footer/>
           </body>
         </html>
+      </BooksSearchProvider>
       </DbUserProvider>
     </ClerkProvider>
   );
