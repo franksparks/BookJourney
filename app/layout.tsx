@@ -1,8 +1,10 @@
+import { DbUserProvider } from "@/app/context/DbUserContext";
+import Footer from "@/components/Footer";
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header";
-import { ClerkProvider } from "@clerk/nextjs";
 import { BooksSearchProvider } from "./context/books-search-context";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -19,6 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
+      <DbUserProvider>
       <BooksSearchProvider>
         <html lang="en">
           <body className="flex flex-col bg-neutral-100">
@@ -27,6 +30,7 @@ export default function RootLayout({
           </body>
         </html>
       </BooksSearchProvider>
+      </DbUserProvider>
     </ClerkProvider>
   );
 }

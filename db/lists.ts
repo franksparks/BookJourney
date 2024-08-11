@@ -10,7 +10,16 @@ export const dbInsertList = catchErrors(
 );
 
 export const dbGetListsByUserId = catchErrors(async (userId: string) => {
-  const result = await db.list.findMany({ where: { userId } });
+  const result = await db.list.findMany({
+    where: { userId },
+    include: {
+      books: {
+        include: {
+          book: true,
+        },
+      },
+    },
+  });
   return result;
 });
 
