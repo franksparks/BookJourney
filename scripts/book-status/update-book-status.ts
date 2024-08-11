@@ -26,8 +26,8 @@ const updated_book_status: Prisma.BookStatusUpdateInput = {
 };
 
 const result = await actionUpdateBookStatus(
-  updated_book_status,
-  status_id
+  status_id,
+  updated_book_status
 );
 
 if (result != null) {

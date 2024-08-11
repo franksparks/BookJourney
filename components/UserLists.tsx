@@ -30,7 +30,9 @@ export default function UserLists() {
   //TODO: Add a loading for this component
 
   return (
-    <div className="flex flex-col justify-start rounded-3xl shadow-xl shadow-orange-200 p-8 bg-orange-500 text-slate-200 w-96 h-96 overflow-y-auto">
+    <div className="flex flex-col justify-start rounded-3xl shadow-xl shadow-orange-200 p-8 bg-orange-500 text-slate-200 overflow-y-auto">
+      <h1 className="font-light text-sky-200 text-center">My lists</h1>
+
       {dbUser &&
         lists.map((list: List, index) => (
           <div

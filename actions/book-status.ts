@@ -46,10 +46,10 @@ export const actionGetBooksByUserIdAndReadingStatus = async (
 };
 
 export const actionUpdateBookStatus = async (
-  bookStatus: Prisma.BookStatusUpdateInput,
-  id: string
+  id: string,
+  bookStatus: ReadStatus
 ) => {
-  const result = await dbUpdateBookStatus(bookStatus, id);
+  const result = await dbUpdateBookStatus(id, bookStatus);
   return result;
 };
 

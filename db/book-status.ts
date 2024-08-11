@@ -38,10 +38,10 @@ export const dbGetBooksByUserIdAndReadingStatus = catchErrors(
 );
 
 export const dbUpdateBookStatus = catchErrors(
-  async (bookStatus: Prisma.BookStatusUpdateInput, id: string) => {
+  async (id: string, status: ReadStatus) => {
     const result = await db.bookStatus.update({
       where: { id },
-      data: bookStatus,
+      data: { status },
     });
     return result;
   }
