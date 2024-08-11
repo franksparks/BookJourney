@@ -44,7 +44,7 @@ export default function Home() {
             setResults(result.books);
             setTotalItems(result.totalItems);
             setAdvancedResults(result.books);
-            if (totalItems === 0) {
+            if (advancedTotalItems === 0) {
                 setAdvancedTotalItems(result.totalItems)
             }
             if (queryMap && query) {

@@ -34,8 +34,9 @@ export default function SearchBox({
   const handleRadioButtonChange = useCallback(
     (event: React.SyntheticEvent) => {
       setRadioValue((event.target as HTMLInputElement).value);
+      setAvoidAdvancedSearch(true);
     },
-    [setRadioValue]
+    [setRadioValue, setAvoidAdvancedSearch]
   );
 
   const onSearchButtonClick = useCallback(() => {
