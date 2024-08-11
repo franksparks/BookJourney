@@ -36,7 +36,7 @@ export default function PreviewSearchBox() {
       const firstFiveBooks = result.books.slice(0, 5);
       const mappedOptions = firstFiveBooks.map((book, index) => ({
         label: `${book.title} by ${book.authors?.length ? book.authors.join(", ") : 'Unknown Author'}`,
-        imageUrl: book.cover,
+        imageUrl: book.smallCover,
         googleBooksId: book.googleBooksId,
         index,
       }));

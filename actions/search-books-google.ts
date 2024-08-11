@@ -26,7 +26,8 @@ export async function actionSearchBooksGoogle(query: string, index: number) {
       publisher: item.volumeInfo.publiser,
       publishedDate: item.volumeInfo.publishedDate,
       language: item.volumeInfo.language,
-      cover: item.volumeInfo.imageLinks?.smallThumbnail,
+      cover: item.volumeInfo.imageLinks?.thumbnail,
+      smallCover: item.volumeInfo.imageLinks?.smallThumbnail
     };
   });
   return { books, totalItems };

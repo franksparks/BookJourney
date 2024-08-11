@@ -5,6 +5,7 @@ type Item = {
 
 type ImageLinks = {
   smallThumbnail: string;
+  thumbnail: string;
 };
 
 type IndustriyIdentifier = {
