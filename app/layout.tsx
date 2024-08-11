@@ -24,9 +24,10 @@ export default function RootLayout({
       <DbUserProvider>
       <BooksSearchProvider>
         <html lang="en">
-          <body className="flex flex-col bg-neutral-100">
+        <body className=" h-screen flex flex-col bg-neutral-300">
             <Header />
-            <body className={inter.className}>{children}</body>
+            <main className="flex-grow">{children}</main>
+            <Footer/>
           </body>
         </html>
       </BooksSearchProvider>
