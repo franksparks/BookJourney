@@ -31,13 +31,17 @@ export default function SearchBox({
         setPreviewSearch(false);
     }, [setAdvancedQuery, setAvoidAdvancedSearch]);
 
-    const handleRadioButtonChange = useCallback((event: React.SyntheticEvent) => {
-        setRadioValue((event.target as HTMLInputElement).value);
-    }, [setRadioValue]);
+  const handleRadioButtonChange = useCallback(
+    (event: React.SyntheticEvent) => {
+      setRadioValue((event.target as HTMLInputElement).value);
+      setAvoidAdvancedSearch(true);
+    },
+    [setRadioValue, setAvoidAdvancedSearch]
+  );
 
-    const onSearchButtonClick = useCallback(() => {
-        handleAdvancedSearch();
-    }, [handleAdvancedSearch]);
+  const onSearchButtonClick = useCallback(() => {
+    handleAdvancedSearch();
+  }, [handleAdvancedSearch]);
 
     const onSearchMouseDown = useCallback(() => {
         setTotalItems(0);
@@ -47,19 +51,28 @@ export default function SearchBox({
 
     }, [setTotalItems, setPage, setAvoidAdvancedSearch]);
 
-    return (
-        <>
-            <div className='flex flex-row pr-5'>
-                <Input
-                    className="mt-5 ml-5 w-96 rounded-none bg-white border-black"
-                    type="search"
-                    placeholder="Search by book title or author"
-                    value={advancedQuery}
-                    onChange={handleChange} />
-                <Button onMouseDown={onSearchMouseDown} onClick={onSearchButtonClick} className='mt-5 ml-5'>
-                    Search
-                </Button>
-            </div><SearchRadioButtons handleRadioButtonChange={handleRadioButtonChange} value={radioValue} />
-        </>
-    );
+  return (
+    <>
+      <div className="flex flex-row pr-5">
+        <Input
+          className="mt-5 ml-5 w-96 rounded-none bg-white border-black"
+          type="search"
+          placeholder="Search by book title or author"
+          value={advancedQuery}
+          onChange={handleChange}
+        />
+        <Button
+          onMouseDown={onSearchMouseDown}
+          onClick={onSearchButtonClick}
+          className="mt-5 ml-5"
+        >
+          Search
+        </Button>
+      </div>
+      <SearchRadioButtons
+        handleRadioButtonChange={handleRadioButtonChange}
+        value={radioValue}
+      />
+    </>
+  );
 }

@@ -54,15 +54,12 @@ export default function PreviewSearchBox() {
     }
   };
 
-  const debouncedSearchBooks = useCallback(
-    debounce(searchBooks, 300),
-    []
-  );
+  const debouncedSearchBooks = useCallback(debounce(searchBooks, 300), []);
 
   const handleInputChange = (_event: React.SyntheticEvent, query: string) => {
     setInputValue(query);
     debouncedSearchBooks(query);
-  }
+  };
 
   const handleBlur = () => {
     if (inputRef.current) {
@@ -86,11 +83,14 @@ export default function PreviewSearchBox() {
     (props: HTMLAttributes<HTMLLIElement>, option: Option) => {
       if (option.index === 5) {
         return (
-          <div className="flex justify-center" onMouseDown={(event) => {
-            event.preventDefault();
-            handleRedirect();
-            clearValues();
-          }}>
+          <div
+            className="flex justify-center"
+            onMouseDown={(event) => {
+              event.preventDefault();
+              handleRedirect();
+              clearValues();
+            }}
+          >
             <li {...props}>{"See all results"}</li>
           </div>
         );
@@ -101,7 +101,12 @@ export default function PreviewSearchBox() {
             <img
               src={option.imageUrl || "../default_cover.jpg"}
               alt={option.label}
-              style={{ width: 50, height: 75, marginRight: 10, objectFit: 'cover' }}
+              style={{
+                width: 50,
+                height: 75,
+                marginRight: 10,
+                objectFit: "cover",
+              }}
             />
             {option.label}
           </li>
@@ -116,7 +121,7 @@ export default function PreviewSearchBox() {
     <div className="flex">
       <Autocomplete
         filterOptions={(x) => x}
-        className="bg-white mt-4 mb-4 mr-4"
+        className="bg-orange-100 mt-4 mb-4 mr-4 rounded-md border-none"
         size="small"
         disablePortal
         forcePopupIcon={false}
@@ -149,8 +154,15 @@ export default function PreviewSearchBox() {
           />
         )}
       />
-      <a href="https://books.google.com/" target="_blank" rel="noopener noreferrer">
-        <img className="mt-5" src={"https://books.google.com/googlebooks/images/poweredby.png"} />
+      <a
+        href="https://books.google.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          className="mt-5"
+          src={"https://books.google.com/googlebooks/images/poweredby.png"}
+        />
       </a>
     </div>
   );
