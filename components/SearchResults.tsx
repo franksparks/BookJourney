@@ -1,4 +1,4 @@
-import { Book } from "@/actions/search-books";
+import { Book } from "@/models/auxiliar";
 import { Table, TableBody, TableCell, TableRow } from "./ui/table";
 import { capitalizeFirstLetter } from "@/lib/capitalize";
 import AddToList from './AddToList';

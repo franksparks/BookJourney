@@ -1,6 +1,7 @@
 "use client"
 
-import { Book, actionSearchBooks } from "@/actions/search-books";
+import { actionSearchBooks } from "@/actions/search-books";
+import { Book } from "@/models/auxiliar";
 import SearchBox from "@/components/SearchBox";
 import SearchPagination from "@/components/SearchPagination";
 import SearchResults from "@/components/SearchResults";

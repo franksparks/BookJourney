@@ -1,3 +1,5 @@
+import BookCard from "@/components/common/BookCard";
+import { BookCardProps } from "@/models/auxiliar";
 export default function Home() {
   return (
     <main>

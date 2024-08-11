@@ -1,0 +1,71 @@
+.card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  background-color: #0369a14d;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.media {
+  width: 120px;
+  height: 180px;
+  background-image: url('../assets/images/book-model.png');
+  background-size: cover;
+  background-position: center;
+}
+
+.thumb {
+  width: 85px;
+  height: 100px;
+  margin-left: 22px;
+  margin-top: 62px;
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  padding-left: 16px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.totalPages {
+  font-size: 14px;
+  color: #888;
+  text-align: end;
+}
+
+.updateButton {
+  margin-right: 16px;
+  background-color: #3f51b5;
+  border-radius: 20px;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.updateButton:hover {
+  background-color: #303f9f; /* Darker shade for hover */
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+}
