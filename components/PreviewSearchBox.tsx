@@ -1,6 +1,6 @@
 "use client";
 
-import { actionSearchBooks } from "@/actions/search-books";
+import { actionSearchBooksGoogle } from "@/actions/search-books-google";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { useState, useCallback, HTMLAttributes, useRef } from "react";
@@ -27,10 +27,10 @@ export default function PreviewSearchBox() {
     }
 
     try {
-      const result = await actionSearchBooks(query, 0, 5);
+      const result = await actionSearchBooksGoogle(query, 0, 5);
       const mappedOptions = result.books.map((book, index) => ({
         label: `${book.title} by ${book.authors?.length ? book.authors.join(", ") : 'Unknown Author'}`,
-        imageUrl: book.smallThumbnail,
+        imageUrl: book.cover,
         index,
       }));
 

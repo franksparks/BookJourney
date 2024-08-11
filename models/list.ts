@@ -1,4 +1,4 @@
-import { BookList } from "./bookList";
+import { BookList } from "./book-list";
 
 export type List = {
   id: string;
