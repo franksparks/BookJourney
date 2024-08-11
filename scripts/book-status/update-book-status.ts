@@ -1,5 +1,5 @@
 import { actionUpdateBookStatus } from "@/actions/book-status";
-import { Prisma, ReadStatus } from "@prisma/client";
+import { ReadStatus } from "@prisma/client";
 
 if (process.argv.length != 4) {
   console.error("Usage: bun update-book-status.ts <status_id> <status>");
@@ -21,13 +21,9 @@ if (!isValidReadStatus(status)) {
   process.exit(1);
 }
 
-const updated_book_status: Prisma.BookStatusUpdateInput = {
-  status: status as ReadStatus,
-};
-
 const result = await actionUpdateBookStatus(
   status_id,
-  updated_book_status
+  status as ReadStatus
 );
 
 if (result != null) {
