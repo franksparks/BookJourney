@@ -29,7 +29,7 @@ model Book {
   categories    String[]
   pages         Int?
   publisher     String?
-  publishYear   DateTime?
+  publishedDate DateTime?
   language      String?
   cover         String?
   ratingAverage Float?

@@ -9,7 +9,7 @@ export type Book = {
   categories: string[];
   pages: number;
   publisher: string;
-  publishDate: Date;
+  publishedDate: Date;
   language: string;
   cover?: string;
   ratingAverage?: number;
