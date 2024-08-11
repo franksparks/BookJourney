@@ -7,9 +7,11 @@ import { useState, useCallback, HTMLAttributes, useRef } from "react";
 import debounce from "lodash/debounce";
 import { useRouter } from "next/navigation";
 import { useBooksSearchContext } from "@/app/context/books-search-context";
+import BookNavigationWrapper from "./BookNavigationWrapper";
 interface Option {
   label: string;
   imageUrl?: string;
+  googleBooksId: string;
   index: number;
 }
 
@@ -35,12 +37,14 @@ export default function PreviewSearchBox() {
       const mappedOptions = firstFiveBooks.map((book, index) => ({
         label: `${book.title} by ${book.authors?.length ? book.authors.join(", ") : 'Unknown Author'}`,
         imageUrl: book.cover,
+        googleBooksId: book.googleBooksId,
         index,
       }));
 
       mappedOptions.push({
         label: "See all results",
         imageUrl: "",
+        googleBooksId: "",
         index: 5,
       });
 
@@ -60,13 +64,17 @@ export default function PreviewSearchBox() {
     debouncedSearchBooks(query);
   }
 
+  const handleBlur = () => {
+    if (inputRef.current) {
+      inputRef.current.blur();
+    }
+  }
+
   const handleRedirect = () => {
     setPreviewSearch(true);
     setResetRadio(true);
     router.push(`/search?q=${encodeURIComponent(inputValue)}`);
-    if (inputRef.current) {
-      inputRef.current.blur();
-    }
+    handleBlur();
   };
 
   const clearValues = useCallback(() => {
@@ -88,6 +96,7 @@ export default function PreviewSearchBox() {
         );
       } else {
         return (
+          <BookNavigationWrapper key={option.index} id={option.googleBooksId} clearValues={clearValues} handleBlur={handleBlur}>
           <li {...props}>
             <img
               src={option.imageUrl || "../default_cover.jpg"}
@@ -96,6 +105,7 @@ export default function PreviewSearchBox() {
             />
             {option.label}
           </li>
+          </BookNavigationWrapper>
         );
       }
     },
