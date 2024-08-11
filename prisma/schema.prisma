@@ -31,6 +31,7 @@ model Book {
   publisher     String?
   publishedDate DateTime?
   language      String?
+  smallCover    String?
   cover         String?
   ratingAverage Float?
   reviews       Review[]
