@@ -10,8 +10,9 @@ export async function actionSearchBooksGoogle(query: string, index: number, maxR
   const result = await searchVolumes(query, index, maxResults);
   const totalItems = result.totalItems;
   const books: Book[] = result.items.map(item => {
-    const isbn10Identifier = item.volumeInfo.industryIdentifiers.find(identifier => identifier.type === ISBN10);
-    const isbn13Identifier = item.volumeInfo.industryIdentifiers.find(identifier => identifier.type === ISBN13);
+    const industryIdentifiers = item.volumeInfo.industryIdentifiers || [];
+    const isbn10Identifier = industryIdentifiers.find(identifier => identifier.type === ISBN10);
+    const isbn13Identifier = industryIdentifiers.find(identifier => identifier.type === ISBN13);
 
     return {
       isbn10: isbn10Identifier ? isbn10Identifier.identifier : 0,

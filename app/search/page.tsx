@@ -74,16 +74,17 @@ export default function Home() {
         }
     }, [searchParams, router]);
 
-
-    useEffect(() => {
-        handleAdvancedSearch();
-    }, [page, advancedQuery, avoidAdvancedSearch])
-
     const handleAdvancedSearch = useCallback(() => {
         if (advancedQuery && !avoidAdvancedSearch && !previewSearch ) {
             performSearch(advancedQuery, queryMap);
         }
     }, [advancedQuery, page, radioValue, totalItems, avoidAdvancedSearch]);
+
+
+    useEffect(() => {
+        handleAdvancedSearch();
+    }, [handleAdvancedSearch])
+
 
     const handlePageChange = useCallback((newPage: number) => {
         setPage(newPage);
