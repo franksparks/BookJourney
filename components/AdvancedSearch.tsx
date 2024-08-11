@@ -22,9 +22,9 @@ const calculateIndex = (page: number): number => {
 const MAX_NUMBER_RESULTS = 10;
 
 export default function AdvancedSearch() {
-    const { results, setResults, resetRadio, previewSearch, setPreviewSearch} = useBooksSearchContext();
+    const { results, setResults, resetRadio, previewSearch, setPreviewSearch, setTotalItems, totalItems} = useBooksSearchContext();
     const [advancedResults, setAdvancedResults] = useState<Book[]>([]);
-    const [totalItems, setTotalItems] = useState(0);
+    const [advancedTotalItems, setAdvancedTotalItems] = useState(0);
     const [page, setPage] = useState(1);
     const [advancedQuery, setAdvancedQuery] = useState('');
     const [radioValue, setRadioValue] = useState('all');
@@ -44,7 +44,9 @@ export default function AdvancedSearch() {
 
             const result = await actionSearchBooksGoogle(queryString, index, MAX_NUMBER_RESULTS);
             setResults(result.books);
+            setTotalItems(result.totalItems);
             setAdvancedResults(result.books);
+            setAdvancedTotalItems(result.totalItems)
             if (totalItems === 0) {
                 setTotalItems(result.totalItems);
             }
@@ -59,6 +61,7 @@ export default function AdvancedSearch() {
     useEffect(() => {
         const urlQuery = searchParams.get('q');
         setAdvancedResults(results);
+        setAdvancedTotalItems(totalItems);
         setPreviewSearch(false);
         setPage(1);
         if(resetRadio) {
@@ -90,10 +93,10 @@ export default function AdvancedSearch() {
         <Suspense>
             <main className="flex justify-center flex-col items-center">
                 <div className="bg-slate-300 mt-10" >
-                    <SearchBox advancedQuery={advancedQuery} setAdvancedQuery={setAdvancedQuery} handleAdvancedSearch={handleAdvancedSearch} setPage={setPage} setTotalItems={setTotalItems} setAvoidAdvancedSearch={setAvoidAdvancedSearch} setRadioValue={setRadioValue} radioValue={radioValue} />
+                    <SearchBox advancedQuery={advancedQuery} setAdvancedQuery={setAdvancedQuery} handleAdvancedSearch={handleAdvancedSearch} setPage={setPage} setTotalItems={setAdvancedTotalItems} setAvoidAdvancedSearch={setAvoidAdvancedSearch} setRadioValue={setRadioValue} radioValue={radioValue} />
                 </div>
-                {advancedQuery && !previewSearch && advancedResults.length !== 0 && <SearchResults results={advancedResults}/>}
-                {advancedQuery && advancedResults.length !== 0 && <SearchPagination setPage={handlePageChange} page={page} totalItems={totalItems} />}
+                {advancedResults.length !== 0 && <SearchResults results={advancedResults}/>}
+                {advancedResults.length !== 0 && <SearchPagination setPage={handlePageChange} page={page} totalItems={advancedTotalItems} />}
             </main>
         </Suspense>
     );

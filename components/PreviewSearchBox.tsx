@@ -14,7 +14,7 @@ interface Option {
 }
 
 export default function PreviewSearchBox() {
-  const { setResults, setPreviewSearch } = useBooksSearchContext();
+  const { setResults, setPreviewSearch, setTotalItems } = useBooksSearchContext();
   const [previewResults, setPreviewResults] = useState<Option[]>([]);;
   const [inputValue, setInputValue] = useState("");
   const router = useRouter();
@@ -30,7 +30,7 @@ export default function PreviewSearchBox() {
     try {
       const result = await actionSearchBooksGoogle(query, 0, 5);
       setResults(result.books);
-      setPreviewSearch(true);
+      setTotalItems(result.totalItems);
       const firstFiveBooks = result.books.slice(0, 5);
       const mappedOptions = firstFiveBooks.map((book, index) => ({
         label: `${book.title} by ${book.authors?.length ? book.authors.join(", ") : 'Unknown Author'}`,
@@ -61,6 +61,7 @@ export default function PreviewSearchBox() {
   }
 
   const handleRedirect = () => {
+    setPreviewSearch(true);
     setResetRadio(true);
     router.push(`/search?q=${encodeURIComponent(inputValue)}`);
     if (inputRef.current) {

@@ -8,9 +8,10 @@ export const BooksSearchProvider = ({ children }) => {
     const [results, setResults] = useState([]);
     const [resetRadio, setResetRadio] = useState(true);
     const [previewSearch, setPreviewSearch] = useState(false);
+    const [totalItems, setTotalItems] = useState(0);
 
     return (
-        <BooksSearchContext.Provider value={{ results, setResults, resetRadio, setResetRadio, previewSearch, setPreviewSearch }}>
+        <BooksSearchContext.Provider value={{ results, setResults, resetRadio, setResetRadio, previewSearch, setPreviewSearch, totalItems, setTotalItems }}>
             {children}
         </BooksSearchContext.Provider>
     );
