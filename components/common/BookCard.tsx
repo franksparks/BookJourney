@@ -1,14 +1,18 @@
 import React from "react";
 import { Card, CardContent, Typography, Button } from "@mui/material";
-import { BookCardProps } from "@/models/auxiliar";
 import styles from "@/styles/bookcard.module.css";
+import { Book } from "@/models/book";
+
+interface BookCardProps extends Book {
+    updateAction: any;
+}
 
 export default function BookCard({ book }: { book: BookCardProps }) {
   return (
     <Card className={styles.card}>
       <div className={styles.media}>
         <img
-          src={book.smallThumbnail}
+          src={book.cover}
           alt={book.title}
           className={styles.thumb}
         />
@@ -32,7 +36,7 @@ export default function BookCard({ book }: { book: BookCardProps }) {
             component="div"
             className={styles.publishedDate}
           >
-            <strong>Genre:</strong> {book.genre}
+            <strong>Categories:</strong> {book.categories.join(", ")}
           </Typography>
         </CardContent>
         <div className={styles.footer}>
