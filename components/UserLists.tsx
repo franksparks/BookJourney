@@ -2,10 +2,9 @@
 
 import { actionGetListsByUserId } from "@/actions/lists";
 import { useDbUser } from "@/app/context/DbUserContext";
-import { useEffect, useState } from "react";
-
-import { BookList } from "@/models/bookList";
+import { BookList } from "@/models/book-list";
 import { List } from "@/models/list";
+import { useEffect, useState } from "react";
 
 const initialState: List[] = [];
 

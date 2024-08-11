@@ -1,6 +1,6 @@
 import { actionUpdateBookStatus } from "@/actions/book-status";
 import { Book } from "@/models/book";
-import { BookStatus } from "@/models/bookStatus";
+import { BookStatus } from "@/models/book-status";
 import { ReadStatus } from "@prisma/client";
 import Image from "next/image";
 import { Button } from "./ui/button";

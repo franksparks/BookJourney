@@ -2,7 +2,7 @@
 
 import { actionGetBooksByUserIdAndReadingStatus } from "@/actions/book-status";
 import { useDbUser } from "@/app/context/DbUserContext";
-import { BookStatus } from "@/models/bookStatus";
+import { BookStatus } from "@/models/book-status";
 import { useEffect, useState } from "react";
 import BookCard from "./BookCard";
 
