@@ -19,8 +19,6 @@ const calculateIndex = (page: number): number => {
     return (page - 1) * 10
 }
 
-const MAX_NUMBER_RESULTS = 10;
-
 export default function Home() {
     const { results, setResults, resetRadio, previewSearch, setPreviewSearch, setTotalItems, totalItems} = useBooksSearchContext();
     const [advancedResults, setAdvancedResults] = useState<Book[]>([]);
@@ -42,13 +40,12 @@ export default function Home() {
                 ? `${queryMap[radioValue]}${query}`
                 : query;
 
-            const result = await actionSearchBooksGoogle(queryString, index, MAX_NUMBER_RESULTS);
+            const result = await actionSearchBooksGoogle(queryString, index);
             setResults(result.books);
             setTotalItems(result.totalItems);
             setAdvancedResults(result.books);
-            setAdvancedTotalItems(result.totalItems)
             if (totalItems === 0) {
-                setTotalItems(result.totalItems);
+                setAdvancedTotalItems(result.totalItems)
             }
             if (queryMap && query) {
                 router.push(`/search?q=${encodeURIComponent(query)}`);
@@ -62,7 +59,6 @@ export default function Home() {
         const urlQuery = searchParams?.get('q');
         setAdvancedResults(results);
         setAdvancedTotalItems(totalItems);
-        setPreviewSearch(false);
         setPage(1);
         if(resetRadio) {
             setRadioValue('all');
@@ -87,6 +83,7 @@ export default function Home() {
 
 
     const handlePageChange = useCallback((newPage: number) => {
+        setPreviewSearch(false);
         setPage(newPage);
     }, []);
 

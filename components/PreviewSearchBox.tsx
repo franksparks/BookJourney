@@ -28,7 +28,7 @@ export default function PreviewSearchBox() {
     }
 
     try {
-      const result = await actionSearchBooksGoogle(query, 0, 5);
+      const result = await actionSearchBooksGoogle(query, 0);
       setResults(result.books);
       setTotalItems(result.totalItems);
       const firstFiveBooks = result.books.slice(0, 5);
