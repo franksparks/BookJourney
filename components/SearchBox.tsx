@@ -14,7 +14,6 @@ type SearchBoxProps = {
     handleAdvancedSearch: () => void,
     setPage: (page: number) => void,
     setTotalItems: (items: number) => void,
-    setAvoidSearch: (status: boolean) => void,
     setAvoidAdvancedSearch: (status: boolean) => void,
     setRadioValue: (option: string) => void,
 }
@@ -22,10 +21,10 @@ type SearchBoxProps = {
 // Todo: Change the img for the next.js Image component
 export default function SearchBox({
     query, advancedQuery, radioValue, setAdvancedQuery, handleAdvancedSearch,
-    setPage, setTotalItems, setAvoidSearch, setAvoidAdvancedSearch, setRadioValue
+    setPage, setTotalItems,setAvoidAdvancedSearch, setRadioValue
 }: SearchBoxProps) {
 
-    const {setResetRadio} = useBooksSearchContext()
+    const {setResetRadio, setPreviewSearch} = useBooksSearchContext()
 
     useEffect(() => {
         setAdvancedQuery(query);
@@ -34,6 +33,7 @@ export default function SearchBox({
     const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         setAdvancedQuery(event.target.value);
         setAvoidAdvancedSearch(true);
+        setPreviewSearch(false);
     }, [setAdvancedQuery, setAvoidAdvancedSearch]);
 
     const handleRadioButtonChange = useCallback((event: React.SyntheticEvent) => {
@@ -47,11 +47,10 @@ export default function SearchBox({
     const onSearchMouseDown = useCallback(() => {
         setTotalItems(0);
         setPage(1);
-        setAvoidSearch(true);
         setAvoidAdvancedSearch(false);
         setResetRadio(false);
 
-    }, [setTotalItems, setPage, setAvoidSearch, setAvoidAdvancedSearch]);
+    }, [setTotalItems, setPage, setAvoidAdvancedSearch]);
 
     return (
         <>
