@@ -59,7 +59,7 @@ export default function Home() {
     };
 
     useEffect(() => {
-        const urlQuery = searchParams.get('q');
+        const urlQuery = searchParams?.get('q');
         setAdvancedResults(results);
         setAdvancedTotalItems(totalItems);
         setPreviewSearch(false);
