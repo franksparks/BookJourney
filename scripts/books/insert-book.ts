@@ -18,24 +18,22 @@ const [
   description,
   pages,
   publisher,
-  publishYear,
   language,
   cover,
-  ratingAverage,
 ] = process.argv;
+
+const parsedIsbn = isbn ? Number(isbn) : undefined;
 
 const new_book: Prisma.BookCreateInput = {
   title,
   categories: categories.split(","),
-  ...(isbn && { isbn }),
+  ...(parsedIsbn && { isbn: parsedIsbn }),
   ...(googleBooksId && { googleBooksId }),
   ...(description && { description }),
   ...(pages && { pages: parseInt(pages) }),
   ...(publisher && { publisher }),
-  ...(publishYear && { publishYear: parseInt(publishYear) }),
   ...(language && { language }),
   ...(cover && { cover }),
-  ...(ratingAverage && { ratingAverage: parseInt(ratingAverage) }),
 };
 
 const result = await actionInsertBook(new_book);

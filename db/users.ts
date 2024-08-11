@@ -1,11 +1,5 @@
 import { db } from "@/db/db";
 
-export type User = {
-  id: string;
-  clerkId: string;
-  email: string;
-};
-
 export async function dbGetUsers() {
   return await db.user.findMany({
     orderBy: { id: "asc" },

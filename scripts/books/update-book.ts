@@ -20,24 +20,22 @@ const [
   description,
   pages,
   publisher,
-  publishYear,
   language,
   cover,
-  ratingAverage,
 ] = process.argv;
+
+const parsedIsbn = isbn ? Number(isbn) : undefined;
 
 const updated_book: Prisma.BookUpdateInput = {
   ...(title && { title }),
   ...(categories && { categories: categories.split(",") }),
-  ...(isbn && { isbn }),
+  ...(parsedIsbn && { isbn: parsedIsbn }),
   ...(googleBooksId && { googleBooksId }),
   ...(description && { description }),
   ...(pages && { pages: parseInt(pages) }),
   ...(publisher && { publisher }),
-  ...(publishYear && { publishYear: parseInt(publishYear) }),
   ...(language && { language }),
   ...(cover && { cover }),
-  ...(ratingAverage && { ratingAverage: parseInt(ratingAverage) }),
 };
 
 const result = await actionUpdateBook(updated_book, book_id);
