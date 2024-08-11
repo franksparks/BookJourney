@@ -30,6 +30,7 @@ export default function PreviewSearchBox() {
     try {
       const result = await actionSearchBooksGoogle(query, 0, 5);
       setResults(result.books);
+      setPreviewSearch(true);
       const firstFiveBooks = result.books.slice(0, 5);
       const mappedOptions = firstFiveBooks.map((book, index) => ({
         label: `${book.title} by ${book.authors?.length ? book.authors.join(", ") : 'Unknown Author'}`,
