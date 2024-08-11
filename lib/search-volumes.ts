@@ -1,21 +1,4 @@
-type Item = {
-  volumeInfo: VolumeInfo;
-};
-
-type ImageLinks = {
-  smallThumbnail: string;
-};
-
-type VolumeInfo = {
-  title: string;
-  authors: string[];
-  imageLinks: ImageLinks;
-};
-
-export type VolumesResponse = {
-  items: [Item];
-  totalItems: number;
-};
+import { VolumesResponse } from "@/models/google-books-response";
 
 export const searchVolumes = async (
   search: string,
