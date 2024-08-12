@@ -52,6 +52,9 @@ export default function Header() {
             <Loader className="h-6 w-6 text-white animate-spin" />
           </ClerkLoading>
           <ClerkLoaded>
+            <Button onClick={() => router.push("/lists")}>
+              See all Lists
+            </Button>
             <SignedIn>
               <UserButton />
             </SignedIn>
