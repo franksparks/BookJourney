@@ -21,7 +21,7 @@ type VolumeInfo = {
   categories: string[];
   pages: number;
   industryIdentifiers: IndustriyIdentifier[];
-  publiser: string;
+  publisher: string;
   publishedDate: Date;
   language: string;
 };

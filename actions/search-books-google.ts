@@ -23,7 +23,7 @@ export async function actionSearchBooksGoogle(query: string, index: number) {
       description: item.volumeInfo.description,
       categories: item.volumeInfo.categories,
       pages: item.volumeInfo.pages,
-      publisher: item.volumeInfo.publiser,
+      publisher: item.volumeInfo.publisher,
       publishedDate: item.volumeInfo.publishedDate,
       language: item.volumeInfo.language,
       cover: item.volumeInfo.imageLinks?.thumbnail,
