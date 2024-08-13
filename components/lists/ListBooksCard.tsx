@@ -3,13 +3,14 @@
 import React, { useState, useEffect } from "react";
 import { actionGetBookListsByListId } from "@/actions/book-list";
 import { List } from "@/models/list";
+import { Book } from "@/models/book";
 
 interface BooksListProps {
   list: List | null;
 }
 
 export default function ListBooksCard({ list }: BooksListProps) {
-  const [books, setBooks] = useState([]);
+  const [books, setBooks] = useState<Book[]>([]);
 
   useEffect(() => {
     fetchBooks();
@@ -17,8 +18,12 @@ export default function ListBooksCard({ list }: BooksListProps) {
 
   const fetchBooks = async () => {
     if (!list) return;
-    const result = await actionGetBookListsByListId(list.id);
-    setBooks(result);
+    const listBooks = await actionGetBookListsByListId(list.id);
+    const allBooks: Book[] = []
+    for (const bookList of listBooks) {
+        allBooks.push(bookList.book)
+    }
+    setBooks(allBooks);
   };
 
   return (
@@ -28,7 +33,7 @@ export default function ListBooksCard({ list }: BooksListProps) {
         {books.length > 0 ? (
           books.map((book) => (
             <li key={book.id} className="p-2 border-b">
-              {book.title} by {book.author}
+              {book.title} by {book.authors?.join(', ')}
             </li>
           ))
         ) : (
