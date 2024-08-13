@@ -3,6 +3,7 @@ import ReadMore from "./ReadMore";
 import { Separator } from "./ui/separator";
 import AddToList from "./AddToList";
 import ControlledRating from "./ControlledRating";
+import ReadRating from "./ReadRating";
 
 type BookDetailsProps = {
     book: Book;
@@ -26,6 +27,9 @@ export default function BookDetails({ book }: BookDetailsProps) {
             </div>
             <div className="flex w-screen justify-start flex-col mr-4">
                 <h1>{book.title}</h1>
+                <div className="flex flex-row">
+                    <ReadRating value={5} />
+                </div>
                 <Separator className="my-4" />
                 {book.authors && book.authors.map((author, index) => (<h2 key={index}> {author} </h2>)) || (<h2> {'Unknown author'} </h2>)}
                 {book.description && <ReadMore text={book.description} />}
