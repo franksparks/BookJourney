@@ -3,7 +3,11 @@
 import React, { useState, useEffect } from "react";
 import { List } from "@/models/list";
 import { PlusIcon, Cross2Icon } from "@radix-ui/react-icons";
-import { actionGetListsByUserId, actionInsertList } from "@/actions/lists";
+import {
+  actionGetListsByUserId,
+  actionInsertList,
+  actionGetListById,
+} from "@/actions/lists";
 import { useDbUser } from "@/app/context/DbUserContext";
 import { Prisma } from "@prisma/client";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
@@ -24,9 +28,14 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
       getLists();
     }
     if (listId) {
-      setSelectedList(listId);
+      getListById(listId);
     }
   }, [dbUser]);
+
+  const getListById = async (listId: string) => {
+    const result = await actionGetListById(listId);
+    setSelectedList(result);
+  };
 
   const getLists = async () => {
     const result = await actionGetListsByUserId(dbUser!.id);
@@ -50,11 +59,11 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
     getLists();
   };
 
-  const handleSelectList = (id: string) => {
+  const handleSelectList = (list: List) => {
     if (pathname === "/") {
-      router.push(`/lists?listId=${id}`);
+      router.push(`/lists?listId=${list.id}`);
     } else {
-      setSelectedList(id);
+      setSelectedList(list);
     }
   };
 
@@ -69,9 +78,9 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
         {lists.map((list) => (
           <li
             key={list.id}
-            onClick={() => handleSelectList(list.id)}
+            onClick={() => handleSelectList(list)}
             className={`p-2 cursor-pointer transition-colors duration-300 hover:bg-gray-200 ${
-              selectedList === list.id ? "font-bold" : ""
+              selectedList?.id === list.id ? "font-bold" : ""
             }`}
           >
             {list.name} - ({list.books.length})

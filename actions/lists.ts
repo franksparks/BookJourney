@@ -1,6 +1,7 @@
 "use server";
 
 import {
+  dbGetListById,
   dbDeleteList,
   dbGetListsByUserId,
   dbInsertList,
@@ -9,6 +10,10 @@ import {
 import { List } from "@/models/list";
 import { Prisma } from "@prisma/client";
 
+export const actionGetListById = async (id: string) => {
+  const result = await dbGetListById(id);
+  return result;
+}
 export const actionInsertList = async (list: Prisma.ListCreateInput, userId: string) => {
   const result = await dbInsertList(list, userId);
   return result;

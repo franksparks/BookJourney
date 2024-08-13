@@ -2,6 +2,11 @@ import { catchErrors } from "@/lib/error-handling";
 import { Prisma } from "@prisma/client";
 import { db } from "./db";
 
+export const dbGetListById = catchErrors(async (id: string) => {
+  const result = await db.list.findUnique({ where: { id } });
+  return result;
+})
+
 export const dbInsertList = catchErrors(
   async (list: Prisma.ListCreateInput, userId: string) => {
     const result = await db.list.create({

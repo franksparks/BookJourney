@@ -2,27 +2,28 @@
 
 import React, { useState, useEffect } from "react";
 import { actionGetBookListsByListId } from "@/actions/book-list";
+import { List } from "@/models/list";
 
 interface BooksListProps {
-  listId: string | null;
+  list: List | null;
 }
 
-export default function ListBooksCard({ listId }: BooksListProps) {
+export default function ListBooksCard({ list }: BooksListProps) {
   const [books, setBooks] = useState([]);
 
   useEffect(() => {
     fetchBooks();
-  }, [listId]);
+  }, [list]);
 
   const fetchBooks = async () => {
-    if (!listId) return;
-    const result = await actionGetBookListsByListId(listId);
+    if (!list) return;
+    const result = await actionGetBookListsByListId(list.id);
     setBooks(result);
   };
 
   return (
     <div className="p-2 border rounded-lg shadow-md w-full">
-      <h2 className="text-lg font-semibold mb-4">Books in List</h2>
+      <h2 className="text-lg font-semibold mb-4">Books in "{list?.name}"</h2>
       <ul>
         {books.length > 0 ? (
           books.map((book) => (
