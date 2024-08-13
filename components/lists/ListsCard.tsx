@@ -22,7 +22,7 @@ export default function ListsCard() {
           onClick={() => handleSelectList(list.id)}
           className={styles.listItem}
         >
-          {list.name} - ({list.bookCount})
+          {list.name} - ({list.books.length})
         </li>
       ))}
     </ul>
