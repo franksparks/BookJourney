@@ -1,6 +1,5 @@
 import ReadingList from "@/components/ReadingList";
-import UserLists from "@/components/UserLists";
-
+import ListsCard from "@/components/lists/ListsCard";
 export default function Home() {
   return (
     <main className="flex justify-center p-8 flex-grow bg-sky-50 h-full">
@@ -12,7 +11,7 @@ export default function Home() {
           <ReadingList />
         </div>
         <div className="w-1/2">
-          <UserLists />
+          <ListsCard />
         </div>
       </div>
     </main>

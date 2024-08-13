@@ -3,8 +3,14 @@ import { Prisma } from "@prisma/client";
 import { db } from "./db";
 
 export const dbInsertList = catchErrors(
-  async (list: Prisma.ListCreateInput) => {
-    const result = await db.list.create({ data: list });
+  async (list: Prisma.ListCreateInput, userId: string) => {
+    const result = await db.list.create({
+      data: {
+        ...list,
+        user: {
+          connect: { id: userId },
+        }
+      } });
     return result;
   }
 );

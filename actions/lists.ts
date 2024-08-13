@@ -9,8 +9,8 @@ import {
 import { List } from "@/models/list";
 import { Prisma } from "@prisma/client";
 
-export const actionInsertList = async (list: Prisma.ListCreateInput) => {
-  const result = await dbInsertList(list);
+export const actionInsertList = async (list: Prisma.ListCreateInput, userId: string) => {
+  const result = await dbInsertList(list, userId);
   return result;
 };
 
