@@ -23,8 +23,6 @@ export default function UserLists() {
         dbUser.id,
         "READING"
       );
-      console.log(JSON.stringify(userLists));
-
       setLists(userLists);
     }
   };
