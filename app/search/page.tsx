@@ -1,101 +1,132 @@
-"use client"
+"use client";
 
 import { actionSearchBooksGoogle } from "@/actions/search-books-google";
 import { useBooksSearchContext } from "@/app/context/books-search-context";
+import AdvancedBookCard from "@/components/AdvancedBookCard";
 import SearchBox from "@/components/SearchBox";
 import SearchPagination from "@/components/SearchPagination";
-import SearchResults from "@/components/SearchResults";
 import { Book } from "@/models/book";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useCallback, useEffect, Suspense } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 
 const queryMap: { [key: string]: string } = {
-    "author": ":inauthor:",
-    "title": ":intitle:",
-    "all": "",
+  author: ":inauthor:",
+  title: ":intitle:",
+  all: "",
 };
 
 const calculateIndex = (page: number): number => {
-    return (page - 1) * 10
-}
+  return (page - 1) * 10;
+};
 
 export default function Home() {
-    const { results, setResults, resetRadio, previewSearch, setPreviewSearch, setTotalItems, totalItems} = useBooksSearchContext();
-    const [advancedResults, setAdvancedResults] = useState<Book[]>([]);
-    const [advancedTotalItems, setAdvancedTotalItems] = useState(0);
-    const [page, setPage] = useState(1);
-    const [advancedQuery, setAdvancedQuery] = useState('');
-    const [radioValue, setRadioValue] = useState('all');
-    const [avoidAdvancedSearch, setAvoidAdvancedSearch] = useState(false);
-    const router = useRouter();
-    const searchParams = useSearchParams();
+  const {
+    results,
+    setResults,
+    resetRadio,
+    previewSearch,
+    setPreviewSearch,
+    setTotalItems,
+    totalItems,
+  } = useBooksSearchContext();
+  const [advancedResults, setAdvancedResults] = useState<Book[]>([]);
+  const [advancedTotalItems, setAdvancedTotalItems] = useState(0);
+  const [page, setPage] = useState(1);
+  const [advancedQuery, setAdvancedQuery] = useState("");
+  const [radioValue, setRadioValue] = useState("all");
+  const [avoidAdvancedSearch, setAvoidAdvancedSearch] = useState(false);
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-    const performSearch = async (
-        query: string,
-        queryMap?: { [key: string]: string },
-    ) => {
-        try {
-            const index = calculateIndex(page);
-            const queryString = queryMap
-                ? `${queryMap[radioValue]}${query}`
-                : query;
+  const performSearch = async (
+    query: string,
+    queryMap?: { [key: string]: string }
+  ) => {
+    try {
+      const index = calculateIndex(page);
+      const queryString = queryMap
+        ? `${queryMap[radioValue]}${query}`
+        : query;
 
-            const result = await actionSearchBooksGoogle(queryString, index);
-            setResults(result.books);
-            setTotalItems(result.totalItems);
-            setAdvancedResults(result.books);
-            if (advancedTotalItems === 0) {
-                setAdvancedTotalItems(result.totalItems)
-            }
-            if (queryMap && query) {
-                router.push(`/search?q=${encodeURIComponent(query)}`);
-            }
-        } catch (error) {
-            console.error('Error fetching books:', error);
-        }
-    };
+      const result = await actionSearchBooksGoogle(queryString, index);
+      setResults(result.books);
+      setTotalItems(result.totalItems);
+      setAdvancedResults(result.books);
+      if (advancedTotalItems === 0) {
+        setAdvancedTotalItems(result.totalItems);
+      }
+      if (queryMap && query) {
+        router.push(`/search?q=${encodeURIComponent(query)}`);
+      }
+    } catch (error) {
+      console.error("Error fetching books:", error);
+    }
+  };
 
-    useEffect(() => {
-        const urlQuery = searchParams?.get('q');
-        setAdvancedResults(results);
-        setAdvancedTotalItems(totalItems);
-        setPage(1);
-        if(resetRadio) {
-            setRadioValue('all');
-        }
-        if (urlQuery && urlQuery !== '') {
-            setAdvancedQuery(urlQuery);
-        } else {
-            router.push('/');
-        }
-    }, [searchParams, router]);
+  useEffect(() => {
+    const urlQuery = searchParams?.get("q");
+    setAdvancedResults(results);
+    setAdvancedTotalItems(totalItems);
+    setPage(1);
+    if (resetRadio) {
+      setRadioValue("all");
+    }
+    if (urlQuery && urlQuery !== "") {
+      setAdvancedQuery(urlQuery);
+    } else {
+      router.push("/");
+    }
+  }, [searchParams, router]);
 
-    const handleAdvancedSearch = useCallback(() => {
-        if (advancedQuery && !avoidAdvancedSearch && !previewSearch ) {
-            performSearch(advancedQuery, queryMap);
-        }
-    }, [advancedQuery, page, radioValue, totalItems, avoidAdvancedSearch]);
+  const handleAdvancedSearch = useCallback(() => {
+    if (advancedQuery && !avoidAdvancedSearch && !previewSearch) {
+      performSearch(advancedQuery, queryMap);
+    }
+  }, [advancedQuery, page, radioValue, totalItems, avoidAdvancedSearch]);
 
+  useEffect(() => {
+    handleAdvancedSearch();
+  }, [handleAdvancedSearch]);
 
-    useEffect(() => {
-        handleAdvancedSearch();
-    }, [handleAdvancedSearch])
+  const handlePageChange = useCallback((newPage: number) => {
+    setPreviewSearch(false);
+    setPage(newPage);
+  }, []);
 
+  return (
+    <Suspense>
+      <main className="flex flex-col items-center bg-slate-200 p-8">
+        <div className="w-2/3 flex flex-col items-center rounded-3xl shadow-sky-200 bg-sky-300">
+          <h1 className="font-light text-sky-700">Advanced Search</h1>
+          <div className="bg-slate-300 mt-1 w-2/3  ">
+            <SearchBox
+              advancedQuery={advancedQuery}
+              setAdvancedQuery={setAdvancedQuery}
+              handleAdvancedSearch={handleAdvancedSearch}
+              setPage={setPage}
+              setTotalItems={setAdvancedTotalItems}
+              setAvoidAdvancedSearch={setAvoidAdvancedSearch}
+              setRadioValue={setRadioValue}
+              radioValue={radioValue}
+            />
+          </div>
 
-    const handlePageChange = useCallback((newPage: number) => {
-        setPreviewSearch(false);
-        setPage(newPage);
-    }, []);
-
-    return (
-        <Suspense>
-            <main className="flex justify-center flex-col items-center">
-                <div className="bg-slate-300 mt-10" >
-                    <SearchBox advancedQuery={advancedQuery} setAdvancedQuery={setAdvancedQuery} handleAdvancedSearch={handleAdvancedSearch} setPage={setPage} setTotalItems={setAdvancedTotalItems} setAvoidAdvancedSearch={setAvoidAdvancedSearch} setRadioValue={setRadioValue} radioValue={radioValue} />
-                </div>
-                {advancedResults.length !== 0 && <SearchResults results={advancedResults}/>}
-                {advancedResults.length !== 0 && <SearchPagination setPage={handlePageChange} page={page} totalItems={advancedTotalItems} />}
-            </main>
-        </Suspense>
-    );
+          <div className="w-4/5 grid grid-cols-2 gap-4 p-8">
+            {advancedResults.length !== 0 &&
+              advancedResults.length !== 0 &&
+              results.map((result: Book, index: any) => (
+                <AdvancedBookCard book={result} key={index} />
+              ))}
+          </div>
+          {advancedResults.length !== 0 && (
+            <SearchPagination
+              setPage={handlePageChange}
+              page={page}
+              totalItems={advancedTotalItems}
+            />
+          )}
+        </div>
+      </main>
+    </Suspense>
+  );
 }
