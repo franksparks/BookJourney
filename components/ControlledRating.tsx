@@ -1,8 +1,8 @@
-import * as React from "react";
 import Rating from "@mui/material/Rating";
+import { useState } from "react";
 
 export default function ControlledRating() {
-  const [value, setValue] = React.useState<number | null>(0);
+  const [value, setValue] = useState<number | null>(0);
 
   return (
     <Rating
