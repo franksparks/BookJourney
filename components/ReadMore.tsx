@@ -21,7 +21,7 @@ export default function ReadMore ({ text, amountOfWords = 36 }: ReadMoreProps) {
   }
 
   return (
-    <p>
+    <div>
       {beginText}
       {itCanOverflow && (
         <>
@@ -44,6 +44,6 @@ export default function ReadMore ({ text, amountOfWords = 36 }: ReadMoreProps) {
           </span>
         </>
       )}
-    </p>
+    </div>
   )
 }

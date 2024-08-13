@@ -19,7 +19,7 @@ type VolumeInfo = {
   imageLinks: ImageLinks;
   description: string;
   categories: string[];
-  pages: number;
+  pageCount: number;
   industryIdentifiers: IndustriyIdentifier[];
   publisher: string;
   publishedDate: Date;
