@@ -66,6 +66,7 @@ export default function SearchBox({
           type="search"
           placeholder="Search by book title or author"
           value={advancedQuery}
+          onChange={handleChange}
         />
 
         <Button

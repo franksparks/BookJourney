@@ -113,7 +113,7 @@ export default function Home() {
           {advancedResults.length !== 0 && (
             <div className="w-4/5 grid grid-cols-2 gap-2">
               {advancedResults.map((book: Book, index: any) => (
-                <AdvancedBookCard book={book} key={index} />
+                <AdvancedBookCard book={book} key={book.googleBooksId} />
               ))}
             </div>
           )}
