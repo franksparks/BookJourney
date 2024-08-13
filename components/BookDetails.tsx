@@ -48,7 +48,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
                     {book.language && (
                         <div className="flex items-center">
                             <div className="font-semibold">Language</div>
-                            <div className="ml-4">{book.language}</div>
+                            <div className="ml-4">{book.language.toUpperCase()}</div>
                         </div>
                     )}
                 </div>
