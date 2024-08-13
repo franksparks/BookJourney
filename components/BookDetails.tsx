@@ -1,6 +1,7 @@
 import { Book } from "@/models/book";
 import ReadMore from "./ReadMore";
 import { Separator } from "./ui/separator";
+import AddToList from "./AddToList";
 
 type BookDetailsProps = {
     book: Book;
@@ -9,9 +10,12 @@ type BookDetailsProps = {
 export default function BookDetails({ book }: BookDetailsProps) {
     return (
         <div className="flex justify-center mt-10">
-            <div className="flex w-screen justify-center basis-1/4">
-                <div>
-                    <img src={book.cover || "../default_cover.jpg"} />
+            <div className="flex justify-center basis-1/4">
+                <div className="flex flex-col">
+                    <img className="mb-8" src={book.cover || "../default_cover.jpg"} />
+                    <div>
+                        <AddToList />
+                    </div>
                 </div>
             </div>
             <div className="flex w-screen justify-start flex-col mr-4">
@@ -31,12 +35,6 @@ export default function BookDetails({ book }: BookDetailsProps) {
                         <div className="flex items-center">
                             <div className="font-semibold">Pages</div>
                             <div className="ml-11">{book.pages}</div>
-                        </div>
-                    )}
-                    {book.publishedDate && (
-                        <div className="flex items-center">
-                            <div className="font-semibold">Published</div>
-                            <div className="ml-4">{book.publishedDate.toString()}</div>
                         </div>
                     )}
                     {book.language && (
