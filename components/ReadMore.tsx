@@ -21,7 +21,7 @@ export default function ReadMore ({ text, amountOfWords = 36 }: ReadMoreProps) {
   }
 
   return (
-    <div>
+    <div className="mt-6">
       {beginText}
       {itCanOverflow && (
         <>
