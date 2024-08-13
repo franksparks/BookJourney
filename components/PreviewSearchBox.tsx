@@ -14,12 +14,13 @@ interface Option {
 }
 
 export default function PreviewSearchBox() {
-  const { setResults, setPreviewSearch, setTotalItems } = useBooksSearchContext();
-  const [previewResults, setPreviewResults] = useState<Option[]>([]);;
+  const { setResults, setPreviewSearch, setTotalItems } =
+    useBooksSearchContext();
+  const [previewResults, setPreviewResults] = useState<Option[]>([]);
   const [inputValue, setInputValue] = useState("");
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
-  const { setResetRadio } = useBooksSearchContext()
+  const { setResetRadio } = useBooksSearchContext();
 
   const searchBooks = async (query: string) => {
     if (!query) {
@@ -33,7 +34,9 @@ export default function PreviewSearchBox() {
       setTotalItems(result.totalItems);
       const firstFiveBooks = result.books.slice(0, 5);
       const mappedOptions = firstFiveBooks.map((book, index) => ({
-        label: `${book.title} by ${book.authors?.length ? book.authors.join(", ") : 'Unknown Author'}`,
+        label: `${book.title} by ${
+          book.authors?.length ? book.authors.join(", ") : "Unknown Author"
+        }`,
         imageUrl: book.cover,
         index,
       }));
@@ -52,7 +55,10 @@ export default function PreviewSearchBox() {
 
   const debouncedSearchBooks = useCallback(debounce(searchBooks, 300), []);
 
-  const handleInputChange = (_event: React.SyntheticEvent, query: string) => {
+  const handleInputChange = (
+    _event: React.SyntheticEvent,
+    query: string
+  ) => {
     setInputValue(query);
     debouncedSearchBooks(query);
   };
@@ -78,9 +84,11 @@ export default function PreviewSearchBox() {
           <div
             className="flex justify-center"
             onMouseDown={(event) => {
+              console.log("click1");
               event.preventDefault();
               handleRedirect();
               clearValues();
+              console.log("click2");
             }}
           >
             <li {...props}>{"See all results"}</li>
