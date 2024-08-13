@@ -62,7 +62,7 @@ export default function SearchBox({
     <div className="flex flex-col border-4 border-blue-400 ">
       <div className="flex justify-center">
         <Input
-          className="mt-3 ml-5 w-96 rounded-none bg-white border-black"
+          className="mt-2 ml-5 w-96 rounded-none bg-white border-black"
           type="search"
           placeholder="Search by book title or author"
           value={advancedQuery}

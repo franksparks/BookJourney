@@ -2,6 +2,7 @@
 
 import { actionSearchBooksGoogle } from "@/actions/search-books-google";
 import { useBooksSearchContext } from "@/app/context/books-search-context";
+import AdvancedBookCard from "@/components/BookCardAdvancedSearch";
 import SearchBox from "@/components/SearchBox";
 import SearchPagination from "@/components/SearchPagination";
 import SearchResults from "@/components/SearchResults";
@@ -95,7 +96,7 @@ export default function Home() {
 
   return (
     <Suspense>
-      <main className="flex flex-col items-center bg-slate-200 p-8">
+      <main className="flex flex-col items-center bg-slate-200 p-4">
         <div className="w-2/3 flex flex-col items-center rounded-3xl shadow-sky-200 bg-sky-300">
           <h1 className="font-light text-sky-700">Advanced Search</h1>
           <div className="bg-slate-300 mt-1 w-2/3  ">
@@ -111,7 +112,11 @@ export default function Home() {
             />
           </div>
           {advancedResults.length !== 0 && (
-            <SearchResults results={advancedResults} />
+            <div className="w-4/5 grid grid-cols-2 gap-2">
+              {advancedResults.map((book: Book, index: any) => (
+                <AdvancedBookCard book={book} key={index} />
+              ))}
+            </div>
           )}
           {advancedResults.length !== 0 && (
             <SearchPagination
