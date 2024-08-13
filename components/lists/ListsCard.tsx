@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { List } from "@/models/list";
-import { PlusIcon } from "@radix-ui/react-icons";
+import { PlusIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { actionGetListsByUserId, actionInsertList } from "@/actions/lists";
 import { useDbUser } from "@/app/context/DbUserContext";
 import { Prisma } from "@prisma/client";
@@ -12,7 +12,7 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
   const { dbUser } = useDbUser();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const listId = searchParams.get('listId');
+  const listId = searchParams.get("listId");
   const pathname = usePathname();
   const [lists, setLists] = useState<List[]>([]);
   const [showInput, setShowInput] = useState<boolean>(false);
@@ -24,7 +24,7 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
       getLists();
     }
     if (listId) {
-        setSelectedList(listId);
+      setSelectedList(listId);
     }
   }, [dbUser]);
 
@@ -52,10 +52,14 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
 
   const handleSelectList = (id: string) => {
     if (pathname === "/") {
-        router.push(`/lists?listId=${id}`);
+      router.push(`/lists?listId=${id}`);
     } else {
-        setSelectedList(id);
+      setSelectedList(id);
     }
+  };
+
+  const handleCloseInput = () => {
+    setShowInput(false);
   };
 
   return (
@@ -75,33 +79,43 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
         ))}
       </ul>
       {showInput && (
-        <div className="mb-4">
+        <div className="mb-4 flex items-center space-x-2">
           <input
             type="text"
             value={newListName}
             onChange={(e) => setNewListName(e.target.value)}
             placeholder="Enter list name"
-            className="p-2 border rounded w-full mb-2"
+            className="p-2 border rounded w-full"
           />
           <button
             onClick={handleCreateList}
-            className="p-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors duration-300 w-full"
+            className="bg-orange-500 text-white rounded hover:bg-blue-600 transition-colors duration-300 w-52 pt-2 pb-2"
           >
             Create List
           </button>
         </div>
       )}
-      {pathname.includes("/lists") && (
-        <div className="flex justify-end">
+      <div className="flex justify-end">
+        {showInput ? (
           <button
-            aria-label="add"
-            className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-300"
-            onClick={handleAddList}
+            aria-label="close"
+            className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-300"
+            onClick={handleCloseInput}
           >
-            <PlusIcon className="h-5 w-5" />
+            <Cross2Icon className="h-5 w-5" />
           </button>
-        </div>
-      )}
+        ) : (
+          pathname.includes("/lists") && (
+            <button
+              aria-label="add"
+              className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-300"
+              onClick={handleAddList}
+            >
+              <PlusIcon className="h-5 w-5" />
+            </button>
+          )
+        )}
+      </div>
     </div>
   );
 }

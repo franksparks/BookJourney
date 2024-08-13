@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import ListsCard from "@/components/lists/ListsCard";
+import ListBooksCard from "@/components/lists/ListBooksCard";
 export default function page() {
     const [selectedList, setSelectedList] = useState<string | null>(null);
 
@@ -13,8 +14,13 @@ export default function page() {
   
   return (
     <main>
-      <div className="flex justify-center p-8 flex-grow bg-sky-50 h-full">
-        <ListsCard selectedList={selectedList} setSelectedList={setSelectedList}/>
+      <div className="flex justify-center p-4 bg-sky-50 h-full">
+        <div className="w-1/3 p-2">
+          <ListsCard selectedList={selectedList} setSelectedList={setSelectedList} />
+        </div>
+        <div className="w-2/3 p-2">
+          <ListBooksCard listId={selectedList} />
+        </div>
       </div>
     </main>
   );
