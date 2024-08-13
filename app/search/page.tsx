@@ -5,10 +5,9 @@ import { useBooksSearchContext } from "@/app/context/books-search-context";
 import AdvancedBookCard from "@/components/BookCardAdvancedSearch";
 import SearchBox from "@/components/SearchBox";
 import SearchPagination from "@/components/SearchPagination";
-import SearchResults from "@/components/SearchResults";
 import { Book } from "@/models/book";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useCallback, useEffect, Suspense } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 
 const queryMap: { [key: string]: string } = {
   author: ":inauthor:",
