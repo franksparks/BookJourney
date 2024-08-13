@@ -2,6 +2,7 @@ import { Book } from "@/models/book";
 import ReadMore from "./ReadMore";
 import { Separator } from "./ui/separator";
 import AddToList from "./AddToList";
+import ControlledRating from "./ControlledRating";
 
 type BookDetailsProps = {
     book: Book;
@@ -16,6 +17,11 @@ export default function BookDetails({ book }: BookDetailsProps) {
                     <div>
                         <AddToList />
                     </div>
+                    <div className="flex justify-center mt-7">
+                        <ControlledRating />
+                    </div>
+                    <div className="flex justify-center mt-2">{"Rate this book"}</div>
+
                 </div>
             </div>
             <div className="flex w-screen justify-start flex-col mr-4">
