@@ -14,7 +14,7 @@ type bookCardProps = {
 export default function BookCard({
   book,
   status,
-  onStatusChange,
+  onStatusChange
 }: bookCardProps) {
   const handleDoneClick = async () => {
     await actionUpdateBookStatus(status.id, ReadStatus.READ);
