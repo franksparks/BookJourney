@@ -41,7 +41,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
                     </div></>}
                 {<><div className="mt-8 font-bold">{'This edition'}</div><Separator className="my-4" /></>}
                 <div className="grid gap-4">
-                    {book.pages && (
+                    {book.pages!== 0 && (
                         <div className="flex items-center">
                             <div className="font-semibold">Pages</div>
                             <div className="ml-11">{book.pages}</div>
