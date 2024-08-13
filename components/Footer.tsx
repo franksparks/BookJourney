@@ -6,7 +6,6 @@ import Link from "next/link";
 export default function Footer() {
   const { user } = useUser();
   const year = new Date().getFullYear();
-  console.log(year);
 
   return (
     <div className="bg-sky-600 h-50 text-white p-2 text-center">
