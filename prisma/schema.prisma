@@ -20,8 +20,8 @@ model User {
 
 model Book {
   id            String       @id @default(auto()) @map("_id") @db.ObjectId
-  isbn10        Int?
-  isbn13        Int?
+  isbn10        String?
+  isbn13        String?
   authors       String[]
   googleBooksId String? // M:for sync process
   title         String
