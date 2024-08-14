@@ -9,6 +9,8 @@ type ConditionalTooltipProps = {
 
 type ControlledRatingProps = {
   logged: boolean;
+  bookRating: number | null;
+  setBookRating: (rating: number | null) => void;
 };
 
 interface CustomRatingProps {
@@ -44,15 +46,13 @@ const CustomRating = forwardRef<HTMLDivElement, CustomRatingProps>(
   }
 );
 
-export default function ControlledRating({ logged }: ControlledRatingProps) {
-  const [value, setValue] = useState<number | null>(0);
-
+export default function ControlledRating({ logged, bookRating, setBookRating }: ControlledRatingProps) {
   return (
     <ConditionalTooltip logged={logged}>
       <CustomRating
-        value={value}
+        value={bookRating}
         onChange={(_event, newValue) => {
-          setValue(newValue);
+          setBookRating(newValue);
         }}
         size="large"
         disabled={!logged}

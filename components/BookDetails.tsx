@@ -5,6 +5,8 @@ import AddToList from "./AddToList";
 import ControlledRating from "./ControlledRating";
 import ReadRating from "./ReadRating";
 import { useDbUser } from "@/app/context/db-user-context";
+import { useEffect, useState } from "react";
+import { log } from "console";
 
 type BookDetailsProps = {
   book: Book;
@@ -13,7 +15,12 @@ type BookDetailsProps = {
 export default function BookDetails({ book }: BookDetailsProps) {
 
     const { dbUser } = useDbUser();
+    const [bookRating, setBookRating] = useState<number | null>(0);
     const logged = dbUser ? true : false; 
+
+    useEffect(() => {
+        console.log(bookRating)
+    }, [bookRating])
 
   return (
     <div className="flex justify-center mt-10">
@@ -24,11 +31,11 @@ export default function BookDetails({ book }: BookDetailsProps) {
             <AddToList />
           </div>
           <div className="flex justify-center mt-7">
-            <ControlledRating logged={false} />
+            <ControlledRating logged={logged} bookRating={bookRating} setBookRating={setBookRating} />
           </div>
           <div className="flex justify-center mt-2">{"Rate this book"}</div>
         </div>
-      </div>
+      </div>    
       <div className="flex w-screen justify-start flex-col mr-4">
         <h1>{book.title}</h1>
         <div className="flex flex-row">
