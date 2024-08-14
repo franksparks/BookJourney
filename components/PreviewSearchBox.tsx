@@ -7,19 +7,22 @@ import { useState, useCallback, HTMLAttributes, useRef } from "react";
 import debounce from "lodash/debounce";
 import { useRouter } from "next/navigation";
 import { useBooksSearchContext } from "@/app/context/books-search-context";
+import BookNavigationWrapper from "./BookNavigationWrapper";
 interface Option {
   label: string;
   imageUrl?: string;
+  googleBooksId: string;
   index: number;
 }
 
 export default function PreviewSearchBox() {
-  const { setResults, setPreviewSearch, setTotalItems } = useBooksSearchContext();
-  const [previewResults, setPreviewResults] = useState<Option[]>([]);;
+  const { setResults, setPreviewSearch, setTotalItems } =
+    useBooksSearchContext();
+  const [previewResults, setPreviewResults] = useState<Option[]>([]);
   const [inputValue, setInputValue] = useState("");
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
-  const { setResetRadio } = useBooksSearchContext()
+  const { setResetRadio } = useBooksSearchContext();
 
   const searchBooks = async (query: string) => {
     if (!query) {
@@ -33,15 +36,19 @@ export default function PreviewSearchBox() {
       setTotalItems(result.totalItems);
       const firstFiveBooks = result.books.slice(0, 5);
       const mappedOptions = firstFiveBooks.map((book, index) => ({
-        label: `${book.title} by ${book.authors?.length ? book.authors.join(", ") : 'Unknown Author'}`,
-        imageUrl: book.cover,
-        index,
+        label: `${book.title} by ${
+          book.authors?.length ? book.authors.join(", ") : "Unknown Author"
+        }`,
+        imageUrl: book.smallCover,
+        googleBooksId: book.googleBooksId,
+        index
       }));
 
       mappedOptions.push({
         label: "See all results",
         imageUrl: "",
-        index: 5,
+        googleBooksId: "",
+        index: 5
       });
 
       setPreviewResults(mappedOptions);
@@ -57,13 +64,17 @@ export default function PreviewSearchBox() {
     debouncedSearchBooks(query);
   };
 
+  const handleBlur = () => {
+    if (inputRef.current) {
+      inputRef.current.blur();
+    }
+  };
+
   const handleRedirect = () => {
     setPreviewSearch(true);
     setResetRadio(true);
     router.push(`/search?q=${encodeURIComponent(inputValue)}`);
-    if (inputRef.current) {
-      inputRef.current.blur();
-    }
+    handleBlur();
   };
 
   const clearValues = useCallback(() => {
@@ -88,19 +99,26 @@ export default function PreviewSearchBox() {
         );
       } else {
         return (
-          <li {...props}>
-            <img
-              src={option.imageUrl || "../default_cover.jpg"}
-              alt={option.label}
-              style={{
-                width: 50,
-                height: 75,
-                marginRight: 10,
-                objectFit: "cover",
-              }}
-            />
-            {option.label}
-          </li>
+          <BookNavigationWrapper
+            key={option.index}
+            id={option.googleBooksId}
+            clearValues={clearValues}
+            handleBlur={handleBlur}
+          >
+            <li {...props}>
+              <img
+                src={option.imageUrl || "../default_cover.jpg"}
+                alt={option.label}
+                style={{
+                  width: 50,
+                  height: 75,
+                  marginRight: 10,
+                  objectFit: "cover"
+                }}
+              />
+              {option.label}
+            </li>
+          </BookNavigationWrapper>
         );
       }
     },
@@ -128,18 +146,18 @@ export default function PreviewSearchBox() {
             sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
-                  borderColor: "white",
+                  borderColor: "white"
                 },
                 "&:hover fieldset": {
-                  borderColor: "white",
+                  borderColor: "white"
                 },
                 "&.Mui-focused fieldset": {
-                  borderColor: "white",
-                },
-              },
+                  borderColor: "white"
+                }
+              }
             }}
             InputLabelProps={{
-              shrink: false,
+              shrink: false
             }}
           />
         )}

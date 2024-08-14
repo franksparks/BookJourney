@@ -12,5 +12,6 @@ export type Book = {
   publishedDate: Date;
   language: string;
   cover?: string;
+  smallCover?: string;
   ratingAverage?: number;
 };
