@@ -22,8 +22,8 @@ export async function actionSearchBooksGoogle(
     );
 
     return {
-      isbn10: isbn10Identifier ? isbn10Identifier.identifier : 0,
-      isbn13: isbn13Identifier ? isbn13Identifier.identifier : 0,
+      isbn10: isbn10Identifier ? isbn10Identifier.identifier : "",
+      isbn13: isbn13Identifier ? isbn13Identifier.identifier : "",
       authors: item.volumeInfo.authors,
       googleBooksId: item.id,
       title: item.volumeInfo.title,

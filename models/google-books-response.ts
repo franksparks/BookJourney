@@ -10,7 +10,7 @@ type ImageLinks = {
 
 type IndustriyIdentifier = {
   type: string;
-  identifier: number;
+  identifier: string;
 };
 
 type VolumeInfo = {
@@ -22,7 +22,7 @@ type VolumeInfo = {
   pageCount: number;
   industryIdentifiers: IndustriyIdentifier[];
   publisher: string;
-  publishedDate: Date;
+  publishedDate: string;
   language: string;
 };
 

@@ -14,7 +14,7 @@ type bookCardProps = {
 export default function BookCard({
   book,
   status,
-  onStatusChange,
+  onStatusChange
 }: bookCardProps) {
   const handleDoneClick = async () => {
     await actionUpdateBookStatus(status.id, ReadStatus.READ);
@@ -23,11 +23,11 @@ export default function BookCard({
 
   return (
     <div className="flex flex-row m-4 w-96 hover:scale-105 shadow border border-white shadow-white rounded-lg hover:bg-slate-50 hover:text-sky-700 bg-sky-600 cursor-pointer transition duration-500 ">
-      {book.cover && (
+      {book.smallCover && (
         <div className="flex justify-center items-center p-4">
           <Image
             className="shadow-md shadow-white rounded"
-            src={book.cover}
+            src={book.smallCover}
             alt="cover"
             width={60}
             height={100}

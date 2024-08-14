@@ -1,7 +1,7 @@
 "use client";
 
 import { actionGetUserByClerkId, actionInsertUser } from "@/actions/users";
-import { useDbUser } from "@/app/context/DbUserContext";
+import { useDbUser } from "@/app/context/db-user-context";
 import {
   ClerkLoaded,
   ClerkLoading,
