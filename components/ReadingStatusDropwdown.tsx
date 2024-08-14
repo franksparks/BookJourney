@@ -1,13 +1,15 @@
+import { actionInsertBookStatus } from "@/actions/book-status";
+import { actionInsertBook } from "@/actions/books";
+import { useDbUser } from "@/app/context/db-user-context";
+import { Book } from "@/models/book";
+import { ReadStatus } from "@prisma/client";
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
   DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
 import { Button } from "./ui/button";
-import { actionInsertBook } from "@/actions/books";
-import { Book } from "@/models/book";
-import { CounterClockwiseClockIcon } from "@radix-ui/react-icons";
 
 const menuItems = [
   { label: "Read", value: "read" },
@@ -22,9 +24,14 @@ type ReadingStatusDropwdownProps = {
 export default function ReadingStatusDropwdown({
   book,
 }: ReadingStatusDropwdownProps) {
+  const { dbUser } = useDbUser();
+
   const handleDropdownClick = async () => {
-    await actionInsertBook(book);
+    const res = await actionInsertBook(book);
+
+    await actionInsertBookStatus(ReadStatus.WANT_TO_READ, res, dbUser);
   };
+
   return (
     <>
       <Button onClick={handleDropdownClick} className="rounded-r-none">
