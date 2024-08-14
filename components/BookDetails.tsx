@@ -4,12 +4,17 @@ import { Separator } from "./ui/separator";
 import AddToList from "./AddToList";
 import ControlledRating from "./ControlledRating";
 import ReadRating from "./ReadRating";
+import { useDbUser } from "@/app/context/db-user-context";
 
 type BookDetailsProps = {
   book: Book;
 };
 
 export default function BookDetails({ book }: BookDetailsProps) {
+
+    const { dbUser } = useDbUser();
+    const logged = dbUser ? true : false; 
+
   return (
     <div className="flex justify-center mt-10">
       <div className="flex justify-center basis-1/4">
@@ -19,7 +24,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
             <AddToList />
           </div>
           <div className="flex justify-center mt-7">
-            <ControlledRating />
+            <ControlledRating logged={false} />
           </div>
           <div className="flex justify-center mt-2">{"Rate this book"}</div>
         </div>
