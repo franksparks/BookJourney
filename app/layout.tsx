@@ -1,11 +1,11 @@
-import { DbUserProvider } from "@/app/context/DbUserContext";
+import { DbUserProvider } from "@/app/context/db-user-context";
 import Footer from "@/components/Footer";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/header";
 import { BooksSearchProvider } from "./context/books-search-context";
+import Header from "@/components/header";
 
 const inter = Inter({ subsets: ["latin"] });
 
