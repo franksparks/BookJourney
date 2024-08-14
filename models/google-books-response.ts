@@ -5,6 +5,7 @@ type Item = {
 
 type ImageLinks = {
   smallThumbnail: string;
+  thumbnail: string;
 };
 
 type IndustriyIdentifier = {
@@ -18,9 +19,9 @@ type VolumeInfo = {
   imageLinks: ImageLinks;
   description: string;
   categories: string[];
-  pages: number;
+  pageCount: number;
   industryIdentifiers: IndustriyIdentifier[];
-  publiser: string;
+  publisher: string;
   publishedDate: Date;
   language: string;
 };
