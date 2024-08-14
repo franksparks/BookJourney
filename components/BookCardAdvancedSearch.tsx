@@ -9,11 +9,11 @@ type bookCardProps = {
 
 export default function AdvancedBookCard({ book }: bookCardProps) {
   return (
-    <main className="flex flex-row hover:scale-105 m-2  rounded-lg hover:bg-slate-50 hover:text-sky-700 bg-sky-600 cursor-pointer transition duration-500 ">
+    <main className="flex flex-row hover:scale-105 m-1  rounded-lg hover:bg-slate-50 hover:text-sky-700 bg-slate-100 cursor-pointer transition duration-500 h-32 min-w-96 max-w-lg">
       {book.cover && (
-        <div className="flex justify-center items-center p-2">
+        <div className="flex justify-center items-center p-2 w-1/3">
           <Image
-            className="shadow-md shadow-white rounded"
+            className="shadow-lg shadow-sky-600 rounded"
             src={book.cover}
             alt="cover"
             width={60}
@@ -22,9 +22,9 @@ export default function AdvancedBookCard({ book }: bookCardProps) {
         </div>
       )}
       {!book.cover && (
-        <div className="flex justify-center items-center p-4">
+        <div className="flex justify-center items-center p-2 w-1/3">
           <Image
-            className="shadow-md shadow-white rounded"
+            className="shadow-md shadow-sky-600 rounded"
             src="/default_cover.jpg"
             alt="cover"
             width={60}
@@ -33,17 +33,18 @@ export default function AdvancedBookCard({ book }: bookCardProps) {
         </div>
       )}
 
-      <div className="flex flex-col justify-center p-4 flex-grow">
-        <p className="italic">{capitalizeFirstLetter(book.title)}</p>
-        <p>
+      <div className="flex flex-col justify-center flex-grow p-2 w-2/3">
+        <p className="italic text-lg mt-2 line-clamp-1">
+          {capitalizeFirstLetter(book.title)}
+        </p>
+        <p className="text-sm">
           {book.authors && book.authors.length > 0
             ? capitalizeFirstLetter(book.authors.join(" "))
             : "Author not available"}
         </p>
-      </div>
-
-      <div className="flex justify-center items-center p-4">
-        <BookStatusDropdown />
+        <div className="flex justify-center items-center p-1">
+          <BookStatusDropdown />
+        </div>
       </div>
     </main>
   );

@@ -44,9 +44,7 @@ export default function Home() {
   ) => {
     try {
       const index = calculateIndex(page);
-      const queryString = queryMap
-        ? `${queryMap[radioValue]}${query}`
-        : query;
+      const queryString = queryMap ? `${queryMap[radioValue]}${query}` : query;
 
       const result = await actionSearchBooksGoogle(queryString, index);
       setResults(result.books);
@@ -96,9 +94,9 @@ export default function Home() {
   return (
     <Suspense>
       <main className="flex flex-col items-center bg-slate-200 p-4">
-        <div className="w-2/3 flex flex-col items-center rounded-3xl shadow-sky-200 bg-sky-300">
-          <h1 className="font-light text-sky-700">Advanced Search</h1>
-          <div className="bg-slate-300 mt-1 w-2/3  ">
+        <div className="w-4/5 flex flex-col items-center rounded-3xl shadow-sky-200 bg-sky-600">
+          <h1 className="font-light text-sky-100 mt-2">Advanced Search</h1>
+          <div className="bg-slate-200 mt-2 w-3/4  ">
             <SearchBox
               advancedQuery={advancedQuery}
               setAdvancedQuery={setAdvancedQuery}
@@ -111,7 +109,7 @@ export default function Home() {
             />
           </div>
           {advancedResults.length !== 0 && (
-            <div className="w-4/5 grid grid-cols-2 gap-2">
+            <div className="w-5/6 grid grid-cols-2 gap-2 mt-3">
               {advancedResults.map((book: Book, index: any) => (
                 <AdvancedBookCard book={book} key={book.googleBooksId} />
               ))}

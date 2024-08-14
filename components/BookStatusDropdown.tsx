@@ -14,10 +14,8 @@ const menuItems = [
 
 export default function BookStatusDropdown() {
   return (
-    <>
-      <Button className="rounded-r-none rounded-full border-orange-400 border-2">
-        Want to read
-      </Button>
+    <div className="border-orange-500 border-2 rounded-lg ">
+      <Button className="rounded-r-none ">Want to read</Button>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button className="rounded-l-none">&#9660;</Button>
@@ -30,6 +28,6 @@ export default function BookStatusDropdown() {
           ))}
         </DropdownMenuContent>
       </DropdownMenu>
-    </>
+    </div>
   );
 }
