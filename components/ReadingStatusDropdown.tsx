@@ -28,10 +28,12 @@ const menuItems = [
 
 type ReadingStatusDropwdownProps = {
   book: Book;
+  logged: boolean;
 };
 
 export default function ReadingStatusDropwdown({
   book,
+  logged,
 }: ReadingStatusDropwdownProps) {
   const { dbUser } = useDbUser();
   const [currentStatus, setStatus] = useState<BookStatus | null>(null);
@@ -106,6 +108,7 @@ export default function ReadingStatusDropwdown({
       <div>
         <DropdownMenu>
           <Button
+            disabled={!logged}
             onClick={() => {
               handleDropdownClick(ReadStatus.WANT_TO_READ);
             }}
@@ -118,7 +121,9 @@ export default function ReadingStatusDropwdown({
             {getSelectedLabel()}
           </Button>
           <DropdownMenuTrigger asChild>
-            <Button className="rounded-l-none">&#9660;</Button>
+            <Button disabled={!logged} className="rounded-l-none">
+              &#9660;
+            </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="flex flex-col">
             {getDropdownItems().map((item, index) => (

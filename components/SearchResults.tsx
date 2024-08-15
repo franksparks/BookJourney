@@ -3,12 +3,16 @@ import { Book } from "@/models/book";
 import BookNavigationWrapper from "./BookNavigationWrapper";
 import ReadingStatusDropwdown from "./ReadingStatusDropdown";
 import { Table, TableCell, TableRow } from "./ui/table";
+import { useDbUser } from "@/app/context/db-user-context";
 
 type SearchResultProps = {
   books: Book[];
 };
 // Todo: Change the img for the next.js Image component
 export default function SearchResult({ books }: SearchResultProps) {
+  const { dbUser } = useDbUser();
+
+  const logged = dbUser ? true : false;
   return (
     <Table className="mt-5 mb-5 flex justify-center">
       <div className="grid grid-cols-2 grid-rows-5 gap-4 mt-5">
@@ -36,7 +40,7 @@ export default function SearchResult({ books }: SearchResultProps) {
                 </div>
               </TableCell>
               <TableCell>
-                <ReadingStatusDropwdown book={book} />
+                <ReadingStatusDropwdown book={book} logged={logged} />
               </TableCell>
             </div>
           </TableRow>
