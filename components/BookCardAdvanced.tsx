@@ -1,0 +1,47 @@
+import { capitalizeFirstLetter } from "@/lib/capitalize";
+import AddToList from "./AddToList";
+import { Book } from "@/models/book";
+import Image from "next/image";
+
+type bookCardAdvancedProps = {
+  book: Book;
+};
+
+export default function BookCardAdvanced({ book }: bookCardAdvancedProps) {
+  return (
+    <div className="flex flex-row justify-between h-36 bg-sky-50 rounded-lg mx-8 max-w-lg shadow-md shadow-sky-800 hover:bg-sky-200 transition duration-500">
+      <div className="w-1/3 flex items-center justify-center p-12">
+        {book.smallCover ? (
+          <Image
+            className="shadow-lg shadow-sky-600"
+            src={book.smallCover}
+            alt={book.title}
+            width={70}
+            height={100}
+          />
+        ) : (
+          <Image
+            className="shadow-lg shadow-sky-600"
+            src={"/default_cover.jpg"}
+            alt={book.title}
+            width={70}
+            height={100}
+          />
+        )}
+      </div>
+      <div className="flex flex-col justify-center w-2/3 gap-2 m-2">
+        <b className="text-base line-clamp-1">{`${capitalizeFirstLetter(
+          book.title
+        )}`}</b>
+        <div className="text-base line-clamp-1">
+          by{" "}
+          {book.authors && book.authors.length > 0
+            ? capitalizeFirstLetter(book.authors.join(" "))
+            : "Unknown"}
+        </div>
+
+        <AddToList />
+      </div>
+    </div>
+  );
+}
