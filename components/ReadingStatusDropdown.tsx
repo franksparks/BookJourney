@@ -39,46 +39,44 @@ export default function ReadingStatusDropwdown({
   const [currentStatus, setStatus] = useState<BookStatus | null>(null);
 
   useEffect(() => {
-    if (dbUser && book) {
-      getStatus();
-    }
+    getStatus();
   }, [dbUser, book]);
 
   const getStatus = async () => {
-    //Compruebo si el libro está en BBDD
+    //Check if the book is on DB
     const dbBook = await actionGetBookByGoogleId(book.googleBooksId);
 
     if (dbUser != null && dbBook != null) {
-      // Si el libro está en BBDD obtengo el estado de lectura
-      // de este libro para este usuario
+      // obtain the bookStatus if the book is on DB.
+
       const readingStatus: BookStatus =
         await actionGetBookStatusByBookIdAndUserId(dbBook.id!, dbUser.id);
 
       setStatus(readingStatus);
-    } else {
-      // Si el libro no está en BBDD, seteo status a null
-      setStatus(null);
     }
   };
 
   const handleDropdownClick = async (status: ReadStatus) => {
-    const res = await actionInsertBook(book);
+    const existing = await actionGetBookByGoogleId(book.googleBooksId);
+    let res;
+    if (!existing) {
+      res = await actionInsertBook(book);
+    } else {
+      res = existing;
+    }
 
     if (!currentStatus) {
-      //Si el usuario no tiene entrada para bookStatus, hago insert
+      //If bookStatus does no exist, call to insert action
       const newStatus = await actionInsertBookStatus(status, res, dbUser);
       setStatus(newStatus);
     } else {
-      //Si el usuario TIENE entrada para bookStatus, hago update
-
+      //If bookStatus exists, call to update action
       const updatedStatus = await actionUpdateBookStatus(
         currentStatus.id,
         status
       );
       setStatus(updatedStatus);
     }
-
-    getStatus();
   };
 
   const getSelectedLabel = () => {
@@ -86,7 +84,7 @@ export default function ReadingStatusDropwdown({
       const selectedItem = menuItems.find(
         (item) => item.value === currentStatus.status
       );
-      return selectedItem?.label || "Select status";
+      return selectedItem?.label;
     }
     return "Want to read";
   };

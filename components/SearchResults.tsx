@@ -1,7 +1,7 @@
 import { capitalizeFirstLetter } from "@/lib/capitalize";
 import { Book } from "@/models/book";
 import BookNavigationWrapper from "./BookNavigationWrapper";
-import ReadingStatusDropwdown from "./ReadingStatusDropdown";
+import ReadingStatusDropdown from "./ReadingStatusDropdown";
 import { Table, TableCell, TableRow } from "./ui/table";
 import { useDbUser } from "@/app/context/db-user-context";
 
@@ -40,7 +40,7 @@ export default function SearchResult({ books }: SearchResultProps) {
                 </div>
               </TableCell>
               <TableCell>
-                <ReadingStatusDropwdown book={book} logged={logged} />
+                <ReadingStatusDropdown book={book} logged={logged} />
               </TableCell>
             </div>
           </TableRow>

@@ -12,14 +12,8 @@ import {
 import { Prisma } from "@prisma/client";
 
 export const actionInsertBook = async (book: Prisma.BookCreateInput) => {
-  const existing = await dbGetBookByGoogleId(book.googleBooksId);
-
-  if (!existing) {
-    const result = await dbInsertBook(book);
-    return result;
-  } else {
-    return existing;
-  }
+  const result = await dbInsertBook(book);
+  return result;
 };
 
 export const actionGetBookById = async (id: string) => {

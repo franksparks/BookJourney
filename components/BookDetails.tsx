@@ -3,7 +3,7 @@ import ReadMore from "./ReadMore";
 import { Separator } from "./ui/separator";
 import ControlledRating from "./ControlledRating";
 import ReadRating from "./ReadRating";
-import ReadingStatusDropwdown from "./ReadingStatusDropdown";
+import ReadingStatusDropdown from "./ReadingStatusDropdown";
 import { useDbUser } from "@/app/context/db-user-context";
 
 type BookDetailsProps = {
@@ -22,7 +22,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
             src={book.cover || "../default_cover.jpg"}
           />
           <div>
-            <ReadingStatusDropwdown book={book} logged={logged} />
+            <ReadingStatusDropdown book={book} logged={logged} />
           </div>
           <div className="flex justify-center mt-7">
             <ControlledRating />
