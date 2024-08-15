@@ -1,7 +1,7 @@
 export type Book = {
   id?: string;
-  isbn10: number;
-  isbn13: number;
+  isbn10: string;
+  isbn13: string;
   authors: string[];
   googleBooksId: string;
   title: string;
@@ -9,7 +9,7 @@ export type Book = {
   categories: string[];
   pages: number;
   publisher: string;
-  publishedDate: Date;
+  publishedDate: string;
   language: string;
   cover?: string;
   smallCover?: string;
