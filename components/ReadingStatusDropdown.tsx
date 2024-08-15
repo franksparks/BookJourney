@@ -108,11 +108,12 @@ export default function ReadingStatusDropwdown({
           <Button
             disabled={!logged}
             onClick={() => {
-              handleDropdownClick(ReadStatus.WANT_TO_READ);
+              if (getSelectedLabel() === "Want to read")
+                handleDropdownClick(ReadStatus.WANT_TO_READ);
             }}
             className={
               currentStatus
-                ? "rounded-r-none bg-blue-300 text-black"
+                ? "rounded-r-none bg-blue-300 hover:bg-blue-300 text-black cursor-not-allowed"
                 : "rounded-r-none"
             }
           >
