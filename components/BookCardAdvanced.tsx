@@ -1,15 +1,19 @@
 import { capitalizeFirstLetter } from "@/lib/capitalize";
-import AddToList from "./AddToList";
 import { Book } from "@/models/book";
 import Image from "next/image";
 import { Tooltip } from "@mui/material";
 import BookNavigationWrapper from "./BookNavigationWrapper";
+import ReadingStatusDropwdown from "./ReadingStatusDropdown";
+import { useDbUser } from "@/app/context/db-user-context";
 
 type bookCardAdvancedProps = {
   book: Book;
 };
 
 export default function BookCardAdvanced({ book }: bookCardAdvancedProps) {
+  const { dbUser } = useDbUser();
+
+  const logged = dbUser ? true : false;
   return (
     <div className="flex flex-row justify-between h-36 bg-sky-50 rounded-lg mx-4 shadow-md shadow-sky-800 hover:bg-sky-200 transition duration-500 max-w-xl">
       <div className="w-1/3 flex items-center justify-center p-2 min-w-fit">
@@ -49,7 +53,7 @@ export default function BookCardAdvanced({ book }: bookCardAdvancedProps) {
               : "Unknown"}
           </div>
         </Tooltip>
-        <AddToList />
+        <ReadingStatusDropwdown book={book} logged={logged} />
       </div>
     </div>
   );
