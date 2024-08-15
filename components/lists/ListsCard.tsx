@@ -44,8 +44,8 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
 
   const getLists = async () => {
     const result = await actionGetListsByUserId(dbUser!.id);
-    setLists(result);
-    if (!selectedList && result.length > 0 && setSelectedList) {
+    setLists(result ?? []);
+    if (!selectedList && result?.length > 0 && setSelectedList) {
       setSelectedList(result[0]);
     }
   };

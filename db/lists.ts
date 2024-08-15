@@ -42,6 +42,9 @@ export const dbUpdateList = catchErrors(
 );
 
 export const dbDeleteList = catchErrors(async (id: string) => {
+  const resultBookLists = await db.bookList.deleteMany({
+    where: { listId: id },
+  })
   const result = await db.list.delete({ where: { id } });
-  return result;
+  return {...resultBookLists, ...result};
 });
