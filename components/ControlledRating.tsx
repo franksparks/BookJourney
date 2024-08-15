@@ -46,6 +46,8 @@ const CustomRating = forwardRef<HTMLDivElement, CustomRatingProps>(
   }
 );
 
+CustomRating.displayName = 'CustomRating';
+
 export default function ControlledRating({ logged, bookRating, setBookRating }: ControlledRatingProps) {
   return (
     <ConditionalTooltip logged={logged}>
