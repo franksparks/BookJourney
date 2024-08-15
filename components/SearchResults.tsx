@@ -11,7 +11,7 @@ export default function SearchResult({ results }: SearchResultProps) {
     <div className="grid grid-cols-2 grid-rows-5 gap-4 p-12">
       {results.map((result: Book, index) => (
         <div key={index}>
-          <BookNavigationWrapper id={result.googleBooksId} key={index}>
+          <BookNavigationWrapper id={result.googleBooksId}>
             <BookCardAdvanced book={result} />
           </BookNavigationWrapper>
         </div>

@@ -9,11 +9,11 @@ type bookCardAdvancedProps = {
 
 export default function BookCardAdvanced({ book }: bookCardAdvancedProps) {
   return (
-    <div className="flex flex-row justify-between h-36 bg-sky-50 rounded-lg mx-8 max-w-lg shadow-md shadow-sky-800 hover:bg-sky-200 transition duration-500">
+    <div className="flex flex-row justify-between h-36 bg-sky-50 rounded-lg mx-8 max-w-xl shadow-md shadow-sky-800 hover:bg-sky-200 transition duration-500">
       <div className="w-1/3 flex items-center justify-center p-12">
         {book.smallCover ? (
           <Image
-            className="shadow-lg shadow-sky-600"
+            className=" shadow-lg shadow-sky-600 rounded hover:scale-110 transition duration-1000"
             src={book.smallCover}
             alt={book.title}
             width={70}
@@ -21,7 +21,7 @@ export default function BookCardAdvanced({ book }: bookCardAdvancedProps) {
           />
         ) : (
           <Image
-            className="shadow-lg shadow-sky-600"
+            className="rounded"
             src={"/default_cover.jpg"}
             alt={book.title}
             width={70}
@@ -39,7 +39,6 @@ export default function BookCardAdvanced({ book }: bookCardAdvancedProps) {
             ? capitalizeFirstLetter(book.authors.join(" "))
             : "Unknown"}
         </div>
-
         <AddToList />
       </div>
     </div>
