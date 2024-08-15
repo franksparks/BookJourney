@@ -1,27 +1,35 @@
 import { Book } from "@/models/book";
 import ReadMore from "./ReadMore";
 import { Separator } from "./ui/separator";
-import AddToList from "./AddToList";
 import ControlledRating from "./ControlledRating";
 import ReadRating from "./ReadRating";
+import ReadingStatusDropdown from "./ReadingStatusDropdown";
+import { useDbUser } from "@/app/context/db-user-context";
 
 type BookDetailsProps = {
   book: Book;
 };
 
 export default function BookDetails({ book }: BookDetailsProps) {
+  const { dbUser } = useDbUser();
+  const logged = dbUser ? true : false;
   return (
     <div className="flex justify-center mt-10">
       <div className="flex justify-center basis-1/4">
         <div className="flex flex-col">
-          <img className="mb-8" src={book.cover || "../default_cover.jpg"} />
+          <img
+            className="mb-8"
+            src={book.cover || "../default_cover.jpg"}
+          />
           <div>
-            <AddToList />
+            <ReadingStatusDropdown book={book} logged={logged} />
           </div>
           <div className="flex justify-center mt-7">
             <ControlledRating />
           </div>
-          <div className="flex justify-center mt-2">{"Rate this book"}</div>
+          <div className="flex justify-center mt-2">
+            {"Rate this book"}
+          </div>
         </div>
       </div>
       <div className="flex w-screen justify-start flex-col mr-4">
@@ -65,7 +73,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
           {book.language && (
             <div className="flex items-center">
               <div className="font-semibold">Published</div>
-              <div className="ml-4">{book.publishedDate.toString()}</div>
+              <div className="ml-4">{book.publishedDate}</div>
             </div>
           )}
           {book.language && (
