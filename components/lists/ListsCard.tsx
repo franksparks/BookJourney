@@ -116,96 +116,106 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
   return (
     <div className="p-4 border shadow-md w-full rounded-3xl bg-orange-500 bg-opacity-50">
       <h1 className="font-light text-orange-700 text-center mt-4">My Lists</h1>
-      <ul className="mb-4">
-        {lists.length > 0 && lists.map((list) => (
-          <div className="flex items-center mb-2" key={list.id}>
-            {editingListId === list.id ? (
-              <>
-                <input
-                  type="text"
-                  value={editingListName}
-                  onChange={(e) => setEditingListName(e.target.value)}
-                  className="p-2 border rounded w-full"
-                />
-                <button
-                  onClick={handleSaveEdit}
-                  className="font-bold text-green-600 hover:text-green-800 transition-colors duration-300 ml-2"
-                >
-                  Save
-                </button>
-                <button
-                  onClick={handleCancelEdit}
-                  className="font-bold text-red-600 hover:text-red-800 transition-colors duration-300 ml-2"
-                >
-                  Cancel
-                </button>
-              </>
-            ) : (
-              <>
-                <li
-                  onClick={() => handleSelectList(list)}
-                  className={`p-2 cursor-pointer transition-colors duration-300 hover:bg-gray-200 ${
-                    selectedList?.id === list.id ? "font-bold" : ""
-                  }`}
-                >
-                  {list.name} - ({list.books.length})
-                </li>
-                <button
-                  className="font-bold text-blue-600 hover:text-blue-800 transition-colors duration-300 ml-auto"
-                  onClick={() => handleEditList(list)}
-                >
-                  Edit
-                </button>
-                <button
-                  className="font-bold text-red-600 hover:text-red-800 transition-colors duration-300 ml-2"
-                  onClick={() => handleDeleteList(list.id)}
-                >
-                  Delete
-                </button>
-              </>
-            )}
-          </div>
-        ))}
-        {lists.length === 0 && <p>No lists found</p>}
-      </ul>
-      {showInput && (
-        <div className="mb-4 flex items-center space-x-2">
-          <input
-            type="text"
-            value={newListName}
-            onChange={(e) => setNewListName(e.target.value)}
-            placeholder="Enter list name"
-            className="p-2 border rounded w-full"
-          />
-          <button
-            onClick={handleCreateList}
-            className="bg-orange-500 text-white rounded hover:bg-blue-600 transition-colors duration-300 w-52 pt-2 pb-2"
-          >
-            Create List
-          </button>
+      {!dbUser && (
+        <div className="text-slate-100 text-center">
+          You must register or login to create a list
         </div>
       )}
-      <div className="flex justify-end">
-        {showInput ? (
-          <button
-            aria-label="close"
-            className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-300"
-            onClick={handleCloseInput}
-          >
-            <Cross2Icon className="h-5 w-5" />
-          </button>
-        ) : (
-          pathname.includes("/lists") && (
-            <button
-              aria-label="add"
-              className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-300"
-              onClick={handleAddList}
-            >
-              <PlusIcon className="h-5 w-5" />
-            </button>
-          )
-        )}
-      </div>
+      {dbUser && (
+        <>
+          <ul className="mb-4">
+            {lists.length > 0 &&
+              lists.map((list) => (
+                <div className="flex items-center mb-2" key={list.id}>
+                  {editingListId === list.id ? (
+                    <>
+                      <input
+                        type="text"
+                        value={editingListName}
+                        onChange={(e) => setEditingListName(e.target.value)}
+                        className="p-2 border rounded w-full"
+                      />
+                      <button
+                        onClick={handleSaveEdit}
+                        className="font-bold text-green-600 hover:text-green-800 transition-colors duration-300 ml-2"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={handleCancelEdit}
+                        className="font-bold text-red-600 hover:text-red-800 transition-colors duration-300 ml-2"
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <li
+                        onClick={() => handleSelectList(list)}
+                        className={`p-2 cursor-pointer transition-colors duration-300 hover:bg-gray-200 ${
+                          selectedList?.id === list.id ? "font-bold" : ""
+                        }`}
+                      >
+                        {list.name} - ({list.books.length})
+                      </li>
+                      <button
+                        className="font-bold text-blue-600 hover:text-blue-800 transition-colors duration-300 ml-auto"
+                        onClick={() => handleEditList(list)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="font-bold text-red-600 hover:text-red-800 transition-colors duration-300 ml-2"
+                        onClick={() => handleDeleteList(list.id)}
+                      >
+                        Delete
+                      </button>
+                    </>
+                  )}
+                </div>
+              ))}
+            {lists.length === 0 && <p>No lists found</p>}
+          </ul>
+          {showInput && (
+            <div className="mb-4 flex items-center space-x-2">
+              <input
+                type="text"
+                value={newListName}
+                onChange={(e) => setNewListName(e.target.value)}
+                placeholder="Enter list name"
+                className="p-2 border rounded w-full"
+              />
+              <button
+                onClick={handleCreateList}
+                className="bg-orange-500 text-white rounded hover:bg-blue-600 transition-colors duration-300 w-52 pt-2 pb-2"
+              >
+                Create List
+              </button>
+            </div>
+          )}
+          <div className="flex justify-end">
+            {showInput ? (
+              <button
+                aria-label="close"
+                className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-300"
+                onClick={handleCloseInput}
+              >
+                <Cross2Icon className="h-5 w-5" />
+              </button>
+            ) : (
+              pathname.includes("/lists") && (
+                <button
+                  aria-label="add"
+                  className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-300"
+                  onClick={handleAddList}
+                >
+                  <PlusIcon className="h-5 w-5" />
+                </button>
+              )
+            )}
+          </div>
+        </>
+      )}
 
       {/* Modal for deletion confirmation */}
       <Modal
