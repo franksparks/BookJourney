@@ -9,8 +9,8 @@ type bookCardAdvancedProps = {
 
 export default function BookCardAdvanced({ book }: bookCardAdvancedProps) {
   return (
-    <div className="flex flex-row justify-between h-36 bg-sky-50 rounded-lg mx-8 max-w-xl shadow-md shadow-sky-800 hover:bg-sky-200 transition duration-500">
-      <div className="w-1/3 flex items-center justify-center p-12">
+    <div className="flex flex-row justify-between h-36 bg-sky-50 rounded-lg mx-8 max-w-xl min-w-96 shadow-md shadow-sky-800 hover:bg-sky-200 transition duration-500">
+      <div className="w-1/3 flex items-center justify-center p-2">
         {book.smallCover ? (
           <Image
             className=" shadow-lg shadow-sky-600 rounded hover:scale-110 transition duration-1000"
