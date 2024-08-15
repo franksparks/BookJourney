@@ -4,12 +4,15 @@ import { Separator } from "./ui/separator";
 import ControlledRating from "./ControlledRating";
 import ReadRating from "./ReadRating";
 import ReadingStatusDropwdown from "./ReadingStatusDropdown";
+import { useDbUser } from "@/app/context/db-user-context";
 
 type BookDetailsProps = {
   book: Book;
 };
 
 export default function BookDetails({ book }: BookDetailsProps) {
+  const { dbUser } = useDbUser();
+  const logged = dbUser ? true : false;
   return (
     <div className="flex justify-center mt-10">
       <div className="flex justify-center basis-1/4">
@@ -19,7 +22,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
             src={book.cover || "../default_cover.jpg"}
           />
           <div>
-            <ReadingStatusDropwdown book={book} />
+            <ReadingStatusDropwdown book={book} logged={logged} />
           </div>
           <div className="flex justify-center mt-7">
             <ControlledRating />
