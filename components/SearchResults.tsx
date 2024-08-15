@@ -7,7 +7,7 @@ type SearchResultProps = {
 // Todo: Change the img for the next.js Image component
 export default function SearchResult({ results }: SearchResultProps) {
   return (
-    <div className="grid grid-cols-2 grid-rows-5 gap-4 p-12">
+    <div className="grid grid-cols-2 grid-rows-5 gap-4 m-4 w-4/5">
       {results.map((result: Book, index) => (
         <div key={index}>
           <BookCardAdvanced book={result} />

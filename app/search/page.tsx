@@ -94,8 +94,8 @@ export default function Home() {
   return (
     <Suspense>
       <main className="flex justify-center flex-col items-center">
-        <div className="flex justify-center flex-col items-center bg-sky-600 m-12 mx-24 rounded-3xl w-3/4 min-w-fit">
-          <div className="bg-slate-300 mt-6 rounded-md min-w-fit shadow-md shadow-sky-800">
+        <div className="flex justify-center flex-col items-center bg-sky-600 m-8 rounded-3xl w-5/6 min-w-fit">
+          <div className="bg-slate-300 mt-4 rounded-md min-w-fit shadow-md shadow-sky-800">
             <SearchBox
               advancedQuery={advancedQuery}
               setAdvancedQuery={setAdvancedQuery}

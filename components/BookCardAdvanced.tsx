@@ -11,8 +11,8 @@ type bookCardAdvancedProps = {
 
 export default function BookCardAdvanced({ book }: bookCardAdvancedProps) {
   return (
-    <div className="flex flex-row justify-between h-36 bg-sky-50 rounded-lg mx-8 max-w-xl min-w-96 shadow-md shadow-sky-800 hover:bg-sky-200 transition duration-500">
-      <div className="w-1/3 flex items-center justify-center p-2">
+    <div className="flex flex-row justify-between h-36 bg-sky-50 rounded-lg mx-4 shadow-md shadow-sky-800 hover:bg-sky-200 transition duration-500 max-w-xl">
+      <div className="w-1/3 flex items-center justify-center p-2 min-w-fit">
         <BookNavigationWrapper id={book.googleBooksId}>
           {book.smallCover ? (
             <Image
@@ -33,7 +33,7 @@ export default function BookCardAdvanced({ book }: bookCardAdvancedProps) {
           )}
         </BookNavigationWrapper>
       </div>
-      <div className="flex flex-col justify-center w-2/3 gap-2 m-2 mr-5">
+      <div className="flex flex-col justify-center w-2/3 gap-2 m-2 mr-5 cursor-default">
         <Tooltip title={book.title}>
           <b className="text-base line-clamp-1">{`${capitalizeFirstLetter(
             book.title
