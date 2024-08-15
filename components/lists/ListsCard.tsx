@@ -10,7 +10,7 @@ import {
   actionDeleteList,
   actionUpdateList,
 } from "@/actions/lists";
-import { useDbUser } from "@/app/context/DbUserContext";
+import { useDbUser } from "@/app/context/db-user-context";
 import { Prisma } from "@prisma/client";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import Modal from "@/components/ui/confirmation-modal";
