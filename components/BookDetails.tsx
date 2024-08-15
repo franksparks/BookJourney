@@ -3,7 +3,7 @@ import ReadMore from "./ReadMore";
 import { Separator } from "./ui/separator";
 import ControlledRating from "./ControlledRating";
 import ReadRating from "./ReadRating";
-import ReadingStatusDropwdown from "./ReadingStatusDropwdown";
+import ReadingStatusDropwdown from "./ReadingStatusDropdown";
 
 type BookDetailsProps = {
   book: Book;

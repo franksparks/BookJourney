@@ -17,7 +17,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 
 const menuItems = [
@@ -49,19 +49,12 @@ export default function ReadingStatusDropwdown({
     if (dbUser != null && dbBook != null) {
       // Si el libro está en BBDD obtengo el estado de lectura
       // de este libro para este usuario
-      console.log("El libro ESTÁ en BBDD");
-
       const readingStatus: BookStatus =
         await actionGetBookStatusByBookIdAndUserId(dbBook.id!, dbUser.id);
-
-      if (readingStatus) {
-        console.log("READING STATUS: " + readingStatus.status);
-      }
 
       setStatus(readingStatus);
     } else {
       // Si el libro no está en BBDD, seteo status a null
-      console.log("El libro no está en BBDD");
       setStatus(null);
     }
   };
@@ -75,7 +68,6 @@ export default function ReadingStatusDropwdown({
       setStatus(newStatus);
     } else {
       //Si el usuario TIENE entrada para bookStatus, hago update
-      console.log("Update status here");
 
       const updatedStatus = await actionUpdateBookStatus(
         currentStatus.id,

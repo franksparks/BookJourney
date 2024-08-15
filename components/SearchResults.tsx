@@ -1,7 +1,7 @@
 import { capitalizeFirstLetter } from "@/lib/capitalize";
 import { Book } from "@/models/book";
 import BookNavigationWrapper from "./BookNavigationWrapper";
-import ReadingStatusDropwdown from "./ReadingStatusDropwdown";
+import ReadingStatusDropwdown from "./ReadingStatusDropdown";
 import { Table, TableCell, TableRow } from "./ui/table";
 
 type SearchResultProps = {
