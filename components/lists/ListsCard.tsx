@@ -7,10 +7,13 @@ import {
   actionGetListsByUserId,
   actionInsertList,
   actionGetListById,
+  actionDeleteList,
+  actionUpdateList,
 } from "@/actions/lists";
 import { useDbUser } from "@/app/context/DbUserContext";
 import { Prisma } from "@prisma/client";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import Modal from "@/components/ui/confirmation-modal";
 
 export default function ListsCard({ selectedList, setSelectedList }: any) {
   const { dbUser } = useDbUser();
@@ -21,8 +24,10 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
   const [lists, setLists] = useState<List[]>([]);
   const [showInput, setShowInput] = useState<boolean>(false);
   const [newListName, setNewListName] = useState<string>("");
+  const [editingListId, setEditingListId] = useState<string | null>(null);
+  const [editingListName, setEditingListName] = useState<string>("");
+  const [deletingListId, setDeletingListId] = useState<string | null>(null); // For the modal
 
-  // if there is a dbUser, get the lists
   useEffect(() => {
     if (dbUser && dbUser.id) {
       getLists();
@@ -40,6 +45,9 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
   const getLists = async () => {
     const result = await actionGetListsByUserId(dbUser!.id);
     setLists(result);
+    if (!selectedList && result.length > 0 && setSelectedList) {
+      setSelectedList(result[0]);
+    }
   };
 
   const handleAddList = () => {
@@ -67,6 +75,40 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
     }
   };
 
+  const handleEditList = (list: List) => {
+    setEditingListId(list.id);
+    setEditingListName(list.name);
+  };
+
+  const handleSaveEdit = async () => {
+    if (editingListName.trim() === "") return;
+    await actionUpdateList(editingListId!, editingListName);
+    setEditingListId(null);
+    setEditingListName("");
+    getLists();
+  };
+
+  const handleCancelEdit = () => {
+    setEditingListId(null);
+    setEditingListName("");
+  };
+
+  const handleDeleteList = async (id: string) => {
+    setDeletingListId(id);
+  };
+
+  const confirmDeleteList = async () => {
+    if (deletingListId) {
+      await actionDeleteList(deletingListId);
+      setDeletingListId(null);
+      getLists();
+    }
+  };
+
+  const cancelDeleteList = () => {
+    setDeletingListId(null);
+  };
+
   const handleCloseInput = () => {
     setShowInput(false);
   };
@@ -75,17 +117,56 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
     <div className="p-4 border rounded-lg shadow-md w-full">
       <h2 className="text-lg font-semibold mb-4">My Lists</h2>
       <ul className="mb-4">
-        {lists.map((list) => (
-          <li
-            key={list.id}
-            onClick={() => handleSelectList(list)}
-            className={`p-2 cursor-pointer transition-colors duration-300 hover:bg-gray-200 ${
-              selectedList?.id === list.id ? "font-bold" : ""
-            }`}
-          >
-            {list.name} - ({list.books.length})
-          </li>
+        {lists.length > 0 && lists.map((list) => (
+          <div className="flex items-center mb-2" key={list.id}>
+            {editingListId === list.id ? (
+              <>
+                <input
+                  type="text"
+                  value={editingListName}
+                  onChange={(e) => setEditingListName(e.target.value)}
+                  className="p-2 border rounded w-full"
+                />
+                <button
+                  onClick={handleSaveEdit}
+                  className="font-bold text-green-600 hover:text-green-800 transition-colors duration-300 ml-2"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={handleCancelEdit}
+                  className="font-bold text-red-600 hover:text-red-800 transition-colors duration-300 ml-2"
+                >
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <>
+                <li
+                  onClick={() => handleSelectList(list)}
+                  className={`p-2 cursor-pointer transition-colors duration-300 hover:bg-gray-200 ${
+                    selectedList?.id === list.id ? "font-bold" : ""
+                  }`}
+                >
+                  {list.name} - ({list.books.length})
+                </li>
+                <button
+                  className="font-bold text-blue-600 hover:text-blue-800 transition-colors duration-300 ml-auto"
+                  onClick={() => handleEditList(list)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="font-bold text-red-600 hover:text-red-800 transition-colors duration-300 ml-2"
+                  onClick={() => handleDeleteList(list.id)}
+                >
+                  Delete
+                </button>
+              </>
+            )}
+          </div>
         ))}
+        {lists.length === 0 && <p>No lists found</p>}
       </ul>
       {showInput && (
         <div className="mb-4 flex items-center space-x-2">
@@ -125,6 +206,15 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
           )
         )}
       </div>
+
+      {/* Modal for deletion confirmation */}
+      <Modal
+        isOpen={!!deletingListId}
+        onClose={cancelDeleteList}
+        onConfirm={confirmDeleteList}
+        title="Confirm Deletion"
+        message="Are you sure you want to delete this list? This action cannot be undone."
+      />
     </div>
   );
 }
