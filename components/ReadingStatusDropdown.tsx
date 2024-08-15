@@ -111,8 +111,8 @@ export default function ReadingStatusDropwdown({
             }}
             className={
               currentStatus
-                ? "rounded-l-none bg-blue-300 text-black"
-                : "rounded-l-none"
+                ? "rounded-r-none bg-blue-300 text-black"
+                : "rounded-r-none"
             }
           >
             {getSelectedLabel()}
