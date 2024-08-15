@@ -114,8 +114,8 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
   };
 
   return (
-    <div className="p-4 border rounded-lg shadow-md w-full">
-      <h2 className="text-lg font-semibold mb-4">My Lists</h2>
+    <div className="p-4 border shadow-md w-full rounded-3xl bg-orange-500 bg-opacity-50">
+      <h1 className="font-light text-orange-700 text-center mt-4">My Lists</h1>
       <ul className="mb-4">
         {lists.length > 0 && lists.map((list) => (
           <div className="flex items-center mb-2" key={list.id}>

@@ -27,8 +27,8 @@ export default function ListBooksCard({ list }: BooksListProps) {
   };
 
   return (
-    <div className="p-2 border rounded-lg shadow-md w-full">
-      <h2 className="text-lg font-semibold mb-4">Books in <i>{list?.name}</i></h2>
+    <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-sky-300 text-slate-100 h-full overflow-y-auto">
+        <h1 className="font-light text-sky-700 text-center">Books in <i>{list?.name}</i></h1>
       <ul>
         {books.length > 0 ? (
           books.map((book) => (
