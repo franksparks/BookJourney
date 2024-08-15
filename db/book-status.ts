@@ -20,8 +20,11 @@ export const dbGetBookStatusById = catchErrors(
 
 export const dbGetBookStatusByBookIdAndUserId = catchErrors(
   async (bookId: string, userId: string) => {
-    const result = await db.bookStatus.findMany({
-      where: { bookId, userId },
+    const result = await db.bookStatus.findFirst({
+      where: {
+        bookId: bookId,
+        userId: userId,
+      },
     });
     return result;
   }

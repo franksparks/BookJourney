@@ -44,6 +44,7 @@ export default function Home() {
   ) => {
     try {
       const index = calculateIndex(page);
+
       const queryString = queryMap ? `${queryMap[radioValue]}${query}` : query;
 
       const result = await actionSearchBooksGoogle(queryString, index);
@@ -108,7 +109,7 @@ export default function Home() {
             />
           </div>
           {advancedResults.length !== 0 && (
-            <SearchResults results={advancedResults} />
+            <SearchResults books={advancedResults} />
           )}
           {advancedResults.length !== 0 && (
             <SearchPagination

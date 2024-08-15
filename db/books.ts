@@ -14,6 +14,13 @@ export const dbGetBookById = catchErrors(async (id: string) => {
   return result;
 });
 
+export const dbGetBookByGoogleId = catchErrors(
+  async (googleBooksId: string) => {
+    const result = await db.book.findFirst({ where: { googleBooksId } });
+    return result;
+  }
+);
+
 export const dbGetBooksInList = catchErrors(async (listId: string) => {
   const list = await db.list.findUnique({
     where: { id: listId },
