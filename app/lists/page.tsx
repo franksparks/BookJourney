@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import ListsCard from "@/components/lists/ListsCard";
 import ListBooksCard from "@/components/lists/ListBooksCard";
 import { List } from "@/models/list";
-export default function page() {
+export default function Page() {
   const [selectedList, setSelectedList] = useState<List | null>(null);
 
   return (
