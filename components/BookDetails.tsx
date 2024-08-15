@@ -70,7 +70,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
           {book.language && (
             <div className="flex items-center">
               <div className="font-semibold">Published</div>
-              <div className="ml-4">{book.publishedDate.toString()}</div>
+              <div className="ml-4">{book.publishedDate}</div>
             </div>
           )}
           {book.language && (
