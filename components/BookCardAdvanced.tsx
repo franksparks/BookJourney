@@ -34,7 +34,7 @@ export default function BookCardAdvanced({ book }: bookCardAdvancedProps) {
         </BookNavigationWrapper>
       </div>
       <div className="flex flex-col justify-center w-2/3 gap-2 m-2 mr-5">
-        <Tooltip title={book.title}>
+        <Tooltip arrow title={book.title}>
           <b className="text-base line-clamp-1">{`${capitalizeFirstLetter(
             book.title
           )}`}</b>
