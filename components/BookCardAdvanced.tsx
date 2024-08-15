@@ -39,12 +39,14 @@ export default function BookCardAdvanced({ book }: bookCardAdvancedProps) {
             book.title
           )}`}</b>
         </Tooltip>
-        <div className="text-base line-clamp-1">
-          by{" "}
-          {book.authors && book.authors.length > 0
-            ? capitalizeFirstLetter(book.authors.join(" "))
-            : "Unknown"}
-        </div>
+        <Tooltip arrow title={book.authors}>
+          <div className="text-base line-clamp-1">
+            by{" "}
+            {book.authors && book.authors.length > 0
+              ? capitalizeFirstLetter(book.authors.join(" "))
+              : "Unknown"}
+          </div>
+        </Tooltip>
         <AddToList />
       </div>
     </div>
