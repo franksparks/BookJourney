@@ -9,7 +9,9 @@ import { useDbUser } from "@/app/context/db-user-context";
 import { useCallback, useEffect, useState } from "react";
 import ReadingStatusDropdown from "./ReadingStatusDropdown";
 import {
+  actionGetAverageRatingByBookId,
   actionGetRatingByGoogleBookIdAndUserId,
+  actionGetRatingsByBook,
   actionInsertRating,
   actionUpdateRating
 } from "@/actions/ratings";
@@ -24,6 +26,8 @@ type BookDetailsProps = {
 export default function BookDetails({ book }: BookDetailsProps) {
   const { dbUser } = useDbUser();
   const [numericBookRating, setNumericBookRating] = useState<number | null>(0);
+  const [averageBookRating, setAverageBookRating] = useState<number>(0);
+  const [numberOfRatings, setNumberOfRatings] = useState<number>(0);
   const [bookInDb, setBookInDb] = useState<Book | null>(null);
   const [bookRating, setBookRating] = useState<Rating | null>(null);
   const [firstInteraction, setFirstInteraction] = useState(true);
@@ -42,6 +46,16 @@ export default function BookDetails({ book }: BookDetailsProps) {
       }
     }
   }, [book.googleBooksId, dbUser]);
+
+  const fetchAverageRating = useCallback(async () => {
+    if (bookInDb) {
+      const average = await actionGetAverageRatingByBookId(bookInDb.id!);
+      setAverageBookRating(average);
+
+      const ratings = await actionGetRatingsByBook(bookInDb.id!);
+      setNumberOfRatings(ratings.length);
+    }
+  }, [bookInDb?.id!]);
 
   const fetchBookInDb = useCallback(async () => {
     const dbBook: Book = await actionGetBookByGoogleId(book.googleBooksId);
@@ -83,7 +97,8 @@ export default function BookDetails({ book }: BookDetailsProps) {
   useEffect(() => {
     fetchRating();
     fetchBookInDb();
-  }, [fetchRating, fetchBookInDb]);
+    fetchAverageRating();
+  }, [fetchRating, fetchBookInDb, fetchAverageRating]);
 
   useEffect(() => {
     if (!firstInteraction) {
@@ -118,10 +133,11 @@ export default function BookDetails({ book }: BookDetailsProps) {
         </div>
       </div>
       <div className="flex w-screen justify-start flex-col mr-4">
-        <h1>{book.title}</h1>
         <div className="flex flex-row">
-          <ReadRating value={5} />
+          <h1 className="mr-4">{book.title}</h1>
+          <ReadRating value={averageBookRating} />
         </div>
+          <h2>{`Average: ${averageBookRating} - Number of ratings: ${numberOfRatings}`}</h2>
         <Separator className="my-4" />
         {(book.authors &&
           book.authors.map((author, index) => (
