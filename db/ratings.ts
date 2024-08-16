@@ -7,7 +7,7 @@ const ratingMap: { [key: string]: number } = {
   TWO: 2,
   THREE: 3,
   FOUR: 4,
-  FIVE: 5,
+  FIVE: 5
 };
 
 export const dbInsertRating = catchErrors(
@@ -22,22 +22,35 @@ export const dbGetRatingsByBookId = catchErrors(async (bookId: string) => {
   return result;
 });
 
+export const dbGetRatingsByGoogleId = catchErrors(
+  async (googleBooksId: string) => {
+    const result = await db.rating.findFirst({
+      where: {
+        book: {
+          googleBooksId: googleBooksId
+        }
+      }
+    });
+    return result;
+  }
+);
+
 export const dbGetAverageRatingByBookId = catchErrors(
   async (bookId: string) => {
     const ratings = await db.rating.findMany({
       where: { bookId },
       orderBy: {
-        createdAt: "desc",
+        createdAt: "desc"
       },
       take: 20,
       select: {
-        rating: true,
-      },
+        rating: true
+      }
     });
 
     const numericRatings = ratings
-      .map((r) => ratingMap[r.rating])
-      .filter((value) => value !== undefined);
+      .map(r => ratingMap[r.rating])
+      .filter(value => value !== undefined);
 
     const average = numericRatings.length
       ? numericRatings.reduce((sum, value) => sum + value, 0) /
@@ -64,7 +77,7 @@ export const dbUpdateRating = catchErrors(
   async (rating: RatingValue, id: string) => {
     const result = await db.rating.update({
       where: { id },
-      data: { rating },
+      data: { rating }
     });
     return result;
   }
