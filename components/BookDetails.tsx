@@ -8,8 +8,13 @@ import ReadRating from "./ReadRating";
 import { useDbUser } from "@/app/context/db-user-context";
 import { useCallback, useEffect, useState } from "react";
 import ReadingStatusDropdown from "./ReadingStatusDropdown";
-import { actionGetRatingByGoogleBookIdAndUserId } from "@/actions/ratings";
-import { Rating, ratingMap } from "@/models/rating";
+import {
+  actionGetRatingByGoogleBookIdAndUserId,
+  actionInsertRating
+} from "@/actions/ratings";
+import { inverseRatingMap, Rating, ratingMap } from "@/models/rating";
+import { actionGetBookByGoogleId, actionInsertBook } from "@/actions/books";
+import { RatingValue } from "@prisma/client";
 
 type BookDetailsProps = {
   book: Book;
@@ -17,7 +22,10 @@ type BookDetailsProps = {
 
 export default function BookDetails({ book }: BookDetailsProps) {
   const { dbUser } = useDbUser();
-  const [bookRating, setBookRating] = useState<number | null>(0);
+  const [numericBookRating, setNumericBookRating] = useState<number | null>(0);
+  const [bookInDb, setBookInDb] = useState<Book | null>(null);
+  const [bookRating, setBookRating] = useState<Rating | null>(null);
+  const [firstInteraction, setFirstInteraction] = useState(true);
   const logged = dbUser ? true : false;
 
   const fetchRating = useCallback(async () => {
@@ -25,13 +33,61 @@ export default function BookDetails({ book }: BookDetailsProps) {
       book.googleBooksId,
       dbUser.id
     );
-    const numericRating = ratingMap[rating.rating];
-    setBookRating(numericRating);
+    if (rating) {
+      setBookRating(rating);
+      const numericRating = ratingMap[rating.rating];
+      setNumericBookRating(numericRating);
+    }
   }, [book.googleBooksId]);
+
+  const fetchBookInDb = useCallback(async () => {
+    const dbBook: Book = await actionGetBookByGoogleId(book.googleBooksId);
+    setBookInDb(dbBook);
+  }, []);
+
+  const addBookToDb = useCallback(async () => {
+    const createdBook = await actionInsertBook(book);
+    setBookInDb(createdBook);
+  }, [bookInDb]);
+
+  const addRatingToBook = useCallback(async () => {
+    const stringRating = inverseRatingMap[numericBookRating!];
+    const ratingCreateInput = {
+      rating: stringRating as RatingValue,
+      book: {
+        connect: {
+          id: bookInDb?.id
+        }
+      },
+      user: {
+        connect: {
+          id: dbUser.id
+        }
+      }
+    };
+
+    await actionInsertRating(ratingCreateInput);
+  }, [numericBookRating, bookInDb]);
+
+  const updateRating = useCallback(async () => {}, []);
+
+  const handleBookRating = useCallback(() => {}, []);
 
   useEffect(() => {
     fetchRating();
-  }, [fetchRating]);
+    fetchBookInDb();
+  }, [fetchRating, fetchBookInDb]);
+
+  useEffect(() => {
+    if (!firstInteraction) {
+      if (bookInDb === null) {
+        addBookToDb();
+      }
+      if (bookRating === null) {
+        addRatingToBook();
+      }
+    }
+  }, [numericBookRating, bookInDb]);
 
   return (
     <div className="flex justify-center mt-10">
@@ -44,8 +100,9 @@ export default function BookDetails({ book }: BookDetailsProps) {
           <div className="flex justify-center mt-7">
             <ControlledRating
               logged={logged}
-              bookRating={bookRating}
-              setBookRating={setBookRating}
+              bookRating={numericBookRating}
+              setBookRating={setNumericBookRating}
+              setFirstInteraction={setFirstInteraction}
             />
           </div>
           <div className="flex justify-center mt-2">{"Rate this book"}</div>
