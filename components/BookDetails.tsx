@@ -1,45 +1,56 @@
+"use client";
+
 import { Book } from "@/models/book";
 import ReadMore from "./ReadMore";
 import { Separator } from "./ui/separator";
 import ControlledRating from "./ControlledRating";
 import ReadRating from "./ReadRating";
 import { useDbUser } from "@/app/context/db-user-context";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ReadingStatusDropdown from "./ReadingStatusDropdown";
-
+import { actionGetRatingByGoogleBookIdAndUserId } from "@/actions/ratings";
+import { Rating, ratingMap } from "@/models/rating";
 
 type BookDetailsProps = {
   book: Book;
 };
 
 export default function BookDetails({ book }: BookDetailsProps) {
-    const { dbUser } = useDbUser();
-    const [bookRating, setBookRating] = useState<number | null>(0);
-    const logged = dbUser ? true : false; 
+  const { dbUser } = useDbUser();
+  const [bookRating, setBookRating] = useState<number | null>(0);
+  const logged = dbUser ? true : false;
 
-    useEffect(() => {
-        console.log(bookRating)
-    }, [bookRating])
+  const fetchRating = useCallback(async () => {
+    const rating: Rating = await actionGetRatingByGoogleBookIdAndUserId(
+      book.googleBooksId,
+      dbUser.id
+    );
+    const numericRating = ratingMap[rating.rating];
+    setBookRating(numericRating);
+  }, [book.googleBooksId]);
+
+  useEffect(() => {
+    fetchRating();
+  }, [fetchRating]);
 
   return (
     <div className="flex justify-center mt-10">
       <div className="flex justify-center basis-1/4">
         <div className="flex flex-col">
-          <img
-            className="mb-8"
-            src={book.cover || "../default_cover.jpg"}
-          />
+          <img className="mb-8" src={book.cover || "../default_cover.jpg"} />
           <div>
             <ReadingStatusDropdown book={book} logged={logged} />
           </div>
           <div className="flex justify-center mt-7">
-            <ControlledRating logged={logged} bookRating={bookRating} setBookRating={setBookRating} />
+            <ControlledRating
+              logged={logged}
+              bookRating={bookRating}
+              setBookRating={setBookRating}
+            />
           </div>
-          <div className="flex justify-center mt-2">
-            {"Rate this book"}
-          </div>
+          <div className="flex justify-center mt-2">{"Rate this book"}</div>
         </div>
-      </div>    
+      </div>
       <div className="flex w-screen justify-start flex-col mr-4">
         <h1>{book.title}</h1>
         <div className="flex flex-row">

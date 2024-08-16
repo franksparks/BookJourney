@@ -4,6 +4,7 @@ import { dbUpdateBookRatingAverage } from "@/db/books";
 import {
   dbDeleteRating,
   dbGetAverageRatingByBookId,
+  dbGetRatingByGoogleBookIdAndUserId,
   dbGetRatingByRatingId,
   dbGetRatingsByBookId,
   dbGetRatingsByBookIdAndUserId,
@@ -41,6 +42,11 @@ export const actionGetRatingsByBook = async (id: string) => {
   const result = await dbGetRatingsByBookId(id);
   return result;
 };
+
+export const actionGetRatingByGoogleBookIdAndUserId = async (googleBooksId: string, userId: string) => {
+  const result = await dbGetRatingByGoogleBookIdAndUserId(googleBooksId, userId);
+  return result;
+}
 
 export const actionGetRatingByRatingId = async (id: string) => {
   const result = await dbGetRatingByRatingId(id);
