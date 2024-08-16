@@ -30,16 +30,18 @@ export default function BookDetails({ book }: BookDetailsProps) {
   const logged = dbUser ? true : false;
 
   const fetchRating = useCallback(async () => {
-    const rating: Rating = await actionGetRatingByGoogleBookIdAndUserId(
-      book.googleBooksId,
-      dbUser.id
-    );
-    if (rating) {
-      setBookRating(rating);
-      const numericRating = ratingMap[rating.rating];
-      setNumericBookRating(numericRating);
+    if (dbUser) {
+      const rating: Rating = await actionGetRatingByGoogleBookIdAndUserId(
+        book.googleBooksId,
+        dbUser.id
+      );
+      if (rating) {
+        setBookRating(rating);
+        const numericRating = ratingMap[rating.rating];
+        setNumericBookRating(numericRating);
+      }
     }
-  }, [book.googleBooksId]);
+  }, [book.googleBooksId, dbUser]);
 
   const fetchBookInDb = useCallback(async () => {
     const dbBook: Book = await actionGetBookByGoogleId(book.googleBooksId);
