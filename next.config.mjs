@@ -1,7 +1,20 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["books.google.com"], // Add the required domain here
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'books.google.com',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'books.google.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
   },
 };
 
