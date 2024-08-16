@@ -10,7 +10,8 @@ import { useCallback, useEffect, useState } from "react";
 import ReadingStatusDropdown from "./ReadingStatusDropdown";
 import {
   actionGetRatingByGoogleBookIdAndUserId,
-  actionInsertRating
+  actionInsertRating,
+  actionUpdateRating
 } from "@/actions/ratings";
 import { inverseRatingMap, Rating, ratingMap } from "@/models/rating";
 import { actionGetBookByGoogleId, actionInsertBook } from "@/actions/books";
@@ -69,9 +70,13 @@ export default function BookDetails({ book }: BookDetailsProps) {
     await actionInsertRating(ratingCreateInput);
   }, [numericBookRating, bookInDb]);
 
-  const updateRating = useCallback(async () => {}, []);
-
-  const handleBookRating = useCallback(() => {}, []);
+  const updateRating = useCallback(async () => {
+    const stringRating = inverseRatingMap[numericBookRating!];
+    await actionUpdateRating(
+      stringRating as RatingValue,
+      bookRating?.id as string
+    );
+  }, [numericBookRating]);
 
   useEffect(() => {
     fetchRating();
@@ -85,6 +90,8 @@ export default function BookDetails({ book }: BookDetailsProps) {
       }
       if (bookRating === null) {
         addRatingToBook();
+      } else {
+        updateRating();
       }
     }
   }, [numericBookRating, bookInDb]);
