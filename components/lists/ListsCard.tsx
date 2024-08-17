@@ -31,14 +31,13 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
   useEffect(() => {
     if (dbUser && dbUser.id) {
       getLists();
-    }
-    if (listId) {
-      getListById(listId);
+      if (listId) getListById(listId);
     }
   }, [dbUser]);
 
   const getListById = async (listId: string) => {
     const result = await actionGetListById(listId);
+    if (result.userId !== dbUser!.id) return;
     setSelectedList(result);
   };
 
