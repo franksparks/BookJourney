@@ -9,6 +9,7 @@ import { useDbUser } from "@/app/context/db-user-context";
 import { useCallback, useEffect, useState } from "react";
 import ReadingStatusDropdown from "./ReadingStatusDropdown";
 import {
+  actionDeleteRating,
   actionGetAverageRatingByBookId,
   actionGetRatingByGoogleBookIdAndUserId,
   actionGetRatingsByBook,
@@ -94,6 +95,11 @@ export default function BookDetails({ book }: BookDetailsProps) {
     );
   }, [numericBookRating]);
 
+  const deleteRating = useCallback(
+    async () => await actionDeleteRating(bookRating!.id!),
+    [numericBookRating]
+  );
+
   useEffect(() => {
     fetchRating();
     fetchBookInDb();
@@ -108,7 +114,11 @@ export default function BookDetails({ book }: BookDetailsProps) {
       if (bookRating === null) {
         addRatingToBook();
       } else {
-        updateRating();
+        if (numericBookRating === null) {
+          deleteRating();
+        } else {
+          updateRating();
+        }
       }
     }
   }, [numericBookRating, bookInDb]);
@@ -137,7 +147,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
           <h1 className="mr-4">{book.title}</h1>
           <ReadRating value={averageBookRating} />
         </div>
-          <h2>{`Average: ${averageBookRating} - Number of ratings: ${numberOfRatings}`}</h2>
+        <h2>{`Average: ${averageBookRating} - Number of ratings: ${numberOfRatings}`}</h2>
         <Separator className="my-4" />
         {(book.authors &&
           book.authors.map((author, index) => (
