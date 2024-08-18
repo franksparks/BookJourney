@@ -145,9 +145,11 @@ export default function BookDetails({ book }: BookDetailsProps) {
       <div className="flex w-screen justify-start flex-col mr-4">
         <div className="flex flex-row">
           <h1 className="mr-4">{book.title}</h1>
-          <ReadRating value={averageBookRating} />
+          {logged && <ReadRating value={averageBookRating} />}
         </div>
-        <h2>{`Average: ${averageBookRating} - Number of ratings: ${numberOfRatings}`}</h2>
+        {logged && (
+          <h2>{`Average: ${averageBookRating} - Number of ratings: ${numberOfRatings}`}</h2>
+        )}
         <Separator className="my-4" />
         {(book.authors &&
           book.authors.map((author, index) => (
