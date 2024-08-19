@@ -8,36 +8,38 @@ datasource db {
 }
 
 model User {
-  id           String       @id @default(auto()) @map("_id") @db.ObjectId
-  clerkId      String       @unique
-  email        String
-  createdAt    DateTime     @default(now())
-  reviews      Review[]
-  lists        List[]
-  ratings      Rating[]
-  bookStatuses BookStatus[]
+  id              String            @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId         String            @unique
+  email           String
+  createdAt       DateTime          @default(now())
+  reviews         Review[]
+  lists           List[]
+  ratings         Rating[]
+  bookStatuses    BookStatus[]
+  ReadingActivity ReadingActivity[]
 }
 
 model Book {
-  id            String       @id @default(auto()) @map("_id") @db.ObjectId
-  isbn10        String?
-  isbn13        String?
-  authors       String[]
-  googleBooksId String? // M:for sync process
-  title         String
-  description   String?
-  categories    String[]
-  pages         Int?
-  publisher     String?
-  publishedDate String?
-  language      String?
-  smallCover    String?
-  cover         String?
-  ratingAverage Float?
-  reviews       Review[]
-  ratings       Rating[]
-  lists         BookList[]
-  bookStatuses  BookStatus[]
+  id              String            @id @default(auto()) @map("_id") @db.ObjectId
+  isbn10          String?
+  isbn13          String?
+  authors         String[]
+  googleBooksId   String? // M:for sync process
+  title           String
+  description     String?
+  categories      String[]
+  pages           Int?
+  publisher       String?
+  publishedDate   String?
+  language        String?
+  smallCover      String?
+  cover           String?
+  ratingAverage   Float?
+  reviews         Review[]
+  ratings         Rating[]
+  lists           BookList[]
+  bookStatuses    BookStatus[]
+  ReadingActivity ReadingActivity[]
 }
 
 model Review {
@@ -84,6 +86,16 @@ model BookStatus {
   user   User       @relation(fields: [userId], references: [id])
   bookId String     @db.ObjectId
   book   Book       @relation(fields: [bookId], references: [id])
+}
+
+model ReadingActivity {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  value     Int
+  createdAt DateTime @default(now())
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id])
+  bookId    String   @db.ObjectId
+  book      Book     @relation(fields: [bookId], references: [id])
 }
 
 enum RatingValue {
