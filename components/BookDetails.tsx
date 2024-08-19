@@ -84,7 +84,9 @@ export default function BookDetails({ book }: BookDetailsProps) {
       }
     };
 
-    await actionInsertRating(ratingCreateInput);
+    const rating = await actionInsertRating(ratingCreateInput);
+    setBookRating(rating);
+    
   }, [numericBookRating, bookInDb]);
 
   const updateRating = useCallback(async () => {
