@@ -1,5 +1,5 @@
 import {
-  dbGetReadingActivityByBookId,
+  dbGetReadingActivityByBookIdandUserId,
   dbGetReadingActivityByUserId,
   dbInsertReadingActivity,
 } from "@/db/reading-activity";
@@ -12,8 +12,10 @@ export const actionInsertReadingActivity = async (
   return result;
 };
 
-export const actionGetReadingActivityByBookId = async (bookId: string) => {
-  const result = await dbGetReadingActivityByBookId(bookId);
+export const actionGetReadingActivityByBookIdAndId = async (
+  bookId: string
+) => {
+  const result = await dbGetReadingActivityByBookIdandUserId(bookId);
   return result;
 };
 
