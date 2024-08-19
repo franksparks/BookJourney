@@ -6,9 +6,23 @@ import {
 import { Prisma } from "@prisma/client";
 
 export const actionInsertReadingActivity = async (
-  readingActivity: Prisma.ReadingActivityCreateInput
+  value: string,
+  bookId: string,
+  userId: string
 ) => {
+  const readingActivity: Prisma.ReadingActivityCreateInput = {
+    value: Number(value),
+
+    book: {
+      connect: { id: bookId },
+    },
+    user: {
+      connect: { id: userId },
+    },
+  };
+  console.log(readingActivity);
   const result = await dbInsertReadingActivity(readingActivity);
+  console.log(result);
   return result;
 };
 

@@ -4,9 +4,12 @@ import { db } from "./db";
 
 export const dbInsertReadingActivity = catchErrors(
   async (readingActivity: Prisma.ReadingActivityCreateInput) => {
+    console.log(readingActivity);
+
     const result = await db.readingActivity.create({
       data: readingActivity,
     });
+
     return result;
   }
 );

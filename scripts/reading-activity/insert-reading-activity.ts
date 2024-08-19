@@ -1,5 +1,4 @@
 import { actionInsertReadingActivity } from "@/actions/reading-activity";
-import { Prisma } from "@prisma/client";
 
 if (process.argv.length != 5) {
   console.error(
@@ -10,25 +9,7 @@ if (process.argv.length != 5) {
 
 const [_bun, _script, value, book_id, user_id] = process.argv;
 
-const rating_user: Prisma.UserCreateNestedOneWithoutListsInput = {
-  connect: {
-    id: user_id,
-  },
-};
-
-const rating_book: Prisma.BookCreateNestedOneWithoutListsInput = {
-  connect: {
-    id: book_id,
-  },
-};
-
-const new_rating: Prisma.ReadingActivityCreateInput = {
-  value: Number(value),
-  user: rating_user,
-  book: rating_book,
-};
-
-const result = await actionInsertReadingActivity(new_rating);
+const result = await actionInsertReadingActivity(value, book_id, user_id);
 
 if (result != null) {
   console.log("Activity added");

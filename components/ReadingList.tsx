@@ -4,8 +4,7 @@ import { actionGetBooksByUserIdAndReadingStatus } from "@/actions/book-status";
 import { useDbUser } from "@/app/context/db-user-context";
 import { BookStatus } from "@/models/book-status";
 import { useEffect, useState } from "react";
-import BookCard from "./BookCard";
-import BookNavigationWrapper from "./BookNavigationWrapper";
+import BookCardLandingPage from "./BookCardLandingPage";
 
 const initialState: BookStatus[] = [];
 
@@ -42,17 +41,12 @@ export default function UserLists() {
       <div className="flex flex-col items-center">
         {dbUser &&
           readingList.map((element: BookStatus, index) => (
-            <BookNavigationWrapper
-              id={element.book.googleBooksId}
+            <BookCardLandingPage
               key={index}
-            >
-              <BookCard
-                key={index}
-                book={element.book}
-                status={element}
-                onStatusChange={handleStatusChange}
-              />
-            </BookNavigationWrapper>
+              book={element.book}
+              status={element}
+              onStatusChange={handleStatusChange}
+            />
           ))}
         {dbUser && readingList.length == 0 && (
           <div>Start reading to see something here!</div>
