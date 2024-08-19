@@ -5,6 +5,7 @@ import { useDbUser } from "@/app/context/db-user-context";
 import { BookStatus } from "@/models/book-status";
 import { useEffect, useState } from "react";
 import BookCard from "./BookCard";
+import BookNavigationWrapper from "./BookNavigationWrapper";
 
 const initialState: BookStatus[] = [];
 
@@ -35,21 +36,30 @@ export default function UserLists() {
 
   return (
     <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-sky-300 text-slate-100 h-full overflow-y-auto">
-      <h1 className="font-light text-sky-700 text-center">Currently Reading</h1>
+      <h1 className="font-light text-sky-700 text-center">
+        Currently Reading
+      </h1>
       <div className="flex flex-col items-center">
         {dbUser &&
           readingList.map((element: BookStatus, index) => (
-            <BookCard
+            <BookNavigationWrapper
+              id={element.book.googleBooksId}
               key={index}
-              book={element.book}
-              status={element}
-              onStatusChange={handleStatusChange}
-            />
+            >
+              <BookCard
+                key={index}
+                book={element.book}
+                status={element}
+                onStatusChange={handleStatusChange}
+              />
+            </BookNavigationWrapper>
           ))}
         {dbUser && readingList.length == 0 && (
           <div>Start reading to see something here!</div>
         )}
-        {!dbUser && <div>Login to see the books you are reading here!</div>}
+        {!dbUser && (
+          <div>Login to see the books you are reading here!</div>
+        )}
       </div>
     </div>
   );
