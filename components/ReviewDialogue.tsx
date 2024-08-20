@@ -4,7 +4,7 @@ import DialogActions from '@mui/material/DialogActions';
 import { useState } from 'react';
 import { TextareaAutosize } from "@mui/material";
 
-export default function Review() {
+export default function ReviewDialogue() {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {

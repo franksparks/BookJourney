@@ -21,11 +21,25 @@ export const dbGetReviewsByBookIdAndUserId = catchErrors(
   }
 );
 
+export const dbGetReviewsByGoogleBookIdAndUserId = catchErrors(
+  async (googleBooksId: string, userId: string) => {
+    const result = await db.review.findMany({
+      where: {
+        book: {
+          googleBooksId
+        },
+        userId
+      }
+    });
+    return result;
+  }
+);
+
 export const dbUpdateReview = catchErrors(
   async (id: string, comment: string) => {
     const result = await db.review.update({
       where: { id },
-      data: { comment },
+      data: { comment }
     });
     return result;
   }

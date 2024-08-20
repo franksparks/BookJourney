@@ -4,6 +4,7 @@ import {
   dbDeleteReview,
   dbGetReviewsByBookId,
   dbGetReviewsByBookIdAndUserId,
+  dbGetReviewsByGoogleBookIdAndUserId,
   dbInsertReview,
   dbUpdateReview,
 } from "@/db/reviews";
@@ -28,6 +29,11 @@ export const actionInsertReview = async (
 export const actionGetReviewByBookId = async (id: string) => {
   const result = await dbGetReviewsByBookId(id);
   return result;
+};
+
+export const actionGetRviewByGoogleBookIdAndUserId = async (googleBookId: string, userId: string) => {
+  const result = await dbGetReviewsByGoogleBookIdAndUserId(googleBookId, userId)
+  return result
 };
 
 export const actionUpdateReview = async (id: string, comment: string) => {
