@@ -20,7 +20,7 @@ import { Button } from "./ui/button";
 export default function Header() {
   const { user } = useUser();
   const router = useRouter();
-  const { setDbUser } = useDbUser();
+  const { setDbUser, dbUser } = useDbUser();
 
   useEffect(() => {
     getLocalUser();
@@ -52,7 +52,7 @@ export default function Header() {
             <Loader className="h-6 w-6 text-white animate-spin" />
           </ClerkLoading>
           <ClerkLoaded>
-            <Button onClick={() => router.push("/lists")}>
+            <Button disabled={dbUser === null} onClick={() => router.push("/lists")}>
               See all Lists
             </Button>
             <SignedIn>
