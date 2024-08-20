@@ -4,6 +4,7 @@ import { BookStatus } from "@/models/book-status";
 import { ReadStatus } from "@prisma/client";
 import Image from "next/image";
 import { Button } from "./ui/button";
+import BookNavigationWrapper from "./BookNavigationWrapper";
 
 type bookCardProps = {
   book: Book;
@@ -14,7 +15,7 @@ type bookCardProps = {
 export default function BookCard({
   book,
   status,
-  onStatusChange
+  onStatusChange,
 }: bookCardProps) {
   const handleDoneClick = async () => {
     await actionUpdateBookStatus(status.id, ReadStatus.READ);
@@ -22,16 +23,18 @@ export default function BookCard({
   };
 
   return (
-    <div className="flex flex-row m-4 w-96 hover:scale-105 shadow border border-white shadow-white rounded-lg hover:bg-slate-50 hover:text-sky-700 bg-sky-600 cursor-pointer transition duration-500 ">
+    <div className="flex flex-row m-4 w-96 hover:scale-105 shadow border border-white shadow-white rounded-lg hover:bg-slate-50 hover:text-sky-700 bg-sky-600 transition duration-500 ">
       {book.smallCover && (
         <div className="flex justify-center items-center p-4">
-          <Image
-            className="shadow-md shadow-white rounded"
-            src={book.smallCover}
-            alt="cover"
-            width={60}
-            height={100}
-          />
+          <BookNavigationWrapper id={book.googleBooksId}>
+            <Image
+              className="shadow-md shadow-white rounded"
+              src={book.smallCover}
+              alt="cover"
+              width={60}
+              height={100}
+            />
+          </BookNavigationWrapper>
         </div>
       )}
 

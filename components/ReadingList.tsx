@@ -42,17 +42,12 @@ export default function UserLists() {
       <div className="flex flex-col items-center">
         {dbUser &&
           readingList.map((element: BookStatus, index) => (
-            <BookNavigationWrapper
-              id={element.book.googleBooksId}
+            <BookCard
               key={index}
-            >
-              <BookCard
-                key={index}
-                book={element.book}
-                status={element}
-                onStatusChange={handleStatusChange}
-              />
-            </BookNavigationWrapper>
+              book={element.book}
+              status={element}
+              onStatusChange={handleStatusChange}
+            />
           ))}
         {dbUser && readingList.length == 0 && (
           <div>Start reading to see something here!</div>
