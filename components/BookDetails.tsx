@@ -86,7 +86,6 @@ export default function BookDetails({ book }: BookDetailsProps) {
 
     const rating = await actionInsertRating(ratingCreateInput);
     setBookRating(rating);
-    
   }, [numericBookRating, bookInDb]);
 
   const updateRating = useCallback(async () => {
@@ -97,10 +96,10 @@ export default function BookDetails({ book }: BookDetailsProps) {
     );
   }, [numericBookRating]);
 
-  const deleteRating = useCallback(
-    async () => await actionDeleteRating(bookRating!.id!),
-    [numericBookRating]
-  );
+  const deleteRating = useCallback(async () => {
+    await actionDeleteRating(bookRating!.id!);
+    setBookRating(null);
+  }, [numericBookRating]);
 
   useEffect(() => {
     fetchRating();
@@ -141,7 +140,14 @@ export default function BookDetails({ book }: BookDetailsProps) {
               setFirstInteraction={setFirstInteraction}
             />
           </div>
-          <div className="flex justify-center mt-2">{"Rate this book"}</div>
+          {!bookRating && (
+            <div className="flex justify-center mt-2">{"Rate this book"}</div>
+          )}
+          {bookRating && (
+            <div className="flex justify-center mt-2">
+              {"Rated. Write a review"}
+            </div>
+          )}
         </div>
       </div>
       <div className="flex w-screen justify-start flex-col mr-4">
