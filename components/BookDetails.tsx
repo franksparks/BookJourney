@@ -19,6 +19,7 @@ import {
 import { inverseRatingMap, Rating, ratingMap } from "@/models/rating";
 import { actionGetBookByGoogleId, actionInsertBook } from "@/actions/books";
 import { RatingValue } from "@prisma/client";
+import Review from "./Review";
 
 type BookDetailsProps = {
   book: Book;
@@ -145,7 +146,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
           )}
           {bookRating && (
             <div className="flex justify-center mt-2">
-              {"Rated. Write a review"}
+              <Review/>
             </div>
           )}
         </div>
