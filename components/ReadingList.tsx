@@ -4,7 +4,7 @@ import { actionGetBooksByUserIdAndReadingStatus } from "@/actions/book-status";
 import { useDbUser } from "@/app/context/db-user-context";
 import { BookStatus } from "@/models/book-status";
 import { useEffect, useState } from "react";
-import BookCardLandingPage from "./BookCardLandingPage";
+import BookCard from "./BookCard";
 
 const initialState: BookStatus[] = [];
 
@@ -42,7 +42,7 @@ export default function UserLists() {
       <div className="flex flex-col items-center">
         {dbUser &&
           readingList.map((element: BookStatus, index) => (
-            <BookCardLandingPage
+            <BookCard
               key={index}
               book={element.book}
               status={element}
