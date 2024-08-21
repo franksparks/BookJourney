@@ -1,17 +1,72 @@
+import { actionDeleteRating, actionGetRatingByGoogleBookIdAndUserId } from "@/actions/ratings";
+import { Tooltip } from "@mui/material";
 import Rating from "@mui/material/Rating";
-import { useState } from "react";
+import { forwardRef } from "react";
 
-export default function ControlledRating() {
-  const [value, setValue] = useState<number | null>(0);
+type ConditionalTooltipProps = {
+  logged: boolean;
+  children: React.ReactElement;
+};
 
+type ControlledRatingProps = {
+  logged: boolean;
+  bookRating: number | null;
+  setBookRating: (rating: number | null) => void;
+  setFirstInteraction: (firstInteraction: boolean) => void;
+};
+
+interface CustomRatingProps {
+  value: number | null;
+  onChange: (event: React.ChangeEvent<{}>, newValue: number | null) => void;
+  size: "small" | "medium" | "large";
+  disabled: boolean;
+}
+
+function ConditionalTooltip({ logged, children }: ConditionalTooltipProps) {
+  if (logged) {
+    return <>{children}</>;
+  }
   return (
-    <Rating
-      name="simple-controlled"
-      value={value}
-      onChange={(_event, newValue) => {
-        setValue(newValue);
-      }}
-      size="large"
-    />
+    <Tooltip className=" text-white" title="Login to rate this book." arrow>
+      {children}
+    </Tooltip>
+  );
+}
+
+const CustomRating = forwardRef<HTMLDivElement, CustomRatingProps>(
+  ({ value, onChange, size, disabled, ...rest }, ref) => {
+    return (
+      <div {...rest} ref={ref}>
+        <Rating
+          value={value}
+          onChange={onChange}
+          size={size}
+          disabled={disabled}
+        />
+      </div>
+    );
+  }
+);
+
+CustomRating.displayName = "CustomRating";
+
+export default function ControlledRating({
+  logged,
+  bookRating,
+  setBookRating,
+  setFirstInteraction
+}: ControlledRatingProps) {
+  return (
+    <ConditionalTooltip logged={logged}>
+      <CustomRating
+        value={bookRating}
+        onChange={(_event, newValue) => {
+          setBookRating(newValue);
+          setFirstInteraction(false);
+        }}
+        size="large"
+        disabled={!logged}
+      />
+    </ConditionalTooltip>
   );
 }
