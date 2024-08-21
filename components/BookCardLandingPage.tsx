@@ -1,9 +1,11 @@
 import { actionUpdateBookStatus } from "@/actions/book-status";
+import { actionInsertReadingActivity } from "@/actions/reading-activity";
 import { useDbUser } from "@/app/context/db-user-context";
 import { Book } from "@/models/book";
 import { BookStatus } from "@/models/book-status";
 import { ReadStatus } from "@prisma/client";
 import Image from "next/image";
+import { useState } from "react";
 import BookNavigationWrapper from "./BookNavigationWrapper";
 import { Button } from "./ui/button";
 import {
@@ -16,9 +18,6 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Input } from "./ui/input";
-import { actionInsertReadingActivity } from "@/actions/reading-activity";
-import { useState } from "react";
-import { actionGetBookByGoogleId } from "@/actions/books";
 
 type bookCardProps = {
   book: Book;
@@ -32,19 +31,29 @@ export default function BookCardLandingPage({
   onStatusChange,
 }: bookCardProps) {
   const { dbUser } = useDbUser();
-  const [readingProgress, setReadingProgress] = useState(""); // Estado para almacenar el valor del input
+  const [readingProgress, setReadingProgress] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleDoneBook = async () => {
     await actionUpdateBookStatus(status.id, ReadStatus.READ);
     onStatusChange();
-    // close modal
+    setIsDialogOpen(false);
   };
   const handleAddReadingActivity = async () => {
+    if (
+      isNaN(Number(readingProgress)) ||
+      Number(readingProgress) < 0 ||
+      Number(readingProgress) > 100
+    ) {
+      alert("Please enter a valid percentage between 0 and 100.");
+      return;
+    }
     await actionInsertReadingActivity(
       readingProgress,
       book.id!,
       dbUser.id
     );
+    setIsDialogOpen(false); // Cerrar el modal
   };
 
   return (
@@ -76,27 +85,27 @@ export default function BookCardLandingPage({
         {/* To do: Display current progress of the book*/}
         <p>Progress bar</p>
         <div className="flex flex-col justify-center items-center p-4">
-          {/* Modal para editar perfil */}
-          <Dialog>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button variant="outline">Update progress</Button>
+              <Button className="rounded-full border-orange-400 border-2">
+                Update progress
+              </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent>
               <DialogHeader>
                 <DialogTitle>Update progress</DialogTitle>
                 <DialogDescription>
                   Add reading activity for the book.
                 </DialogDescription>
               </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <p>Current:</p>
+              <div>
+                <div className=" items-center gap-4">
+                  <p>Current reading percentage:</p>
                 </div>
-                <p>Label</p>
                 <Input
                   id="value"
                   className="col-span-3"
-                  value={readingProgress} // Asocia el valor del input al estado
+                  value={readingProgress}
                   onChange={(e) => setReadingProgress(e.target.value)}
                 />
               </div>
