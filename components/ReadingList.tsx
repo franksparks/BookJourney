@@ -34,8 +34,8 @@ export default function UserLists() {
   //TODO: Add a loading for this component
 
   return (
-    <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-sky-300 text-slate-100 h-full overflow-y-auto">
-      <h1 className="font-light text-sky-700 text-center">Currently Reading</h1>
+    <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-sky-600 text-slate-100 h-full overflow-y-auto">
+      <h1 className="font-light text-sky-200 text-center">Currently Reading</h1>
       <div className="flex flex-col items-center">
         {dbUser &&
           readingList.map((element: BookStatus, index) => (
