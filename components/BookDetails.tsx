@@ -20,7 +20,6 @@ import { inverseRatingMap, Rating, ratingMap } from "@/models/rating";
 import { actionGetBookByGoogleId, actionInsertBook } from "@/actions/books";
 import { RatingValue } from "@prisma/client";
 import ReviewDialogue from "./ReviewDialogue";
-import { Review } from "@/models/review";
 
 type BookDetailsProps = {
   book: Book;
@@ -33,7 +32,6 @@ export default function BookDetails({ book }: BookDetailsProps) {
   const [numberOfRatings, setNumberOfRatings] = useState<number>(0);
   const [bookInDb, setBookInDb] = useState<Book | null>(null);
   const [bookRating, setBookRating] = useState<Rating | null>(null);
-  const [bookReview, setBookReview] = useState<Review | null>(null);
   const [firstInteraction, setFirstInteraction] = useState(true);
   const logged = dbUser ? true : false;
 
@@ -50,16 +48,6 @@ export default function BookDetails({ book }: BookDetailsProps) {
       }
     }
   }, [book.googleBooksId, dbUser]);
-
-  const fetchReview = useCallback(async () => {
-    if(dbUser) {
-      const review: Review = await actionGetRatingByGoogleBookIdAndUserId(book.googleBooksId, dbUser.id)
-      
-      if(review) {
-      setBookReview(review);
-      }
-    }
-  }, [book.googleBooksId, dbUser])
 
   const fetchAverageRating = useCallback(async () => {
     if (bookInDb) {
@@ -116,7 +104,6 @@ export default function BookDetails({ book }: BookDetailsProps) {
 
   useEffect(() => {
     fetchRating();
-    fetchReview();
     fetchBookInDb();
     fetchAverageRating();
   }, [fetchRating, fetchBookInDb, fetchAverageRating]);
@@ -159,7 +146,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
           )}
           {bookRating && (
             <div className="flex justify-center mt-2">
-              <ReviewDialogue/>
+              <ReviewDialogue bookInDb={bookInDb!} dbUser={dbUser}/>
             </div>
           )}
         </div>

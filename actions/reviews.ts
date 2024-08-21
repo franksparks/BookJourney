@@ -10,7 +10,7 @@ import {
 } from "@/db/reviews";
 import { Prisma } from "@prisma/client";
 
-export const actionInsertReview = async (
+export const actionInsertReviewDeprecated = async (
   review: Prisma.ReviewCreateInput
 ) => {
   const existingReview = await dbGetReviewsByBookIdAndUserId(
@@ -24,6 +24,11 @@ export const actionInsertReview = async (
   return console.error(
     "This user has already introduced a review for this Book."
   );
+};
+
+export const actionInsertReview = async (review: Prisma.ReviewCreateInput) => {
+  const result = await dbInsertReview(review);
+  return result;
 };
 
 export const actionGetReviewByBookId = async (id: string) => {
