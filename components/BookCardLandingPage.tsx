@@ -1,3 +1,5 @@
+"user client";
+
 import { actionUpdateBookStatus } from "@/actions/book-status";
 import { actionInsertReadingActivity } from "@/actions/reading-activity";
 import { useDbUser } from "@/app/context/db-user-context";
