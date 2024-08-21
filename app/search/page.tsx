@@ -44,9 +44,8 @@ export default function Home() {
   ) => {
     try {
       const index = calculateIndex(page);
-      const queryString = queryMap
-        ? `${queryMap[radioValue]}${query}`
-        : query;
+
+      const queryString = queryMap ? `${queryMap[radioValue]}${query}` : query;
 
       const result = await actionSearchBooksGoogle(queryString, index);
       setResults(result.books);
@@ -96,28 +95,30 @@ export default function Home() {
   return (
     <Suspense>
       <main className="flex justify-center flex-col items-center">
-        <div className="bg-slate-300 mt-10">
-          <SearchBox
-            advancedQuery={advancedQuery}
-            setAdvancedQuery={setAdvancedQuery}
-            handleAdvancedSearch={handleAdvancedSearch}
-            setPage={setPage}
-            setTotalItems={setAdvancedTotalItems}
-            setAvoidAdvancedSearch={setAvoidAdvancedSearch}
-            setRadioValue={setRadioValue}
-            radioValue={radioValue}
-          />
+        <div className="flex justify-center flex-col items-center bg-sky-600 m-8 rounded-3xl w-5/6 min-w-fit">
+          <div className="bg-slate-300 mt-4 rounded-md min-w-fit shadow-md shadow-sky-800">
+            <SearchBox
+              advancedQuery={advancedQuery}
+              setAdvancedQuery={setAdvancedQuery}
+              handleAdvancedSearch={handleAdvancedSearch}
+              setPage={setPage}
+              setTotalItems={setAdvancedTotalItems}
+              setAvoidAdvancedSearch={setAvoidAdvancedSearch}
+              setRadioValue={setRadioValue}
+              radioValue={radioValue}
+            />
+          </div>
+          {advancedResults.length !== 0 && (
+            <SearchResults books={advancedResults} />
+          )}
+          {advancedResults.length !== 0 && (
+            <SearchPagination
+              setPage={handlePageChange}
+              page={page}
+              totalItems={advancedTotalItems}
+            />
+          )}
         </div>
-        {advancedResults.length !== 0 && (
-          <SearchResults books={advancedResults} />
-        )}
-        {advancedResults.length !== 0 && (
-          <SearchPagination
-            setPage={handlePageChange}
-            page={page}
-            totalItems={advancedTotalItems}
-          />
-        )}
       </main>
     </Suspense>
   );
