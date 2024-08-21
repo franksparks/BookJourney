@@ -4,32 +4,39 @@ import { dbUpdateBookRatingAverage } from "@/db/books";
 import {
   dbDeleteRating,
   dbGetAverageRatingByBookId,
+  dbGetRatingByGoogleBookIdAndUserId,
   dbGetRatingByRatingId,
   dbGetRatingsByBookId,
   dbGetRatingsByBookIdAndUserId,
   dbInsertRating,
-  dbUpdateRating,
+  dbUpdateRating
 } from "@/db/ratings";
 import { Prisma, RatingValue } from "@prisma/client";
 
-export const actionInsertRating = async (
+export const actionInsertRatingDeprecated = async (
   rating: Prisma.RatingCreateInput
 ) => {
   const existingRating = await dbGetRatingsByBookIdAndUserId(
     rating.book.connect?.id!,
     rating.user.connect?.id!
   );
+
   if (existingRating.length == 0) {
     const result = await dbInsertRating(rating);
-    const average = await dbGetAverageRatingByBookId(
-      rating.book.connect?.id
-    );
+    const average = await dbGetAverageRatingByBookId(rating.book.connect?.id);
     await dbUpdateBookRatingAverage(rating.book.connect?.id, average);
     return result;
   }
   return console.error(
     "This user has already introduced a rating for this Book."
   );
+};
+
+export const actionInsertRating = async (rating: Prisma.RatingCreateInput) => {
+  const result = await dbInsertRating(rating);
+  const average = await dbGetAverageRatingByBookId(rating.book.connect?.id);
+  await dbUpdateBookRatingAverage(rating.book.connect?.id, average);
+  return result;
 };
 
 export const actionGetAverageRatingByBookId = async (id: string) => {
@@ -42,15 +49,23 @@ export const actionGetRatingsByBook = async (id: string) => {
   return result;
 };
 
+export const actionGetRatingByGoogleBookIdAndUserId = async (
+  googleBooksId: string,
+  userId: string
+) => {
+  const result = await dbGetRatingByGoogleBookIdAndUserId(
+    googleBooksId,
+    userId
+  );
+  return result;
+};
+
 export const actionGetRatingByRatingId = async (id: string) => {
   const result = await dbGetRatingByRatingId(id);
   return result;
 };
 
-export const actionUpdateRating = async (
-  rating: RatingValue,
-  id: string
-) => {
+export const actionUpdateRating = async (rating: RatingValue, id: string) => {
   await dbUpdateRating(rating, id);
   const { bookId } = await actionGetRatingByRatingId(id);
   const average = await actionGetAverageRatingByBookId(bookId);

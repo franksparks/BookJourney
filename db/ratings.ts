@@ -1,14 +1,7 @@
 import { catchErrors } from "@/lib/error-handling";
 import { Prisma, RatingValue } from "@prisma/client";
 import { db } from "./db";
-
-const ratingMap: { [key: string]: number } = {
-  ONE: 1,
-  TWO: 2,
-  THREE: 3,
-  FOUR: 4,
-  FIVE: 5,
-};
+import { ratingMap } from "@/models/rating";
 
 export const dbInsertRating = catchErrors(
   async (rating: Prisma.RatingCreateInput) => {
@@ -27,12 +20,12 @@ export const dbGetAverageRatingByBookId = catchErrors(
     const ratings = await db.rating.findMany({
       where: { bookId },
       orderBy: {
-        createdAt: "desc",
+        createdAt: "desc"
       },
       take: 20,
       select: {
-        rating: true,
-      },
+        rating: true
+      }
     });
 
     const numericRatings = ratings
@@ -55,6 +48,21 @@ export const dbGetRatingsByBookIdAndUserId = catchErrors(
   }
 );
 
+export const dbGetRatingByGoogleBookIdAndUserId = catchErrors(
+  async (googleBooksId: string, userId: string) => {
+    const result = await db.rating.findFirst({
+      where: {
+        userId,
+        book: {
+          googleBooksId: googleBooksId
+        }
+      }
+    });
+
+    return result;
+  }
+);
+
 export const dbGetRatingByRatingId = catchErrors(async (id: string) => {
   const result = await db.rating.findFirst({ where: { id } });
   return result;
@@ -64,7 +72,7 @@ export const dbUpdateRating = catchErrors(
   async (rating: RatingValue, id: string) => {
     const result = await db.rating.update({
       where: { id },
-      data: { rating },
+      data: { rating }
     });
     return result;
   }

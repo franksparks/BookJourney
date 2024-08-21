@@ -5,6 +5,7 @@ import { ReadStatus } from "@prisma/client";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import { Tooltip } from "@mui/material";
+import BookNavigationWrapper from "./BookNavigationWrapper";
 
 type bookCardProps = {
   book: Book;
@@ -23,16 +24,18 @@ export default function BookCard({
   };
 
   return (
-    <div className="flex flex-row m-4 h-36 w-96 hover:scale-105 shadow-lg shadow-sky-800 rounded-lg text-sky-800 bg-sky-100 hover:bg-sky-50 cursor-pointer transition duration-500 ">
+    <div className="flex flex-row m-4 h-36 w-96 hover:scale-105 shadow-lg shadow-sky-800 rounded-lg text-sky-800 bg-sky-100 hover:bg-sky-50 cursor-pointer transition duration-500">
       {book.smallCover && (
-        <div className="flex justify-center items-center p-4 w-1/4">
-          <Image
-            className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000"
-            src={book.smallCover}
-            alt="cover"
-            width={60}
-            height={100}
-          />
+        <div className="flex justify-center items-center p-4">
+          <BookNavigationWrapper id={book.googleBooksId}>
+            <Image
+              className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000"
+              src={book.smallCover}
+              alt="cover"
+              width={60}
+              height={100}
+            />
+          </BookNavigationWrapper>
         </div>
       )}
 
