@@ -9,6 +9,7 @@ import {
   actionGetListById,
   actionDeleteList,
   actionUpdateList,
+  actionGetListByNameAndUserId,
 } from "@/actions/lists";
 import { useDbUser } from "@/app/context/db-user-context";
 import { Prisma } from "@prisma/client";
@@ -26,7 +27,8 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
   const [newListName, setNewListName] = useState<string>("");
   const [editingListId, setEditingListId] = useState<string | null>(null);
   const [editingListName, setEditingListName] = useState<string>("");
-  const [deletingListId, setDeletingListId] = useState<string | null>(null); // For the modal
+  const [deletingListId, setDeletingListId] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (dbUser && dbUser.id) {
@@ -34,6 +36,10 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
       if (listId) getListById(listId);
     }
   }, [dbUser]);
+
+  useEffect(() => {
+    setErrorMessage(null);
+  }, [newListName, editingListName]);
 
   const getListById = async (listId: string) => {
     const result = await actionGetListById(listId);
@@ -60,6 +66,14 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
       createdAt: new Date(),
       user: dbUser,
     };
+    const existing = await actionGetListByNameAndUserId(
+      newListName,
+      dbUser!.id
+    );
+    if (existing) {
+      setErrorMessage("List already exists");
+      return;
+    }
     await actionInsertList(newList, dbUser!.id);
     setNewListName("");
     setShowInput(false);
@@ -81,6 +95,14 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
 
   const handleSaveEdit = async () => {
     if (editingListName.trim() === "") return;
+    const existing = await actionGetListByNameAndUserId(
+      editingListName,
+      dbUser!.id
+    );
+    if (existing) {
+      setErrorMessage("List already exists");
+      return;
+    }
     await actionUpdateList(editingListId!, editingListName);
     setEditingListId(null);
     setEditingListName("");
@@ -127,26 +149,31 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
               lists.map((list) => (
                 <div className="flex items-center mb-2" key={list.id}>
                   {editingListId === list.id ? (
-                    <>
-                      <input
-                        type="text"
-                        value={editingListName}
-                        onChange={(e) => setEditingListName(e.target.value)}
-                        className="p-2 border rounded w-full"
-                      />
-                      <button
-                        onClick={handleSaveEdit}
-                        className="font-bold text-green-600 hover:text-green-800 transition-colors duration-300 ml-2"
-                      >
-                        Save
-                      </button>
-                      <button
-                        onClick={handleCancelEdit}
-                        className="font-bold text-red-600 hover:text-red-800 transition-colors duration-300 ml-2"
-                      >
-                        Cancel
-                      </button>
-                    </>
+                    <div className="w-full">
+                      <div className="flex items-center mb-2">
+                        <input
+                          type="text"
+                          value={editingListName}
+                          onChange={(e) => setEditingListName(e.target.value)}
+                          className="p-2 border rounded w-full"
+                        />
+                        <button
+                          onClick={handleSaveEdit}
+                          className="font-bold text-green-600 hover:text-green-800 transition-colors duration-300 ml-2"
+                        >
+                          Save
+                        </button>
+                        <button
+                          onClick={handleCancelEdit}
+                          className="font-bold text-red-600 hover:text-red-800 transition-colors duration-300 ml-2"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                      {errorMessage && (
+                        <p className="text-red-600">{errorMessage}</p>
+                      )}
+                    </div>
                   ) : (
                     <>
                       <li
@@ -176,21 +203,26 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
             {lists.length === 0 && <p>No lists found</p>}
           </ul>
           {showInput && (
-            <div className="mb-4 flex items-center space-x-2">
-              <input
-                type="text"
-                value={newListName}
-                onChange={(e) => setNewListName(e.target.value)}
-                placeholder="Enter list name"
-                className="p-2 border rounded w-full"
-              />
-              <button
-                onClick={handleCreateList}
-                className="bg-orange-500 text-white rounded hover:bg-blue-600 transition-colors duration-300 w-52 pt-2 pb-2"
-              >
-                Create List
-              </button>
-            </div>
+            <>
+              <div className="mb-4 flex items-center space-x-2">
+                <input
+                  type="text"
+                  value={newListName}
+                  onChange={(e) => setNewListName(e.target.value)}
+                  placeholder="Enter list name"
+                  className="p-2 border rounded w-full"
+                />
+                <button
+                  onClick={handleCreateList}
+                  className="bg-orange-500 text-white rounded hover:bg-blue-600 transition-colors duration-300 w-52 pt-2 pb-2"
+                >
+                  Create List
+                </button>
+              </div>
+              {errorMessage && (
+                <label className="text-red-600">{errorMessage}</label>
+              )}
+            </>
           )}
           <div className="flex justify-end">
             {showInput ? (
