@@ -4,8 +4,6 @@ import { db } from "./db";
 
 export const dbInsertReadingActivity = catchErrors(
   async (readingActivity: Prisma.ReadingActivityCreateInput) => {
-    console.log(readingActivity);
-
     const result = await db.readingActivity.create({
       data: readingActivity,
     });
@@ -14,10 +12,23 @@ export const dbInsertReadingActivity = catchErrors(
   }
 );
 
-export const dbGetReadingActivityByBookIdandUserId = catchErrors(
+export const dbGetReadingActivityByBookIdAndUserId = catchErrors(
   async (bookId: string, userId: string) => {
     const result = await db.readingActivity.findMany({
       where: { bookId, userId },
+    });
+    return result;
+  }
+);
+
+export const dbGetLatestReadingActivityByBookIdAndUserId = catchErrors(
+  async (bookId: string, userId: string) => {
+    const result = await db.readingActivity.findMany({
+      where: { bookId, userId },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: 1,
     });
     return result;
   }

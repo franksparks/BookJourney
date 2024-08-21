@@ -1,11 +1,17 @@
 import { actionUpdateBookStatus } from "@/actions/book-status";
+import {
+  actionGetLatestReadingActivityByBookIdAndUserId,
+  actionInsertReadingActivity,
+} from "@/actions/reading-activity";
+import { useDbUser } from "@/app/context/db-user-context";
 import { Book } from "@/models/book";
 import { BookStatus } from "@/models/book-status";
+import { Tooltip } from "@mui/material";
 import { ReadStatus } from "@prisma/client";
 import Image from "next/image";
-import { Button } from "./ui/button";
-import { Tooltip } from "@mui/material";
+import { useState } from "react";
 import BookNavigationWrapper from "./BookNavigationWrapper";
+import { Button } from "./ui/button";
 import {
   Dialog,
   DialogContent,
@@ -16,9 +22,6 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Input } from "./ui/input";
-import { useDbUser } from "@/app/context/db-user-context";
-import { useState } from "react";
-import { actionInsertReadingActivity } from "@/actions/reading-activity";
 
 type bookCardProps = {
   book: Book;
@@ -34,6 +37,8 @@ export default function BookCard({
   const { dbUser } = useDbUser();
   const [readingProgress, setReadingProgress] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const currentReadingActivity =
+    actionGetLatestReadingActivityByBookIdAndUserId(book.id!, dbUser.id);
 
   const handleDoneClick = async () => {
     await actionUpdateBookStatus(status.id, ReadStatus.READ);
@@ -58,7 +63,7 @@ export default function BookCard({
   };
 
   return (
-    <div className="flex flex-row m-4 h-36 w-96 hover:scale-105 shadow-lg shadow-sky-800 rounded-lg text-sky-800 bg-sky-100 hover:bg-sky-50 cursor-pointer transition duration-500">
+    <div className="flex flex-row m-4 h-36 w-3/4 hover:scale-105 shadow-lg shadow-sky-800 rounded-lg text-sky-800 bg-sky-100 hover:bg-sky-50 cursor-pointer transition duration-500">
       {book.smallCover && (
         <div className="flex justify-center items-center p-4">
           <BookNavigationWrapper id={book.googleBooksId}>
@@ -88,11 +93,14 @@ export default function BookCard({
 
       <div className="flex flex-col *:justify-center items-center p-4">
         {/* To do: Display current progress of the book*/}
-        <p>Progress bar</p>
+        <p>Progress</p>
+        <p>
+          {currentReadingActivity.pages}/{book.pages}
+        </p>
         <div className="flex flex-col justify-center items-center p-4">
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="rounded-full border-orange-400 border-2">
+              <Button className="rounded-full border-orange-400 border-2 hover:border-blue-600">
                 Update progress
               </Button>
             </DialogTrigger>

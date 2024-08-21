@@ -1,15 +1,15 @@
-import { actionGetReadingActivityByBookIdAndUserId } from "@/actions/reading-activity";
+import { actionGetLatestReadingActivityByBookIdAndUserId } from "@/actions/reading-activity";
 
 if (process.argv.length != 4) {
   console.error(
-    "Usage: bun find-reading-activity-by-book-id-and-user-id.ts <book-id> <user-id>"
+    "Usage: bun get-latest-reading-activity-by-book-id-and-user-id.ts <book-id> <user-id>"
   );
   process.exit(1);
 }
 
 const [_bun, _script, bookId, userId] = process.argv;
 
-const result = await actionGetReadingActivityByBookIdAndUserId(
+const result = await actionGetLatestReadingActivityByBookIdAndUserId(
   bookId,
   userId
 );

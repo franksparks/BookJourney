@@ -89,13 +89,14 @@ model BookStatus {
 }
 
 model ReadingActivity {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  value     Int
-  createdAt DateTime @default(now())
-  userId    String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id])
-  bookId    String   @db.ObjectId
-  book      Book     @relation(fields: [bookId], references: [id])
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  page       Int?
+  percentage Int?
+  createdAt  DateTime @default(now())
+  userId     String   @db.ObjectId
+  user       User     @relation(fields: [userId], references: [id])
+  bookId     String   @db.ObjectId
+  book       Book     @relation(fields: [bookId], references: [id])
 }
 
 enum RatingValue {
