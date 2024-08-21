@@ -16,7 +16,7 @@ model User {
   lists           List[]
   ratings         Rating[]
   bookStatuses    BookStatus[]
-  ReadingActivity ReadingActivity[]
+  readingActivity ReadingActivity[]
 }
 
 model Book {
@@ -39,7 +39,7 @@ model Book {
   ratings         Rating[]
   lists           BookList[]
   bookStatuses    BookStatus[]
-  ReadingActivity ReadingActivity[]
+  readingActivity ReadingActivity[]
 }
 
 model Review {
