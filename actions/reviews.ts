@@ -36,7 +36,7 @@ export const actionGetReviewByBookId = async (id: string) => {
   return result;
 };
 
-export const actionGetRviewByGoogleBookIdAndUserId = async (googleBookId: string, userId: string) => {
+export const actionGetReviewByGoogleBookIdAndUserId = async (googleBookId: string, userId: string) => {
   const result = await dbGetReviewsByGoogleBookIdAndUserId(googleBookId, userId)
   return result
 };
