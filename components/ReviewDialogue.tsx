@@ -5,16 +5,23 @@ import { SetStateAction, useCallback, useEffect, useState } from "react";
 import { TextareaAutosize } from "@mui/material";
 import { Review } from "@/models/review";
 import { Book } from "@/models/book";
-import { actionGetReviewByGoogleBookIdAndUserId, actionInsertReview } from "@/actions/reviews";
+import {
+  actionDeleteReview,
+  actionGetReviewByGoogleBookIdAndUserId,
+  actionInsertReview,
+  actionUpdateReview
+} from "@/actions/reviews";
 
 type ReviewDialogueProps = {
   bookInDb: Book | null;
   dbUser: any;
+  numericBookRating: number | null;
 };
 
 export default function ReviewDialogue({
   bookInDb,
-  dbUser
+  dbUser,
+  numericBookRating
 }: ReviewDialogueProps) {
   const [bookReview, setBookReview] = useState<Review | null>(null);
   const [commentBookReview, setCommentBookReview] = useState<string>("");
@@ -33,30 +40,40 @@ export default function ReviewDialogue({
     }
   }, [dbUser, bookInDb, bookReview]);
 
-  const addReview = useCallback(async () => {
-    const reviewCreateInput = {
-      comment: commentBookReview,
-      book: {
-        connect: {
-          id: bookInDb?.id
+  const saveReview = useCallback(async () => {
+    if (bookReview === null) {
+      const reviewCreateInput = {
+        comment: commentBookReview,
+        book: {
+          connect: {
+            id: bookInDb?.id
+          }
+        },
+        user: {
+          connect: {
+            id: dbUser?.id
+          }
         }
-      },
-      user: {
-        connect: {
-          id: dbUser?.id
-        }
-      }
-    };
+      };
 
-    const review = await actionInsertReview(reviewCreateInput);
-    setBookReview(review);
-    setCommentBookReview(review.comment);
+      const review = await actionInsertReview(reviewCreateInput);
+      setBookReview(review);
+      setCommentBookReview(review.comment);
+    } else {
+      await actionUpdateReview(bookReview.id!, commentBookReview);
+    }
   }, [commentBookReview]);
 
-  const handleTextChange = (event: {
-    target: { value: string };
-  }) => {
-      setCommentBookReview(event.target.value);
+  const deleteReview = useCallback(async () => {
+    if (bookReview) {
+      await actionDeleteReview(bookReview?.id!);
+      setBookReview(null);
+      setCommentBookReview("");
+    }
+  }, [bookReview]);
+
+  const handleTextChange = (event: { target: { value: string } }) => {
+    setCommentBookReview(event.target.value);
   };
 
   const handleClickOpen = () => {
@@ -69,20 +86,25 @@ export default function ReviewDialogue({
 
   const handleSave = () => {
     setOpen(false);
+    saveReview();
   };
 
-  const handleMouseDown = () => {
-    addReview();
-  }
+  const handleDelete = () => {
+    setOpen(false);
+    deleteReview();
+  };
 
   useEffect(() => {
     fetchReview();
-  },[]);
+    if (numericBookRating === null) {
+      deleteReview();
+    }
+  }, [bookInDb, numericBookRating]);
 
   return (
     <>
       <Button className="cursor-pointer" onClick={handleClickOpen}>
-        Write a review
+        {bookReview === null ? "Write a review" : "Edit your review"}
       </Button>
       <Dialog open={open} onClose={handleClose} fullWidth={true}>
         <TextareaAutosize
@@ -93,10 +115,9 @@ export default function ReviewDialogue({
           onChange={handleTextChange}
         ></TextareaAutosize>
         <DialogActions>
-          <Button onClick={handleSave} onMouseDown={handleMouseDown}>Save</Button>
-          <Button onClick={handleClose}>
-            Close
-          </Button>
+          <Button onClick={handleSave}>Save</Button>
+          {bookReview && <Button onClick={handleDelete}>Delete</Button>}
+          <Button onClick={handleClose}>Close</Button>
         </DialogActions>
       </Dialog>
     </>
