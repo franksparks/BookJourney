@@ -170,13 +170,11 @@ export default function BookCard({
               </p>
               <div className="w-36 bg-gray-200 rounded-full h-4 border-2 border-gray-300">
                 <div
-                  className="w-36 bg-orange-500 h-3 rounded-full"
+                  className=" bg-orange-500 h-3 rounded-full"
                   style={{
-                    width: `${(
-                      (currentReadingActivity.page / book.pages) *
-                      100
-                    ).toFixed(1)}
-                    %)}%`,
+                    width: `${
+                      (currentReadingActivity.page / book.pages) * 100
+                    }%`,
                   }}
                 ></div>
               </div>
