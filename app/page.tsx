@@ -1,5 +1,6 @@
 import ReadingList from "@/components/ReadingList";
 import UserLists from "@/components/UserLists";
+import WantToRead from "@/components/WantToRead";
 
 export default function Home() {
   return (
@@ -8,8 +9,9 @@ export default function Home() {
         <div className="w-1/2">
           <ReadingList />
         </div>
-        <div className="w-1/2">
+        <div className="w-1/2 flex flex-col h-full gap-12">
           <UserLists />
+          <WantToRead />
         </div>
       </div>
     </main>
