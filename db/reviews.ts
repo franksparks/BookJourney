@@ -21,9 +21,9 @@ export const dbGetReviewsByBookIdAndUserId = catchErrors(
   }
 );
 
-export const dbGetReviewsByGoogleBookIdAndUserId = catchErrors(
+export const dbGetReviewByGoogleBookIdAndUserId = catchErrors(
   async (googleBooksId: string, userId: string) => {
-    const result = await db.review.findMany({
+    const result = await db.review.findFirst({
       where: {
         book: {
           googleBooksId

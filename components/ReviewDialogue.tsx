@@ -28,9 +28,13 @@ export default function ReviewDialogue({
       );
       if (review) {
         setBookReview(review);
+        setCommentBookReview(review.comment);
+
+        console.log(review);
+        console.log("REVIEW COMMENT", review.comment);
       }
     }
-  }, [dbUser, bookInDb]);
+  }, [dbUser, bookInDb, bookReview]);
 
   const addReview = useCallback(async () => {
     const reviewCreateInput = {
@@ -49,6 +53,8 @@ export default function ReviewDialogue({
 
     const review = await actionInsertReview(reviewCreateInput);
     setBookReview(review);
+    setCommentBookReview(review.comment);
+
   }, [commentBookReview]);
 
   const handleTextChange = (event: {
@@ -66,9 +72,12 @@ export default function ReviewDialogue({
   };
 
   const handleSave = () => {
-    addReview();
     setOpen(false);
   };
+
+  const handleMouseDown = () => {
+    addReview();
+  }
 
   useEffect(() => {
     fetchReview();
@@ -84,10 +93,11 @@ export default function ReviewDialogue({
           className="m-2 p-4"
           minRows={10}
           placeholder="Add your review here"
+          value={commentBookReview}
           onChange={handleTextChange}
         ></TextareaAutosize>
         <DialogActions>
-          <Button onClick={handleSave}>Save</Button>
+          <Button onClick={handleSave} onMouseDown={handleMouseDown}>Save</Button>
           <Button onClick={handleClose}>
             Close
           </Button>
