@@ -29,9 +29,6 @@ export default function ReviewDialogue({
       if (review) {
         setBookReview(review);
         setCommentBookReview(review.comment);
-
-        console.log(review);
-        console.log("REVIEW COMMENT", review.comment);
       }
     }
   }, [dbUser, bookInDb, bookReview]);
@@ -54,7 +51,6 @@ export default function ReviewDialogue({
     const review = await actionInsertReview(reviewCreateInput);
     setBookReview(review);
     setCommentBookReview(review.comment);
-
   }, [commentBookReview]);
 
   const handleTextChange = (event: {
@@ -81,7 +77,7 @@ export default function ReviewDialogue({
 
   useEffect(() => {
     fetchReview();
-  },[bookReview]);
+  },[]);
 
   return (
     <>
