@@ -40,6 +40,10 @@ export default function ReadingStatusDropwdown({
 
   useEffect(() => {
     getStatus();
+
+    console.log("Status");
+    console.log("------------------");
+    console.log(currentStatus);
   }, [dbUser, book]);
 
   const getStatus = async () => {
@@ -53,6 +57,8 @@ export default function ReadingStatusDropwdown({
         await actionGetBookStatusByBookIdAndUserId(dbBook.id!, dbUser.id);
 
       setStatus(readingStatus);
+    } else {
+      setStatus(null);
     }
   };
 
