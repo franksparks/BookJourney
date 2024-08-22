@@ -30,7 +30,7 @@ export const dbGetLatestReadingActivityByBookIdAndUserId = catchErrors(
       },
       take: 1,
     });
-    return result;
+    return result[0];
   }
 );
 

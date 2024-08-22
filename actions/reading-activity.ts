@@ -15,6 +15,7 @@ export const actionInsertReadingActivityPage = async (
 ) => {
   const readingActivity: Prisma.ReadingActivityCreateInput = {
     page: Number(value),
+    percentage: null,
 
     book: {
       connect: { id: bookId },
@@ -34,6 +35,7 @@ export const actionInsertReadingActivityPercentage = async (
 ) => {
   const readingActivity: Prisma.ReadingActivityCreateInput = {
     percentage: Number(value),
+    page: null,
 
     book: {
       connect: { id: bookId },

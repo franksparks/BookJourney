@@ -1,15 +1,16 @@
 import { actionUpdateBookStatus } from "@/actions/book-status";
 import {
   actionGetLatestReadingActivityByBookIdAndUserId,
-  actionInsertReadingActivity,
+  actionInsertReadingActivityPage,
+  actionInsertReadingActivityPercentage,
 } from "@/actions/reading-activity";
 import { useDbUser } from "@/app/context/db-user-context";
 import { Book } from "@/models/book";
 import { BookStatus } from "@/models/book-status";
 import { Tooltip } from "@mui/material";
-import { ReadStatus } from "@prisma/client";
+import { ReadingActivity, ReadStatus } from "@prisma/client";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BookNavigationWrapper from "./BookNavigationWrapper";
 import { Button } from "./ui/button";
 import {
@@ -37,8 +38,51 @@ export default function BookCard({
   const { dbUser } = useDbUser();
   const [readingProgress, setReadingProgress] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const currentReadingActivity =
-    actionGetLatestReadingActivityByBookIdAndUserId(book.id!, dbUser.id);
+  const [currentReadingActivity, setCurrentReadingActivity] =
+    useState<ReadingActivity | null>(null);
+  const [progressType, setProgressType] = useState("pages");
+
+  const fetchReadingActivity = async () => {
+    const activity: ReadingActivity =
+      await actionGetLatestReadingActivityByBookIdAndUserId(
+        book.id!,
+        dbUser.id
+      );
+    setCurrentReadingActivity(activity);
+  };
+  useEffect(() => {
+    fetchReadingActivity();
+  }, [book.id, dbUser.id]);
+
+  const validateProgress = (
+    progressType: string,
+    value: string
+  ): boolean => {
+    const numberValue = Number(value);
+
+    if (isNaN(numberValue) || numberValue < 0) {
+      alert("Please enter a valid number.");
+      return false;
+    }
+
+    if (
+      progressType === "percentage" &&
+      (numberValue > 100 || numberValue < 0)
+    ) {
+      alert("Please enter a valid percentage between 0 and 100.");
+      return false;
+    }
+
+    if (
+      progressType === "pages" &&
+      (numberValue > book.pages || numberValue < 0)
+    ) {
+      alert("Please enter a valid page.");
+      return false;
+    }
+
+    return true;
+  };
 
   const handleDoneClick = async () => {
     await actionUpdateBookStatus(status.id, ReadStatus.READ);
@@ -46,20 +90,25 @@ export default function BookCard({
   };
 
   const handleAddReadingActivity = async () => {
-    if (
-      isNaN(Number(readingProgress)) ||
-      Number(readingProgress) < 0 ||
-      Number(readingProgress) > 100
-    ) {
-      alert("Please enter a valid percentage between 0 and 100.");
+    if (!validateProgress(progressType, readingProgress)) {
       return;
     }
-    await actionInsertReadingActivity(
-      readingProgress,
-      book.id!,
-      dbUser.id
-    );
-    setIsDialogOpen(false); // Cerrar el modal
+    if (progressType === "pages") {
+      await actionInsertReadingActivityPage(
+        readingProgress,
+        book.id!,
+        dbUser.id
+      );
+    } else {
+      await actionInsertReadingActivityPercentage(
+        readingProgress,
+        book.id!,
+        dbUser.id
+      );
+    }
+    fetchReadingActivity();
+
+    setIsDialogOpen(false);
   };
 
   return (
@@ -91,12 +140,50 @@ export default function BookCard({
         </Tooltip>
       </div>
 
+      {/*Mover este div*/}
       <div className="flex flex-col *:justify-center items-center p-4">
-        {/* To do: Display current progress of the book*/}
-        <p>Progress</p>
-        <p>
-          {currentReadingActivity.pages}/{book.pages}
-        </p>
+        <div>
+          {currentReadingActivity === undefined ||
+          currentReadingActivity === null ? (
+            <p>0/{book.pages}</p>
+          ) : currentReadingActivity.page === null ? (
+            <>
+              <p>{currentReadingActivity.percentage}%</p>
+              <div className="w-36 bg-gray-200 rounded-full h-4 border-2 border-gray-300">
+                <div
+                  className="bg-orange-500 h-3 rounded-full"
+                  style={{
+                    width: `${currentReadingActivity?.percentage || 0}%`,
+                  }}
+                ></div>
+              </div>
+            </>
+          ) : (
+            <>
+              <p>
+                {currentReadingActivity.page}/{book.pages} (
+                {(
+                  (currentReadingActivity.page / book.pages) *
+                  100
+                ).toFixed(1)}
+                %)
+              </p>
+              <div className="w-36 bg-gray-200 rounded-full h-4 border-2 border-gray-300">
+                <div
+                  className="w-36 bg-orange-500 h-3 rounded-full"
+                  style={{
+                    width: `${(
+                      (currentReadingActivity.page / book.pages) *
+                      100
+                    ).toFixed(1)}
+                    %)}%`,
+                  }}
+                ></div>
+              </div>
+            </>
+          )}
+        </div>
+
         <div className="flex flex-col justify-center items-center p-4">
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
@@ -112,15 +199,42 @@ export default function BookCard({
                 </DialogDescription>
               </DialogHeader>
               <div>
-                <div className=" items-center gap-4">
-                  <p>Current reading percentage:</p>
+                <div className="flex items-center gap-4">
+                  <input
+                    type="radio"
+                    id="pages"
+                    name="progressType"
+                    value="pages"
+                    checked={progressType === "pages"}
+                    onChange={() => setProgressType("pages")}
+                  />
+                  <label htmlFor="pages">Pages</label>
+
+                  <input
+                    type="radio"
+                    id="percentage"
+                    name="progressType"
+                    value="percentage"
+                    checked={progressType === "percentage"}
+                    onChange={() => setProgressType("percentage")}
+                  />
+                  <label htmlFor="percentage">Percentage</label>
                 </div>
-                <Input
-                  id="value"
-                  className="col-span-3"
-                  value={readingProgress}
-                  onChange={(e) => setReadingProgress(e.target.value)}
-                />
+
+                <div className="items-center gap-4 mt-4">
+                  <p>
+                    Read{" "}
+                    {progressType === "pages" ? "pages" : "percentage"}:
+                  </p>
+                  <Input
+                    id="value"
+                    className="col-span-3"
+                    value={readingProgress}
+                    onChange={(e) => setReadingProgress(e.target.value)}
+                    type="number"
+                    step="any"
+                  />
+                </div>
               </div>
               <DialogFooter>
                 <Button
@@ -130,7 +244,11 @@ export default function BookCard({
                   Save activity
                 </Button>
                 <Button
-                  onClick={handleDoneClick}
+                  onClick={() => {
+                    // Lógica para marcar el libro como terminado
+                    handleDoneClick();
+                    setIsDialogOpen(false);
+                  }}
                   className="rounded-full border-orange-400 border-2"
                 >
                   Book Finished!
