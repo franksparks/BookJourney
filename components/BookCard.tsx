@@ -57,6 +57,11 @@ export default function BookCard({
 
   const handleDoneClick = async () => {
     await actionUpdateBookStatus(status.id, ReadStatus.READ);
+    await actionInsertReadingActivityPercentage(
+      "100",
+      book.id!,
+      dbUser.id
+    );
     onStatusChange();
   };
 
@@ -214,7 +219,6 @@ export default function BookCard({
                 </Button>
                 <Button
                   onClick={() => {
-                    // Lógica para marcar el libro como terminado
                     handleDoneClick();
                     setIsDialogOpen(false);
                   }}
