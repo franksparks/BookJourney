@@ -5,6 +5,7 @@ import {
   actionInsertReadingActivityPercentage,
 } from "@/actions/reading-activity";
 import { useDbUser } from "@/app/context/db-user-context";
+import { validateProgressInput } from "@/lib/reading-progress-validator";
 import { Book } from "@/models/book";
 import { BookStatus } from "@/models/book-status";
 import { Tooltip } from "@mui/material";
@@ -54,43 +55,13 @@ export default function BookCard({
     fetchReadingActivity();
   }, [book.id, dbUser.id]);
 
-  const validateProgress = (
-    progressType: string,
-    value: string
-  ): boolean => {
-    const numberValue = Number(value);
-
-    if (isNaN(numberValue) || numberValue < 0) {
-      alert("Please enter a valid number.");
-      return false;
-    }
-
-    if (
-      progressType === "percentage" &&
-      (numberValue > 100 || numberValue < 0)
-    ) {
-      alert("Please enter a valid percentage between 0 and 100.");
-      return false;
-    }
-
-    if (
-      progressType === "pages" &&
-      (numberValue > book.pages || numberValue < 0)
-    ) {
-      alert("Please enter a valid page.");
-      return false;
-    }
-
-    return true;
-  };
-
   const handleDoneClick = async () => {
     await actionUpdateBookStatus(status.id, ReadStatus.READ);
     onStatusChange();
   };
 
   const handleAddReadingActivity = async () => {
-    if (!validateProgress(progressType, readingProgress)) {
+    if (!validateProgressInput(book, progressType, readingProgress)) {
       return;
     }
     if (progressType === "pages") {
