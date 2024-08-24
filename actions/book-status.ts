@@ -7,7 +7,9 @@ import {
   dbInsertBookStatus,
   dbUpdateBookStatus,
   dbGetBooksByUserIdAndReadingStatus,
+  dbGetBookStatusByUserId
 } from "@/db/book-status";
+import { BookStatus } from "@/models/book-status";
 import { Prisma, ReadStatus } from "@prisma/client";
 
 export const actionInsertBookStatus = async (
@@ -28,6 +30,11 @@ export const actionGetBookStatusById = async (bookStatusId: string) => {
   const result = await dbGetBookStatusById(bookStatusId);
   return result;
 };
+
+export const actionGetBookStatusByUserId = async (userId: string): Promise<BookStatus[]> => {
+  const result = await dbGetBookStatusByUserId(userId);
+  return result;
+}
 
 export const actionGetBookStatusByBookIdAndUserId = async (
   bookId: string,

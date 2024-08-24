@@ -6,25 +6,11 @@ import { List } from "@/models/list";
 import { Book } from "@/models/book";
 
 interface BooksListProps {
-  list: List | null;
+    list: List | null;
+    books: Book[];
 }
 
-export default function ListBooksCard({ list }: BooksListProps) {
-  const [books, setBooks] = useState<Book[]>([]);
-
-  useEffect(() => {
-    fetchBooks();
-  }, [list]);
-
-  const fetchBooks = async () => {
-    if (!list) return;
-    const listBooks = await actionGetBookListsByListId(list.id);
-    const allBooks: Book[] = []
-    for (const bookList of listBooks) {
-        allBooks.push(bookList.book)
-    }
-    setBooks(allBooks);
-  };
+export default function ListBooksCard({ list, books }: BooksListProps) {
 
   return (
     <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-sky-300 text-slate-100 h-full overflow-y-auto">

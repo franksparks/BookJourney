@@ -1,5 +1,5 @@
 import { catchErrors } from "@/lib/error-handling";
-import { Prisma, ReadStatus } from "@prisma/client";
+import { BookStatus, Prisma, ReadStatus } from "@prisma/client";
 import { db } from "./db";
 
 export const dbInsertBookStatus = catchErrors(
@@ -17,6 +17,16 @@ export const dbGetBookStatusById = catchErrors(
     return result;
   }
 );
+
+export const dbGetBookStatusByUserId = catchErrors(
+  async (userId: string) => {
+    const result = await db.bookStatus.findMany({
+      where: { userId },
+      include: { book: true },
+    });
+    return result;
+  }
+)
 
 export const dbGetBookStatusByBookIdAndUserId = catchErrors(
   async (bookId: string, userId: string) => {

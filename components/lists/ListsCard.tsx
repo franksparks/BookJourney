@@ -6,17 +6,18 @@ import { PlusIcon, Cross2Icon } from "@radix-ui/react-icons";
 import {
   actionGetListsByUserId,
   actionInsertList,
-  actionGetListById,
   actionDeleteList,
   actionUpdateList,
   actionGetListByNameAndUserId,
 } from "@/actions/lists";
+import { actionGetBookStatusByUserId } from "@/actions/book-status";
 import { useDbUser } from "@/app/context/db-user-context";
 import { Prisma } from "@prisma/client";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import Modal from "@/components/ui/confirmation-modal";
+import { Book } from "@/models/book";
 
-export default function ListsCard({ selectedList, setSelectedList }: any) {
+export default function ListsCard({ setBooks, selectedList, setSelectedList }: any) {
   const { dbUser } = useDbUser();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -33,7 +34,6 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
   useEffect(() => {
     if (dbUser && dbUser.id) {
       getLists();
-      if (listId) getListById(listId);
     }
   }, [dbUser]);
 
@@ -41,18 +41,60 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
     setErrorMessage(null);
   }, [newListName, editingListName]);
 
-  const getListById = async (listId: string) => {
-    const result = await actionGetListById(listId);
-    if (result.userId !== dbUser!.id) return;
-    setSelectedList(result);
+  const getLists = async () => {
+    const listsResult = await actionGetListsByUserId(dbUser!.id);
+    const statusResult = await actionGetBookStatusByUserId(dbUser!.id);
+    const allLists: List[] = [];
+    for (const bookStatus of statusResult) {
+        const found = allLists.find((list) => list.name === bookStatus.status);
+        if (found) {
+            found.books.push({
+                id: `${found.id}-${bookStatus.bookId}`,
+                book: bookStatus.book,
+                bookId: bookStatus.bookId ?? '',
+                listId: found.id,
+            });
+        } else {
+            allLists.push({
+                id: bookStatus.status,
+                name: bookStatus.status,
+                createdAt: new Date(),
+                userId: dbUser!.id,
+                books: [{
+                    id: `${bookStatus.status}-${bookStatus.bookId}`,
+                    book: bookStatus.book,
+                    bookId: bookStatus.bookId ?? '',
+                    listId: bookStatus.status,
+                }]
+            });
+        }
+    }
+    allLists.push(...(listsResult ?? []));
+    if (setSelectedList) handlePreselectedList(allLists)
+    setLists(allLists)
   };
 
-  const getLists = async () => {
-    const result = await actionGetListsByUserId(dbUser!.id);
-    setLists(result ?? []);
-    if (!selectedList && result?.length > 0 && setSelectedList) {
-      setSelectedList(result[0]);
+  const handlePreselectedList = (allLists: List[]) => {
+    if (listId) {
+        const foundSelected = allLists.find((list) => list.id === listId);
+        if (foundSelected) {
+            setSelectedList(foundSelected);
+            handleSetSelectedBooks(foundSelected);
+        }
+    } else {
+        if (allLists.length > 0) {
+            setSelectedList(allLists[0]);
+            handleSetSelectedBooks(allLists[0]);
+        }
     }
+  }
+
+  const handleSetSelectedBooks = (list: List) => {
+    const newBooks: Book[] = [];
+    for (const bookList of list.books ?? []) {
+        newBooks.push(bookList.book);
+    }
+    setBooks(newBooks);
   };
 
   const handleAddList = () => {
@@ -85,6 +127,7 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
       router.push(`/lists?listId=${list.id}`);
     } else {
       setSelectedList(list);
+      handleSetSelectedBooks(list);
     }
   };
 
