@@ -53,6 +53,8 @@ export default function ReadingStatusDropwdown({
         await actionGetBookStatusByBookIdAndUserId(dbBook.id!, dbUser.id);
 
       setStatus(readingStatus);
+    } else {
+      setStatus(null);
     }
   };
 
