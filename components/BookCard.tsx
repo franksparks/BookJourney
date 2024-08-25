@@ -43,7 +43,7 @@ export default function BookCard({
     useState<ReadingActivity | null>(null);
   const [progressType, setProgressType] = useState("pages");
 
-  const fetchReadingActivity = async () => {
+  const setReadingActivity = async () => {
     const activity: ReadingActivity =
       await actionGetLatestReadingActivityByBookIdAndUserId(
         book.id!,
@@ -52,7 +52,7 @@ export default function BookCard({
     setCurrentReadingActivity(activity);
   };
   useEffect(() => {
-    fetchReadingActivity();
+    setReadingActivity();
   }, [book.id, dbUser.id]);
 
   const handleDoneClick = async () => {
@@ -78,7 +78,7 @@ export default function BookCard({
         dbUser.id
       );
     }
-    fetchReadingActivity();
+    setReadingActivity();
 
     setIsDialogOpen(false);
   };
