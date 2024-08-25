@@ -26,12 +26,26 @@ export const actionInsertReviewDeprecated = async (
   );
 };
 
-export const actionInsertReview = async (review: Prisma.ReviewCreateInput) => {
+export const actionInsertReview = async (comment: string, bookId: string, userId: string) => {
+  const review = {
+    comment,
+    book: {
+      connect: {
+        id: bookId
+      }
+    },
+    user: {
+      connect: {
+        id: userId
+      }
+    }
+  };
+
   const result = await dbInsertReview(review);
   return result;
 };
 
-export const actionGetReviewByBookId = async (id: string) => {
+export const actionGetReviewsByBookId = async (id: string) => {
   const result = await dbGetReviewsByBookId(id);
   return result;
 };

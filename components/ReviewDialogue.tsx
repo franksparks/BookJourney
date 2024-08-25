@@ -1,7 +1,7 @@
 import { Button } from "./ui/button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
-import { SetStateAction, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { TextareaAutosize } from "@mui/material";
 import { Review } from "@/models/review";
 import { Book } from "@/models/book";
@@ -42,21 +42,7 @@ export default function ReviewDialogue({
 
   const saveReview = useCallback(async () => {
     if (bookReview === null) {
-      const reviewCreateInput = {
-        comment: commentBookReview,
-        book: {
-          connect: {
-            id: bookInDb?.id
-          }
-        },
-        user: {
-          connect: {
-            id: dbUser?.id
-          }
-        }
-      };
-
-      const review = await actionInsertReview(reviewCreateInput);
+      const review = await actionInsertReview(commentBookReview, bookInDb?.id!, dbUser?.id);
       setBookReview(review);
       setCommentBookReview(review.comment);
     } else {
