@@ -16,12 +16,14 @@ import { useDbUser } from "@/app/context/db-user-context";
 import { Book } from "@/models/book";
 import { inverseRatingMap, Rating, ratingMap } from "@/models/rating";
 import { RatingValue } from "@prisma/client";
+import ReviewDialogue from "./ReviewDialogue";
 import { useCallback, useEffect, useState } from "react";
 import ControlledRating from "./ControlledRating";
 import ReadingStatusDropdown from "./ReadingStatusDropdown";
 import ReadMore from "./ReadMore";
 import ReadRating from "./ReadRating";
 import { Separator } from "./ui/separator";
+
 
 type BookDetailsProps = {
   book: Book;
@@ -101,10 +103,10 @@ export default function BookDetails({ book }: BookDetailsProps) {
     );
   }, [numericBookRating]);
 
-  const deleteRating = useCallback(
-    async () => await actionDeleteRating(bookRating!.id!),
-    [numericBookRating]
-  );
+  const deleteRating = useCallback(async () => {
+    await actionDeleteRating(bookRating!.id!);
+    setBookRating(null);
+  }, [numericBookRating]);
 
   useEffect(() => {
     fetchRating();
@@ -148,9 +150,14 @@ export default function BookDetails({ book }: BookDetailsProps) {
               setFirstInteraction={setFirstInteraction}
             />
           </div>
-          <div className="flex justify-center mt-2">
-            {"Rate this book"}
-          </div>
+          {!bookRating && (
+            <div className="flex justify-center mt-2">{"Rate this book"}</div>
+          )}
+          {bookRating && (
+            <div className="flex justify-center mt-2">
+              <ReviewDialogue bookInDb={bookInDb!} dbUser={dbUser} numericBookRating={numericBookRating}/>
+            </div>
+          )}
         </div>
       </div>
       <div className="flex w-screen justify-start flex-col mr-4">
