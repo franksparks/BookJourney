@@ -10,7 +10,7 @@ if (process.argv.length != 5) {
 const [_bun, _script, percentage, book_id, user_id] = process.argv;
 
 const result = await actionInsertReadingActivityPercentage(
-  percentage,
+  Number(percentage),
   book_id,
   user_id
 );
