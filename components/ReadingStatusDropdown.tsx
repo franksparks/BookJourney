@@ -7,6 +7,7 @@ import {
   actionGetBookByGoogleId,
   actionInsertBook,
 } from "@/actions/books";
+import { actionInsertReadingActivityPercentage } from "@/actions/reading-activity";
 import { useDbUser } from "@/app/context/db-user-context";
 import { Book } from "@/models/book";
 import { BookStatus } from "@/models/book-status";
@@ -69,6 +70,13 @@ export default function ReadingStatusDropwdown({
       //If bookStatus does no exist, call to insert action
       const newStatus = await actionInsertBookStatus(status, res, dbUser);
       setStatus(newStatus);
+      if (status === ReadStatus.READ) {
+        await actionInsertReadingActivityPercentage(
+          100,
+          res.id!,
+          dbUser.id
+        );
+      }
     } else {
       //If bookStatus exists, call to update action
       const updatedStatus = await actionUpdateBookStatus(
@@ -76,6 +84,13 @@ export default function ReadingStatusDropwdown({
         status
       );
       setStatus(updatedStatus);
+      if (status === ReadStatus.READ) {
+        await actionInsertReadingActivityPercentage(
+          100,
+          existing.id!,
+          dbUser.id
+        );
+      }
     }
   };
 

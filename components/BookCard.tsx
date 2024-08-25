@@ -57,11 +57,7 @@ export default function BookCard({
 
   const handleDoneClick = async () => {
     await actionUpdateBookStatus(status.id, ReadStatus.READ);
-    await actionInsertReadingActivityPercentage(
-      "100",
-      book.id!,
-      dbUser.id
-    );
+    await actionInsertReadingActivityPercentage(100, book.id!, dbUser.id);
     onStatusChange();
   };
 
@@ -77,7 +73,7 @@ export default function BookCard({
       );
     } else {
       await actionInsertReadingActivityPercentage(
-        readingProgress,
+        Number(readingProgress),
         book.id!,
         dbUser.id
       );
@@ -185,7 +181,7 @@ export default function BookCard({
                   <label htmlFor="pages">Pages</label>
 
                   <input
-                    type="radio"
+                    type="number"
                     id="percentage"
                     name="progressType"
                     value="percentage"

@@ -29,7 +29,7 @@ export const actionInsertReadingActivityPage = async (
 };
 
 export const actionInsertReadingActivityPercentage = async (
-  value: string,
+  value: Number,
   bookId: string,
   userId: string
 ) => {
