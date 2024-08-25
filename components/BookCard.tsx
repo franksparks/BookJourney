@@ -181,7 +181,7 @@ export default function BookCard({
                   <label htmlFor="pages">Pages</label>
 
                   <input
-                    type="number"
+                    type="radio"
                     id="percentage"
                     name="progressType"
                     value="percentage"
@@ -201,7 +201,6 @@ export default function BookCard({
                     className="col-span-3"
                     value={readingProgress}
                     onChange={(e) => setReadingProgress(e.target.value)}
-                    type="number"
                     step="any"
                   />
                 </div>
