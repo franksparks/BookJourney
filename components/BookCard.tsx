@@ -71,17 +71,17 @@ export default function BookCard({
         book.id!,
         dbUser.id
       );
-      if (Number(readingProgress) === book.pages) {
+      if (readingProgress === book.pages) {
         await actionUpdateBookStatus(status.id, ReadStatus.READ);
         onStatusChange();
       }
     } else {
       await actionInsertReadingActivityPercentage(
-        Number(readingProgress),
+        readingProgress,
         book.id!,
         dbUser.id
       );
-      if (Number(readingProgress) === 100) {
+      if (readingProgress === 100) {
         await actionUpdateBookStatus(status.id, ReadStatus.READ);
         onStatusChange();
       }
@@ -200,8 +200,7 @@ export default function BookCard({
                 </div>
 
                 <div className="items-center gap-4 mt-4">
-                  <p>
-                    {currentReadingActivity &&
+                  {currentReadingActivity ? (
                     currentReadingActivity.page !== null ? (
                       <>
                         Currently read {currentReadingActivity.page}/
@@ -212,10 +211,16 @@ export default function BookCard({
                         ).toFixed(1)}
                         %)
                       </>
+                    ) : currentReadingActivity.percentage !== null ? (
+                      <>
+                        Currently read {currentReadingActivity.percentage}%
+                      </>
                     ) : (
                       ""
-                    )}
-                  </p>
+                    )
+                  ) : (
+                    ""
+                  )}
                   <p>
                     {progressType === "pages" ? "Pages " : "Percentage "}
                     read:
