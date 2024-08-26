@@ -10,6 +10,7 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@clerk/clerk-sdk-node": "^5.0.29",
     "@clerk/nextjs": "^5.2.3",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
