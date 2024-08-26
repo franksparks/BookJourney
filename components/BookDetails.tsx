@@ -23,6 +23,7 @@ import ReadingStatusDropdown from "./ReadingStatusDropdown";
 import ReadMore from "./ReadMore";
 import ReadRating from "./ReadRating";
 import { Separator } from "./ui/separator";
+import Reviews from "./Reviews";
 
 
 type BookDetailsProps = {
@@ -218,6 +219,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
             <div className="mt-8 font-bold">{"Reviews"}</div>
             <Separator className="my-4" />
           </>
+          <Reviews bookInDb={bookInDb} dbUser={dbUser}/>
       </div>
     </div>
   );
