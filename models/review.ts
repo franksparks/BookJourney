@@ -1,10 +1,6 @@
-import { Book } from "./book";
-import { User } from "./user";
-
 export type Review = {
-    id?: string;
+    id: string;
     comment: string;
     createdAt?: string;
-    book: Book;
-    user: User;
+    userId: string;
   };

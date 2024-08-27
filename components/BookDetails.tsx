@@ -24,6 +24,7 @@ import ReadMore from "./ReadMore";
 import ReadRating from "./ReadRating";
 import { Separator } from "./ui/separator";
 import Reviews from "./Reviews";
+import { Review } from "@/models/review";
 
 
 type BookDetailsProps = {
@@ -39,6 +40,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
   const [numberOfRatings, setNumberOfRatings] = useState<number>(0);
   const [bookInDb, setBookInDb] = useState<Book | null>(null);
   const [bookRating, setBookRating] = useState<Rating | null>(null);
+  const [bookReview, setBookReview] = useState<Review | null>(null);
   const [firstInteraction, setFirstInteraction] = useState(true);
   const logged = dbUser ? true : false;
 
@@ -219,7 +221,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
             <div className="mt-8 font-bold">{"Reviews"}</div>
             <Separator className="my-4" />
           </>
-          <Reviews bookInDb={bookInDb} dbUser={dbUser}/>
+          <Reviews bookInDb={bookInDb} bookReview={bookReview}/>
       </div>
     </div>
   );
