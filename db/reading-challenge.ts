@@ -34,3 +34,13 @@ export const dbGetReadingChallengeByUserId = catchErrors(
     return result;
   }
 );
+
+export const dbUpdateReadingChallenge = catchErrors(
+  async (id: string, goal: number) => {
+    const result = await db.readingChallenge.update({
+      where: { id },
+      data: { goal },
+    });
+    return result;
+  }
+);
