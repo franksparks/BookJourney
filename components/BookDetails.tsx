@@ -1,24 +1,29 @@
 "use client";
 
-import { Book } from "@/models/book";
-import ReadMore from "./ReadMore";
-import { Separator } from "./ui/separator";
-import ControlledRating from "./ControlledRating";
-import ReadRating from "./ReadRating";
-import { useDbUser } from "@/app/context/db-user-context";
-import { useCallback, useEffect, useState } from "react";
-import ReadingStatusDropdown from "./ReadingStatusDropdown";
+import {
+  actionGetBookByGoogleId,
+  actionInsertBook,
+} from "@/actions/books";
 import {
   actionDeleteRating,
   actionGetAverageRatingByBookId,
   actionGetRatingByGoogleBookIdAndUserId,
   actionGetRatingsByBook,
   actionInsertRating,
-  actionUpdateRating
+  actionUpdateRating,
 } from "@/actions/ratings";
+import { useDbUser } from "@/app/context/db-user-context";
+import { Book } from "@/models/book";
 import { inverseRatingMap, Rating, ratingMap } from "@/models/rating";
-import { actionGetBookByGoogleId, actionInsertBook } from "@/actions/books";
 import { RatingValue } from "@prisma/client";
+import ReviewDialogue from "./ReviewDialogue";
+import { useCallback, useEffect, useState } from "react";
+import ControlledRating from "./ControlledRating";
+import ReadingStatusDropdown from "./ReadingStatusDropdown";
+import ReadMore from "./ReadMore";
+import ReadRating from "./ReadRating";
+import { Separator } from "./ui/separator";
+
 
 type BookDetailsProps = {
   book: Book;
@@ -26,7 +31,9 @@ type BookDetailsProps = {
 
 export default function BookDetails({ book }: BookDetailsProps) {
   const { dbUser } = useDbUser();
-  const [numericBookRating, setNumericBookRating] = useState<number | null>(0);
+  const [numericBookRating, setNumericBookRating] = useState<
+    number | null
+  >(0);
   const [averageBookRating, setAverageBookRating] = useState<number>(0);
   const [numberOfRatings, setNumberOfRatings] = useState<number>(0);
   const [bookInDb, setBookInDb] = useState<Book | null>(null);
@@ -74,19 +81,18 @@ export default function BookDetails({ book }: BookDetailsProps) {
       rating: stringRating as RatingValue,
       book: {
         connect: {
-          id: bookInDb?.id
-        }
+          id: bookInDb?.id,
+        },
       },
       user: {
         connect: {
-          id: dbUser.id
-        }
-      }
+          id: dbUser.id,
+        },
+      },
     };
 
     const rating = await actionInsertRating(ratingCreateInput);
     setBookRating(rating);
-    
   }, [numericBookRating, bookInDb]);
 
   const updateRating = useCallback(async () => {
@@ -97,10 +103,10 @@ export default function BookDetails({ book }: BookDetailsProps) {
     );
   }, [numericBookRating]);
 
-  const deleteRating = useCallback(
-    async () => await actionDeleteRating(bookRating!.id!),
-    [numericBookRating]
-  );
+  const deleteRating = useCallback(async () => {
+    await actionDeleteRating(bookRating!.id!);
+    setBookRating(null);
+  }, [numericBookRating]);
 
   useEffect(() => {
     fetchRating();
@@ -129,7 +135,10 @@ export default function BookDetails({ book }: BookDetailsProps) {
     <div className="flex justify-center mt-10">
       <div className="flex justify-center basis-1/4">
         <div className="flex flex-col">
-          <img className="mb-8" src={book.cover || "../default_cover.jpg"} />
+          <img
+            className="mb-8"
+            src={book.cover || "../default_cover.jpg"}
+          />
           <div>
             <ReadingStatusDropdown book={book} logged={logged} />
           </div>
@@ -141,7 +150,14 @@ export default function BookDetails({ book }: BookDetailsProps) {
               setFirstInteraction={setFirstInteraction}
             />
           </div>
-          <div className="flex justify-center mt-2">{"Rate this book"}</div>
+          {!bookRating && (
+            <div className="flex justify-center mt-2">{"Rate this book"}</div>
+          )}
+          {bookRating && (
+            <div className="flex justify-center mt-2">
+              <ReviewDialogue bookInDb={bookInDb!} dbUser={dbUser} numericBookRating={numericBookRating}/>
+            </div>
+          )}
         </div>
       </div>
       <div className="flex w-screen justify-start flex-col mr-4">

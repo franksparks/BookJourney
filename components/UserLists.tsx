@@ -6,12 +6,10 @@ import { BookList } from "@/models/book-list";
 import { List } from "@/models/list";
 import { useEffect, useState } from "react";
 
-const initialState: List[] = [];
-
 export default function UserLists() {
   const { dbUser } = useDbUser();
 
-  const [lists, setLists] = useState(initialState);
+  const [lists, setLists] = useState<List[]>([]);
 
   useEffect(() => {
     getLists();

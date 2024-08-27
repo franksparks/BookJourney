@@ -5,37 +5,34 @@ import { useDbUser } from "@/app/context/db-user-context";
 import { BookStatus } from "@/models/book-status";
 import { useEffect, useState } from "react";
 import BookCard from "./BookCard";
-import BookNavigationWrapper from "./BookNavigationWrapper";
 
-const initialState: BookStatus[] = [];
-
-export default function UserLists() {
+export default function ReadingList() {
   const { dbUser } = useDbUser();
 
-  const [readingList, setLists] = useState(initialState);
+  const [readingList, setReadingList] = useState<BookStatus[]>([]);
 
   useEffect(() => {
-    getLists();
+    getReadingList();
   }, [dbUser]);
 
-  const getLists = async () => {
+  const getReadingList = async () => {
     if (dbUser != null) {
-      const userLists = await actionGetBooksByUserIdAndReadingStatus(
+      const userReadingList = await actionGetBooksByUserIdAndReadingStatus(
         dbUser.id,
         "READING"
       );
-      setLists(userLists);
+      setReadingList(userReadingList);
     }
   };
 
   const handleStatusChange = async () => {
-    await getLists(); // Refresh the list
+    await getReadingList(); // Refresh the list
   };
 
   //TODO: Add a loading for this component
 
   return (
-    <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-sky-600 text-slate-100 h-auto overflow-y-auto">
+    <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-sky-600 text-slate-100 h-full overflow-y-auto">
       <h1 className="font-light text-sky-200 text-center">Currently Reading</h1>
 
       <div className="flex flex-col items-center">
