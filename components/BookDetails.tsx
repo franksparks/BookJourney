@@ -158,7 +158,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
           )}
           {bookRating && (
             <div className="flex justify-center mt-2">
-              <ReviewDialogue bookInDb={bookInDb!} dbUser={dbUser} numericBookRating={numericBookRating}/>
+              <ReviewDialogue bookInDb={bookInDb!} dbUser={dbUser} numericBookRating={numericBookRating} setBookReview={setBookReview} bookReview={bookReview}/>
             </div>
           )}
         </div>
