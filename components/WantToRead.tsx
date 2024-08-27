@@ -1,10 +1,10 @@
 "use client";
 
 import { useDbUser } from "@/app/context/db-user-context";
-import BookCard from "./BookCard";
 import { useEffect, useState } from "react";
 import { actionGetBooksByUserIdAndReadingStatus } from "@/actions/book-status";
 import { BookStatus } from "@/models/book-status";
+import BookCardWantToRead from "./BookCardWantToRead";
 
 const initialState: BookStatus[] = [];
 
@@ -44,7 +44,7 @@ export default function WantToRead() {
   };
 
   return (
-    <div className="flex flex-col justify-start rounded-3xl shadow-xl shadow-sky-200 p-4 bg-sky-600 text-sky-50 h-2/5 overflow-y-auto">
+    <div className="flex flex-col justify-start rounded-3xl shadow-xl shadow-sky-200 p-4 bg-sky-600 text-sky-50 h-72 overflow-y-auto">
       <h1 className="font-light text-sky-200 text-center">Want to Read</h1>
       <div className="relative flex flex-col items-center justify-center h-full w-full">
         {dbUser && readingList.length > 0 && (
@@ -58,7 +58,7 @@ export default function WantToRead() {
                     : "opacity-0 pointer-events-none"
                 } flex justify-center items-center`}
               >
-                <BookCard
+                <BookCardWantToRead
                   book={element.book}
                   status={element}
                   onStatusChange={handleStatusChange}
