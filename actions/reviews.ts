@@ -4,12 +4,13 @@ import {
   dbDeleteReview,
   dbGetReviewsByBookId,
   dbGetReviewsByBookIdAndUserId,
+  dbGetReviewByGoogleBookIdAndUserId,
   dbInsertReview,
   dbUpdateReview,
 } from "@/db/reviews";
 import { Prisma } from "@prisma/client";
 
-export const actionInsertReview = async (
+export const actionInsertReviewDeprecated = async (
   review: Prisma.ReviewCreateInput
 ) => {
   const existingReview = await dbGetReviewsByBookIdAndUserId(
@@ -25,9 +26,33 @@ export const actionInsertReview = async (
   );
 };
 
-export const actionGetReviewByBookId = async (id: string) => {
+export const actionInsertReview = async (comment: string, bookId: string, userId: string) => {
+  const review = {
+    comment,
+    book: {
+      connect: {
+        id: bookId
+      }
+    },
+    user: {
+      connect: {
+        id: userId
+      }
+    }
+  };
+
+  const result = await dbInsertReview(review);
+  return result;
+};
+
+export const actionGetReviewsByBookId = async (id: string) => {
   const result = await dbGetReviewsByBookId(id);
   return result;
+};
+
+export const actionGetReviewByGoogleBookIdAndUserId = async (googleBookId: string, userId: string) => {
+  const result = await dbGetReviewByGoogleBookIdAndUserId(googleBookId, userId)
+  return result
 };
 
 export const actionUpdateReview = async (id: string, comment: string) => {

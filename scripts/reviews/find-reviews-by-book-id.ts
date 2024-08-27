@@ -1,4 +1,4 @@
-import { actionGetReviewByBookId } from "@/actions/reviews";
+import { actionGetReviewsByBookId } from "@/actions/reviews";
 
 if (process.argv.length != 3) {
   console.error("Usage: bun find-reviews-by-book-id.ts <book-id>");
@@ -7,7 +7,7 @@ if (process.argv.length != 3) {
 
 const [_bun, _script, identifier] = process.argv;
 
-const result = await actionGetReviewByBookId(identifier);
+const result = await actionGetReviewsByBookId(identifier);
 
 if (result == null) {
   process.exit(1);

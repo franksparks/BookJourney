@@ -9,15 +9,15 @@ if (process.argv.length != 4) {
 
 const [_bun, _script, book_id, user_id] = process.argv;
 
-const bookStatuses = await actionGetBookStatusByBookIdAndUserId(
+const bookStatus = await actionGetBookStatusByBookIdAndUserId(
   book_id,
   user_id
 );
 
-if (bookStatuses.length > 0) {
-  console.log("Book statuses found:", bookStatuses);
+if (bookStatus) {
+  console.log(bookStatus);
   process.exit(0);
 } else {
-  console.log("No book statuses found");
+  console.log("No book status found");
   process.exit(0);
 }

@@ -6,7 +6,10 @@ import { Book } from "@/models/book";
 const ISBN10 = "ISBN_10";
 const ISBN13 = "ISBN_13";
 
-export async function actionSearchBooksGoogle(query: string, index: number) {
+export async function actionSearchBooksGoogle(
+  query: string,
+  index: number
+) {
   const result = await searchVolumes(query, index);
   const totalItems = result.totalItems;
   const books: Book[] = result.items.map((item) => {
@@ -30,8 +33,8 @@ export async function actionSearchBooksGoogle(query: string, index: number) {
       publisher: item.volumeInfo.publisher,
       publishedDate: item.volumeInfo.publishedDate,
       language: item.volumeInfo.language,
-      cover: item.volumeInfo.imageLinks?.thumbnail,
-      smallCover: item.volumeInfo.imageLinks?.smallThumbnail
+      smallCover: item.volumeInfo.imageLinks?.smallThumbnail,
+      cover: item.volumeInfo.imageLinks?.smallThumbnail,
     };
   });
   return { books, totalItems };

@@ -1,0 +1,165 @@
+import {
+  actionGetBookStatusByBookIdAndUserId,
+  actionInsertBookStatus,
+  actionUpdateBookStatus,
+} from "@/actions/book-status";
+import {
+  actionGetBookByGoogleId,
+  actionInsertBook,
+} from "@/actions/books";
+import { actionInsertReadingActivityPercentage } from "@/actions/reading-activity";
+import { useDbUser } from "@/app/context/db-user-context";
+import { Book } from "@/models/book";
+import { BookStatus } from "@/models/book-status";
+import { ReadStatus } from "@prisma/client";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@radix-ui/react-dropdown-menu";
+import { useEffect, useState } from "react";
+import { Button } from "./ui/button";
+
+const menuItems = [
+  { label: "Read", value: ReadStatus.READ },
+  { label: "Currently reading", value: ReadStatus.READING },
+  { label: "Want to read", value: ReadStatus.WANT_TO_READ },
+];
+
+type ReadingStatusDropwdownProps = {
+  book: Book;
+  logged: boolean;
+};
+
+export default function ReadingStatusDropwdown({
+  book,
+  logged,
+}: ReadingStatusDropwdownProps) {
+  const { dbUser } = useDbUser();
+  const [currentStatus, setStatus] = useState<BookStatus | null>(null);
+
+  useEffect(() => {
+    getStatus();
+  }, [dbUser, book]);
+
+  const getStatus = async () => {
+    //Check if the book is on DB
+    const dbBook = await actionGetBookByGoogleId(book.googleBooksId);
+
+    if (dbUser != null && dbBook != null) {
+      // obtain the bookStatus if the book is on DB.
+
+      const readingStatus: BookStatus =
+        await actionGetBookStatusByBookIdAndUserId(dbBook.id!, dbUser.id);
+
+      setStatus(readingStatus);
+    } else {
+      setStatus(null);
+    }
+  };
+
+  const handleDropdownClick = async (status: ReadStatus) => {
+    const existing = await actionGetBookByGoogleId(book.googleBooksId);
+    let res;
+    if (!existing) {
+      res = await actionInsertBook(book);
+    } else {
+      res = existing;
+    }
+
+    if (!currentStatus) {
+      //If bookStatus does no exist, call to insert action
+      const newStatus = await actionInsertBookStatus(status, res, dbUser);
+      setStatus(newStatus);
+      if (status === ReadStatus.READ) {
+        await actionInsertReadingActivityPercentage(
+          100,
+          res.id!,
+          dbUser.id
+        );
+      }
+    } else {
+      //If bookStatus exists, call to update action
+      const updatedStatus = await actionUpdateBookStatus(
+        currentStatus.id,
+        status
+      );
+      setStatus(updatedStatus);
+      if (status === ReadStatus.READ) {
+        await actionInsertReadingActivityPercentage(
+          100,
+          existing.id!,
+          dbUser.id
+        );
+      }
+    }
+  };
+
+  const getSelectedLabel = () => {
+    if (currentStatus) {
+      const selectedItem = menuItems.find(
+        (item) => item.value === currentStatus.status
+      );
+      return selectedItem?.label;
+    }
+    return "Want to read";
+  };
+
+  const getDropdownItems = () => {
+    if (currentStatus) {
+      return menuItems.filter(
+        (item) => item.value !== currentStatus.status
+      );
+    } else {
+      return menuItems.filter(
+        (item) => item.value !== ReadStatus.WANT_TO_READ
+      );
+    }
+  };
+
+  return (
+    <>
+      <div>
+        <DropdownMenu>
+          <Button
+            disabled={!logged}
+            onClick={() => {
+              if (getSelectedLabel() === "Want to read")
+                handleDropdownClick(ReadStatus.WANT_TO_READ);
+            }}
+            className={
+              currentStatus
+                ? "rounded-r-none bg-blue-300 hover:bg-blue-300 text-black cursor-not-allowed"
+                : "rounded-r-none"
+            }
+          >
+            {getSelectedLabel()}
+          </Button>
+          <DropdownMenuTrigger asChild>
+            <Button disabled={!logged} className="rounded-l-none">
+              &#9660;
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="flex flex-col">
+            {getDropdownItems().map((item, index) => (
+              <DropdownMenuItem
+                key={index}
+                className={
+                  index === 0 && String(currentStatus) === item.value
+                    ? "rounded-l-none bg-blue-200"
+                    : "rounded-l-none"
+                }
+                onClick={() => {
+                  handleDropdownClick(item.value);
+                }}
+              >
+                <Button>{item.label}</Button>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </>
+  );
+}

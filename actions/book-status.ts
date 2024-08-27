@@ -2,8 +2,8 @@
 
 import {
   dbDeleteBookStatus,
-  dbGetBookStatusById,
   dbGetBookStatusByBookIdAndUserId,
+  dbGetBookStatusById,
   dbInsertBookStatus,
   dbUpdateBookStatus,
   dbGetBooksByUserIdAndReadingStatus,
@@ -13,17 +13,32 @@ import { BookStatus } from "@/models/book-status";
 import { Prisma, ReadStatus } from "@prisma/client";
 
 export const actionInsertBookStatus = async (
-  bookStatus: Prisma.BookStatusCreateInput
+  status: ReadStatus,
+  book: { id: string },
+  user: { id: string }
 ) => {
   const existingStatus = await dbGetBookStatusByBookIdAndUserId(
-    bookStatus.book.connect?.id!,
-    bookStatus.user.connect?.id!
+    book.id,
+    user.id
   );
-  if (existingStatus.length == 0) {
+
+  if (!existingStatus || existingStatus.length === 0) {
+    const bookStatus: Prisma.BookStatusCreateInput = {
+      status: status,
+      user: {
+        connect: { id: user.id },
+      },
+      book: {
+        connect: { id: book.id },
+      },
+    };
     const result = await dbInsertBookStatus(bookStatus);
     return result;
+  } else {
+    console.log(
+      "This user has already introduced a status for this Book."
+    );
   }
-  console.log("This user has already introduced a status for this Book.");
 };
 
 export const actionGetBookStatusById = async (bookStatusId: string) => {

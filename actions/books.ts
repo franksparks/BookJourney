@@ -2,6 +2,7 @@
 
 import {
   dbDeleteBook,
+  dbGetBookByGoogleId,
   dbGetBookById,
   dbGetBooksInList,
   dbInsertBook,
@@ -17,6 +18,11 @@ export const actionInsertBook = async (book: Prisma.BookCreateInput) => {
 
 export const actionGetBookById = async (id: string) => {
   const result = await dbGetBookById(id);
+  return result;
+};
+
+export const actionGetBookByGoogleId = async (id: string) => {
+  const result = await dbGetBookByGoogleId(id);
   return result;
 };
 

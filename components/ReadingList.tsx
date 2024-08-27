@@ -6,35 +6,36 @@ import { BookStatus } from "@/models/book-status";
 import { useEffect, useState } from "react";
 import BookCard from "./BookCard";
 
-const initialState: BookStatus[] = [];
-
-export default function UserLists() {
+export default function ReadingList() {
   const { dbUser } = useDbUser();
 
-  const [readingList, setLists] = useState(initialState);
+  const [readingList, setReadingList] = useState<BookStatus[]>([]);
 
   useEffect(() => {
-    getLists();
+    getReadingList();
   }, [dbUser]);
 
-  const getLists = async () => {
+  const getReadingList = async () => {
     if (dbUser != null) {
-      const userLists = await actionGetBooksByUserIdAndReadingStatus(
+      const userReadingList = await actionGetBooksByUserIdAndReadingStatus(
         dbUser.id,
         "READING"
       );
-      setLists(userLists);
+      setReadingList(userReadingList);
     }
   };
 
   const handleStatusChange = async () => {
-    await getLists(); // Refresh the list
+    await getReadingList(); // Refresh the list
   };
 
   //TODO: Add a loading for this component
   return (
-    <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-sky-300 text-slate-100 h-full overflow-y-auto">
-      <h1 className="font-light text-sky-700 text-center">Currently Reading</h1>
+    <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-sky-600 text-slate-100 h-full overflow-y-auto">
+      <h1 className="font-light text-sky-200 text-center">
+        Currently Reading
+      </h1>
+
       <div className="flex flex-col items-center">
         {dbUser &&
           readingList.map((element: BookStatus, index) => (
@@ -48,7 +49,9 @@ export default function UserLists() {
         {dbUser && readingList.length == 0 && (
           <div>Start reading to see something here!</div>
         )}
-        {!dbUser && <div>Login to see the books you are reading here!</div>}
+        {!dbUser && (
+          <div>Login to see the books you are reading here!</div>
+        )}
       </div>
     </div>
   );

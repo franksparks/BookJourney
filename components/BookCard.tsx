@@ -1,9 +1,29 @@
 import { actionUpdateBookStatus } from "@/actions/book-status";
+import {
+  actionGetLatestReadingActivityByBookIdAndUserId,
+  actionInsertReadingActivityPage,
+  actionInsertReadingActivityPercentage,
+} from "@/actions/reading-activity";
+import { useDbUser } from "@/app/context/db-user-context";
+import { validateProgressInput } from "@/lib/reading-progress-validator";
 import { Book } from "@/models/book";
 import { BookStatus } from "@/models/book-status";
-import { ReadStatus } from "@prisma/client";
+import { Tooltip } from "@mui/material";
+import { ReadingActivity, ReadStatus } from "@prisma/client";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import BookNavigationWrapper from "./BookNavigationWrapper";
 import { Button } from "./ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
+import { Input } from "./ui/input";
 
 type bookCardProps = {
   book: Book;
@@ -14,43 +34,197 @@ type bookCardProps = {
 export default function BookCard({
   book,
   status,
-  onStatusChange
+  onStatusChange,
 }: bookCardProps) {
+  const { dbUser } = useDbUser();
+  const [readingProgress, setReadingProgress] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [currentReadingActivity, setCurrentReadingActivity] =
+    useState<ReadingActivity | null>(null);
+  const [progressType, setProgressType] = useState("pages");
+
+  const setReadingActivity = async () => {
+    const activity: ReadingActivity =
+      await actionGetLatestReadingActivityByBookIdAndUserId(
+        book.id!,
+        dbUser.id
+      );
+    setCurrentReadingActivity(activity);
+  };
+  useEffect(() => {
+    setReadingActivity();
+  }, [book.id, dbUser.id]);
+
   const handleDoneClick = async () => {
     await actionUpdateBookStatus(status.id, ReadStatus.READ);
+    await actionInsertReadingActivityPercentage(100, book.id!, dbUser.id);
     onStatusChange();
   };
 
+  const handleAddReadingActivity = async () => {
+    if (!validateProgressInput(book, progressType, readingProgress)) {
+      return;
+    }
+    if (progressType === "pages") {
+      await actionInsertReadingActivityPage(
+        readingProgress,
+        book.id!,
+        dbUser.id
+      );
+    } else {
+      await actionInsertReadingActivityPercentage(
+        Number(readingProgress),
+        book.id!,
+        dbUser.id
+      );
+    }
+    setReadingActivity();
+
+    setIsDialogOpen(false);
+  };
+
   return (
-    <div className="flex flex-row m-4 w-96 hover:scale-105 shadow border border-white shadow-white rounded-lg hover:bg-slate-50 hover:text-sky-700 bg-sky-600 cursor-pointer transition duration-500 ">
+    <div className="flex flex-row m-4 h-36 w-3/4 hover:scale-105 shadow-lg shadow-sky-800 rounded-lg text-sky-800 bg-sky-100 hover:bg-sky-50 cursor-pointer transition duration-500">
       {book.smallCover && (
         <div className="flex justify-center items-center p-4">
-          <Image
-            className="shadow-md shadow-white rounded"
-            src={book.smallCover}
-            alt="cover"
-            width={60}
-            height={100}
-          />
+          <BookNavigationWrapper id={book.googleBooksId}>
+            <Image
+              className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000"
+              src={book.smallCover}
+              alt="cover"
+              width={60}
+              height={100}
+            />
+          </BookNavigationWrapper>
         </div>
       )}
 
-      <div className="flex flex-col justify-center p-4 flex-grow">
-        <p className="italic">{book.title}</p>
-        <p>
-          {book.authors && book.authors.length > 0
-            ? book.authors[0]
-            : "Author not available"}
-        </p>
+      <div className="flex flex-col justify-center gap-1 p-1 flex-grow w-1/2">
+        <Tooltip arrow title={book.title} placement="top">
+          <p className="italic line-clamp-2">{book.title}</p>
+        </Tooltip>
+        <Tooltip arrow title={book.authors[0]} placement="bottom">
+          <p className="text-slate-500">
+            {book.authors && book.authors.length > 0
+              ? book.authors[0]
+              : "Author not available"}
+          </p>
+        </Tooltip>
       </div>
 
-      <div className="flex justify-center items-center p-4">
-        <Button
-          onClick={handleDoneClick}
-          className="rounded-full border-orange-400 border-2"
-        >
-          Done
-        </Button>
+      {/*Mover este div*/}
+      <div className="flex flex-col *:justify-center items-center p-4">
+        <div>
+          {currentReadingActivity === undefined ||
+          currentReadingActivity === null ? (
+            <p>0/{book.pages}</p>
+          ) : currentReadingActivity.page === null ? (
+            <>
+              <p>{currentReadingActivity.percentage}%</p>
+              <div className="w-36 bg-gray-200 rounded-full h-4 border-2 border-gray-300">
+                <div
+                  className="bg-orange-500 h-3 rounded-full"
+                  style={{
+                    width: `${currentReadingActivity?.percentage || 0}%`,
+                  }}
+                ></div>
+              </div>
+            </>
+          ) : (
+            <>
+              <p>
+                {currentReadingActivity.page}/{book.pages} (
+                {(
+                  (currentReadingActivity.page / book.pages) *
+                  100
+                ).toFixed(1)}
+                %)
+              </p>
+              <div className="w-36 bg-gray-200 rounded-full h-4 border-2 border-gray-300">
+                <div
+                  className=" bg-orange-500 h-3 rounded-full"
+                  style={{
+                    width: `${
+                      (currentReadingActivity.page / book.pages) * 100
+                    }%`,
+                  }}
+                ></div>
+              </div>
+            </>
+          )}
+        </div>
+
+        <div className="flex flex-col justify-center items-center p-4">
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="rounded-full border-orange-400 border-2 hover:border-blue-600">
+                Update progress
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Update progress</DialogTitle>
+                <DialogDescription>
+                  Add reading activity for the book.
+                </DialogDescription>
+              </DialogHeader>
+              <div>
+                <div className="flex items-center gap-4">
+                  <input
+                    type="radio"
+                    id="pages"
+                    name="progressType"
+                    value="pages"
+                    checked={progressType === "pages"}
+                    onChange={() => setProgressType("pages")}
+                  />
+                  <label htmlFor="pages">Pages</label>
+
+                  <input
+                    type="radio"
+                    id="percentage"
+                    name="progressType"
+                    value="percentage"
+                    checked={progressType === "percentage"}
+                    onChange={() => setProgressType("percentage")}
+                  />
+                  <label htmlFor="percentage">Percentage</label>
+                </div>
+
+                <div className="items-center gap-4 mt-4">
+                  <p>
+                    Read{" "}
+                    {progressType === "pages" ? "pages" : "percentage"}:
+                  </p>
+                  <Input
+                    id="value"
+                    className="col-span-3"
+                    value={readingProgress}
+                    onChange={(e) => setReadingProgress(e.target.value)}
+                    step="any"
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button
+                  onClick={handleAddReadingActivity}
+                  className="rounded-full border-orange-400 border-2"
+                >
+                  Save activity
+                </Button>
+                <Button
+                  onClick={() => {
+                    handleDoneClick();
+                    setIsDialogOpen(false);
+                  }}
+                  className="rounded-full border-orange-400 border-2"
+                >
+                  Book Finished!
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
     </div>
   );

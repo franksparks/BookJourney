@@ -22,15 +22,15 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <DbUserProvider>
-      <BooksSearchProvider>
-        <html lang="en">
-        <body className=" h-screen flex flex-col bg-neutral-300">
-            <Header />
-            <main className="flex-grow">{children}</main>
-            <Footer/>
-          </body>
-        </html>
-      </BooksSearchProvider>
+        <BooksSearchProvider>
+          <html lang="en">
+            <body className=" h-screen flex flex-col bg-neutral-300">
+              <Header />
+              <main className="flex-grow">{children}</main>
+              <Footer />
+            </body>
+          </html>
+        </BooksSearchProvider>
       </DbUserProvider>
     </ClerkProvider>
   );
