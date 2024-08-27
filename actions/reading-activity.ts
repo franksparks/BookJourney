@@ -1,6 +1,7 @@
 "use server";
 
 import {
+  dbGetBooksReadByUserIdAndYear,
   dbGetLatestReadingActivityByBookIdAndUserId,
   dbGetReadingActivityByBookIdAndUserId,
   dbGetReadingActivityByUserId,
@@ -69,5 +70,13 @@ export const actionGetLatestReadingActivityByBookIdAndUserId = async (
 
 export const actionGetReadingActivityByUserId = async (userId: string) => {
   const result = await dbGetReadingActivityByUserId(userId);
+  return result;
+};
+
+export const actionGetBooksReadByUserIdAndYear = async (
+  userId: string,
+  year: number
+) => {
+  const result = await dbGetBooksReadByUserIdAndYear(userId, year);
   return result;
 };
