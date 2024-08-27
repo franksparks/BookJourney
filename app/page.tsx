@@ -1,4 +1,4 @@
-import ReadingChallenge from "@/components/ReadingChallenge";
+import ReadingChallengeCard from "@/components/ReadingChallengeCard";
 import ReadingList from "@/components/ReadingList";
 import UserLists from "@/components/UserLists";
 
@@ -11,7 +11,7 @@ export default function Home() {
         </div>
         <div className="w-1/2">
           <UserLists />
-          <ReadingChallenge />
+          <ReadingChallengeCard />
         </div>
       </div>
     </main>

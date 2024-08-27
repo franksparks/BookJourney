@@ -6,10 +6,9 @@ import { useDbUser } from "@/app/context/db-user-context";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
+import { ReadingChallenge } from "@prisma/client";
 
-import { ReadingChallenge } from "@/models/reading-challenge";
-
-export default function ReadingChallenge() {
+export default function ReadingChallengeCard() {
   const { dbUser } = useDbUser();
 
   const year = new Date().getFullYear();
