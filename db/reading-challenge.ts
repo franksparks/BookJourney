@@ -11,3 +11,26 @@ export const dbInsertReadingChallenge = catchErrors(
     return result;
   }
 );
+
+export const dbGetReadingChallengeByUserIdAndYear = catchErrors(
+  async (year: number, userId: string) => {
+    const result = await db.readingChallenge.findFirst({
+      where: {
+        year,
+        userId,
+      },
+    });
+    return result;
+  }
+);
+
+export const dbGetReadingChallengeByUserId = catchErrors(
+  async (userId: string) => {
+    const result = await db.readingChallenge.findMany({
+      where: {
+        userId,
+      },
+    });
+    return result;
+  }
+);

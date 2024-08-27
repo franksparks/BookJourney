@@ -52,10 +52,7 @@ export const actionGetReadingActivityByBookIdAndUserId = async (
   bookId: string,
   userId: string
 ) => {
-  const result = await dbGetReadingActivityByBookIdAndUserId(
-    bookId,
-    userId
-  );
+  const result = await dbGetReadingActivityByBookIdAndUserId(bookId, userId);
   return result;
 };
 

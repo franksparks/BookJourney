@@ -1,6 +1,10 @@
 "use server";
 
-import { dbInsertReadingChallenge } from "@/db/reading-challenge";
+import {
+  dbGetReadingChallengeByUserId,
+  dbGetReadingChallengeByUserIdAndYear,
+  dbInsertReadingChallenge,
+} from "@/db/reading-challenge";
 import { Prisma } from "@prisma/client";
 
 const year: number = new Date().getFullYear();
@@ -18,5 +22,18 @@ export const actionInsertReadingChallenge = async (
     },
   };
   const result = await dbInsertReadingChallenge(readingChallenge);
+  return result;
+};
+
+export const actionGetReadingChallengeByUserIdAndYear = async (
+  year: number,
+  userId: string
+) => {
+  const result = await dbGetReadingChallengeByUserIdAndYear(year, userId);
+  return result;
+};
+
+export const actionGetReadingChallengeByUserId = async (userId: string) => {
+  const result = await dbGetReadingChallengeByUserId(userId);
   return result;
 };
