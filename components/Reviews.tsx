@@ -2,10 +2,8 @@
 
 import { actionGetUsernameFromClerk } from "@/actions/clerk-users";
 import { actionGetReviewsByBookId } from "@/actions/reviews";
-import { useDbUser } from "@/app/context/db-user-context";
 import { Book } from "@/models/book";
 import { Review } from "@/models/review";
-import { User } from "@/models/user";
 import { useUser } from "@clerk/nextjs";
 import { useCallback, useEffect, useState } from "react";
 
@@ -41,8 +39,18 @@ export default function Reviews({ bookInDb, bookReview }: ReviewsProps) {
 
   return (
     <>
-    <h2 className="text-xl font-bold">{'My Review'}</h2>
-      {bookReview !== null && <div>{''}</div>}
+      {bookReview !== null && (
+        <>
+          <div className="font-bold mb-4">{"My Review"}</div>
+          <div className="flex">
+            <div className="basis-1/6">
+              <img src={user?.imageUrl} className={"w-8 h-8 mb-2 rounded-full"} />
+              <div>{user?.username}</div>
+            </div>
+            <div>{bookReview.comment}</div>
+          </div>
+        </>
+      )}
     </>
   );
 }

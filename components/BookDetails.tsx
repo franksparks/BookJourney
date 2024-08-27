@@ -218,7 +218,6 @@ export default function BookDetails({ book }: BookDetailsProps) {
           )}
         </div>
         <>
-            <div className="mt-8 font-bold">{"Reviews"}</div>
             <Separator className="my-4" />
           </>
           <Reviews bookInDb={bookInDb} bookReview={bookReview}/>
