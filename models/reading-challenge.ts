@@ -1,6 +1,6 @@
 import { User } from "./user";
 
-export type ReadingActivity = {
+export type ReadingChallenge = {
   id: string;
   goal: number;
   year: number;

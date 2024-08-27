@@ -3,10 +3,11 @@
 import { actionGetBooksReadByUserIdAndYear } from "@/actions/reading-activity";
 import { actionGetReadingChallengeByUserIdAndYear } from "@/actions/reading-challenge";
 import { useDbUser } from "@/app/context/db-user-context";
-import { ReadingChallenge } from "@prisma/client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
+
+import { ReadingChallenge } from "@/models/reading-challenge";
 
 export default function ReadingChallenge() {
   const { dbUser } = useDbUser();
