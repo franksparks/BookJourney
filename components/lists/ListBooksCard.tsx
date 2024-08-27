@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { actionGetBookListsByListId } from "@/actions/book-list";
+import React from "react";
 import { List } from "@/models/list";
 import { Book } from "@/models/book";
+import BookCardAdvanced from "../BookCardAdvanced";
 
 interface BooksListProps {
     list: List | null;
@@ -14,12 +14,12 @@ export default function ListBooksCard({ list, books }: BooksListProps) {
 
   return (
     <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-sky-300 text-slate-100 h-full overflow-y-auto">
-        <h1 className="font-light text-sky-700 text-center">Books in <i>{list?.name}</i></h1>
+        <h1 className="font-light text-sky-700 text-center"><strong>{list?.books.length}</strong> Books in <i>{list?.name}</i></h1>
       <ul>
         {books.length > 0 ? (
-          books.map((book) => (
+          books.map((book, index) => (
             <li key={book.id} className="p-2 border-b">
-              {book.title} by {book.authors?.join(', ')}
+              <BookCardAdvanced book={book} />
             </li>
           ))
         ) : (

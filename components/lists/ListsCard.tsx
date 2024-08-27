@@ -1,8 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import { List } from "@/models/list";
-import { PlusIcon, Cross2Icon } from "@radix-ui/react-icons";
+import {
+  PlusIcon,
+  EraserIcon,
+  Pencil2Icon,
+  Cross2Icon,
+  CheckIcon,
+} from "@radix-ui/react-icons";
 import {
   actionGetListsByUserId,
   actionInsertList,
@@ -16,8 +22,14 @@ import { Prisma } from "@prisma/client";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import Modal from "@/components/ui/confirmation-modal";
 import { Book } from "@/models/book";
+import { ReadStatus } from "@prisma/client";
+import StyledButton from "@/components/lists/StyledButton";
 
-export default function ListsCard({ setBooks, selectedList, setSelectedList }: any) {
+export default function ListsCard({
+  setBooks,
+  selectedList,
+  setSelectedList,
+}: any) {
   const { dbUser } = useDbUser();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -46,53 +58,55 @@ export default function ListsCard({ setBooks, selectedList, setSelectedList }: a
     const statusResult = await actionGetBookStatusByUserId(dbUser!.id);
     const allLists: List[] = [];
     for (const bookStatus of statusResult) {
-        const found = allLists.find((list) => list.name === bookStatus.status);
-        if (found) {
-            found.books.push({
-                id: `${found.id}-${bookStatus.bookId}`,
-                book: bookStatus.book,
-                bookId: bookStatus.bookId ?? '',
-                listId: found.id,
-            });
-        } else {
-            allLists.push({
-                id: bookStatus.status,
-                name: bookStatus.status,
-                createdAt: new Date(),
-                userId: dbUser!.id,
-                books: [{
-                    id: `${bookStatus.status}-${bookStatus.bookId}`,
-                    book: bookStatus.book,
-                    bookId: bookStatus.bookId ?? '',
-                    listId: bookStatus.status,
-                }]
-            });
-        }
+      const found = allLists.find((list) => list.name === bookStatus.status);
+      if (found) {
+        found.books.push({
+          id: `${found.id}-${bookStatus.bookId}`,
+          book: bookStatus.book,
+          bookId: bookStatus.bookId ?? "",
+          listId: found.id,
+        });
+      } else {
+        allLists.push({
+          id: bookStatus.status,
+          name: bookStatus.status,
+          createdAt: new Date(),
+          userId: dbUser!.id,
+          books: [
+            {
+              id: `${bookStatus.status}-${bookStatus.bookId}`,
+              book: bookStatus.book,
+              bookId: bookStatus.bookId ?? "",
+              listId: bookStatus.status,
+            },
+          ],
+        });
+      }
     }
     allLists.push(...(listsResult ?? []));
-    if (setSelectedList) handlePreselectedList(allLists)
-    setLists(allLists)
+    if (setSelectedList) handlePreselectedList(allLists);
+    setLists(allLists);
   };
 
   const handlePreselectedList = (allLists: List[]) => {
     if (listId) {
-        const foundSelected = allLists.find((list) => list.id === listId);
-        if (foundSelected) {
-            setSelectedList(foundSelected);
-            handleSetSelectedBooks(foundSelected);
-        }
+      const foundSelected = allLists.find((list) => list.id === listId);
+      if (foundSelected) {
+        setSelectedList(foundSelected);
+        handleSetSelectedBooks(foundSelected);
+      }
     } else {
-        if (allLists.length > 0) {
-            setSelectedList(allLists[0]);
-            handleSetSelectedBooks(allLists[0]);
-        }
+      if (allLists.length > 0) {
+        setSelectedList(allLists[0]);
+        handleSetSelectedBooks(allLists[0]);
+      }
     }
-  }
+  };
 
   const handleSetSelectedBooks = (list: List) => {
     const newBooks: Book[] = [];
     for (const bookList of list.books ?? []) {
-        newBooks.push(bookList.book);
+      newBooks.push(bookList.book);
     }
     setBooks(newBooks);
   };
@@ -177,6 +191,22 @@ export default function ListsCard({ setBooks, selectedList, setSelectedList }: a
     setShowInput(false);
   };
 
+  const handleEditListName = (e: ChangeEvent<HTMLInputElement>) => {
+    if (editingListName.length === 50 && e.target.value.length > 50) {
+      setErrorMessage("List name must be less than 50 characters");
+      return;
+    }
+    setEditingListName(e.target.value);
+  };
+
+  const handleEditNewListName = (e: ChangeEvent<HTMLInputElement>) => {
+    if (newListName.length === 50) {
+      setErrorMessage("List name must be less than 50 characters");
+      return;
+    }
+    setNewListName(e.target.value);
+  };
+
   return (
     <div className="p-4 border shadow-md w-full rounded-3xl bg-orange-500 bg-opacity-50">
       <h1 className="font-light text-orange-700 text-center mt-4">My Lists</h1>
@@ -197,20 +227,22 @@ export default function ListsCard({ setBooks, selectedList, setSelectedList }: a
                         <input
                           type="text"
                           value={editingListName}
-                          onChange={(e) => setEditingListName(e.target.value)}
+                          onChange={handleEditListName}
                           className="p-2 border rounded w-full"
                         />
                         <button
+                          aria-label="close"
+                          className="p-2 bg-green-500 text-white rounded-full hover:bg-green-800 transition-colors duration-300 ml-3 mr-3"
                           onClick={handleSaveEdit}
-                          className="font-bold text-green-600 hover:text-green-800 transition-colors duration-300 ml-2"
                         >
-                          Save
+                          <CheckIcon className="h-3 w-3" />
                         </button>
                         <button
+                          aria-label="close"
+                          className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-300"
                           onClick={handleCancelEdit}
-                          className="font-bold text-red-600 hover:text-red-800 transition-colors duration-300 ml-2"
                         >
-                          Cancel
+                          <Cross2Icon className="h-3 w-3" />
                         </button>
                       </div>
                       {errorMessage && (
@@ -221,72 +253,76 @@ export default function ListsCard({ setBooks, selectedList, setSelectedList }: a
                     <>
                       <li
                         onClick={() => handleSelectList(list)}
-                        className={`p-2 cursor-pointer transition-colors duration-300 hover:bg-gray-200 ${
+                        className={`transition transform hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none hover:cursor-pointer ${
                           selectedList?.id === list.id ? "font-bold" : ""
                         }`}
                       >
                         {list.name} - ({list.books.length})
                       </li>
-                      <button
-                        className="font-bold text-blue-600 hover:text-blue-800 transition-colors duration-300 ml-auto"
-                        onClick={() => handleEditList(list)}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="font-bold text-red-600 hover:text-red-800 transition-colors duration-300 ml-2"
-                        onClick={() => handleDeleteList(list.id)}
-                      >
-                        Delete
-                      </button>
+                      {!Object.values(ReadStatus).includes(
+                        list.name as ReadStatus
+                      ) && (
+                        <button
+                          aria-label="close"
+                          className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-800 transition-colors duration-300 ml-auto mr-3"
+                          onClick={() => handleEditList(list)}
+                        >
+                          <Pencil2Icon className="h-3 w-3" />
+                        </button>
+                      )}
+                      {!Object.values(ReadStatus).includes(
+                        list.name as ReadStatus
+                      ) && (
+                        <button
+                          aria-label="close"
+                          className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-300"
+                          onClick={() => handleDeleteList(list.id)}
+                        >
+                          <EraserIcon className="h-3 w-3" />
+                        </button>
+                      )}
                     </>
                   )}
                 </div>
               ))}
             {lists.length === 0 && <p>No lists found</p>}
           </ul>
-          {showInput && (
-            <>
-              <div className="mb-4 flex items-center space-x-2">
-                <input
-                  type="text"
-                  value={newListName}
-                  onChange={(e) => setNewListName(e.target.value)}
-                  placeholder="Enter list name"
-                  className="p-2 border rounded w-full"
-                />
-                <button
-                  onClick={handleCreateList}
-                  className="bg-orange-500 text-white rounded hover:bg-blue-600 transition-colors duration-300 w-52 pt-2 pb-2"
-                >
-                  Create List
-                </button>
-              </div>
-              {errorMessage && (
-                <label className="text-red-600">{errorMessage}</label>
-              )}
-            </>
-          )}
-          <div className="flex justify-end">
+          <div className="flex">
             {showInput ? (
-              <button
-                aria-label="close"
-                className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-300"
-                onClick={handleCloseInput}
-              >
-                <Cross2Icon className="h-5 w-5" />
-              </button>
-            ) : (
-              pathname.includes("/lists") && (
-                <button
-                  aria-label="add"
-                  className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-300"
-                  onClick={handleAddList}
-                >
-                  <PlusIcon className="h-5 w-5" />
-                </button>
-              )
-            )}
+              <>
+                <div className="mb-4 flex items-center w-full">
+                  <input
+                    type="text"
+                    value={newListName}
+                    onChange={handleEditNewListName}
+                    placeholder="Enter list name"
+                    className="p-2 border rounded max-w-80"
+                  />
+                  <button
+                    aria-label="close"
+                    className="p-2 bg-green-500 text-white rounded-full hover:bg-green-800 transition-colors duration-300 ml-auto mr-3"
+                    onClick={handleCreateList}
+                  >
+                    <CheckIcon className="h-3 w-3" />
+                  </button>
+                  <button
+                    aria-label="close"
+                    className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-300"
+                    onClick={handleCloseInput}
+                  >
+                    <Cross2Icon className="h-3 w-3" />
+                  </button>
+                </div>
+                {errorMessage && (
+                  <label className="text-red-600">{errorMessage}</label>
+                )}
+              </>
+            ) : 
+              <div className="ml-auto">
+              {pathname.includes("/lists") && 
+                <StyledButton onClick={handleAddList} />
+              }
+            </div>}
           </div>
         </>
       )}
