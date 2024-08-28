@@ -23,11 +23,13 @@ import {
 import { Input } from "./ui/input";
 
 interface ReadingChallengeCardProps {
-  readBooksCount: number;
+  bookRead: boolean;
+  onReset: () => void;
 }
 
 export default function ReadingChallengeCard({
-  readBooksCount,
+  bookRead,
+  onReset,
 }: ReadingChallengeCardProps) {
   const { dbUser } = useDbUser();
 
@@ -36,13 +38,12 @@ export default function ReadingChallengeCard({
   const [readBooks, setReadBooks] = useState<ReadingChallenge[]>([]);
   const [currentChallenge, setCurrentChallenge] = useState<ReadingChallenge>();
   const [newGoal, setNewGoal] = useState(0);
-  console.log("------");
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     getReadBooks();
-  }, [dbUser, readBooksCount]);
+  }, [dbUser, bookRead]);
 
   useEffect(() => {
     getCurrentChallenge();
@@ -55,6 +56,7 @@ export default function ReadingChallengeCard({
         year
       );
       setReadBooks(booksRead);
+      onReset();
     }
   };
 
