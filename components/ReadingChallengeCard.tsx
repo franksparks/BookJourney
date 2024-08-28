@@ -22,7 +22,13 @@ import {
 } from "./ui/dialog";
 import { Input } from "./ui/input";
 
-export default function ReadingChallengeCard() {
+interface ReadingChallengeCardProps {
+  readBooksCount: number;
+}
+
+export default function ReadingChallengeCard({
+  readBooksCount,
+}: ReadingChallengeCardProps) {
   const { dbUser } = useDbUser();
 
   const year = new Date().getFullYear();
@@ -36,7 +42,7 @@ export default function ReadingChallengeCard() {
 
   useEffect(() => {
     getReadBooks();
-  }, [dbUser]);
+  }, [dbUser, readBooksCount]);
 
   useEffect(() => {
     getCurrentChallenge();
