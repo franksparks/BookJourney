@@ -99,7 +99,9 @@ export default function ReadingChallengeCard() {
             width={100}
             height={120}
           />
-          {currentChallenge === null || currentChallenge === undefined ? (
+          {currentChallenge === null ||
+          currentChallenge === undefined ||
+          dbUser === null ? (
             <div className="ml-10">
               <p className="mb-2">No reading challenge set yet.</p>
 
