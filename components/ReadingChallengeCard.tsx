@@ -4,6 +4,7 @@ import { actionGetBooksReadByUserIdAndYear } from "@/actions/reading-activity";
 import {
   actionGetReadingChallengeByUserIdAndYear,
   actionInsertReadingChallenge,
+  actionUpdateChallenge,
 } from "@/actions/reading-challenge";
 import { useDbUser } from "@/app/context/db-user-context";
 import Image from "next/image";
@@ -27,8 +28,9 @@ export default function ReadingChallengeCard() {
   const year = new Date().getFullYear();
 
   const [readBooks, setReadBooks] = useState<ReadingChallenge[]>([]);
-  const [challengeGoal, setChallengeGoal] = useState(0);
-  const [readingChallenge, setReadingChallenge] = useState(0);
+  const [currentChallenge, setCurrentChallenge] = useState<ReadingChallenge>();
+  const [newGoal, setNewGoal] = useState(0);
+  console.log("------");
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -37,7 +39,7 @@ export default function ReadingChallengeCard() {
   }, [dbUser]);
 
   useEffect(() => {
-    getChallengeGoal();
+    getCurrentChallenge();
   }, [dbUser]);
 
   const getReadBooks = async () => {
@@ -50,25 +52,37 @@ export default function ReadingChallengeCard() {
     }
   };
 
-  const getChallengeGoal = async () => {
+  const getCurrentChallenge = async () => {
     if (dbUser != null) {
       const challenge: ReadingChallenge =
         await actionGetReadingChallengeByUserIdAndYear(year, dbUser.id);
 
       if (challenge != null) {
-        setChallengeGoal(challenge.goal);
+        setCurrentChallenge(challenge);
       }
     }
   };
 
   const handleSetReadingChallenge = async () => {
-    if (readingChallenge <= 0) {
+    if (newGoal <= 0) {
       alert("Please enter a valid number.");
       return;
     }
-    await actionInsertReadingChallenge(readingChallenge, year, dbUser.id);
-    setChallengeGoal(readingChallenge);
+    const res = await actionInsertReadingChallenge(newGoal, year, dbUser.id);
+    setCurrentChallenge(res);
     setIsDialogOpen(false);
+  };
+
+  const handleEditReadingChallenge = async () => {
+    if (newGoal <= 0) {
+      alert("Please enter a valid number.");
+      return;
+    }
+    if (currentChallenge) {
+      const res = await actionUpdateChallenge(currentChallenge.id, newGoal);
+      setCurrentChallenge(res);
+      setIsDialogOpen(false);
+    }
   };
 
   return (
@@ -85,7 +99,7 @@ export default function ReadingChallengeCard() {
             width={100}
             height={120}
           />
-          {challengeGoal === 0 ? (
+          {currentChallenge === null || currentChallenge === undefined ? (
             <div className="ml-10">
               <p className="mb-2">No reading challenge set yet.</p>
 
@@ -108,11 +122,11 @@ export default function ReadingChallengeCard() {
                         id="value"
                         className="col-span-3"
                         type="number"
-                        value={readingChallenge === 0 ? "" : readingChallenge} // Permite mostrar una cadena vacía
+                        value={newGoal === 0 ? "" : newGoal} // Permite mostrar una cadena vacía
                         onChange={(e) => {
                           const value = e.target.value;
                           if (value === "" || Number(value) > 0) {
-                            setReadingChallenge(Number(value));
+                            setNewGoal(Number(value));
                           }
                         }}
                         step="1"
@@ -145,23 +159,72 @@ export default function ReadingChallengeCard() {
                 completed
               </p>
               <p className="mb-2">
-                {readBooks.length}/{challengeGoal} (
-                {((readBooks.length / challengeGoal) * 100).toFixed(1)}%)
+                {readBooks.length}/{currentChallenge.goal} (
+                {((readBooks.length / currentChallenge.goal) * 100).toFixed(1)}
+                %)
               </p>
               <div className="w-36 bg-gray-200 rounded-full h-4 border-2 border-gray-300 mb-2">
                 <div
                   className="bg-blue-500 h-3 rounded-full"
                   style={{
-                    width: `${(readBooks.length / challengeGoal) * 100}%`,
+                    width: `${
+                      (readBooks.length / currentChallenge.goal) * 100
+                    }%`,
                   }}
                 ></div>
               </div>
               <div className="flex flex-row gap-2">
-                <Button className="rounded-full border-orange-400 border-2 hover:border-blue-600">
-                  Edit challenge
-                </Button>
+                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button className="rounded-full border-orange-400 border-2 hover:border-blue-600">
+                      Edit challenge
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Reading challenge!</DialogTitle>
+                      <DialogDescription>
+                        Edit your goal for this year
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div>
+                      <div className="items-center gap-4 mt-4">
+                        <Input
+                          id="value"
+                          className="col-span-3"
+                          type="number"
+                          value={newGoal === 0 ? "" : newGoal} // Permite mostrar una cadena vacía
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            if (value === "" || Number(value) > 0) {
+                              setNewGoal(Number(value));
+                            }
+                          }}
+                          step="1"
+                        />
+                      </div>
+                    </div>
+                    <DialogFooter>
+                      <Button
+                        onClick={handleEditReadingChallenge}
+                        className="rounded-full border-orange-400 border-2"
+                      >
+                        Set reading challenge
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          setIsDialogOpen(false);
+                        }}
+                        className="rounded-full border-orange-400 border-2"
+                      >
+                        Cancel
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+
                 {/*Todo: Redirect to a list of the read books this year*/}
-                <Button className="rounded-full border-orange-400 border-2 hover:border-blue-600">
+                <Button className="rounded-full border-orange-400 border-2  cursor-not-allowed">
                   View challenge
                 </Button>
               </div>
