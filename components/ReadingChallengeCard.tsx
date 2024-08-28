@@ -119,13 +119,6 @@ export default function ReadingChallengeCard({
           {year} Reading Challenge
         </h1>
         <div className="flex flex-row items-center">
-          <Image
-            className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000"
-            src={"/default_cover.jpg"}
-            alt="cover"
-            width={100}
-            height={120}
-          />
           {currentChallenge === null ||
           currentChallenge === undefined ||
           dbUser === null ? (
