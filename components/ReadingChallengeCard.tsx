@@ -173,11 +173,16 @@ export default function ReadingChallengeCard({
               </p>
               <div className="w-36 bg-gray-200 rounded-full h-4 border-2 border-gray-300 mb-2">
                 <div
-                  className="bg-blue-500 h-3 rounded-full"
+                  className={`h-3 rounded-full transition-all duration-300 ${
+                    readBooks.length >= currentChallenge.goal
+                      ? "bg-green-500"
+                      : "bg-blue-500"
+                  }`}
                   style={{
-                    width: `${
-                      (readBooks.length / currentChallenge.goal) * 100
-                    }%`,
+                    width: `${Math.min(
+                      (readBooks.length / currentChallenge.goal) * 100,
+                      100
+                    )}%`,
                   }}
                 ></div>
               </div>
