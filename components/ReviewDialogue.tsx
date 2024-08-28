@@ -50,7 +50,8 @@ export default function ReviewDialogue({
       setBookReview(review);
       setCommentBookReview(review.comment);
     } else {
-      await actionUpdateReview(bookReview.id!, commentBookReview);
+      const review = await actionUpdateReview(bookReview.id!, commentBookReview);
+      setBookReview(review);
     }
   }, [commentBookReview]);
 
