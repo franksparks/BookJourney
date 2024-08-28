@@ -44,3 +44,23 @@ export const dbUpdateReadingChallenge = catchErrors(
     return result;
   }
 );
+
+export const dbMarkChallengeAsCelebrated = catchErrors(async (id: string) => {
+  const updatedChallenge = await db.readingChallenge.update({
+    where: { id },
+    data: { hasCelebrated: true },
+  });
+
+  return updatedChallenge;
+});
+
+export const dbMarkChallengeAsNotCelebrated = catchErrors(
+  async (id: string) => {
+    const updatedChallenge = await db.readingChallenge.update({
+      where: { id },
+      data: { hasCelebrated: false },
+    });
+
+    return updatedChallenge;
+  }
+);

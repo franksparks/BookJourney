@@ -4,13 +4,16 @@ import { actionGetBooksReadByUserIdAndYear } from "@/actions/reading-activity";
 import {
   actionGetReadingChallengeByUserIdAndYear,
   actionInsertReadingChallenge,
+  actionMarkChallengeAsCelebrated,
+  actionMarkChallengeAsNotCelebrated,
   actionUpdateChallenge,
 } from "@/actions/reading-challenge";
 import { useDbUser } from "@/app/context/db-user-context";
+import { ReadingChallenge } from "@prisma/client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import Confetti from "react-confetti";
 import { Button } from "./ui/button";
-import { ReadingChallenge } from "@prisma/client";
 import {
   Dialog,
   DialogContent,
@@ -40,6 +43,7 @@ export default function ReadingChallengeCard({
   const [newGoal, setNewGoal] = useState(0);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
     getReadBooks();
@@ -48,6 +52,18 @@ export default function ReadingChallengeCard({
   useEffect(() => {
     getCurrentChallenge();
   }, [dbUser]);
+
+  useEffect(() => {
+    if (
+      currentChallenge &&
+      currentChallenge.hasCelebrated == false &&
+      readBooks.length >= currentChallenge.goal
+    ) {
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 10000);
+      actionMarkChallengeAsCelebrated(currentChallenge.id);
+    }
+  }, [readBooks.length, currentChallenge]);
 
   const getReadBooks = async () => {
     if (dbUser != null) {
@@ -89,12 +105,15 @@ export default function ReadingChallengeCard({
     if (currentChallenge) {
       const res = await actionUpdateChallenge(currentChallenge.id, newGoal);
       setCurrentChallenge(res);
+      actionMarkChallengeAsNotCelebrated(currentChallenge.id);
       setIsDialogOpen(false);
     }
   };
 
   return (
     <>
+      {showConfetti && <Confetti />}
+
       <div className="flex flex-col items-center rounded-3xl shadow-xl shadow-orange-200 p-8 bg-orange-500 text-orange-100 mt-10">
         <h1 className="font-light text-orange-100 text-center mb-2">
           {year} Reading Challenge

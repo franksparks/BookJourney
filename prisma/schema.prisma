@@ -101,12 +101,13 @@ model ReadingActivity {
 }
 
 model ReadingChallenge {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  goal      Int
-  year      Int
-  createdAt DateTime @default(now())
-  userId    String   @db.ObjectId
-  user      User     @relation(fields: [userId], references: [id])
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  goal          Int
+  year          Int
+  hasCelebrated Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  userId        String   @db.ObjectId
+  user          User     @relation(fields: [userId], references: [id])
 }
 
 enum RatingValue {

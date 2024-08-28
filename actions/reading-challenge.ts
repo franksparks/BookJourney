@@ -4,6 +4,8 @@ import {
   dbGetReadingChallengeByUserId,
   dbGetReadingChallengeByUserIdAndYear,
   dbInsertReadingChallenge,
+  dbMarkChallengeAsCelebrated,
+  dbMarkChallengeAsNotCelebrated,
   dbUpdateReadingChallenge,
 } from "@/db/reading-challenge";
 import { Prisma } from "@prisma/client";
@@ -44,5 +46,17 @@ export const actionUpdateChallenge = async (
   goal: number
 ) => {
   const result = await dbUpdateReadingChallenge(challengeId, goal);
+  return result;
+};
+
+export const actionMarkChallengeAsCelebrated = async (challengeId: string) => {
+  const result = await dbMarkChallengeAsCelebrated(challengeId);
+  return result;
+};
+
+export const actionMarkChallengeAsNotCelebrated = async (
+  challengeId: string
+) => {
+  const result = await dbMarkChallengeAsNotCelebrated(challengeId);
   return result;
 };
