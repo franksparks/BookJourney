@@ -10,3 +10,10 @@ export async function actionGetUsernameFromClerk(clerkId: string) {
   return username;
 }
 
+export async function actionGetAvatarFromClerk(clerkId: string) {
+  const client = clerkClient();
+  const user = await client.users.getUserList({ userId: [clerkId] });
+  const imageUrl = user.data[0].imageUrl;
+
+  return imageUrl;
+}
