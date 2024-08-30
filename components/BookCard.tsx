@@ -24,6 +24,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Input } from "./ui/input";
+import { useToast } from "./ui/use-toast";
 
 type bookCardProps = {
   book: Book;
@@ -42,6 +43,7 @@ export default function BookCard({
   const [currentReadingActivity, setCurrentReadingActivity] =
     useState<ReadingActivity | null>(null);
   const [progressType, setProgressType] = useState("pages");
+  const { toast } = useToast();
 
   const setReadingActivity = async () => {
     const activity: ReadingActivity =
@@ -59,6 +61,11 @@ export default function BookCard({
     await actionUpdateBookStatus(status.id, ReadStatus.READ);
     await actionInsertReadingActivityPercentage(100, book.id!, dbUser.id);
     onStatusChange();
+    toast({
+      title: "Book read! Well done!",
+      className: "bg-orange-500 text-white",
+      duration: 5000,
+    });
   };
 
   const handleAddReadingActivity = async () => {
@@ -81,6 +88,12 @@ export default function BookCard({
     setReadingActivity();
 
     setIsDialogOpen(false);
+
+    toast({
+      title: "Reading activity stored correctly. ",
+      className: "bg-orange-500 text-white",
+      duration: 5000,
+    });
   };
 
   return (
