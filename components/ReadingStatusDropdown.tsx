@@ -20,6 +20,7 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
+import { Skeleton } from "./ui/skeleton";
 import { useToast } from "./ui/use-toast";
 
 const menuItems = [
@@ -39,6 +40,7 @@ export default function ReadingStatusDropwdown({
 }: ReadingStatusDropwdownProps) {
   const { dbUser } = useDbUser();
   const [currentStatus, setStatus] = useState<BookStatus | null>(null);
+  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -47,6 +49,7 @@ export default function ReadingStatusDropwdown({
 
   const getStatus = async () => {
     //Check if the book is on DB
+    setLoading(true);
     const dbBook = await actionGetBookByGoogleId(book.googleBooksId);
 
     if (dbUser != null && dbBook != null) {
@@ -59,6 +62,7 @@ export default function ReadingStatusDropwdown({
     } else {
       setStatus(null);
     }
+    setLoading(false);
   };
 
   const handleDropdownClick = async (status: ReadStatus) => {
@@ -129,10 +133,13 @@ export default function ReadingStatusDropwdown({
       );
     }
   };
+  if (loading) {
+    return <Skeleton className="h-10 w-1/2" />;
+  }
 
   return (
     <>
-      <div>
+      <div className="w-full">
         <DropdownMenu>
           <Button
             disabled={!logged}
