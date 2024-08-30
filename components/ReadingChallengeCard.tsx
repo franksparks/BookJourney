@@ -10,7 +10,6 @@ import {
 } from "@/actions/reading-challenge";
 import { useDbUser } from "@/app/context/db-user-context";
 import { ReadingChallenge } from "@prisma/client";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import Confetti from "react-confetti";
 import { Button } from "./ui/button";
@@ -39,7 +38,8 @@ export default function ReadingChallengeCard({
   const year = new Date().getFullYear();
 
   const [readBooks, setReadBooks] = useState<ReadingChallenge[]>([]);
-  const [currentChallenge, setCurrentChallenge] = useState<ReadingChallenge>();
+  const [currentChallenge, setCurrentChallenge] =
+    useState<ReadingChallenge>();
   const [newGoal, setNewGoal] = useState(0);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -92,7 +92,11 @@ export default function ReadingChallengeCard({
       alert("Please enter a valid number.");
       return;
     }
-    const res = await actionInsertReadingChallenge(newGoal, year, dbUser.id);
+    const res = await actionInsertReadingChallenge(
+      newGoal,
+      year,
+      dbUser.id
+    );
     setCurrentChallenge(res);
     setIsDialogOpen(false);
   };
@@ -103,7 +107,10 @@ export default function ReadingChallengeCard({
       return;
     }
     if (currentChallenge) {
-      const res = await actionUpdateChallenge(currentChallenge.id, newGoal);
+      const res = await actionUpdateChallenge(
+        currentChallenge.id,
+        newGoal
+      );
       setCurrentChallenge(res);
       actionMarkChallengeAsNotCelebrated(currentChallenge.id);
       setIsDialogOpen(false);
@@ -182,7 +189,10 @@ export default function ReadingChallengeCard({
               </p>
               <p className="mb-2">
                 {readBooks.length}/{currentChallenge.goal} (
-                {((readBooks.length / currentChallenge.goal) * 100).toFixed(1)}
+                {(
+                  (readBooks.length / currentChallenge.goal) *
+                  100
+                ).toFixed(1)}
                 %)
               </p>
               <div className="w-36 bg-gray-200 rounded-full h-4 border-2 border-gray-300 mb-2">
