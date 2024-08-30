@@ -7,6 +7,7 @@ import { Review } from "@/models/review";
 import { useUser } from "@clerk/nextjs";
 import { useCallback, useEffect, useState } from "react";
 import ReadRating from "./ReadRating";
+import { format } from 'date-fns';
 
 type ReviewsProps = {
   bookInDb: Book | null;
@@ -59,10 +60,7 @@ export default function Reviews({
             </div>
             <div className="flex flex-col">
               <ReadRating value={numericBookRating!} size={"small"} />
-              <div>{bookReview.createdAt!.toLocaleString("es-ES", {year: "numeric",
-    month: "long",
-    day: "numeric",
-  })}</div>
+              <div>{format(bookReview.createdAt!, 'dd/MM/yyyy')}</div>
               <div className="mt-2">{bookReview.comment}</div>
             </div>
           </div>
