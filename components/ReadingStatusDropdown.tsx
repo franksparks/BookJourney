@@ -20,6 +20,7 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
+import { useToast } from "./ui/use-toast";
 
 const menuItems = [
   { label: "Read", value: ReadStatus.READ },
@@ -38,6 +39,7 @@ export default function ReadingStatusDropwdown({
 }: ReadingStatusDropwdownProps) {
   const { dbUser } = useDbUser();
   const [currentStatus, setStatus] = useState<BookStatus | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     getStatus();
@@ -79,6 +81,11 @@ export default function ReadingStatusDropwdown({
           dbUser.id
         );
       }
+      toast({
+        title: "Book status stored correctly!",
+        className: "bg-orange-500 text-white",
+        duration: 5000,
+      });
     } else {
       //If bookStatus exists, call to update action
       const updatedStatus = await actionUpdateBookStatus(
@@ -93,6 +100,11 @@ export default function ReadingStatusDropwdown({
           dbUser.id
         );
       }
+      toast({
+        title: "Book status updated correctly!",
+        className: "bg-orange-500 text-white",
+        duration: 5000,
+      });
     }
   };
 
