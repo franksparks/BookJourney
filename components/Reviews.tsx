@@ -10,8 +10,7 @@ import {
 } from "@/actions/clerk-users";
 import { actionGetReviewsByBookId } from "@/actions/reviews";
 import { actionGetUserByUserId } from "@/actions/users";
-import { dbGetRatingByGoogleBookIdAndUserId } from "@/db/ratings";
-import { Rating, ratingMap } from "@/models/rating";
+import { ratingMap } from "@/models/rating";
 import { Book } from "@/models/book";
 import { Review } from "@/models/review";
 import { User } from "@/models/user";
