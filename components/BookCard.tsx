@@ -24,6 +24,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Input } from "./ui/input";
+import { useToast } from "./ui/use-toast";
 
 type bookCardProps = {
   book: Book;
@@ -37,11 +38,12 @@ export default function BookCard({
   onStatusChange,
 }: bookCardProps) {
   const { dbUser } = useDbUser();
-  const [readingProgress, setReadingProgress] = useState("");
+  const [readingProgress, setReadingProgress] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [currentReadingActivity, setCurrentReadingActivity] =
     useState<ReadingActivity | null>(null);
   const [progressType, setProgressType] = useState("pages");
+  const { toast } = useToast();
 
   const setReadingActivity = async () => {
     const activity: ReadingActivity =
@@ -59,6 +61,11 @@ export default function BookCard({
     await actionUpdateBookStatus(status.id, ReadStatus.READ);
     await actionInsertReadingActivityPercentage(100, book.id!, dbUser.id);
     onStatusChange();
+    toast({
+      title: "Book read! Well done!",
+      className: "bg-orange-500 text-white",
+      duration: 5000,
+    });
   };
 
   const handleAddReadingActivity = async () => {
@@ -71,16 +78,30 @@ export default function BookCard({
         book.id!,
         dbUser.id
       );
+      if (readingProgress === book.pages) {
+        await actionUpdateBookStatus(status.id, ReadStatus.READ);
+        onStatusChange();
+      }
     } else {
       await actionInsertReadingActivityPercentage(
-        Number(readingProgress),
+        readingProgress,
         book.id!,
         dbUser.id
       );
+      if (readingProgress === 100) {
+        await actionUpdateBookStatus(status.id, ReadStatus.READ);
+        onStatusChange();
+      }
     }
     setReadingActivity();
 
     setIsDialogOpen(false);
+
+    toast({
+      title: "Reading activity stored correctly. ",
+      className: "bg-orange-500 text-white",
+      duration: 5000,
+    });
   };
 
   return (
@@ -192,15 +213,38 @@ export default function BookCard({
                 </div>
 
                 <div className="items-center gap-4 mt-4">
+                  {currentReadingActivity ? (
+                    currentReadingActivity.page !== null ? (
+                      <>
+                        Currently read {currentReadingActivity.page}/
+                        {book.pages} pages (
+                        {(
+                          (currentReadingActivity.page / book.pages) *
+                          100
+                        ).toFixed(1)}
+                        %)
+                      </>
+                    ) : currentReadingActivity.percentage !== null ? (
+                      <>
+                        Currently read {currentReadingActivity.percentage}%
+                      </>
+                    ) : (
+                      ""
+                    )
+                  ) : (
+                    ""
+                  )}
                   <p>
-                    Read{" "}
-                    {progressType === "pages" ? "pages" : "percentage"}:
+                    {progressType === "pages" ? "Pages " : "Percentage "}
+                    read:
                   </p>
                   <Input
                     id="value"
                     className="col-span-3"
                     value={readingProgress}
-                    onChange={(e) => setReadingProgress(e.target.value)}
+                    onChange={(e) =>
+                      setReadingProgress(Number(e.target.value))
+                    }
                     step="any"
                   />
                 </div>

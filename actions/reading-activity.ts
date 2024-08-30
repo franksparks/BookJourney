@@ -10,12 +10,12 @@ import {
 import { Prisma } from "@prisma/client";
 
 export const actionInsertReadingActivityPage = async (
-  value: string,
+  value: number,
   bookId: string,
   userId: string
 ) => {
   const readingActivity: Prisma.ReadingActivityCreateInput = {
-    page: Number(value),
+    page: value,
     percentage: null,
 
     book: {
@@ -30,12 +30,12 @@ export const actionInsertReadingActivityPage = async (
 };
 
 export const actionInsertReadingActivityPercentage = async (
-  value: Number,
+  value: number,
   bookId: string,
   userId: string
 ) => {
   const readingActivity: Prisma.ReadingActivityCreateInput = {
-    percentage: Number(value),
+    percentage: value,
     page: null,
 
     book: {
