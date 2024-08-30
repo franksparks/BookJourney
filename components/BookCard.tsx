@@ -115,9 +115,9 @@ export default function BookCard({
   };
 
   return (
-    <div className="flex flex-row m-4 h-36 w-3/4 hover:scale-105 shadow-lg shadow-sky-800 rounded-lg text-sky-800 bg-sky-100 hover:bg-sky-50 cursor-pointer transition duration-500">
+    <div className="flex flex-row m-4 h-36 w-11/12 max-w-3xl hover:scale-105 shadow-lg shadow-sky-800 rounded-lg text-sky-800 bg-sky-100 hover:bg-sky-50 cursor-pointer transition duration-500">
       {book.smallCover && (
-        <div className="flex justify-center items-center p-4">
+        <div className="flex justify-center items-center p-4 w-1/4">
           <BookNavigationWrapper id={book.googleBooksId}>
             <Image
               className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000"
@@ -143,7 +143,6 @@ export default function BookCard({
         </Tooltip>
       </div>
 
-      {/*Mover este div*/}
       <div className="flex flex-col *:justify-center items-center p-4">
         <div>
           {currentReadingActivity === undefined ||
@@ -165,10 +164,7 @@ export default function BookCard({
             <>
               <p>
                 {currentReadingActivity.page}/{book.pages} (
-                {(
-                  (currentReadingActivity.page / book.pages) *
-                  100
-                ).toFixed(1)}
+                {((currentReadingActivity.page / book.pages) * 100).toFixed(1)}
                 %)
               </p>
               <div className="w-36 bg-gray-200 rounded-full h-4 border-2 border-gray-300">
@@ -188,7 +184,7 @@ export default function BookCard({
         <div className="flex flex-col justify-center items-center p-4">
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="rounded-full border-orange-400 border-2 hover:border-blue-600">
+              <Button className="rounded-full border-orange-500 border-2">
                 Update progress
               </Button>
             </DialogTrigger>
@@ -262,7 +258,7 @@ export default function BookCard({
               <DialogFooter>
                 <Button
                   onClick={handleAddReadingActivity}
-                  className="rounded-full border-orange-400 border-2"
+                  className="rounded-full border-orange-500 border-2"
                 >
                   Save activity
                 </Button>
@@ -271,7 +267,7 @@ export default function BookCard({
                     handleDoneClick();
                     setIsDialogOpen(false);
                   }}
-                  className="rounded-full border-orange-400 border-2"
+                  className="rounded-full border-orange-500 border-2"
                 >
                   Book Finished!
                 </Button>
