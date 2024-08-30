@@ -38,7 +38,7 @@ export default function BookCard({
   onStatusChange,
 }: bookCardProps) {
   const { dbUser } = useDbUser();
-  const [readingProgress, setReadingProgress] = useState("");
+  const [readingProgress, setReadingProgress] = useState(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [currentReadingActivity, setCurrentReadingActivity] =
     useState<ReadingActivity | null>(null);
@@ -78,12 +78,20 @@ export default function BookCard({
         book.id!,
         dbUser.id
       );
+      if (readingProgress === book.pages) {
+        await actionUpdateBookStatus(status.id, ReadStatus.READ);
+        onStatusChange();
+      }
     } else {
       await actionInsertReadingActivityPercentage(
-        Number(readingProgress),
+        readingProgress,
         book.id!,
         dbUser.id
       );
+      if (readingProgress === 100) {
+        await actionUpdateBookStatus(status.id, ReadStatus.READ);
+        onStatusChange();
+      }
     }
     setReadingActivity();
 
@@ -205,15 +213,38 @@ export default function BookCard({
                 </div>
 
                 <div className="items-center gap-4 mt-4">
+                  {currentReadingActivity ? (
+                    currentReadingActivity.page !== null ? (
+                      <>
+                        Currently read {currentReadingActivity.page}/
+                        {book.pages} pages (
+                        {(
+                          (currentReadingActivity.page / book.pages) *
+                          100
+                        ).toFixed(1)}
+                        %)
+                      </>
+                    ) : currentReadingActivity.percentage !== null ? (
+                      <>
+                        Currently read {currentReadingActivity.percentage}%
+                      </>
+                    ) : (
+                      ""
+                    )
+                  ) : (
+                    ""
+                  )}
                   <p>
-                    Read{" "}
-                    {progressType === "pages" ? "pages" : "percentage"}:
+                    {progressType === "pages" ? "Pages " : "Percentage "}
+                    read:
                   </p>
                   <Input
                     id="value"
                     className="col-span-3"
                     value={readingProgress}
-                    onChange={(e) => setReadingProgress(e.target.value)}
+                    onChange={(e) =>
+                      setReadingProgress(Number(e.target.value))
+                    }
                     step="any"
                   />
                 </div>
