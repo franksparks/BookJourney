@@ -220,7 +220,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
         <>
             <Separator className="my-4" />
           </>
-          <Reviews bookInDb={bookInDb} bookReview={bookReview}/>
+          <Reviews bookInDb={bookInDb} bookReview={bookReview} numericBookRating={numericBookRating}/>
       </div>
     </div>
   );
