@@ -3,7 +3,7 @@ import { Book } from "@/models/book";
 export function validateProgressInput(
   book: Book,
   progressType: string,
-  value: string
+  value: number
 ): boolean {
   const numberValue = Number(value);
 

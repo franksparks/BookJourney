@@ -6,6 +6,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { BooksSearchProvider } from "./context/books-search-context";
 import Header from "@/components/header";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,6 +28,7 @@ export default function RootLayout({
             <body className=" h-screen flex flex-col bg-neutral-300">
               <Header />
               <main className="flex-grow">{children}</main>
+              <Toaster />
               <Footer />
             </body>
           </html>

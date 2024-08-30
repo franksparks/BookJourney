@@ -33,9 +33,7 @@ export default function ReadingList() {
 
   return (
     <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-sky-600 text-slate-100 h-full overflow-y-auto">
-      <h1 className="font-light text-sky-200 text-center">
-        Currently Reading
-      </h1>
+      <h1 className="font-light text-sky-200 text-center">Currently Reading</h1>
 
       <div className="flex flex-col items-center">
         {dbUser &&
@@ -50,9 +48,7 @@ export default function ReadingList() {
         {dbUser && readingList.length == 0 && (
           <div>Start reading to see something here!</div>
         )}
-        {!dbUser && (
-          <div>Login to see the books you are reading here!</div>
-        )}
+        {!dbUser && <div>Login to see the books you are reading here!</div>}
       </div>
     </div>
   );
