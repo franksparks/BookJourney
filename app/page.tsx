@@ -25,13 +25,13 @@ export default function Home() {
         <div className="w-1/2">
           <ReadingList onBookRead={handleBookRead} />
         </div>
-        <div className="w-1/2 flex flex-col h-full gap-12">
-          <UserLists />
+        <div className="w-1/2 flex flex-col h-full gap-4">
+          <WantToRead />
           <ReadingChallengeCard
             bookRead={bookRead}
             onReset={handleResetBookRead}
           />
-          <WantToRead />
+          <UserLists />
         </div>
       </div>
     </main>

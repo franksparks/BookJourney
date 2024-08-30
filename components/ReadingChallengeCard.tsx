@@ -121,7 +121,7 @@ export default function ReadingChallengeCard({
     <>
       {showConfetti && <Confetti />}
 
-      <div className="flex flex-col items-center rounded-3xl shadow-xl shadow-orange-200 p-8 bg-orange-500 text-orange-100 mt-10">
+      <div className="flex flex-col items-center rounded-3xl shadow-xl shadow-orange-200 p-8 bg-orange-500 text-orange-100 h-1/3">
         <h1 className="font-light text-orange-100 text-center mb-2">
           {year} Reading Challenge
         </h1>
