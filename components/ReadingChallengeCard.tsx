@@ -183,12 +183,6 @@ export default function ReadingChallengeCard({
                       Set reading challenge
                     </Button>
                     <Button
-                      onClick={handleSetReadingChallenge}
-                      className="rounded-full border-orange-400 border-2"
-                    >
-                      Set reading challenge
-                    </Button>
-                    <Button
                       onClick={handleDeleteReadingChallenge}
                       className="rounded-full border-orange-400 border-2"
                     >
