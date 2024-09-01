@@ -2,6 +2,7 @@
 
 import { actionGetBooksReadByUserIdAndYear } from "@/actions/reading-activity";
 import {
+  actionDeleteChallenge,
   actionGetReadingChallengeByUserIdAndYear,
   actionInsertReadingChallenge,
   actionMarkChallengeAsCelebrated,
@@ -118,6 +119,13 @@ export default function ReadingChallengeCard({
       setIsDialogOpen(false);
     }
   };
+  const handleDeleteReadingChallenge = async () => {
+    if (currentChallenge) {
+      const res = await actionDeleteChallenge(currentChallenge.id);
+      setCurrentChallenge(res);
+      setIsDialogOpen(false);
+    }
+  };
 
   return (
     <>
@@ -173,6 +181,18 @@ export default function ReadingChallengeCard({
                       className="rounded-full border-orange-400 border-2"
                     >
                       Set reading challenge
+                    </Button>
+                    <Button
+                      onClick={handleSetReadingChallenge}
+                      className="rounded-full border-orange-400 border-2"
+                    >
+                      Set reading challenge
+                    </Button>
+                    <Button
+                      onClick={handleDeleteReadingChallenge}
+                      className="rounded-full border-orange-400 border-2"
+                    >
+                      Delete reading challenge
                     </Button>
                     <Button
                       onClick={() => {
