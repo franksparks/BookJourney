@@ -5,6 +5,7 @@ import {
   dbGetBookListsByBookIdAndListId,
   dbGetBookListsByListId,
   dbInsertBookList,
+  dbUpdateBookLists,
 } from "@/db/book-list";
 import { Prisma } from "@prisma/client";
 
@@ -24,6 +25,14 @@ export const actionInsertBookList = async (
 
 export const actionGetBookListsByListId = async (listId: string) => {
   const result = await dbGetBookListsByListId(listId);
+  return result;
+};
+
+export const actionUpdateBookLists = async (
+  bookId: string,
+  listIds: string[]
+) => {
+  const result = await dbUpdateBookLists(bookId, listIds);
   return result;
 };
 

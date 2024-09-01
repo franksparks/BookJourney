@@ -5,6 +5,7 @@ import {
   dbGetListsByBookIdAndUserId,
   dbGetListsByUserId,
   dbInsertList,
+  dbUpdateBookLists,
   dbUpdateList,
 } from "@/db/lists";
 import { Prisma } from "@prisma/client";
