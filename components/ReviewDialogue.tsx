@@ -16,14 +16,18 @@ type ReviewDialogueProps = {
   bookInDb: Book | null;
   dbUser: any;
   numericBookRating: number | null;
+  bookReview: Review | null;
+  setBookReview: (review: Review | null) => void;
 };
 
 export default function ReviewDialogue({
   bookInDb,
   dbUser,
-  numericBookRating
+  numericBookRating,
+  bookReview,
+  setBookReview
 }: ReviewDialogueProps) {
-  const [bookReview, setBookReview] = useState<Review | null>(null);
+
   const [commentBookReview, setCommentBookReview] = useState<string>("");
   const [open, setOpen] = useState(false);
 
@@ -46,7 +50,8 @@ export default function ReviewDialogue({
       setBookReview(review);
       setCommentBookReview(review.comment);
     } else {
-      await actionUpdateReview(bookReview.id!, commentBookReview);
+      const review = await actionUpdateReview(bookReview.id!, commentBookReview);
+      setBookReview(review);
     }
   }, [commentBookReview]);
 
