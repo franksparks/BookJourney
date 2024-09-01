@@ -42,7 +42,7 @@ export default function ReadingChallengeCard({
 
   const [readBooks, setReadBooks] = useState<ReadingChallenge[]>([]);
   const [currentChallenge, setCurrentChallenge] =
-    useState<ReadingChallenge>();
+    useState<ReadingChallenge | null>();
   const [newGoal, setNewGoal] = useState(0);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -122,7 +122,7 @@ export default function ReadingChallengeCard({
   const handleDeleteReadingChallenge = async () => {
     if (currentChallenge) {
       const res = await actionDeleteChallenge(currentChallenge.id);
-      setCurrentChallenge(res);
+      setCurrentChallenge(null);
       setIsDialogOpen(false);
     }
   };
@@ -181,12 +181,6 @@ export default function ReadingChallengeCard({
                       className="rounded-full border-orange-400 border-2"
                     >
                       Set reading challenge
-                    </Button>
-                    <Button
-                      onClick={handleDeleteReadingChallenge}
-                      className="rounded-full border-orange-400 border-2"
-                    >
-                      Delete reading challenge
                     </Button>
                     <Button
                       onClick={() => {
@@ -266,6 +260,12 @@ export default function ReadingChallengeCard({
                         className="rounded-full border-orange-400 border-2"
                       >
                         Set reading challenge
+                      </Button>
+                      <Button
+                        onClick={handleDeleteReadingChallenge}
+                        className="rounded-full border-orange-400 bg-red-400 hover:bg-red-600 border-2"
+                      >
+                        Delete reading challenge
                       </Button>
                       <Button
                         onClick={() => {
