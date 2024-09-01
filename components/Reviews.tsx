@@ -15,11 +15,12 @@ import { Book } from "@/models/book";
 import { Review } from "@/models/review";
 import { User } from "@/models/user";
 import { actionGetRatingByGoogleBookIdAndUserId } from "@/actions/ratings";
+import { useDbUser } from "@/app/context/db-user-context";
 
 type ReviewsProps = {
   bookInDb: Book | null;
-  bookReview: Review | null;
   numericBookRating: number | null;
+  bookReview: Review;
 };
 
 type BookDetailsReview = {
@@ -30,32 +31,47 @@ type BookDetailsReview = {
   creationDate: string;
 };
 
+type Accumulator = {
+  userReview: Review[];
+  otherMembersReviews: Review[];
+};
+
 export default function Reviews({
   bookInDb,
-  bookReview,
-  numericBookRating
+  numericBookRating,
+  bookReview
 }: ReviewsProps) {
   const { user } = useUser();
+  const { dbUser } = useDbUser();
+  const [userBookReview, setUserBookReview] = useState<Review | null>(null);
   const [bookReviews, setBookReviews] = useState<Review[] | null>(null);
   const [bookDetailsReviews, setBookDetailsReviews] = useState<
     BookDetailsReview[] | null
   >(null);
-  const reviewsFetched = useRef(false);
 
   const fetchReviews = useCallback(async () => {
-    if (reviewsFetched.current) return;
-    reviewsFetched.current = true;
-
-    const allReviews: Review[] = await actionGetReviewsByBookId(bookInDb?.id!);
-    if (bookReview !== null) {
-      const otherMembersReviews = allReviews.filter(
-        (review) => review.userId !== bookReview.userId
+    if (bookInDb) {
+      const allReviews: Review[] = await actionGetReviewsByBookId(
+        bookInDb?.id!
       );
+
+      const { userReview, otherMembersReviews } =
+        allReviews.reduce<Accumulator>(
+          (acc, review) => {
+            if (review.userId === dbUser.id) {
+              acc.userReview.push(review);
+            } else {
+              acc.otherMembersReviews.push(review);
+            }
+            return acc;
+          },
+          { userReview: [], otherMembersReviews: [] }
+        );
+
+      setUserBookReview(userReview[0]);
       setBookReviews(otherMembersReviews);
-    } else {
-      setBookReviews(allReviews);
     }
-  }, [bookInDb, bookReview]);
+  }, [bookInDb, dbUser, bookReview]);
 
   const fetchBookDetailsReviews = useCallback(async () => {
     if (!bookReviews) return;
@@ -90,9 +106,7 @@ export default function Reviews({
   }, [bookReviews, bookInDb]);
 
   useEffect(() => {
-    if (bookInDb) {
-      fetchReviews();
-    }
+    fetchReviews();
   }, [fetchReviews, bookInDb]);
 
   useEffect(() => {
@@ -100,7 +114,7 @@ export default function Reviews({
   }, [fetchBookDetailsReviews]);
   return (
     <>
-      {bookReview !== null && (
+      {userBookReview !== null && (
         <>
           <div className="font-bold mb-4">{"My Review"}</div>
           <div className="flex">
@@ -113,8 +127,8 @@ export default function Reviews({
             </div>
             <div className="flex flex-col">
               <ReadRating value={numericBookRating!} size={"small"} />
-              <div>{format(bookReview.createdAt!, "dd/MM/yyyy")}</div>
-              <div className="mt-2">{bookReview.comment}</div>
+              <div>{format(userBookReview.createdAt!, "dd/MM/yyyy")}</div>
+              <div className="mt-2">{userBookReview.comment}</div>
             </div>
           </div>
         </>
