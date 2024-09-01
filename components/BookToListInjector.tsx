@@ -35,6 +35,7 @@ export default function BookToListInjector({
     new Set()
   );
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const logged = dbUser ? true : false;
 
   useEffect(() => {
     if (dbUser) {
@@ -101,28 +102,33 @@ export default function BookToListInjector({
 
   return (
     <div>
-      <ul>
-        {bookLists && bookLists.length > 0 ? (
-          <>
-            <p className="mt-2">
-              Book stored on{" "}
-              {bookLists.length === 1 ? "this list" : "these lists"}:
-            </p>
+      {logged && (
+        <ul>
+          {bookLists && bookLists.length > 0 ? (
+            <>
+              <p className="mt-2">
+                Book stored on{" "}
+                {bookLists.length === 1 ? "this list" : "these lists"}:
+              </p>
 
-            {bookLists.map((list: List, index) => (
-              <li className=" flex justify-center mt-2" key={index}>
-                {list.name}
-              </li>
-            ))}
-          </>
-        ) : (
-          <p>Book not added to any list yet.</p>
-        )}
-      </ul>
+              {bookLists.map((list: List, index) => (
+                <li className=" flex justify-center mt-2" key={index}>
+                  {list.name}
+                </li>
+              ))}
+            </>
+          ) : (
+            <p>Book not added to any list yet.</p>
+          )}
+        </ul>
+      )}
       <div className="flex justify-center mt-4">
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="rounded-full border-orange-500 border-2">
+            <Button
+              className="rounded-full border-orange-500 border-2"
+              disabled={!logged}
+            >
               Manage lists
             </Button>
           </DialogTrigger>
