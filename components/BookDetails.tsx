@@ -164,8 +164,8 @@ export default function BookDetails({ book }: BookDetailsProps) {
                 bookInDb={bookInDb!}
                 dbUser={dbUser}
                 numericBookRating={numericBookRating}
-                setBookReview={setBookReview} 
-                bookReview={bookReview}/>
+                setBookReview={setBookReview}
+                bookReview={bookReview}
               />
             </div>
           )}
@@ -226,9 +226,13 @@ export default function BookDetails({ book }: BookDetailsProps) {
           )}
         </div>
         <>
-            <Separator className="my-4" />
-          </>
-          <Reviews bookInDb={bookInDb} numericBookRating={numericBookRating} bookReview={bookReview}/>
+          <Separator className="my-4" />
+        </>
+        <Reviews
+          bookInDb={bookInDb}
+          numericBookRating={numericBookRating}
+          bookReview={bookReview}
+        />
       </div>
     </div>
   );
