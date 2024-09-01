@@ -25,7 +25,7 @@ model Book {
   isbn10          String?
   isbn13          String?
   authors         String[]
-  googleBooksId   String? // M:for sync process
+  googleBooksId   String?
   title           String
   description     String?
   categories      String[]

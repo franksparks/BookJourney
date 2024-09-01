@@ -164,7 +164,7 @@ export default function ReadingChallengeCard({
                         id="value"
                         className="col-span-3"
                         type="number"
-                        value={newGoal === 0 ? "" : newGoal} // Permite mostrar una cadena vacía
+                        value={newGoal === 0 ? "" : newGoal}
                         onChange={(e) => {
                           const value = e.target.value;
                           if (value === "" || Number(value) > 0) {
@@ -243,7 +243,7 @@ export default function ReadingChallengeCard({
                           id="value"
                           className="col-span-3"
                           type="number"
-                          value={newGoal === 0 ? "" : newGoal} // Permite mostrar una cadena vacía
+                          value={newGoal === 0 ? "" : newGoal}
                           onChange={(e) => {
                             const value = e.target.value;
                             if (value === "" || Number(value) > 0) {
