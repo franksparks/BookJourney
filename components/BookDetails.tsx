@@ -27,7 +27,6 @@ import Reviews from "./Reviews";
 import { Review } from "@/models/review";
 import ParametrizedPagination from "./ParametrizedPagination";
 
-
 type BookDetailsProps = {
   book: Book;
 };
@@ -136,7 +135,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
   }, [numericBookRating, bookInDb]);
 
   return (
-    <div className="flex justify-center mt-10">
+    <div className="flex justify-center mt-10 ">
       <div className="flex justify-center basis-1/4">
         <div className="flex flex-col">
           <img
@@ -155,11 +154,19 @@ export default function BookDetails({ book }: BookDetailsProps) {
             />
           </div>
           {!bookRating && (
-            <div className="flex justify-center mt-2">{"Rate this book"}</div>
+            <div className="flex justify-center mt-2">
+              {"Rate this book"}
+            </div>
           )}
           {bookRating && (
             <div className="flex justify-center mt-2">
-              <ReviewDialogue bookInDb={bookInDb!} dbUser={dbUser} numericBookRating={numericBookRating} setBookReview={setBookReview} bookReview={bookReview}/>
+              <ReviewDialogue
+                bookInDb={bookInDb!}
+                dbUser={dbUser}
+                numericBookRating={numericBookRating}
+                setBookReview={setBookReview} 
+                bookReview={bookReview}/>
+              />
             </div>
           )}
         </div>
