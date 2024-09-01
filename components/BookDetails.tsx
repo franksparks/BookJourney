@@ -16,14 +16,14 @@ import { useDbUser } from "@/app/context/db-user-context";
 import { Book } from "@/models/book";
 import { inverseRatingMap, Rating, ratingMap } from "@/models/rating";
 import { RatingValue } from "@prisma/client";
-import ReviewDialogue from "./ReviewDialogue";
 import { useCallback, useEffect, useState } from "react";
+import BookToListInjector from "./BookToListInjector";
 import ControlledRating from "./ControlledRating";
 import ReadingStatusDropdown from "./ReadingStatusDropdown";
 import ReadMore from "./ReadMore";
 import ReadRating from "./ReadRating";
+import ReviewDialogue from "./ReviewDialogue";
 import { Separator } from "./ui/separator";
-import BookToListInjector from "./BookToListInjector";
 
 type BookDetailsProps = {
   book: Book;

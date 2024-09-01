@@ -105,66 +105,69 @@ export default function BookToListInjector({
       <ul>
         {bookLists && bookLists.length > 0 ? (
           <>
-            <p>
+            <p className="mt-2">
               Book stored on{" "}
               {bookLists.length === 1 ? "this list" : "these lists"}:
             </p>
 
             {bookLists.map((list: List, index) => (
-              <li key={index}>{list.name}</li>
+              <li className=" flex justify-center mt-2" key={index}>
+                {list.name}
+              </li>
             ))}
           </>
         ) : (
           <p>Book not added to any list yet.</p>
         )}
       </ul>
-
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogTrigger asChild>
-          <Button className="rounded-full border-orange-500 border-2">
-            Manage lists
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Manage Lists</DialogTitle>
-          </DialogHeader>
-          <ul>
-            {userLists && userLists.length > 0 ? (
-              userLists.map((list) => (
-                <li key={list.id}>
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={selectedLists.has(list.id)}
-                      onChange={() => toggleListSelection(list.id)}
-                    />
-                    {list.name}
-                  </label>
-                </li>
-              ))
-            ) : (
-              <p>No lists available.</p>
-            )}
-          </ul>
-          <DialogFooter>
-            <Button
-              className="rounded-full border-orange-500 border-2"
-              onClick={saveChanges}
-            >
-              Save
+      <div className="flex justify-center mt-4">
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button className="rounded-full border-orange-500 border-2">
+              Manage lists
             </Button>
-            <Button
-              onClick={() => {
-                setIsDialogOpen(false);
-              }}
-              className="rounded-full border-orange-500 border-2"
-            >
-              Cancel
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Manage Lists</DialogTitle>
+            </DialogHeader>
+            <ul>
+              {userLists && userLists.length > 0 ? (
+                userLists.map((list) => (
+                  <li key={list.id}>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={selectedLists.has(list.id)}
+                        onChange={() => toggleListSelection(list.id)}
+                      />
+                      {list.name}
+                    </label>
+                  </li>
+                ))
+              ) : (
+                <p>No lists available.</p>
+              )}
+            </ul>
+            <DialogFooter>
+              <Button
+                className="rounded-full border-orange-500 border-2"
+                onClick={saveChanges}
+              >
+                Save
+              </Button>
+              <Button
+                onClick={() => {
+                  setIsDialogOpen(false);
+                }}
+                className="rounded-full border-orange-500 border-2"
+              >
+                Cancel
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
     </div>
   );
 }
