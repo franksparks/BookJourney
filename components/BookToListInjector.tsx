@@ -1,3 +1,8 @@
+import { actionUpdateBookLists } from "@/actions/book-list";
+import {
+  actionGetBookByGoogleId,
+  actionInsertBook,
+} from "@/actions/books";
 import {
   actionGetListsByBookIdAndUserId,
   actionGetListsByUserId,
@@ -15,7 +20,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { actionUpdateBookLists } from "@/actions/book-list";
 
 type BookToListInjectorProps = {
   book: Book;
@@ -37,7 +41,7 @@ export default function BookToListInjector({
       getUserLists();
       getBookLists();
     }
-  }, [dbUser]);
+  }, [dbUser, book]);
 
   const getUserLists = async () => {
     const userLists = dbUser
@@ -47,14 +51,22 @@ export default function BookToListInjector({
   };
 
   const getBookLists = async () => {
-    const bookLists = dbUser
-      ? await actionGetListsByBookIdAndUserId(book.id!, dbUser.id!)
-      : null;
-    const selected = new Set<string>(
-      bookLists.map((list: List) => list.id)
-    );
-    setBookLists(bookLists?.length ? bookLists : null);
-    setSelectedLists(selected);
+    const dbBook = await actionGetBookByGoogleId(book.googleBooksId);
+
+    if (dbBook) {
+      const bookLists = dbUser
+        ? await actionGetListsByBookIdAndUserId(dbBook.id, dbUser.id!)
+        : null;
+
+      const selected = new Set<string>(
+        bookLists.map((list: List) => list.id)
+      );
+
+      setBookLists(bookLists?.length ? bookLists : null);
+      setSelectedLists(selected);
+    } else {
+      setBookLists(null);
+    }
   };
 
   const toggleListSelection = (listId: string) => {
@@ -70,27 +82,26 @@ export default function BookToListInjector({
   };
 
   const saveChanges = async () => {
-    if (dbUser) {
-      await actionUpdateBookLists(book.id!, Array.from(selectedLists));
+    if (book.id == undefined) {
+      const dbBook = await actionGetBookByGoogleId(book.googleBooksId);
+      if (dbBook === null) {
+        const newBook = await actionInsertBook(book);
+
+        await actionUpdateBookLists(
+          newBook.id!,
+          Array.from(selectedLists)
+        );
+
+        setIsDialogOpen(false);
+      }
+      await actionUpdateBookLists(dbBook.id!, Array.from(selectedLists));
+      await getBookLists();
       setIsDialogOpen(false);
     }
   };
 
   return (
     <div>
-      <ul>
-        {userLists && userLists.length > 0 ? (
-          <>
-            User has the next {userLists.length === 1 ? "list" : "lists"}:
-            {userLists.map((list: List, index) => (
-              <li key={index}>{list.name}</li>
-            ))}
-          </>
-        ) : (
-          <p>User added no list yet.</p>
-        )}
-      </ul>
-
       <ul>
         {bookLists && bookLists.length > 0 ? (
           <>
