@@ -23,7 +23,7 @@ import ReadingStatusDropdown from "./ReadingStatusDropdown";
 import ReadMore from "./ReadMore";
 import ReadRating from "./ReadRating";
 import { Separator } from "./ui/separator";
-
+import BookToListInjector from "./BookToListInjector";
 
 type BookDetailsProps = {
   book: Book;
@@ -151,13 +151,22 @@ export default function BookDetails({ book }: BookDetailsProps) {
             />
           </div>
           {!bookRating && (
-            <div className="flex justify-center mt-2">{"Rate this book"}</div>
+            <div className="flex justify-center mt-2">
+              {"Rate this book"}
+            </div>
           )}
           {bookRating && (
             <div className="flex justify-center mt-2">
-              <ReviewDialogue bookInDb={bookInDb!} dbUser={dbUser} numericBookRating={numericBookRating}/>
+              <ReviewDialogue
+                bookInDb={bookInDb!}
+                dbUser={dbUser}
+                numericBookRating={numericBookRating}
+              />
             </div>
           )}
+          <div className="flex justify-center mt-2">
+            <BookToListInjector />
+          </div>
         </div>
       </div>
       <div className="flex w-screen justify-start flex-col mr-4">
