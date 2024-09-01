@@ -45,3 +45,22 @@ export const dbGetReadingActivityByUserId = catchErrors(
     return result;
   }
 );
+
+export const dbGetBooksReadByUserIdAndYear = catchErrors(
+  async (userId: string, year: number) => {
+    const startDate = new Date(`${year}-01-01T00:00:00.000Z`);
+    const endDate = new Date(`${year + 1}-01-01T00:00:00.000Z`);
+
+    const result = await db.readingActivity.findMany({
+      where: {
+        userId,
+        percentage: 100,
+        createdAt: {
+          gte: startDate,
+          lt: endDate,
+        },
+      },
+    });
+    return result;
+  }
+);

@@ -80,6 +80,11 @@ export default function BookCard({
       );
       if (readingProgress === book.pages) {
         await actionUpdateBookStatus(status.id, ReadStatus.READ);
+        await actionInsertReadingActivityPercentage(
+          100,
+          book.id!,
+          dbUser.id
+        );
         onStatusChange();
       }
     } else {
@@ -90,6 +95,11 @@ export default function BookCard({
       );
       if (readingProgress === 100) {
         await actionUpdateBookStatus(status.id, ReadStatus.READ);
+        await actionInsertReadingActivityPercentage(
+          100,
+          book.id!,
+          dbUser.id
+        );
         onStatusChange();
       }
     }

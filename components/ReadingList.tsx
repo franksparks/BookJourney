@@ -6,7 +6,11 @@ import { BookStatus } from "@/models/book-status";
 import { useEffect, useState } from "react";
 import BookCard from "./BookCard";
 
-export default function ReadingList() {
+interface ReadingListProps {
+  onBookRead: () => void;
+}
+
+export default function ReadingList({ onBookRead }: ReadingListProps) {
   const { dbUser } = useDbUser();
 
   const [readingList, setReadingList] = useState<BookStatus[]>([]);
@@ -27,6 +31,7 @@ export default function ReadingList() {
 
   const handleStatusChange = async () => {
     await getReadingList(); // Refresh the list
+    onBookRead();
   };
 
   //TODO: Add a loading for this component

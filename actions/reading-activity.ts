@@ -1,6 +1,7 @@
 "use server";
 
 import {
+  dbGetBooksReadByUserIdAndYear,
   dbGetLatestReadingActivityByBookIdAndUserId,
   dbGetReadingActivityByBookIdAndUserId,
   dbGetReadingActivityByUserId,
@@ -52,10 +53,7 @@ export const actionGetReadingActivityByBookIdAndUserId = async (
   bookId: string,
   userId: string
 ) => {
-  const result = await dbGetReadingActivityByBookIdAndUserId(
-    bookId,
-    userId
-  );
+  const result = await dbGetReadingActivityByBookIdAndUserId(bookId, userId);
   return result;
 };
 
@@ -72,5 +70,13 @@ export const actionGetLatestReadingActivityByBookIdAndUserId = async (
 
 export const actionGetReadingActivityByUserId = async (userId: string) => {
   const result = await dbGetReadingActivityByUserId(userId);
+  return result;
+};
+
+export const actionGetBooksReadByUserIdAndYear = async (
+  userId: string,
+  year: number
+) => {
+  const result = await dbGetBooksReadByUserIdAndYear(userId, year);
   return result;
 };
