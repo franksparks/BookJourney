@@ -3,7 +3,6 @@
 import React, { useState, useEffect, ChangeEvent } from "react";
 import { List } from "@/models/list";
 import {
-  PlusIcon,
   EraserIcon,
   Pencil2Icon,
   Cross2Icon,
@@ -44,9 +43,16 @@ export default function ListsCard({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    if (dbUser && dbUser.id) {
-      getLists();
-    }
+    // Before calling getLists timeout avoid multiple calls if dbUser changes a lot of times
+    const timeoutId = setTimeout(() => {
+      if (dbUser && dbUser.id) {
+        getLists();
+      }
+    }, 100);
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, [dbUser]);
 
   useEffect(() => {

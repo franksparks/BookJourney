@@ -51,7 +51,7 @@ export const dbUpdateBook = catchErrors(
 
 export const dbUpdateBookRatingAverage = catchErrors(
   async (id: string, ratingAverage: number) => {
-    ratingAverage = Number(ratingAverage);
+    ratingAverage = parseFloat(ratingAverage.toFixed(2));
     const result = await db.book.update({
       where: { id },
       data: { ratingAverage },

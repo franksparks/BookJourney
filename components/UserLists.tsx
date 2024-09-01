@@ -27,10 +27,8 @@ export default function UserLists() {
   //TODO: Add a loading for this component
 
   return (
-    <div className="flex flex-col justify-start rounded-3xl shadow-xl shadow-orange-200 p-8 bg-orange-500 text-orange-100">
-      <h1 className="font-light text-orange-100 text-center mb-8">
-        My lists
-      </h1>
+    <div className="flex flex-col justify-start rounded-3xl shadow-xl h-2/5 shadow-orange-200 p-4 bg-orange-500 text-orange-100">
+      <h1 className="font-light text-orange-100 text-center mb-8">My Lists</h1>
 
       {dbUser &&
         lists.map((list: List, index) => (
@@ -54,9 +52,7 @@ export default function UserLists() {
             </div>
           </div>
         ))}
-      {dbUser && lists.length == 0 && (
-        <div>Create a list to store books!</div>
-      )}
+      {dbUser && lists.length == 0 && <div>Create a list to store books!</div>}
       {!dbUser && <div>Login to see your lists here!</div>}
     </div>
   );
