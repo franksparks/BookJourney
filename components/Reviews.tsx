@@ -16,6 +16,7 @@ import { Review } from "@/models/review";
 import { User } from "@/models/user";
 import { actionGetRatingByGoogleBookIdAndUserId } from "@/actions/ratings";
 import { useDbUser } from "@/app/context/db-user-context";
+import ParametrizedPagination from "./ParametrizedPagination";
 
 type ReviewsProps = {
   bookInDb: Book | null;
@@ -48,9 +49,12 @@ export default function Reviews({
   const [bookDetailsReviews, setBookDetailsReviews] = useState<
     BookDetailsReview[] | null
   >(null);
+  const [paginatedReviews, setPaginatedReviews] = useState<BookDetailsReview[]>([]);
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 5;
 
   const fetchReviews = useCallback(async () => {
-    if (bookInDb) {
+    if (bookInDb && dbUser) {
       const allReviews: Review[] = await actionGetReviewsByBookId(
         bookInDb?.id!
       );
@@ -68,7 +72,9 @@ export default function Reviews({
           { userReview: [], otherMembersReviews: [] }
         );
 
-      setUserBookReview(userReview[0]);
+      const review: Review = userReview[0] || null;    
+
+      setUserBookReview(review);
       setBookReviews(otherMembersReviews);
     }
   }, [bookInDb, dbUser, bookReview]);
@@ -107,11 +113,20 @@ export default function Reviews({
 
   useEffect(() => {
     fetchReviews();
-  }, [fetchReviews, bookInDb]);
+  }, [fetchReviews, bookInDb, dbUser]);
 
   useEffect(() => {
     fetchBookDetailsReviews();
   }, [fetchBookDetailsReviews]);
+
+  useEffect(() => {
+    if (bookDetailsReviews) {
+      const startIndex = (page - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      setPaginatedReviews(bookDetailsReviews.slice(startIndex, endIndex));
+    }
+  }, [bookDetailsReviews, page]);
+
   return (
     <>
       {userBookReview !== null && (
@@ -154,6 +169,14 @@ export default function Reviews({
             </div>
           ))}
         </>
+      )}
+      {bookDetailsReviews && bookDetailsReviews.length > 0 && (
+        <ParametrizedPagination
+          setPage={setPage}
+          page={page}
+          totalItems={bookDetailsReviews?.length || 0}
+          numItemsPerPage={itemsPerPage}
+        />
       )}
     </>
   );

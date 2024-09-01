@@ -27,14 +27,14 @@ export default function ParametrizedPagination({
       variant="outlined"
       sx={{
         "& .MuiPaginationItem-root": {
-          color: "#ffffff" // Color del texto
+          color: "#ffffff"
         },
         "& .MuiPaginationItem-root.Mui-selected": {
-          backgroundColor: "#F97316", // Fondo del elemento seleccionado
-          color: "#ffffff" // Color del texto del elemento seleccionado
+          backgroundColor: "#F97316",
+          color: "#ffffff"
         },
         "& .MuiPaginationItem-root.Mui-disabled": {
-          color: "#e5e7eb" // Color para el elemento deshabilitado (opcional)
+          color: "#e5e7eb"
         }
       }}
     />
