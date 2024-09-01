@@ -3,7 +3,7 @@
 import { actionSearchBooksGoogle } from "@/actions/search-books-google";
 import { useBooksSearchContext } from "@/app/context/books-search-context";
 import SearchBox from "@/components/SearchBox";
-import SearchPagination from "@/components/SearchPagination";
+import ParametrizedPagination from "@/components/ParametrizedPagination";
 import SearchResults from "@/components/SearchResults";
 import { Book } from "@/models/book";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -112,10 +112,11 @@ export default function Home() {
             <SearchResults books={advancedResults} />
           )}
           {advancedResults.length !== 0 && (
-            <SearchPagination
+            <ParametrizedPagination
               setPage={handlePageChange}
               page={page}
               totalItems={advancedTotalItems}
+              numItemsPerPage={10}
             />
           )}
         </div>
