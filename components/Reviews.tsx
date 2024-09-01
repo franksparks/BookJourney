@@ -17,6 +17,7 @@ import { User } from "@/models/user";
 import { actionGetRatingByGoogleBookIdAndUserId } from "@/actions/ratings";
 import { useDbUser } from "@/app/context/db-user-context";
 import ParametrizedPagination from "./ParametrizedPagination";
+import Skeleton from "@mui/material/Skeleton";
 
 type ReviewsProps = {
   bookInDb: Book | null;
@@ -49,8 +50,11 @@ export default function Reviews({
   const [bookDetailsReviews, setBookDetailsReviews] = useState<
     BookDetailsReview[] | null
   >(null);
-  const [paginatedReviews, setPaginatedReviews] = useState<BookDetailsReview[]>([]);
+  const [paginatedReviews, setPaginatedReviews] = useState<BookDetailsReview[]>(
+    []
+  );
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
   const itemsPerPage = 5;
 
   const fetchReviews = useCallback(async () => {
@@ -72,7 +76,7 @@ export default function Reviews({
           { userReview: [], otherMembersReviews: [] }
         );
 
-      const review: Review = userReview[0] || null;    
+      const review: Review = userReview[0] || null;
 
       setUserBookReview(review);
       setBookReviews(otherMembersReviews);
@@ -81,6 +85,8 @@ export default function Reviews({
 
   const fetchBookDetailsReviews = useCallback(async () => {
     if (!bookReviews) return;
+
+    setLoading(true);
 
     const reviews: BookDetailsReview[] = await Promise.all(
       bookReviews.map(async (review) => {
@@ -109,6 +115,8 @@ export default function Reviews({
     );
 
     setBookDetailsReviews(reviews);
+
+    setLoading(false);
   }, [bookReviews, bookInDb]);
 
   useEffect(() => {
@@ -146,6 +154,14 @@ export default function Reviews({
               <div className="mt-2">{userBookReview.comment}</div>
             </div>
           </div>
+        </>
+      )}
+
+      {loading && (
+        <>
+          {[...Array(5)].map((_, index) => (
+            <Skeleton key={index} className="h-10 w-1/2" />
+          ))}
         </>
       )}
 
