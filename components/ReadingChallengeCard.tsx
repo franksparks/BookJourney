@@ -35,6 +35,8 @@ export default function ReadingChallengeCard({
 }: ReadingChallengeCardProps) {
   const { dbUser } = useDbUser();
 
+  const logged = dbUser ? true : false;
+
   const year = new Date().getFullYear();
 
   const [readBooks, setReadBooks] = useState<ReadingChallenge[]>([]);
@@ -134,7 +136,10 @@ export default function ReadingChallengeCard({
 
               <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button className="rounded-full border-orange-400 border-2 hover:border-blue-600">
+                  <Button
+                    disabled={!logged}
+                    className="rounded-full border-orange-400 border-2 hover:border-blue-600"
+                  >
                     Set reading challenge
                   </Button>
                 </DialogTrigger>
