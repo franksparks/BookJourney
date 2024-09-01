@@ -23,6 +23,22 @@ export const dbGetListsByUserId = catchErrors(async (userId: string) => {
   return result;
 });
 
+export const dbGetListsByBookIdAndUserId = catchErrors(
+  async (bookId: string, userId: string) => {
+    const result = await db.list.findMany({
+      where: {
+        userId: userId,
+        books: {
+          some: {
+            bookId: bookId,
+          },
+        },
+      },
+    });
+    return result;
+  }
+);
+
 export const dbUpdateList = catchErrors(
   async (id: string, name: string) => {
     const result = await db.list.update({ where: { id }, data: { name } });

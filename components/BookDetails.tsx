@@ -165,7 +165,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
             </div>
           )}
           <div className="flex justify-center mt-2">
-            <BookToListInjector />
+            <BookToListInjector book={book} />
           </div>
         </div>
       </div>
