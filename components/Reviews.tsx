@@ -149,10 +149,10 @@ export default function Reviews({
         </>
       )}
 
-      {bookDetailsReviews && bookDetailsReviews.length > 0 && (
+      {paginatedReviews && paginatedReviews.length > 0 && (
         <>
           <div className="font-bold mt-8 mb-4">{"Other Reviews"}</div>
-          {bookDetailsReviews.map((review, index) => (
+          {paginatedReviews.map((review, index) => (
             <div className="flex mb-4" key={index}>
               <div className="basis-1/6">
                 <img
