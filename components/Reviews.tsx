@@ -20,7 +20,7 @@ import { useDbUser } from "@/app/context/db-user-context";
 type ReviewsProps = {
   bookInDb: Book | null;
   numericBookRating: number | null;
-  bookReview: Review;
+  bookReview: Review | null;
 };
 
 type BookDetailsReview = {
