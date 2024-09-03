@@ -2,11 +2,11 @@
 
 import {
   dbDeleteList,
+  dbGetListsByBookIdAndUserId,
   dbGetListsByUserId,
   dbInsertList,
   dbUpdateList,
 } from "@/db/lists";
-import { List } from "@/models/list";
 import { Prisma } from "@prisma/client";
 
 export const actionInsertList = async (list: Prisma.ListCreateInput) => {
@@ -14,10 +14,16 @@ export const actionInsertList = async (list: Prisma.ListCreateInput) => {
   return result;
 };
 
-export const actionGetListsByUserId = async (
-  id: string
-): Promise<List[]> => {
+export const actionGetListsByUserId = async (id: string) => {
   const result = await dbGetListsByUserId(id);
+  return result;
+};
+
+export const actionGetListsByBookIdAndUserId = async (
+  bookId: string,
+  userId: string
+) => {
+  const result = await dbGetListsByBookIdAndUserId(bookId, userId);
   return result;
 };
 
