@@ -8,15 +8,16 @@ datasource db {
 }
 
 model User {
-  id              String            @id @default(auto()) @map("_id") @db.ObjectId
-  clerkId         String            @unique
-  email           String
-  createdAt       DateTime          @default(now())
-  reviews         Review[]
-  lists           List[]
-  ratings         Rating[]
-  bookStatuses    BookStatus[]
-  readingActivity ReadingActivity[]
+  id               String             @id @default(auto()) @map("_id") @db.ObjectId
+  clerkId          String             @unique
+  email            String
+  createdAt        DateTime           @default(now())
+  reviews          Review[]
+  lists            List[]
+  ratings          Rating[]
+  bookStatuses     BookStatus[]
+  readingActivity  ReadingActivity[]
+  readingChallenge ReadingChallenge[]
 }
 
 model Book {
@@ -97,6 +98,16 @@ model ReadingActivity {
   user       User     @relation(fields: [userId], references: [id])
   bookId     String   @db.ObjectId
   book       Book     @relation(fields: [bookId], references: [id])
+}
+
+model ReadingChallenge {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  goal          Int
+  year          Int
+  hasCelebrated Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  userId        String   @db.ObjectId
+  user          User     @relation(fields: [userId], references: [id])
 }
 
 enum RatingValue {

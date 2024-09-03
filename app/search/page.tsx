@@ -3,7 +3,7 @@
 import { actionSearchBooksGoogle } from "@/actions/search-books-google";
 import { useBooksSearchContext } from "@/app/context/books-search-context";
 import SearchBox from "@/components/SearchBox";
-import SearchPagination from "@/components/SearchPagination";
+import ParametrizedPagination from "@/components/ParametrizedPagination";
 import SearchResults from "@/components/SearchResults";
 import { Book } from "@/models/book";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -12,12 +12,14 @@ import { useState, useCallback, useEffect, Suspense } from "react";
 const queryMap: { [key: string]: string } = {
   author: ":inauthor:",
   title: ":intitle:",
-  all: "",
+  all: ""
 };
 
 const calculateIndex = (page: number): number => {
   return (page - 1) * 10;
 };
+
+const FIXED_TOTAL_ITEMS = 200;
 
 export default function Home() {
   const {
@@ -27,7 +29,7 @@ export default function Home() {
     previewSearch,
     setPreviewSearch,
     setTotalItems,
-    totalItems,
+    totalItems
   } = useBooksSearchContext();
   const [advancedResults, setAdvancedResults] = useState<Book[]>([]);
   const [advancedTotalItems, setAdvancedTotalItems] = useState(0);
@@ -49,10 +51,15 @@ export default function Home() {
 
       const result = await actionSearchBooksGoogle(queryString, index);
       setResults(result.books);
-      setTotalItems(result.totalItems);
+      const totalItems =
+        result.totalItems >= FIXED_TOTAL_ITEMS
+          ? FIXED_TOTAL_ITEMS
+          : result.totalItems;
+      setTotalItems(totalItems);
       setAdvancedResults(result.books);
+      
       if (advancedTotalItems === 0) {
-        setAdvancedTotalItems(result.totalItems);
+        setAdvancedTotalItems(totalItems);
       }
       if (queryMap && query) {
         router.push(`/search?q=${encodeURIComponent(query)}`);
@@ -94,8 +101,8 @@ export default function Home() {
 
   return (
     <Suspense>
-      <main className="flex justify-center flex-col items-center">
-        <div className="flex justify-center flex-col items-center bg-sky-600 m-8 rounded-3xl w-5/6 min-w-fit">
+      <main className="flex justify-center flex-col items-center h-full">
+        <div className="flex justify-center flex-col items-center bg-sky-600 m-3 rounded-3xl w-5/6 min-w-fit">
           <div className="bg-slate-300 mt-4 rounded-md min-w-fit shadow-md shadow-sky-800">
             <SearchBox
               advancedQuery={advancedQuery}
@@ -112,10 +119,11 @@ export default function Home() {
             <SearchResults books={advancedResults} />
           )}
           {advancedResults.length !== 0 && (
-            <SearchPagination
+            <ParametrizedPagination
               setPage={handlePageChange}
               page={page}
               totalItems={advancedTotalItems}
+              numItemsPerPage={10}
             />
           )}
         </div>

@@ -20,12 +20,12 @@ export const dbGetAverageRatingByBookId = catchErrors(
     const ratings = await db.rating.findMany({
       where: { bookId },
       orderBy: {
-        createdAt: "desc"
+        createdAt: "desc",
       },
       take: 20,
       select: {
-        rating: true
-      }
+        rating: true,
+      },
     });
 
     const numericRatings = ratings
@@ -37,7 +37,9 @@ export const dbGetAverageRatingByBookId = catchErrors(
         numericRatings.length
       : 0;
 
-    return average;
+    const averageTwoDecimals = average.toFixed(2);
+
+    return parseFloat(averageTwoDecimals);
   }
 );
 
@@ -54,9 +56,9 @@ export const dbGetRatingByGoogleBookIdAndUserId = catchErrors(
       where: {
         userId,
         book: {
-          googleBooksId: googleBooksId
-        }
-      }
+          googleBooksId: googleBooksId,
+        },
+      },
     });
 
     return result;
@@ -72,7 +74,7 @@ export const dbUpdateRating = catchErrors(
   async (rating: RatingValue, id: string) => {
     const result = await db.rating.update({
       where: { id },
-      data: { rating }
+      data: { rating },
     });
     return result;
   }
