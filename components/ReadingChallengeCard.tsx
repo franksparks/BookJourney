@@ -2,6 +2,7 @@
 
 import { actionGetBooksReadByUserIdAndYear } from "@/actions/reading-activity";
 import {
+  actionDeleteChallenge,
   actionGetReadingChallengeByUserIdAndYear,
   actionInsertReadingChallenge,
   actionMarkChallengeAsCelebrated,
@@ -41,10 +42,12 @@ export default function ReadingChallengeCard({
 
   const [readBooks, setReadBooks] = useState<ReadingChallenge[]>([]);
   const [currentChallenge, setCurrentChallenge] =
-    useState<ReadingChallenge>();
+    useState<ReadingChallenge | null>();
   const [newGoal, setNewGoal] = useState(0);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isConfirmationDialogOpen, setConfirmationIsDialogOpen] =
+    useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
@@ -118,6 +121,13 @@ export default function ReadingChallengeCard({
       setIsDialogOpen(false);
     }
   };
+  const handleDeleteReadingChallenge = async () => {
+    if (currentChallenge) {
+      const res = await actionDeleteChallenge(currentChallenge.id);
+      setCurrentChallenge(null);
+      setConfirmationIsDialogOpen(false);
+    }
+  };
 
   return (
     <>
@@ -156,7 +166,7 @@ export default function ReadingChallengeCard({
                         id="value"
                         className="col-span-3"
                         type="number"
-                        value={newGoal === 0 ? "" : newGoal} // Permite mostrar una cadena vacía
+                        value={newGoal === 0 ? "" : newGoal}
                         onChange={(e) => {
                           const value = e.target.value;
                           if (value === "" || Number(value) > 0) {
@@ -176,7 +186,7 @@ export default function ReadingChallengeCard({
                     </Button>
                     <Button
                       onClick={() => {
-                        setIsDialogOpen(false);
+                        setConfirmationIsDialogOpen(false);
                       }}
                       className="rounded-full border-orange-400 border-2"
                     >
@@ -235,7 +245,7 @@ export default function ReadingChallengeCard({
                           id="value"
                           className="col-span-3"
                           type="number"
-                          value={newGoal === 0 ? "" : newGoal} // Permite mostrar una cadena vacía
+                          value={newGoal === 0 ? "" : newGoal}
                           onChange={(e) => {
                             const value = e.target.value;
                             if (value === "" || Number(value) > 0) {
@@ -253,9 +263,46 @@ export default function ReadingChallengeCard({
                       >
                         Set reading challenge
                       </Button>
+
                       <Button
                         onClick={() => {
                           setIsDialogOpen(false);
+                        }}
+                        className="rounded-full border-orange-400 border-2"
+                      >
+                        Cancel
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+
+                <Dialog
+                  open={isConfirmationDialogOpen}
+                  onOpenChange={setConfirmationIsDialogOpen}
+                >
+                  <DialogTrigger asChild>
+                    <Button className="rounded-full border-orange-400 bg-red-400 hover:bg-red-600 border-2">
+                      Delete reading challenge
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Remove reading challenge!</DialogTitle>
+                      <DialogDescription>
+                        Delete your reading goal for this year
+                      </DialogDescription>
+                    </DialogHeader>
+
+                    <DialogFooter>
+                      <Button
+                        onClick={handleDeleteReadingChallenge}
+                        className="rounded-full border-orange-400 bg-red-400 hover:bg-red-600 border-2"
+                      >
+                        Confirm
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          setConfirmationIsDialogOpen(false);
                         }}
                         className="rounded-full border-orange-400 border-2"
                       >

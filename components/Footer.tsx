@@ -1,10 +1,8 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 
 export default function Footer() {
-  const { user } = useUser();
   const year = new Date().getFullYear();
 
   return (

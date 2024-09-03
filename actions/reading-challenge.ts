@@ -1,6 +1,7 @@
 "use server";
 
 import {
+  dbDeleteChallenge,
   dbGetReadingChallengeByUserId,
   dbGetReadingChallengeByUserIdAndYear,
   dbInsertReadingChallenge,
@@ -36,7 +37,9 @@ export const actionGetReadingChallengeByUserIdAndYear = async (
   return result;
 };
 
-export const actionGetReadingChallengeByUserId = async (userId: string) => {
+export const actionGetReadingChallengeByUserId = async (
+  userId: string
+) => {
   const result = await dbGetReadingChallengeByUserId(userId);
   return result;
 };
@@ -49,7 +52,14 @@ export const actionUpdateChallenge = async (
   return result;
 };
 
-export const actionMarkChallengeAsCelebrated = async (challengeId: string) => {
+export const actionDeleteChallenge = async (challengeId: string) => {
+  const result = await dbDeleteChallenge(challengeId);
+  return result;
+};
+
+export const actionMarkChallengeAsCelebrated = async (
+  challengeId: string
+) => {
   const result = await dbMarkChallengeAsCelebrated(challengeId);
   return result;
 };

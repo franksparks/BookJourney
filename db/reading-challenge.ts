@@ -45,14 +45,23 @@ export const dbUpdateReadingChallenge = catchErrors(
   }
 );
 
-export const dbMarkChallengeAsCelebrated = catchErrors(async (id: string) => {
-  const updatedChallenge = await db.readingChallenge.update({
+export const dbDeleteChallenge = catchErrors(async (id: string) => {
+  const result = await db.readingChallenge.delete({
     where: { id },
-    data: { hasCelebrated: true },
   });
-
-  return updatedChallenge;
+  return result;
 });
+
+export const dbMarkChallengeAsCelebrated = catchErrors(
+  async (id: string) => {
+    const updatedChallenge = await db.readingChallenge.update({
+      where: { id },
+      data: { hasCelebrated: true },
+    });
+
+    return updatedChallenge;
+  }
+);
 
 export const dbMarkChallengeAsNotCelebrated = catchErrors(
   async (id: string) => {
