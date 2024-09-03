@@ -195,41 +195,46 @@ export default function BookDetails({ book }: BookDetailsProps) {
         {book.description && <ReadMore text={book.description} />}
         {book.categories && (
           <>
-            <div className="mt-8 mb-4 font-bold">{"Genres"}</div>
-            <div className="flex h-5 items-center space-x-4">
+            <div className="mt-8 mb-4 text-xl">{"Genres"}</div>
+            <div className="flex h-5 items-center space-x-4 gap-4">
               {book.categories.map((category, index) => (
-                <>
-                  <Separator orientation="vertical" />
-                  <div key={index}>{category}</div>
-                  <Separator orientation="vertical" />
-                </>
+                <div key={index}>{category}</div>
               ))}
             </div>
           </>
         )}
-        {
-          <>
-            <div className="mt-8 font-bold">{"This edition"}</div>
-            <Separator className="my-4" />
-          </>
-        }
-        <div className="grid gap-4">
+        <div className="flex flex-row justify-between items-center mt-8 mr-12">
+          <div className="text-xl items-center">{"This edition"}</div>
+
           {book.pages !== 0 && (
-            <div className="flex items-center">
-              <div className="font-semibold">Pages</div>
-              <div className="ml-11">{book.pages}</div>
+            <div className="flex flex-row items-center gap-2">
+              <div>Pages</div>
+              <Image alt={"pages"} src={"/pages.svg"} width={30} height={30} />
+              <div>{book.pages}</div>
             </div>
           )}
           {book.language && (
-            <div className="flex items-center">
-              <div className="font-semibold">Published</div>
-              <div className="ml-4">{book.publishedDate}</div>
+            <div className="flex flex-row items-center gap-2">
+              <div>Published</div>
+              <Image
+                alt={"calendar"}
+                src={"/calendar.svg"}
+                width={30}
+                height={30}
+              />
+              <div>{book.publishedDate}</div>
             </div>
           )}
           {book.language && (
-            <div className="flex items-center">
-              <div className="font-semibold">Language</div>
-              <div className="ml-4">{book.language.toUpperCase()}</div>
+            <div className="flex flex-row items-center gap-2">
+              <div>Language</div>
+              <Image
+                alt={"language"}
+                src={"/language.svg"}
+                width={30}
+                height={30}
+              />
+              <div>{book.language.toUpperCase()}</div>
             </div>
           )}
         </div>
