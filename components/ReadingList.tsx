@@ -8,16 +8,22 @@ import BookCard from "./BookCard";
 
 interface ReadingListProps {
   onBookRead: () => void;
+  bookSignal: boolean;
+  newBookSignal: (bool: boolean) => void;
 }
 
-export default function ReadingList({ onBookRead }: ReadingListProps) {
+export default function ReadingList({
+  onBookRead,
+  bookSignal,
+  newBookSignal,
+}: ReadingListProps) {
   const { dbUser } = useDbUser();
 
   const [readingList, setReadingList] = useState<BookStatus[]>([]);
 
   useEffect(() => {
     getReadingList();
-  }, [dbUser]);
+  }, [dbUser, bookSignal]);
 
   const getReadingList = async () => {
     if (dbUser != null) {
@@ -27,6 +33,7 @@ export default function ReadingList({ onBookRead }: ReadingListProps) {
       );
       setReadingList(userReadingList);
     }
+    newBookSignal(false);
   };
 
   const handleStatusChange = async () => {
@@ -38,7 +45,9 @@ export default function ReadingList({ onBookRead }: ReadingListProps) {
 
   return (
     <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-sky-600 text-slate-100 h-full overflow-y-auto">
-      <h1 className="font-light text-sky-200 text-center">Currently Reading</h1>
+      <h1 className="font-light text-sky-200 text-center">
+        Currently Reading
+      </h1>
 
       <div className="flex flex-col items-center">
         {dbUser &&
@@ -53,7 +62,9 @@ export default function ReadingList({ onBookRead }: ReadingListProps) {
         {dbUser && readingList.length == 0 && (
           <div>Start reading to see something here!</div>
         )}
-        {!dbUser && <div>Login to see the books you are reading here!</div>}
+        {!dbUser && (
+          <div>Login to see the books you are reading here!</div>
+        )}
       </div>
     </div>
   );

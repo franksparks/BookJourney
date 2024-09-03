@@ -6,9 +6,13 @@ import { actionGetBooksByUserIdAndReadingStatus } from "@/actions/book-status";
 import { BookStatus } from "@/models/book-status";
 import BookCardWantToRead from "./BookCardWantToRead";
 
+interface WantToReadProps {
+  newBookSignal: (bool: boolean) => void;
+}
+
 const initialState: BookStatus[] = [];
 
-export default function WantToRead() {
+export default function WantToRead({ newBookSignal }: WantToReadProps) {
   const { dbUser } = useDbUser();
 
   const [readingList, setLists] = useState(initialState);
@@ -41,6 +45,7 @@ export default function WantToRead() {
 
   const handleStatusChange = async () => {
     await getLists();
+    newBookSignal(true);
   };
 
   return (
@@ -64,6 +69,7 @@ export default function WantToRead() {
                   book={element.book}
                   status={element}
                   onStatusChange={handleStatusChange}
+                  newBookSignal={Boolean}
                 />
               </div>
             ))}
