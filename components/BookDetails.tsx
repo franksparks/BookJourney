@@ -132,7 +132,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
 
   return (
     <div className="flex justify-center m-8 bg-sky-50 shadow-lg shadow-sky-600 p-12 rounded-3xl">
-      <div className="flex flex-col justify-evenly items-center w-1/4">
+      <div className="flex flex-col items-center gap-4 w-1/4">
         {book.cover ? (
           <Image
             className="mb-8 shadow-lg shadow-sky-600 rounded-lg"
@@ -176,15 +176,11 @@ export default function BookDetails({ book }: BookDetailsProps) {
           </div>
         )}
       </div>
-      <div className="flex w-screen justify-start flex-col mr-4">
+      <div className="flex justify-start flex-col w-3/4 mr-4">
         <div className="flex flex-row">
           <h1 className="mr-4 mb-8">{book.title}</h1>
           {logged && <ReadRating value={averageBookRating} />}
         </div>
-        {logged && (
-          <h2>{`Average: ${averageBookRating} - Number of ratings: ${numberOfRatings}`}</h2>
-        )}
-        <Separator className="my-4" />
         {(book.authors &&
           book.authors.map((author, index) => (
             <h2 className="text-2xl italic text-slate-600" key={index}>
@@ -241,6 +237,13 @@ export default function BookDetails({ book }: BookDetailsProps) {
         <>
           <Separator className="my-4" />
         </>
+        <div className="flex flex-row items-center gap-4 mb-8">
+          {logged && (
+            <h2>{`Rating Average: ${averageBookRating} - Number of ratings: ${numberOfRatings}`}</h2>
+          )}
+          {logged && <ReadRating value={averageBookRating} />}
+        </div>
+
         <Reviews
           bookInDb={bookInDb}
           numericBookRating={numericBookRating}
