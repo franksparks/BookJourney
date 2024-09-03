@@ -46,6 +46,8 @@ export default function ReadingChallengeCard({
   const [newGoal, setNewGoal] = useState(0);
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isConfirmationDialogOpen, setConfirmationIsDialogOpen] =
+    useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
@@ -123,7 +125,7 @@ export default function ReadingChallengeCard({
     if (currentChallenge) {
       const res = await actionDeleteChallenge(currentChallenge.id);
       setCurrentChallenge(null);
-      setIsDialogOpen(false);
+      setConfirmationIsDialogOpen(false);
     }
   };
 
@@ -184,7 +186,7 @@ export default function ReadingChallengeCard({
                     </Button>
                     <Button
                       onClick={() => {
-                        setIsDialogOpen(false);
+                        setConfirmationIsDialogOpen(false);
                       }}
                       className="rounded-full border-orange-400 border-2"
                     >
@@ -261,15 +263,46 @@ export default function ReadingChallengeCard({
                       >
                         Set reading challenge
                       </Button>
+
+                      <Button
+                        onClick={() => {
+                          setIsDialogOpen(false);
+                        }}
+                        className="rounded-full border-orange-400 border-2"
+                      >
+                        Cancel
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+
+                <Dialog
+                  open={isConfirmationDialogOpen}
+                  onOpenChange={setConfirmationIsDialogOpen}
+                >
+                  <DialogTrigger asChild>
+                    <Button className="rounded-full border-orange-400 bg-red-400 hover:bg-red-600 border-2">
+                      Delete reading challenge
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Remove reading challenge!</DialogTitle>
+                      <DialogDescription>
+                        Delete your reading goal for this year
+                      </DialogDescription>
+                    </DialogHeader>
+
+                    <DialogFooter>
                       <Button
                         onClick={handleDeleteReadingChallenge}
                         className="rounded-full border-orange-400 bg-red-400 hover:bg-red-600 border-2"
                       >
-                        Delete reading challenge
+                        Confirm
                       </Button>
                       <Button
                         onClick={() => {
-                          setIsDialogOpen(false);
+                          setConfirmationIsDialogOpen(false);
                         }}
                         className="rounded-full border-orange-400 border-2"
                       >
