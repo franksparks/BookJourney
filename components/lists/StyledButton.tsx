@@ -39,8 +39,8 @@ export default function StyledButton({ onClick }: StyledButtonProps) {
           ></path>
         </svg>
       </span>
-      <span className="relative w-full text-left transition-colors duration-200 ease-in-out group-hover:text-white text-xs">
-        Create List
+      <span className="relative w-full text-left transition-colors duration-200 ease-in-out group-hover:text-white text-xs mr-2">
+        New!
       </span>
     </a>
   );
