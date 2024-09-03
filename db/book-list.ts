@@ -30,6 +30,26 @@ export const dbGetBookListsByBookIdAndListId = catchErrors(
   }
 );
 
+export const dbUpdateBookLists = catchErrors(
+  async (bookId: string, listIds: string[]) => {
+    await db.bookList.deleteMany({
+      where: { bookId: bookId },
+    });
+
+    const createBookLists = listIds.map((listId) =>
+      db.bookList.create({
+        data: {
+          bookId: bookId,
+          listId: listId,
+        },
+      })
+    );
+
+    const result = await Promise.all(createBookLists);
+    return result;
+  }
+);
+
 export const dbDeleteBookList = catchErrors(async (id: string) => {
   const result = await db.bookList.delete({ where: { id } });
   return result;

@@ -16,12 +16,13 @@ import { useDbUser } from "@/app/context/db-user-context";
 import { Book } from "@/models/book";
 import { inverseRatingMap, Rating, ratingMap } from "@/models/rating";
 import { RatingValue } from "@prisma/client";
-import ReviewDialogue from "./ReviewDialogue";
 import { useCallback, useEffect, useState } from "react";
+import BookToListInjector from "./BookToListInjector";
 import ControlledRating from "./ControlledRating";
 import ReadingStatusDropdown from "./ReadingStatusDropdown";
 import ReadMore from "./ReadMore";
 import ReadRating from "./ReadRating";
+import ReviewDialogue from "./ReviewDialogue";
 import { Separator } from "./ui/separator";
 import Reviews from "./Reviews";
 import { Review } from "@/models/review";
@@ -169,6 +170,9 @@ export default function BookDetails({ book }: BookDetailsProps) {
               />
             </div>
           )}
+          <div className="flex justify-center mt-2">
+            <BookToListInjector book={book} />
+          </div>
         </div>
       </div>
       <div className="flex w-screen justify-start flex-col mr-4">

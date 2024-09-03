@@ -40,13 +40,30 @@ export const dbGetListByNameAndUserId = catchErrors(
     return await db.list.findFirst({
       where: { name, userId },
     });
+});
+
+export const dbGetListsByBookIdAndUserId = catchErrors(
+  async (bookId: string, userId: string) => {
+    const result = await db.list.findMany({
+      where: {
+        userId: userId,
+        books: {
+          some: {
+            bookId: bookId,
+          },
+        },
+      },
+    });
+    return result;
   }
 );
 
-export const dbUpdateList = catchErrors(async (id: string, name: string) => {
-  const result = await db.list.update({ where: { id }, data: { name } });
-  return result;
-});
+export const dbUpdateList = catchErrors(
+  async (id: string, name: string) => {
+    const result = await db.list.update({ where: { id }, data: { name } });
+    return result;
+  }
+);
 
 export const dbDeleteList = catchErrors(async (id: string) => {
   const resultBookLists = await db.bookList.deleteMany({
