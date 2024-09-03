@@ -29,7 +29,11 @@ export default function Home() {
         className="w-5/6 flex flex-row justify-center gap-20"
       >        
         <div className="w-1/2 flex flex-col h-full gap-12">
-          <ListsCard />
+        <ReadingChallengeCard
+            bookRead={bookRead}
+            onReset={handleResetBookRead}
+          />
+          
           <ReadingList
             onBookRead={handleBookRead}
             bookSignal={bookSignal}
@@ -37,11 +41,8 @@ export default function Home() {
           />
         </div>
         <div className="w-1/2 flex flex-col h-full gap-4">
+          <ListsCard />
           <WantToRead newBookSignal={newBookSignal} />
-          <ReadingChallengeCard
-            bookRead={bookRead}
-            onReset={handleResetBookRead}
-          />
         </div>
       </div>
     </main>
