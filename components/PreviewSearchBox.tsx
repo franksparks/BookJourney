@@ -15,6 +15,8 @@ interface Option {
   index: number;
 }
 
+const FIXED_TOTAL_ITEMS = 200; 
+
 export default function PreviewSearchBox() {
   const { setResults, setPreviewSearch, setTotalItems } =
     useBooksSearchContext();
@@ -33,7 +35,13 @@ export default function PreviewSearchBox() {
     try {
       const result = await actionSearchBooksGoogle(query, 0);
       setResults(result.books);
-      setTotalItems(result.totalItems);
+
+      const totalItems =
+        result.totalItems >= FIXED_TOTAL_ITEMS
+          ? FIXED_TOTAL_ITEMS
+          : result.totalItems;
+
+      setTotalItems(totalItems);
       const firstFiveBooks = result.books.slice(0, 5);
       const mappedOptions = firstFiveBooks.map((book, index) => ({
         label: `${book.title} by ${

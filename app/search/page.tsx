@@ -12,12 +12,14 @@ import { useState, useCallback, useEffect, Suspense } from "react";
 const queryMap: { [key: string]: string } = {
   author: ":inauthor:",
   title: ":intitle:",
-  all: "",
+  all: ""
 };
 
 const calculateIndex = (page: number): number => {
   return (page - 1) * 10;
 };
+
+const FIXED_TOTAL_ITEMS = 200;
 
 export default function Home() {
   const {
@@ -27,7 +29,7 @@ export default function Home() {
     previewSearch,
     setPreviewSearch,
     setTotalItems,
-    totalItems,
+    totalItems
   } = useBooksSearchContext();
   const [advancedResults, setAdvancedResults] = useState<Book[]>([]);
   const [advancedTotalItems, setAdvancedTotalItems] = useState(0);
@@ -45,16 +47,19 @@ export default function Home() {
     try {
       const index = calculateIndex(page);
 
-      const queryString = queryMap
-        ? `${queryMap[radioValue]}${query}`
-        : query;
+      const queryString = queryMap ? `${queryMap[radioValue]}${query}` : query;
 
       const result = await actionSearchBooksGoogle(queryString, index);
       setResults(result.books);
-      setTotalItems(result.totalItems);
+      const totalItems =
+        result.totalItems >= FIXED_TOTAL_ITEMS
+          ? FIXED_TOTAL_ITEMS
+          : result.totalItems;
+      setTotalItems(totalItems);
       setAdvancedResults(result.books);
+      
       if (advancedTotalItems === 0) {
-        setAdvancedTotalItems(result.totalItems);
+        setAdvancedTotalItems(totalItems);
       }
       if (queryMap && query) {
         router.push(`/search?q=${encodeURIComponent(query)}`);
