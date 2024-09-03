@@ -65,7 +65,7 @@ export default function ReadingChallengeCard({
       setTimeout(() => setShowConfetti(false), 10000);
       actionMarkChallengeAsCelebrated(currentChallenge.id);
     }
-  }, [readBooks.length, currentChallenge]);
+  }, [readBooks.length, currentChallenge, bookRead]);
 
   const getReadBooks = async () => {
     if (dbUser != null) {
