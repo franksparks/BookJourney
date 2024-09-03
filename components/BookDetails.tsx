@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  actionGetBookByGoogleId,
-  actionInsertBook,
-} from "@/actions/books";
+import { actionGetBookByGoogleId, actionInsertBook } from "@/actions/books";
 import {
   actionDeleteRating,
   actionGetAverageRatingByBookId,
@@ -26,6 +23,7 @@ import { Separator } from "./ui/separator";
 import Reviews from "./Reviews";
 import { Review } from "@/models/review";
 import ParametrizedPagination from "./ParametrizedPagination";
+import Image from "next/image";
 
 type BookDetailsProps = {
   book: Book;
@@ -33,9 +31,7 @@ type BookDetailsProps = {
 
 export default function BookDetails({ book }: BookDetailsProps) {
   const { dbUser } = useDbUser();
-  const [numericBookRating, setNumericBookRating] = useState<
-    number | null
-  >(0);
+  const [numericBookRating, setNumericBookRating] = useState<number | null>(0);
   const [averageBookRating, setAverageBookRating] = useState<number>(0);
   const [numberOfRatings, setNumberOfRatings] = useState<number>(0);
   const [bookInDb, setBookInDb] = useState<Book | null>(null);
@@ -135,45 +131,54 @@ export default function BookDetails({ book }: BookDetailsProps) {
   }, [numericBookRating, bookInDb]);
 
   return (
-    <div className="flex justify-center mt-10 ">
-      <div className="flex justify-center basis-1/4">
-        <div className="flex flex-col">
-          <img
-            className="mb-8"
-            src={book.cover || "../default_cover.jpg"}
+    <div className="flex justify-center m-8 bg-sky-50 shadow-lg shadow-sky-600 p-12 rounded-3xl">
+      <div className="flex flex-col justify-evenly items-center w-1/4">
+        {book.cover ? (
+          <Image
+            className="mb-8 shadow-lg shadow-sky-600 rounded-lg"
+            alt={book.title}
+            src={book.cover}
+            width={150}
+            height={200}
           />
-          <div>
-            <ReadingStatusDropdown book={book} logged={logged} />
-          </div>
-          <div className="flex justify-center mt-7">
-            <ControlledRating
-              logged={logged}
-              bookRating={numericBookRating}
-              setBookRating={setNumericBookRating}
-              setFirstInteraction={setFirstInteraction}
+        ) : (
+          <Image
+            className="mb-8"
+            alt={book.title}
+            src={"/default_cover.jpg"}
+            width={100}
+            height={100}
+          />
+        )}
+        <div>
+          <ReadingStatusDropdown book={book} logged={logged} />
+        </div>
+        <div className="flex justify-center mt-7">
+          <ControlledRating
+            logged={logged}
+            bookRating={numericBookRating}
+            setBookRating={setNumericBookRating}
+            setFirstInteraction={setFirstInteraction}
+          />
+        </div>
+        {!bookRating && (
+          <div className="flex justify-center mt-2">{"Rate this book"}</div>
+        )}
+        {bookRating && (
+          <div className="flex justify-center mt-2">
+            <ReviewDialogue
+              bookInDb={bookInDb!}
+              dbUser={dbUser}
+              numericBookRating={numericBookRating}
+              setBookReview={setBookReview}
+              bookReview={bookReview}
             />
           </div>
-          {!bookRating && (
-            <div className="flex justify-center mt-2">
-              {"Rate this book"}
-            </div>
-          )}
-          {bookRating && (
-            <div className="flex justify-center mt-2">
-              <ReviewDialogue
-                bookInDb={bookInDb!}
-                dbUser={dbUser}
-                numericBookRating={numericBookRating}
-                setBookReview={setBookReview}
-                bookReview={bookReview}
-              />
-            </div>
-          )}
-        </div>
+        )}
       </div>
       <div className="flex w-screen justify-start flex-col mr-4">
         <div className="flex flex-row">
-          <h1 className="mr-4">{book.title}</h1>
+          <h1 className="mr-4 mb-8">{book.title}</h1>
           {logged && <ReadRating value={averageBookRating} />}
         </div>
         {logged && (
@@ -182,7 +187,10 @@ export default function BookDetails({ book }: BookDetailsProps) {
         <Separator className="my-4" />
         {(book.authors &&
           book.authors.map((author, index) => (
-            <h2 key={index}> {author} </h2>
+            <h2 className="text-2xl italic text-slate-600" key={index}>
+              {" "}
+              {author}{" "}
+            </h2>
           ))) || <h2> {"Unknown author"} </h2>}
         {book.description && <ReadMore text={book.description} />}
         {book.categories && (

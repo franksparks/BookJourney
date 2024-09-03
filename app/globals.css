@@ -67,7 +67,7 @@
     @apply bg-background text-foreground;
   }
   h1 {
-    @apply font-bold text-4xl mb-4;
+    @apply text-4xl;
   }
 
   p {
