@@ -6,9 +6,13 @@ import { actionGetBooksByUserIdAndReadingStatus } from "@/actions/book-status";
 import { BookStatus } from "@/models/book-status";
 import BookCardWantToRead from "./BookCardWantToRead";
 
+interface WantToReadProps {
+  newBookSignal: (bool: boolean) => void;
+}
+
 const initialState: BookStatus[] = [];
 
-export default function WantToRead() {
+export default function WantToRead({ newBookSignal }: WantToReadProps) {
   const { dbUser } = useDbUser();
 
   const [readingList, setLists] = useState(initialState);
@@ -41,11 +45,14 @@ export default function WantToRead() {
 
   const handleStatusChange = async () => {
     await getLists();
+    newBookSignal(true);
   };
 
   return (
-    <div className="flex flex-col justify-start rounded-3xl shadow-xl shadow-sky-200 p-4 bg-sky-600 text-sky-50 h-72 overflow-y-auto">
-      <h1 className="font-light text-sky-200 text-center">Want to Read</h1>
+    <div className="flex flex-col justify-start rounded-3xl shadow-xl shadow-orange-200 bg-orange-500 p-4 text-orange-50 h-1/3">
+      <h1 className="font-light text-orange-100 text-center">
+        Want to Read
+      </h1>
       <div className="relative flex flex-col items-center justify-center h-full w-full">
         {dbUser && readingList.length > 0 && (
           <div className="relative w-full h-full">
@@ -62,6 +69,7 @@ export default function WantToRead() {
                   book={element.book}
                   status={element}
                   onStatusChange={handleStatusChange}
+                  newBookSignal={Boolean}
                 />
               </div>
             ))}
@@ -70,7 +78,9 @@ export default function WantToRead() {
         {dbUser && readingList.length === 0 && (
           <div>Start reading to see something here!</div>
         )}
-        {!dbUser && <div>Login to see the books you are reading here!</div>}
+        {!dbUser && (
+          <div>Login to see the books you are reading here!</div>
+        )}
       </div>
     </div>
   );

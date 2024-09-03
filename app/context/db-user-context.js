@@ -5,7 +5,6 @@ import { useAuth } from '@clerk/nextjs';
 
 const DbUserContext = createContext();
 
-// Crear el proveedor del contexto
 export const DbUserProvider = ({ children }) => {
   const [dbUser, setDbUser] = useState(null);
   const { isSignedIn } = useAuth();
@@ -23,5 +22,4 @@ export const DbUserProvider = ({ children }) => {
   );
 };
 
-// Crear un hook personalizado para usar el contexto
 export const useDbUser = () => useContext(DbUserContext);

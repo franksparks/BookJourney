@@ -23,7 +23,9 @@ import ReadingStatusDropdown from "./ReadingStatusDropdown";
 import ReadMore from "./ReadMore";
 import ReadRating from "./ReadRating";
 import { Separator } from "./ui/separator";
-
+import Reviews from "./Reviews";
+import { Review } from "@/models/review";
+import ParametrizedPagination from "./ParametrizedPagination";
 
 type BookDetailsProps = {
   book: Book;
@@ -38,6 +40,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
   const [numberOfRatings, setNumberOfRatings] = useState<number>(0);
   const [bookInDb, setBookInDb] = useState<Book | null>(null);
   const [bookRating, setBookRating] = useState<Rating | null>(null);
+  const [bookReview, setBookReview] = useState<Review | null>(null);
   const [firstInteraction, setFirstInteraction] = useState(true);
   const logged = dbUser ? true : false;
 
@@ -132,7 +135,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
   }, [numericBookRating, bookInDb]);
 
   return (
-    <div className="flex justify-center mt-10">
+    <div className="flex justify-center mt-10 ">
       <div className="flex justify-center basis-1/4">
         <div className="flex flex-col">
           <img
@@ -151,11 +154,19 @@ export default function BookDetails({ book }: BookDetailsProps) {
             />
           </div>
           {!bookRating && (
-            <div className="flex justify-center mt-2">{"Rate this book"}</div>
+            <div className="flex justify-center mt-2">
+              {"Rate this book"}
+            </div>
           )}
           {bookRating && (
             <div className="flex justify-center mt-2">
-              <ReviewDialogue bookInDb={bookInDb!} dbUser={dbUser} numericBookRating={numericBookRating}/>
+              <ReviewDialogue
+                bookInDb={bookInDb!}
+                dbUser={dbUser}
+                numericBookRating={numericBookRating}
+                setBookReview={setBookReview}
+                bookReview={bookReview}
+              />
             </div>
           )}
         </div>
@@ -214,6 +225,14 @@ export default function BookDetails({ book }: BookDetailsProps) {
             </div>
           )}
         </div>
+        <>
+          <Separator className="my-4" />
+        </>
+        <Reviews
+          bookInDb={bookInDb}
+          numericBookRating={numericBookRating}
+          bookReview={bookReview}
+        />
       </div>
     </div>
   );

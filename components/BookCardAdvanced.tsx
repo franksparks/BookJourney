@@ -15,7 +15,7 @@ export default function BookCardAdvanced({ book }: bookCardAdvancedProps) {
 
   const logged = dbUser ? true : false;
   return (
-    <div className="flex flex-row justify-between h-36 bg-sky-50 rounded-lg mx-auto shadow-md shadow-sky-800 hover:bg-sky-200 transition duration-500 max-w-xl">
+    <div className="flex flex-row justify-between bg-sky-50 rounded-lg mx-auto shadow-md shadow-sky-800 hover:bg-sky-200 transition duration-500 max-w-xl">
       <div className="w-1/3 flex items-center justify-center p-2 min-w-fit">
         <BookNavigationWrapper id={book.googleBooksId}>
           {book.smallCover ? (
@@ -23,8 +23,8 @@ export default function BookCardAdvanced({ book }: bookCardAdvancedProps) {
               className=" shadow-lg shadow-sky-600 rounded hover:scale-110 transition duration-1000"
               src={book.smallCover}
               alt={book.title}
-              width={70}
-              height={100}
+              width={60}
+              height={70}
             />
           ) : (
             <Image

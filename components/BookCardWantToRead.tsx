@@ -1,26 +1,37 @@
 import { actionUpdateBookStatus } from "@/actions/book-status";
 import { Book } from "@/models/book";
 import { BookStatus } from "@/models/book-status";
+import { Tooltip } from "@mui/material";
 import { ReadStatus } from "@prisma/client";
 import Image from "next/image";
-import { Button } from "./ui/button";
-import { Tooltip } from "@mui/material";
 import BookNavigationWrapper from "./BookNavigationWrapper";
+import { Button } from "./ui/button";
+import { useToast } from "./ui/use-toast";
 
 type bookCardProps = {
   book: Book;
   status: BookStatus;
   onStatusChange: () => void;
+  newBookSignal: (bool: boolean) => boolean;
 };
 
 export default function BookCardWantToRead({
   book,
   status,
   onStatusChange,
+  newBookSignal,
 }: bookCardProps) {
-  const handleDoneClick = async () => {
+  const { toast } = useToast();
+
+  const handleStartBookClick = async () => {
     await actionUpdateBookStatus(status.id, ReadStatus.READING);
     onStatusChange();
+    newBookSignal(true);
+    toast({
+      title: "Book started!",
+      className: "bg-orange-500 text-white",
+      duration: 5000,
+    });
   };
 
   return (
@@ -54,7 +65,7 @@ export default function BookCardWantToRead({
 
       <div className="flex justify-center items-center mr-2 w-1/4">
         <Button
-          onClick={handleDoneClick}
+          onClick={handleStartBookClick}
           className="rounded-full border-orange-500 border-2 hover:scale-110 transition duration-500"
         >
           Start
