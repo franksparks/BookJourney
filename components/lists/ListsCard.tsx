@@ -14,6 +14,7 @@ import {
   actionDeleteList,
   actionUpdateList,
   actionGetListByNameAndUserId,
+  actionCapitalizeAndReplaceUnderscores,
 } from "@/actions/lists";
 import { actionGetBookStatusByUserId } from "@/actions/book-status";
 import { useDbUser } from "@/app/context/db-user-context";
@@ -23,6 +24,7 @@ import Modal from "@/components/ui/confirmation-modal";
 import { Book } from "@/models/book";
 import { ReadStatus } from "@prisma/client";
 import StyledButton from "@/components/lists/StyledButton";
+import BookGif from '../../assets/book-gif.gif';
 
 export default function ListsCard({
   setBooks,
@@ -64,7 +66,7 @@ export default function ListsCard({
     const statusResult = await actionGetBookStatusByUserId(dbUser!.id);
     const allLists: List[] = [];
     for (const bookStatus of statusResult) {
-      const found = allLists.find((list) => list.name === bookStatus.status);
+      const found = allLists.find((list) => list.id === bookStatus.status);
       if (found) {
         found.books.push({
           id: `${found.id}-${bookStatus.bookId}`,
@@ -75,7 +77,7 @@ export default function ListsCard({
       } else {
         allLists.push({
           id: bookStatus.status,
-          name: bookStatus.status,
+          name: actionCapitalizeAndReplaceUnderscores(bookStatus.status),
           createdAt: new Date(),
           userId: dbUser!.id,
           books: [
@@ -89,6 +91,13 @@ export default function ListsCard({
         });
       }
     }
+    allLists.push({
+      id: '--divider--',
+      name: '--divider--',
+      createdAt: new Date(),
+      userId: dbUser!.id,
+      books: [],
+    })
     allLists.push(...(listsResult ?? []));
     if (setSelectedList) handlePreselectedList(allLists);
     setLists(allLists);
@@ -143,9 +152,8 @@ export default function ListsCard({
   };
 
   const handleSelectList = (list: List) => {
-    if (pathname === "/") {
-      router.push(`/lists?listId=${list.id}`);
-    } else {
+    router.push(`/lists?listId=${list.id}`);
+    if (pathname !== "/") {
       setSelectedList(list);
       handleSetSelectedBooks(list);
     }
@@ -215,7 +223,7 @@ export default function ListsCard({
 
   return (
     <div className="p-4 border shadow-md w-full rounded-3xl bg-orange-500 bg-opacity-50">
-      <h1 className="font-light text-orange-700 text-center mt-4">My Lists</h1>
+      <h1 className="font-light text-orange-700 text-center mt-4 pb-2 border-b-4">My Lists</h1>
       {!dbUser && (
         <div className="text-slate-100 text-center">
           You must register or login to create a list
@@ -226,7 +234,8 @@ export default function ListsCard({
           <ul className="mb-4">
             {lists.length > 0 &&
               lists.map((list) => (
-                <div className="flex items-center mb-2" key={list.id}>
+                list.id === '--divider--' ? <hr key={list.id} className={`mb-4 ${pathname === '/' ? 'hidden' : ''}`}/> :
+                <div className={`items-center mb-2 ${pathname === "/" && !Object.values(ReadStatus).includes(list.id as ReadStatus) ? "hidden" : "flex"}`} key={list.id}>
                   {editingListId === list.id ? (
                     <div className="w-full">
                       <div className="flex items-center mb-2">
@@ -259,14 +268,15 @@ export default function ListsCard({
                     <>
                       <li
                         onClick={() => handleSelectList(list)}
-                        className={`transition transform hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none hover:cursor-pointer ${
+                        className={`transition transform hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none hover:cursor-pointer flex ${
                           selectedList?.id === list.id ? "font-bold" : ""
                         }`}
                       >
+                        <img src={BookGif.src} className="h-6 w-6 mb-2 mr-1" alt="book"/>
                         {list.name} - ({list.books.length})
                       </li>
                       {!Object.values(ReadStatus).includes(
-                        list.name as ReadStatus
+                        list.id as ReadStatus
                       ) && (
                         <button
                           aria-label="close"
@@ -277,7 +287,7 @@ export default function ListsCard({
                         </button>
                       )}
                       {!Object.values(ReadStatus).includes(
-                        list.name as ReadStatus
+                        list.id as ReadStatus
                       ) && (
                         <button
                           aria-label="close"

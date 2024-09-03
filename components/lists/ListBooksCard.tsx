@@ -13,12 +13,12 @@ interface BooksListProps {
 export default function ListBooksCard({ list, books }: BooksListProps) {
 
   return (
-    <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-sky-300 text-slate-100 h-full overflow-y-auto">
-        <h1 className="font-light text-sky-700 text-center"><strong>{list?.books.length}</strong> Books in <i>{list?.name}</i></h1>
+    <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-sky-300 text-slate-100 overflow-y-auto">
+        <h1 className="font-light text-sky-700 text-center pb-2 border-b-4"><strong>{list?.books.length}</strong> Books in <i>{list?.name}</i></h1>
       <ul>
         {books.length > 0 ? (
           books.map((book, index) => (
-            <li key={book.id} className="p-2 border-b">
+            <li key={book.id} className="mb-2">
               <BookCardAdvanced book={book} />
             </li>
           ))

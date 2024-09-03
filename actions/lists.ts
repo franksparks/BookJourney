@@ -42,3 +42,10 @@ export const actionDeleteList = async (id: string) => {
   const result = await dbDeleteList(id);
   return result;
 };
+
+export const actionCapitalizeAndReplaceUnderscores = (input: string): string => {
+  return input
+    .split('_') // Divide la cadena en palabras separadas por guiones bajos
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitaliza la primera letra de cada palabra
+    .join(' '); // Une las palabras con un espacio
+}
