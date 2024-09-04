@@ -5,6 +5,7 @@ import { Book } from "../../../models/book";
 import BookDetails from "@/components/BookDetails";
 import { useEffect, useState } from "react";
 import { actionSearchBooksGoogle } from "@/actions/search-books-google";
+import { actionGetBookByGoogleId } from "@/actions/books";
 
 type PageProps = {
   params: {
@@ -22,8 +23,13 @@ export default function Page({ params }: PageProps) {
     );
 
     if (!foundBook) {
-      const { books } = await actionSearchBooksGoogle(googleBooksId, 0);
-      foundBook = books[0];
+      const bookInDb = await actionGetBookByGoogleId(googleBooksId);
+      if (bookInDb === null) {
+        const { books } = await actionSearchBooksGoogle(googleBooksId, 0);
+        foundBook = books[0];
+      } else {
+        foundBook = bookInDb;
+      }
     }
     setBook(foundBook);
   };
