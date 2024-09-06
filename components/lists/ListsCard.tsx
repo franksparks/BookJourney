@@ -24,12 +24,9 @@ import Modal from "@/components/ui/confirmation-modal";
 import { Book } from "@/models/book";
 import { ReadStatus } from "@prisma/client";
 import StyledButton from "@/components/lists/StyledButton";
-import BookGif from '../../assets/book-gif.gif';
+import BookGif from "../../assets/book-gif.gif";
 
-export default function ListsCard({
-  selectedList,
-  setSelectedList,
-}: any) {
+export default function ListsCard({ selectedList, setSelectedList }: any) {
   const { dbUser } = useDbUser();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -40,7 +37,9 @@ export default function ListsCard({
   const [newListName, setNewListName] = useState<string>("");
   const [editingListId, setEditingListId] = useState<string | null>(null);
   const [editingListName, setEditingListName] = useState<string>("");
-  const [deletingListId, setDeletingListId] = useState<string | null>(null);
+  const [deletingListId, setDeletingListId] = useState<string | null>(
+    null
+  );
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -62,7 +61,9 @@ export default function ListsCard({
 
   const getLists = async () => {
     const listsResult = await actionGetListsBookCountByUserId(dbUser!.id);
-    const statusResult = await actionGetBookStatusCountByUserId(dbUser!.id);
+    const statusResult = await actionGetBookStatusCountByUserId(
+      dbUser!.id
+    );
     const allLists: List[] = [];
     for (const bookStatus of statusResult) {
       allLists.push({
@@ -71,20 +72,20 @@ export default function ListsCard({
         createdAt: new Date(),
         userId: dbUser!.id,
         books: [],
-        book_count: bookStatus._count.status
-      })      
+        book_count: bookStatus._count.status,
+      });
     }
     allLists.push({
-      id: '--divider--',
-      name: '--divider--',
+      id: "--divider--",
+      name: "--divider--",
       createdAt: new Date(),
       userId: dbUser!.id,
       books: [],
-    })
+    });
     for (const list of listsResult) {
       allLists.push({
         ...list,
-        book_count: list._count.books
+        book_count: list._count.books,
       });
     }
     if (setSelectedList) handlePreselectedList(allLists);
@@ -200,7 +201,9 @@ export default function ListsCard({
 
   return (
     <div className="p-4 border shadow-md w-full rounded-3xl bg-orange-500 bg-opacity-50">
-      <h1 className="font-light text-orange-700 text-center mt-4 pb-2 border-b-4">My Lists</h1>
+      <h1 className="font-light text-orange-700 text-center mt-4 pb-2 border-b-4">
+        My Lists
+      </h1>
       {!dbUser && (
         <div className="text-slate-100 text-center">
           You must register or login to create a list
@@ -210,74 +213,94 @@ export default function ListsCard({
         <>
           <ul className="mb-4">
             {lists.length > 0 &&
-              lists.map((list) => (
-                list.id === '--divider--' ? <hr key={list.id} className={`mb-4 ${pathname === '/' ? 'hidden' : ''}`}/> :
-                <div className={`items-center mb-2 ${pathname === "/" && !Object.values(ReadStatus).includes(list.id as ReadStatus) ? "hidden" : "flex"}`} key={list.id}>
-                  {editingListId === list.id ? (
-                    <div className="w-full">
-                      <div className="flex items-center mb-2">
-                        <input
-                          type="text"
-                          value={editingListName}
-                          onChange={handleEditListName}
-                          className="p-2 border rounded w-full"
-                        />
-                        <button
-                          aria-label="close"
-                          className="p-2 bg-green-500 text-white rounded-full hover:bg-green-800 transition-colors duration-300 ml-3 mr-3"
-                          onClick={handleSaveEdit}
-                        >
-                          <CheckIcon className="h-3 w-3" />
-                        </button>
-                        <button
-                          aria-label="close"
-                          className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-300"
-                          onClick={handleCancelEdit}
-                        >
-                          <Cross2Icon className="h-3 w-3" />
-                        </button>
+              lists.map((list) =>
+                list.id === "--divider--" ? (
+                  <hr
+                    key={list.id}
+                    className={`mb-4 ${pathname === "/" ? "hidden" : ""}`}
+                  />
+                ) : (
+                  <div
+                    className={`items-center mb-2 ${
+                      pathname === "/" &&
+                      !Object.values(ReadStatus).includes(
+                        list.id as ReadStatus
+                      )
+                        ? "hidden"
+                        : "flex"
+                    }`}
+                    key={list.id}
+                  >
+                    {editingListId === list.id ? (
+                      <div className="w-full">
+                        <div className="flex items-center mb-2">
+                          <input
+                            type="text"
+                            value={editingListName}
+                            onChange={handleEditListName}
+                            className="p-2 border rounded w-full"
+                          />
+                          <button
+                            aria-label="close"
+                            className="p-2 bg-green-500 text-white rounded-full hover:bg-green-800 transition-colors duration-300 ml-3 mr-3"
+                            onClick={handleSaveEdit}
+                          >
+                            <CheckIcon className="h-3 w-3" />
+                          </button>
+                          <button
+                            aria-label="close"
+                            className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-300"
+                            onClick={handleCancelEdit}
+                          >
+                            <Cross2Icon className="h-3 w-3" />
+                          </button>
+                        </div>
+                        {errorMessage && (
+                          <p className="text-red-600">{errorMessage}</p>
+                        )}
                       </div>
-                      {errorMessage && (
-                        <p className="text-red-600">{errorMessage}</p>
-                      )}
-                    </div>
-                  ) : (
-                    <>
-                      <li
-                        onClick={() => handleSelectList(list)}
-                        className={`transition transform hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none hover:cursor-pointer flex ${
-                          selectedList?.id === list.id ? "font-bold" : ""
-                        }`}
-                      >
-                        <img src={BookGif.src} className="h-6 w-6 mb-2 mr-1" alt="book"/>
-                        {list.name} - ({list.book_count ?? 0})
-                      </li>
-                      {!Object.values(ReadStatus).includes(
-                        list.id as ReadStatus
-                      ) && (
-                        <button
-                          aria-label="close"
-                          className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-800 transition-colors duration-300 ml-auto mr-3"
-                          onClick={() => handleEditList(list)}
+                    ) : (
+                      <>
+                        <li
+                          onClick={() => handleSelectList(list)}
+                          className={`transition transform hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none hover:cursor-pointer flex ${
+                            selectedList?.id === list.id ? "font-bold" : ""
+                          }`}
                         >
-                          <Pencil2Icon className="h-3 w-3" />
-                        </button>
-                      )}
-                      {!Object.values(ReadStatus).includes(
-                        list.id as ReadStatus
-                      ) && (
-                        <button
-                          aria-label="close"
-                          className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-300"
-                          onClick={() => handleDeleteList(list.id)}
-                        >
-                          <EraserIcon className="h-3 w-3" />
-                        </button>
-                      )}
-                    </>
-                  )}
-                </div>
-              ))}
+                          <img
+                            src={BookGif.src}
+                            className="h-6 w-6 mb-2 mr-1"
+                            alt="book"
+                          />
+                          {list.name} - ({list.book_count ?? 0})
+                        </li>
+                        {!Object.values(ReadStatus).includes(
+                          list.id as ReadStatus
+                        ) && (
+                          <button
+                            aria-label="close"
+                            className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-800 transition-colors duration-300 ml-auto mr-3"
+                            onClick={() => handleEditList(list)}
+                          >
+                            <Pencil2Icon className="h-3 w-3" />
+                          </button>
+                        )}
+                        {!Object.values(ReadStatus).includes(
+                          list.id as ReadStatus
+                        ) && (
+                          <button
+                            aria-label="close"
+                            className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-300"
+                            onClick={() => handleDeleteList(list.id)}
+                          >
+                            <EraserIcon className="h-3 w-3" />
+                          </button>
+                        )}
+                      </>
+                    )}
+                  </div>
+                )
+              )}
             {lists.length === 0 && <p>No lists found</p>}
           </ul>
           <div className="flex">
@@ -310,12 +333,13 @@ export default function ListsCard({
                   <label className="text-red-600">{errorMessage}</label>
                 )}
               </>
-            ) : 
+            ) : (
               <div className="ml-auto">
-              {pathname.includes("/lists") && 
-                <StyledButton onClick={handleAddList} />
-              }
-            </div>}
+                {pathname.includes("/lists") && (
+                  <StyledButton onClick={handleAddList} />
+                )}
+              </div>
+            )}
           </div>
         </>
       )}
