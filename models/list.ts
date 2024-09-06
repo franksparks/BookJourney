@@ -6,4 +6,5 @@ export type List = {
   createdAt: Date;
   userId: string;
   books: BookList[];
+  book_count?: number | null;
 };

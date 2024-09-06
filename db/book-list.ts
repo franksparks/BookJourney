@@ -10,12 +10,14 @@ export const dbInsertBookList = catchErrors(
 );
 
 export const dbGetBookListsByListId = catchErrors(
-  async (listId: string) => {
+  async (listId: string, page: number = 1, pageSize: number = 10) => {
     const result = await db.bookList.findMany({
       where: { listId },
       include: {
         book: true,
       },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
     });
     return result;
   }

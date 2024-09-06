@@ -30,10 +30,27 @@ export const dbGetListsByUserId = catchErrors(async (userId: string) => {
           book: true,
         },
       },
+      
     },
   });
   return result;
 });
+
+export const dbGetListsBookCountByUserId = catchErrors(
+  async (userId: string) => {
+    const result = await db.list.findMany({
+      where: { userId },
+      include: { 
+        _count: {
+          select: {
+            books: true
+          }
+        }
+      },
+    });
+    return result;
+  }
+)
 
 export const dbGetListByNameAndUserId = catchErrors(
   async (name: string, userId: string) => {

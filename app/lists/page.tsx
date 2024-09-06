@@ -6,7 +6,6 @@ import ListBooksCard from "@/components/lists/ListBooksCard";
 import { Book } from "@/models/book";
 import { List } from "@/models/list";
 export default function Page() {
-  const [books, setBooks] = useState<Book[]>([]);
   const [selectedList, setSelectedList] = useState<List | null>(null);
 
   return (
@@ -14,13 +13,12 @@ export default function Page() {
       <div className="flex justify-center p-4 bg-sky-50 h-full">
         <div className="w-1/3 p-2">
           <ListsCard
-            setBooks={setBooks}
             selectedList={selectedList}
             setSelectedList={setSelectedList}
           />
         </div>
         <div className="w-2/3 p-2">
-          <ListBooksCard list={selectedList} books={books} />
+          <ListBooksCard list={selectedList} />
         </div>
       </div>
     </main>

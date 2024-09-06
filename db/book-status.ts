@@ -28,6 +28,21 @@ export const dbGetBookStatusByUserId = catchErrors(
   }
 )
 
+export const dbGetBookStatusCountByUserId = catchErrors(
+  async (userId: string) => {
+    const result = await db.bookStatus.groupBy({
+      by: ["status"],
+      _count: {
+        status: true
+      },
+      where: {
+        userId
+      }
+    })
+    return result;
+  }
+)
+
 export const dbGetBookStatusByBookIdAndUserId = catchErrors(
   async (bookId: string, userId: string) => {
     const result = await db.bookStatus.findFirst({
@@ -49,6 +64,18 @@ export const dbGetBooksByUserIdAndReadingStatus = catchErrors(
     return result;
   }
 );
+
+export const dbGetBookStatusByStatusAndUserId = catchErrors(
+  async (userId: string, status: ReadStatus, page: number = 1, pageSize: number = 10) => {
+    const result = await db.bookStatus.findMany({
+      where: { userId, status },
+      include: { book: true },
+      skip: (page - 1) * pageSize,
+      take: pageSize,
+    });
+    return result;
+  }
+)
 
 export const dbUpdateBookStatus = catchErrors(
   async (id: string, status: ReadStatus) => {

@@ -9,14 +9,14 @@ import {
   CheckIcon,
 } from "@radix-ui/react-icons";
 import {
-  actionGetListsByUserId,
   actionInsertList,
   actionDeleteList,
   actionUpdateList,
   actionGetListByNameAndUserId,
   actionCapitalizeAndReplaceUnderscores,
+  actionGetListsBookCountByUserId,
 } from "@/actions/lists";
-import { actionGetBookStatusByUserId } from "@/actions/book-status";
+import { actionGetBookStatusCountByUserId } from "@/actions/book-status";
 import { useDbUser } from "@/app/context/db-user-context";
 import { Prisma } from "@prisma/client";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
@@ -27,7 +27,6 @@ import StyledButton from "@/components/lists/StyledButton";
 import BookGif from '../../assets/book-gif.gif';
 
 export default function ListsCard({
-  setBooks,
   selectedList,
   setSelectedList,
 }: any) {
@@ -62,34 +61,18 @@ export default function ListsCard({
   }, [newListName, editingListName]);
 
   const getLists = async () => {
-    const listsResult = await actionGetListsByUserId(dbUser!.id);
-    const statusResult = await actionGetBookStatusByUserId(dbUser!.id);
+    const listsResult = await actionGetListsBookCountByUserId(dbUser!.id);
+    const statusResult = await actionGetBookStatusCountByUserId(dbUser!.id);
     const allLists: List[] = [];
     for (const bookStatus of statusResult) {
-      const found = allLists.find((list) => list.id === bookStatus.status);
-      if (found) {
-        found.books.push({
-          id: `${found.id}-${bookStatus.bookId}`,
-          book: bookStatus.book,
-          bookId: bookStatus.bookId ?? "",
-          listId: found.id,
-        });
-      } else {
-        allLists.push({
-          id: bookStatus.status,
-          name: actionCapitalizeAndReplaceUnderscores(bookStatus.status),
-          createdAt: new Date(),
-          userId: dbUser!.id,
-          books: [
-            {
-              id: `${bookStatus.status}-${bookStatus.bookId}`,
-              book: bookStatus.book,
-              bookId: bookStatus.bookId ?? "",
-              listId: bookStatus.status,
-            },
-          ],
-        });
-      }
+      allLists.push({
+        id: bookStatus.status,
+        name: actionCapitalizeAndReplaceUnderscores(bookStatus.status),
+        createdAt: new Date(),
+        userId: dbUser!.id,
+        books: [],
+        book_count: bookStatus._count.status
+      })      
     }
     allLists.push({
       id: '--divider--',
@@ -98,7 +81,12 @@ export default function ListsCard({
       userId: dbUser!.id,
       books: [],
     })
-    allLists.push(...(listsResult ?? []));
+    for (const list of listsResult) {
+      allLists.push({
+        ...list,
+        book_count: list._count.books
+      });
+    }
     if (setSelectedList) handlePreselectedList(allLists);
     setLists(allLists);
   };
@@ -108,22 +96,12 @@ export default function ListsCard({
       const foundSelected = allLists.find((list) => list.id === listId);
       if (foundSelected) {
         setSelectedList(foundSelected);
-        handleSetSelectedBooks(foundSelected);
       }
     } else {
       if (allLists.length > 0) {
         setSelectedList(allLists[0]);
-        handleSetSelectedBooks(allLists[0]);
       }
     }
-  };
-
-  const handleSetSelectedBooks = (list: List) => {
-    const newBooks: Book[] = [];
-    for (const bookList of list.books ?? []) {
-      newBooks.push(bookList.book);
-    }
-    setBooks(newBooks);
   };
 
   const handleAddList = () => {
@@ -155,7 +133,6 @@ export default function ListsCard({
     router.push(`/lists?listId=${list.id}`);
     if (pathname !== "/") {
       setSelectedList(list);
-      handleSetSelectedBooks(list);
     }
   };
 
@@ -273,7 +250,7 @@ export default function ListsCard({
                         }`}
                       >
                         <img src={BookGif.src} className="h-6 w-6 mb-2 mr-1" alt="book"/>
-                        {list.name} - ({list.books.length})
+                        {list.name} - ({list.book_count ?? 0})
                       </li>
                       {!Object.values(ReadStatus).includes(
                         list.id as ReadStatus

@@ -7,7 +7,9 @@ import {
   dbInsertBookStatus,
   dbUpdateBookStatus,
   dbGetBooksByUserIdAndReadingStatus,
-  dbGetBookStatusByUserId
+  dbGetBookStatusByUserId,
+  dbGetBookStatusCountByUserId,
+  dbGetBookStatusByStatusAndUserId
 } from "@/db/book-status";
 import { BookStatus } from "@/models/book-status";
 import { Prisma, ReadStatus } from "@prisma/client";
@@ -51,6 +53,11 @@ export const actionGetBookStatusByUserId = async (userId: string): Promise<BookS
   return result;
 }
 
+export const actionGetBookStatusCountByUserId = async (userId: string) => {
+  const result = await dbGetBookStatusCountByUserId(userId);
+  return result;
+}
+
 export const actionGetBookStatusByBookIdAndUserId = async (
   bookId: string,
   userId: string
@@ -64,6 +71,16 @@ export const actionGetBooksByUserIdAndReadingStatus = async (
   status: ReadStatus
 ) => {
   const result = await dbGetBooksByUserIdAndReadingStatus(userId, status);
+  return result;
+};
+
+export const actionGetBookStatusByStatusAndUserId = async (
+  userId: string,
+  status: ReadStatus,
+  page: number = 1,
+  pageSize: number = 10
+) => {
+  const result = await dbGetBookStatusByStatusAndUserId(userId, status, page, pageSize);
   return result;
 };
 

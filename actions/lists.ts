@@ -7,7 +7,8 @@ import {
   dbGetListsByUserId,
   dbInsertList,
   dbUpdateList,
-  dbGetListByNameAndUserId
+  dbGetListByNameAndUserId,
+  dbGetListsBookCountByUserId
 } from "@/db/lists";
 import { List, Prisma } from "@prisma/client";
 
@@ -54,4 +55,8 @@ export const actionCapitalizeAndReplaceUnderscores = (input: string): string => 
     .split('_') // Divide la cadena en palabras separadas por guiones bajos
     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitaliza la primera letra de cada palabra
     .join(' '); // Une las palabras con un espacio
+}
+export const actionGetListsBookCountByUserId = async (userId: string) => {
+  const result = await dbGetListsBookCountByUserId(userId);
+  return result;
 }
