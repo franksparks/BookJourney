@@ -56,6 +56,7 @@ export default function Reviews({
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const itemsPerPage = 5;
+  const existingReviews = useRef(false);
 
   const fetchReviews = useCallback(async () => {
     if (bookInDb && dbUser) {
@@ -63,23 +64,27 @@ export default function Reviews({
         bookInDb?.id!
       );
 
-      const { userReview, otherMembersReviews } =
-        allReviews.reduce<Accumulator>(
-          (acc, review) => {
-            if (review.userId === dbUser.id) {
-              acc.userReview.push(review);
-            } else {
-              acc.otherMembersReviews.push(review);
-            }
-            return acc;
-          },
-          { userReview: [], otherMembersReviews: [] }
-        );
+      if (allReviews.length > 0) {
+        existingReviews.current = true;
 
-      const review: Review = userReview[0] || null;
+        const { userReview, otherMembersReviews } =
+          allReviews.reduce<Accumulator>(
+            (acc, review) => {
+              if (review.userId === dbUser.id) {
+                acc.userReview.push(review);
+              } else {
+                acc.otherMembersReviews.push(review);
+              }
+              return acc;
+            },
+            { userReview: [], otherMembersReviews: [] }
+          );
 
-      setUserBookReview(review);
-      setBookReviews(otherMembersReviews);
+        const review: Review = userReview[0] || null;
+
+        setUserBookReview(review);
+        setBookReviews(otherMembersReviews);
+      }
     }
   }, [bookInDb, dbUser, bookReview]);
 
@@ -157,7 +162,7 @@ export default function Reviews({
         </>
       )}
 
-      {loading && (
+      {loading && dbUser && existingReviews.current === true && (
         <>
           {[...Array(5)].map((_, index) => (
             <Skeleton key={index} className="h-10 w-1/2" />

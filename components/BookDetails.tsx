@@ -26,7 +26,6 @@ import ReviewDialogue from "./ReviewDialogue";
 import { Separator } from "./ui/separator";
 import Reviews from "./Reviews";
 import { Review } from "@/models/review";
-import ParametrizedPagination from "./ParametrizedPagination";
 
 type BookDetailsProps = {
   book: Book;
