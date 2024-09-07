@@ -97,6 +97,8 @@ export default function PreviewSearchBox() {
 
   const handleOptionsRendering = useCallback(
     (props: HTMLAttributes<HTMLLIElement>, option: Option) => {
+      const { children, ...otherProps } = props;
+
       if (option.index === 5) {
         return (
           <div
@@ -108,7 +110,7 @@ export default function PreviewSearchBox() {
               clearValues();
             }}
           >
-            <li {...props} key={option.index}>
+            <li {...otherProps} key={option.index}>
               {"See all results"}
             </li>
           </div>
@@ -121,7 +123,7 @@ export default function PreviewSearchBox() {
             clearValues={clearValues}
             handleBlur={handleBlur}
           >
-            <li {...props}>
+            <li {...otherProps}>
               <Image
                 src={option.imageUrl || "/default_cover.jpg"}
                 alt={option.label}
