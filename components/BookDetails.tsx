@@ -27,6 +27,7 @@ import ReadRating from "./ReadRating";
 import ReviewDialogue from "./ReviewDialogue";
 import Reviews from "./Reviews";
 import { Separator } from "./ui/separator";
+import React from "react";
 
 type BookDetailsProps = {
   book: Book;
@@ -190,7 +191,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
         <Separator className="my-4" />
         {(book.authors &&
           book.authors.map((author, index) => (
-            <h2 key={index}> {author} </h2>
+            <h2 key={`author-${index}`}> {author} </h2>
           ))) || <h2> {"Unknown author"} </h2>}
         {book.description && <ReadMore text={book.description} />}
         {book.categories && (
@@ -198,11 +199,11 @@ export default function BookDetails({ book }: BookDetailsProps) {
             <div className="mt-8 mb-4 font-bold">{"Genres"}</div>
             <div className="flex h-5 items-center space-x-4">
               {book.categories.map((category, index) => (
-                <>
+                <React.Fragment key={`category-${index}`}>
                   <Separator orientation="vertical" />
-                  <div key={index}>{category}</div>
+                  <div>{category}</div>
                   <Separator orientation="vertical" />
-                </>
+                </React.Fragment>
               ))}
             </div>
           </>
