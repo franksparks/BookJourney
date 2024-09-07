@@ -188,6 +188,7 @@ export default function PreviewSearchBox() {
           className="w-full h-auto mt-5"
           src={"https://books.google.com/googlebooks/images/poweredby.png"}
           alt={"Google logo"}
+          priority={false}
         />
       </a>
     </div>
