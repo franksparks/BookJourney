@@ -97,20 +97,18 @@ export default function PreviewSearchBox() {
 
   const handleOptionsRendering = useCallback(
     (props: HTMLAttributes<HTMLLIElement>, option: Option) => {
-      const { children, ...otherProps } = props;
-
       if (option.index === 5) {
         return (
           <div
             className="flex justify-center"
-            key={option.index}
+            key={"All result div"}
             onMouseDown={(event) => {
               event.preventDefault();
               handleRedirect();
               clearValues();
             }}
           >
-            <li {...otherProps} key={option.index}>
+            <li {...props} key={"All results key"}>
               {"See all results"}
             </li>
           </div>
@@ -123,7 +121,7 @@ export default function PreviewSearchBox() {
             clearValues={clearValues}
             handleBlur={handleBlur}
           >
-            <li {...otherProps}>
+            <div className="flex flex-row m-3 items-center">
               <Image
                 src={option.imageUrl || "/default_cover.jpg"}
                 alt={option.label}
@@ -132,8 +130,8 @@ export default function PreviewSearchBox() {
                 sizes="250vw"
                 className="w-1/12 h-auto mr-2"
               />
-              {option.label}
-            </li>
+              <div>{option.label}</div>
+            </div>
           </BookNavigationWrapper>
         );
       }
