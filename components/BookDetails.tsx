@@ -190,7 +190,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
         <Separator className="my-4" />
         {(book.authors &&
           book.authors.map((author, index) => (
-            <h2 key={book.googleBooksId}> {author} </h2>
+            <h2 key={index}> {author} </h2>
           ))) || <h2> {"Unknown author"} </h2>}
         {book.description && <ReadMore text={book.description} />}
         {book.categories && (
