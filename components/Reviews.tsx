@@ -11,7 +11,7 @@ import {
 import { actionGetReviewsByBookId } from "@/actions/reviews";
 import { actionGetUserByUserId } from "@/actions/users";
 import { ratingMap } from "@/models/rating";
-import { Book } from "@/models/book";
+import { Book, DbBook } from "@/models/book";
 import { Review } from "@/models/review";
 import { User } from "@/models/user";
 import { actionGetRatingByGoogleBookIdAndUserId } from "@/actions/ratings";
@@ -20,7 +20,7 @@ import ParametrizedPagination from "./ParametrizedPagination";
 import Skeleton from "@mui/material/Skeleton";
 
 type ReviewsProps = {
-  bookInDb: Book | null;
+  bookInDb: Book | DbBook | null;
   numericBookRating: number | null;
   bookReview: Review | null;
 };
@@ -59,10 +59,13 @@ export default function Reviews({
   const existingReviews = useRef(false);
 
   const fetchReviews = useCallback(async () => {
+    /*
     if (bookInDb && dbUser) {
       const allReviews: Review[] = await actionGetReviewsByBookId(
         bookInDb?.id!
-      );
+      ); */
+
+      const allReviews = (bookInDb as DbBook).reviews
 
       if (allReviews.length > 0) {
         existingReviews.current = true;
@@ -85,7 +88,7 @@ export default function Reviews({
         setUserBookReview(review);
         setBookReviews(otherMembersReviews);
       }
-    }
+   // }
   }, [bookInDb, dbUser, bookReview]);
 
   const fetchBookDetailsReviews = useCallback(async () => {

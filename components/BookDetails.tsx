@@ -13,7 +13,7 @@ import {
   actionUpdateRating,
 } from "@/actions/ratings";
 import { useDbUser } from "@/app/context/db-user-context";
-import { Book } from "@/models/book";
+import { Book, DbBook } from "@/models/book";
 import { inverseRatingMap, Rating, ratingMap } from "@/models/rating";
 import { RatingValue } from "@prisma/client";
 import { useCallback, useEffect, useState } from "react";
@@ -28,7 +28,7 @@ import Reviews from "./Reviews";
 import { Review } from "@/models/review";
 
 type BookDetailsProps = {
-  book: Book;
+  book: Book | DbBook;
 };
 
 export default function BookDetails({ book }: BookDetailsProps) {
@@ -38,7 +38,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
   >(0);
   const [averageBookRating, setAverageBookRating] = useState<number>(0);
   const [numberOfRatings, setNumberOfRatings] = useState<number>(0);
-  const [bookInDb, setBookInDb] = useState<Book | null>(null);
+  const [bookInDb, setBookInDb] = useState<DbBook | null>(null);
   const [bookRating, setBookRating] = useState<Rating | null>(null);
   const [bookReview, setBookReview] = useState<Review | null>(null);
   const [firstInteraction, setFirstInteraction] = useState(true);
@@ -69,12 +69,12 @@ export default function BookDetails({ book }: BookDetailsProps) {
   }, [bookInDb?.id!]);
 
   const fetchBookInDb = useCallback(async () => {
-    const dbBook: Book = await actionGetBookByGoogleId(book.googleBooksId);
+    const dbBook: DbBook = await actionGetBookByGoogleId(book.googleBooksId);
     setBookInDb(dbBook);
   }, []);
 
   const addBookToDb = useCallback(async () => {
-    const createdBook = await actionInsertBook(book);
+    const createdBook = await actionInsertBook(book as Book);
     setBookInDb(createdBook);
   }, [bookInDb]);
 
@@ -112,9 +112,10 @@ export default function BookDetails({ book }: BookDetailsProps) {
   }, [numericBookRating]);
 
   useEffect(() => {
+    console.log('BOOK', book);
     fetchRating();
-    fetchBookInDb();
-    fetchAverageRating();
+    //fetchBookInDb();
+    //fetchAverageRating();
   }, [fetchRating, fetchBookInDb, fetchAverageRating]);
 
   useEffect(() => {
@@ -177,14 +178,16 @@ export default function BookDetails({ book }: BookDetailsProps) {
       <div className="flex w-screen justify-start flex-col mr-4">
         <div className="flex flex-row">
           <h1 className="mr-4">{book.title}</h1>
-          {logged && <ReadRating value={averageBookRating} />}
+          {logged && <ReadRating value={book.ratingAverage!} />}
         </div>
         {logged && (
-          <h2>{`Average: ${averageBookRating} - Number of ratings: ${numberOfRatings}`}</h2>
+          <h2>{`Average: ${book.ratingAverage} - Number of ratings: ${
+            'ratings' in book ? book.ratings.length : ''
+          }`}</h2>
         )}
         <Separator className="my-4" />
         {(book.authors &&
-          book.authors.map((author, index) => (
+          book.authors.map((author: string, index: number) => (
             <h2 key={index}> {author} </h2>
           ))) || <h2> {"Unknown author"} </h2>}
         {book.description && <ReadMore text={book.description} />}
@@ -192,7 +195,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
           <>
             <div className="mt-8 mb-4 font-bold">{"Genres"}</div>
             <div className="flex h-5 items-center space-x-4">
-              {book.categories.map((category, index) => (
+              {book.categories.map((category: string, index: number) => (
                 <>
                   <Separator orientation="vertical" />
                   <div key={index}>{category}</div>
@@ -232,7 +235,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
           <Separator className="my-4" />
         </>
         <Reviews
-          bookInDb={bookInDb}
+          bookInDb={book}
           numericBookRating={numericBookRating}
           bookReview={bookReview}
         />
