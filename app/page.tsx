@@ -23,11 +23,11 @@ export default function Home() {
     setBookSignal(bool);
   }, []);
   return (
-    <main className="flex justify-center p-8 flex-grow bg-sky-50 h-full">
+    <main className="flex justify-center p-8 bg-sky-50 h-screen">
       <div
         id="Container"
         className="w-5/6 flex flex-row justify-center gap-20"
-      >        
+      >
         <div className="w-1/2 flex flex-col h-full gap-12">
           <ReadingList
             onBookRead={handleBookRead}

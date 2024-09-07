@@ -14,12 +14,14 @@ interface BooksListProps {
 
 export default function ListBooksCard({ list }: BooksListProps) {
   const [page, setPage] = useState(1);
-  const pageSize = 5;
-  const totalPages = list?.book_count ? Math.ceil(list.book_count / pageSize) : 0;
+  const pageSize = 10;
+  const totalPages = list?.book_count
+    ? Math.ceil(list.book_count / pageSize)
+    : 0;
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-  const containerRef = useRef<HTMLUListElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (list) {
@@ -35,7 +37,12 @@ export default function ListBooksCard({ list }: BooksListProps) {
 
     if (container) {
       const handleScroll = () => {
-        if (container.scrollTop + container.clientHeight >= container.scrollHeight - 100 && !loading && hasMore) {
+        if (
+          container.scrollTop + container.clientHeight >=
+            container.scrollHeight - 100 &&
+          !loading &&
+          hasMore
+        ) {
           loadMoreBooks();
         }
       };
@@ -51,17 +58,27 @@ export default function ListBooksCard({ list }: BooksListProps) {
   const loadBooks = async (list: List, page: number) => {
     setLoading(true);
     if (Object.values(ReadStatus).includes(list.id as ReadStatus)) {
-      const statusBooks= await actionGetBookStatusByStatusAndUserId(
+      const statusBooks = await actionGetBookStatusByStatusAndUserId(
         list.userId,
         list.id as ReadStatus,
         page,
         pageSize
       );
-      setBooks((prevBooks) => [...prevBooks, ...statusBooks.map((status: any) => status.book)]);
+      setBooks((prevBooks) => [
+        ...prevBooks,
+        ...statusBooks.map((status: any) => status.book),
+      ]);
       setHasMore(page < totalPages);
     } else {
-      const listBooks = await actionGetBookListsByListId(list.id, page, pageSize);
-      setBooks((prevBooks) => [...prevBooks, ...listBooks.map((list: any) => list.book)]);
+      const listBooks = await actionGetBookListsByListId(
+        list.id,
+        page,
+        pageSize
+      );
+      setBooks((prevBooks) => [
+        ...prevBooks,
+        ...listBooks.map((list: any) => list.book),
+      ]);
       setHasMore(page < totalPages);
     }
     setLoading(false);
@@ -76,21 +93,22 @@ export default function ListBooksCard({ list }: BooksListProps) {
   };
 
   return (
-    <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-sky-300 text-slate-100">
+    <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-sky-300 text-slate-100 h-full flex flex-col">
       <h1 className="font-light text-sky-700 text-center pb-2 border-b-4">
         <strong>{list?.book_count}</strong> Books in <i>{list?.name}</i>
       </h1>
-      <ul ref={containerRef} className="h-96 overflow-y-auto">
+      {/* Ajustamos el contenedor para que tenga scroll */}
+      <div ref={containerRef} className="flex-grow overflow-y-auto">
         {books.length > 0 ? (
           books.map((book) => (
-            <li key={book.id} className="mb-2">
+            <div key={book.id} className="mb-2">
               <BookCardAdvanced book={book} />
-            </li>
+            </div>
           ))
         ) : (
-          <li>No books in this list.</li>
+          <div>No books in this list.</div>
         )}
-      </ul>
+      </div>
       {loading && <div className="text-center">Loading more books...</div>}
       {!hasMore && <div className="text-center">No more books to load.</div>}
     </div>

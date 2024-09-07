@@ -199,7 +199,7 @@ export default function ListsCard({
   };
 
   return (
-    <div className="p-4 border shadow-md w-full rounded-3xl bg-orange-500 bg-opacity-50">
+    <div className="p-4 border shadow-md w-full rounded-3xl bg-orange-500 bg-opacity-50 h-full flex-grow overflow-y-auto">
       <h1 className="font-light text-orange-700 text-center mt-4 pb-2 border-b-4">My Lists</h1>
       {!dbUser && (
         <div className="text-slate-100 text-center">

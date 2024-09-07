@@ -27,7 +27,7 @@ export default function RootLayout({
           <html lang="en">
             <body className=" h-screen flex flex-col bg-neutral-300">
               <Header />
-              <main className="flex-grow">{children}</main>
+              <main className="h-screen">{children}</main>
               <Toaster />
               <Footer />
             </body>
