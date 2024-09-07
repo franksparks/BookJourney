@@ -5,10 +5,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import ReadRating from "./ReadRating";
 import {
-  actionGetUserClerkInformation,
+  actionGetUsersClerkInformation,
 } from "@/actions/clerk-users";
 import { actionGetReviewsByBookId } from "@/actions/reviews";
-import { actionGetClerkIdsByUserIds, actionGetUserByUserId, actionGetUserClerkIdByUserId } from "@/actions/users";
+import { actionGetClerkIdsByUserIds, actionGetUserByUserId, actionGetUserClerkIdByUserId, actionGetUsersByIds } from "@/actions/users";
 import { Rating, ratingMap } from "@/models/rating";
 import { Book, DbBook } from "@/models/book";
 import { Review } from "@/models/review";
@@ -97,17 +97,22 @@ export default function Reviews({
     setLoading(true);
 
     const userIds: string[] = bookReviews.map(review => review.userId);
-    const clerkIds: string[] = await actionGetClerkIdsByUserIds(userIds);
-    const clerkUsers = await actionGetUserClerkInformation(clerkIds);
-
-    console.log("CLERKUSERS", clerkUsers)
+    const users: User[] = await actionGetUsersByIds(userIds);
+    const clerkUsers = await actionGetUsersClerkInformation(users);
 
     if(clerkUsers) {
 
     const reviews: BookDetailsReview[] = await Promise.all(
-      bookReviews.map(async (review, index) => {
+      bookReviews.map(async (review) => {
 
-        const {username = undefined, imageUrl: userAvatar} = clerkUsers[index] || {};
+        const currentUser = users.filter(user => review.userId === user.id );
+
+        console.log("CURRENT USER", currentUser); 
+        const clerkUser = clerkUsers.filter((ckUser: { id: string; }) => currentUser[0].clerkId === ckUser.id );
+
+        console.log("COOOSA", clerkUser);
+
+       const {username = undefined, imageUrl: userAvatar} = clerkUser[0]; 
 
 
         (bookInDb as DbBook).ratings.map(userRating => console.log(userRating.user)) 
