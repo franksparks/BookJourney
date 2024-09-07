@@ -4,6 +4,7 @@ import {
   dbGetUserByClerkId,
   dbGetUserByUserId,
   dbGetUserClerkIdByUserId,
+  dbGetUserClerkIdsByUserIds,
   dbGetUsers,
   dbInsertUser,
 } from "@/db/users";
@@ -32,4 +33,9 @@ export async function actionInsertUser(clerkId: string, email: string) {
 export async function actionGetUserClerkIdByUserId(id: string) {
   const result = await dbGetUserClerkIdByUserId(id);
   return result?.clerkId;
+}
+
+export async function actionGetClerkIdsByUserIds (ids: string[]) {
+  const result = await dbGetUserClerkIdsByUserIds(ids)
+  return result
 }

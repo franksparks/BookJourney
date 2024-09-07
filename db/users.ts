@@ -21,6 +21,23 @@ export async function dbGetUserClerkIdByUserId(id: string) {
   });
 }
 
+export async function dbGetUserClerkIdsByUserIds(ids: string[]) {
+  const users = await db.user.findMany({
+    where: {
+      id: {
+        in: ids 
+      }
+    },
+    select: {
+      clerkId: true 
+    }
+  });
+
+  const clerkIds = users.map(user => user.clerkId);
+
+  return clerkIds;
+}
+
 
 export async function dbGetUserByClerkId(clerkId: string) {
   return await db.user.findFirst({

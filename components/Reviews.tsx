@@ -8,7 +8,7 @@ import {
   actionGetUserClerkInformation,
 } from "@/actions/clerk-users";
 import { actionGetReviewsByBookId } from "@/actions/reviews";
-import { actionGetUserByUserId, actionGetUserClerkIdByUserId } from "@/actions/users";
+import { actionGetClerkIdsByUserIds, actionGetUserByUserId, actionGetUserClerkIdByUserId } from "@/actions/users";
 import { Rating, ratingMap } from "@/models/rating";
 import { Book, DbBook } from "@/models/book";
 import { Review } from "@/models/review";
@@ -96,14 +96,18 @@ export default function Reviews({
 
     setLoading(true);
 
-    const reviews: BookDetailsReview[] = await Promise.all(
-      bookReviews.map(async (review) => {
-        const clerkId: string | undefined = await actionGetUserClerkIdByUserId(review.userId);
+    const userIds: string[] = bookReviews.map(review => review.userId);
+    const clerkIds: string[] = await actionGetClerkIdsByUserIds(userIds);
+    const clerkUsers = await actionGetUserClerkInformation(clerkIds);
 
-        console.log("CLERK ID", clerkId);
-       
-        
-        const { username, imageUrl: userAvatar} = await actionGetUserClerkInformation(clerkId!);
+    console.log("CLERKUSERS", clerkUsers)
+
+    if(clerkUsers) {
+
+    const reviews: BookDetailsReview[] = await Promise.all(
+      bookReviews.map(async (review, index) => {
+
+        const {username = undefined, imageUrl: userAvatar} = clerkUsers[index] || {};
 
 
         (bookInDb as DbBook).ratings.map(userRating => console.log(userRating.user)) 
@@ -122,11 +126,14 @@ export default function Reviews({
           creationDate
         };
       })
+    
     );
 
     setBookDetailsReviews(reviews);
 
     setLoading(false);
+
+  }
   }, [bookReviews, bookInDb]);
 
   useEffect(() => {
