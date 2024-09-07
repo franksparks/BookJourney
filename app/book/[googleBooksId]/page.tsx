@@ -24,18 +24,12 @@ export default function Page({ params }: PageProps) {
 
     const bookInDb: DbBook = await actionGetBookByGoogleId(googleBooksId);
 
-    console.log("EL BOOK IN DB EN PAGE.TSX", bookInDb);
-
-
     if (bookInDb === null && foundBook === undefined) {
       const { books } = await actionSearchBooksGoogle(googleBooksId, 0);
       foundBook = books[0];
     } else  {
       foundBook = bookInDb;
     }
-
-
-    console.log("EL FOUND BOOK EN PAGE.TSX", foundBook);
 
     setBook(foundBook);
   };

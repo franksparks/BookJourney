@@ -45,6 +45,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
   const logged = dbUser ? true : false;
 
   const fetchRating = useCallback(async () => {
+    /*
     if (dbUser) {
       const rating: Rating = await actionGetRatingByGoogleBookIdAndUserId(
         book.googleBooksId,
@@ -55,7 +56,15 @@ export default function BookDetails({ book }: BookDetailsProps) {
         const numericRating = ratingMap[rating.rating];
         setNumericBookRating(numericRating);
       }
-    }
+    } */
+
+    const ratings = (book as DbBook).ratings
+
+    const userRating: Rating[] = ratings.filter(rating => rating.userId === dbUser.id)
+
+    const numericRating = ratingMap[userRating[0].rating];
+        setNumericBookRating(numericRating);
+
   }, [book.googleBooksId, dbUser]);
 
   const fetchAverageRating = useCallback(async () => {
@@ -112,11 +121,10 @@ export default function BookDetails({ book }: BookDetailsProps) {
   }, [numericBookRating]);
 
   useEffect(() => {
-    console.log('BOOK', book);
     fetchRating();
     //fetchBookInDb();
     //fetchAverageRating();
-  }, [fetchRating, fetchBookInDb, fetchAverageRating]);
+  }, [fetchRating]);
 
   useEffect(() => {
     if (!firstInteraction) {

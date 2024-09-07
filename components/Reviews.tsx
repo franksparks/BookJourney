@@ -5,12 +5,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { format } from "date-fns";
 import ReadRating from "./ReadRating";
 import {
-  actionGetAvatarFromClerk,
-  actionGetUsernameFromClerk
+  actionGetUserClerkInformation,
 } from "@/actions/clerk-users";
 import { actionGetReviewsByBookId } from "@/actions/reviews";
-import { actionGetUserByUserId } from "@/actions/users";
-import { ratingMap } from "@/models/rating";
+import { actionGetUserByUserId, actionGetUserClerkIdByUserId } from "@/actions/users";
+import { Rating, ratingMap } from "@/models/rating";
 import { Book, DbBook } from "@/models/book";
 import { Review } from "@/models/review";
 import { User } from "@/models/user";
@@ -18,6 +17,7 @@ import { actionGetRatingByGoogleBookIdAndUserId } from "@/actions/ratings";
 import { useDbUser } from "@/app/context/db-user-context";
 import ParametrizedPagination from "./ParametrizedPagination";
 import Skeleton from "@mui/material/Skeleton";
+import { dbGetUserClerkIdByUserId } from "@/db/users";
 
 type ReviewsProps = {
   bookInDb: Book | DbBook | null;
@@ -65,7 +65,7 @@ export default function Reviews({
         bookInDb?.id!
       ); */
 
-      const allReviews = (bookInDb as DbBook).reviews
+      const allReviews: Review[] = (bookInDb as DbBook).reviews
 
       if (allReviews.length > 0) {
         existingReviews.current = true;
@@ -98,16 +98,18 @@ export default function Reviews({
 
     const reviews: BookDetailsReview[] = await Promise.all(
       bookReviews.map(async (review) => {
-        const dbUser: User | null = await actionGetUserByUserId(review.userId);
-        const username: string =
-          (await actionGetUsernameFromClerk(dbUser?.clerkId!)) || "";
-        const userAvatar: string = await actionGetAvatarFromClerk(
-          dbUser?.clerkId!
-        );
-        const rating = await actionGetRatingByGoogleBookIdAndUserId(
-          bookInDb?.googleBooksId!,
-          dbUser?.id!
-        );
+        const clerkId: string | undefined = await actionGetUserClerkIdByUserId(review.userId);
+
+        console.log("CLERK ID", clerkId);
+       
+        
+        const { username, imageUrl: userAvatar} = await actionGetUserClerkInformation(clerkId!);
+
+
+        (bookInDb as DbBook).ratings.map(userRating => console.log(userRating.user)) 
+
+        const ratings: Rating[] = (bookInDb as DbBook).ratings.filter(userRating => userRating.userId === dbUser?.id) 
+        const rating = ratings[0]
         const numericRating: number =
           rating !== undefined ? ratingMap[rating.rating] : 0;
         const creationDate = review.createdAt || "";
