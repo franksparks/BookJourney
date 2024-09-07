@@ -113,9 +113,18 @@ export default function BookCard({
       duration: 5000,
     });
   };
+  const handleStopReading = async () => {
+    await actionUpdateBookStatus(status.id, ReadStatus.WANT_TO_READ);
+    onStatusChange();
+    toast({
+      title: "Book moved back to 'Want to read'!",
+      className: "bg-orange-500 text-white",
+      duration: 5000,
+    });
+  };
 
   return (
-    <div className="flex flex-row m-4 h-36 w-11/12 max-w-3xl hover:scale-105 shadow-lg shadow-sky-800 rounded-lg text-sky-800 bg-sky-100 hover:bg-sky-50 cursor-default transition duration-500 ">
+    <div className="flex flex-row m-4 h-48 w-11/12 max-w-3xl hover:scale-105 shadow-lg shadow-sky-800 rounded-lg text-sky-800 bg-sky-100 hover:bg-sky-50 cursor-default transition duration-500 ">
       <div className="flex justify-center items-center p-4 w-1/4">
         <BookNavigationWrapper id={book.googleBooksId}>
           {book.smallCover != null ? (
@@ -287,6 +296,12 @@ export default function BookCard({
               </DialogFooter>
             </DialogContent>
           </Dialog>
+          <Button
+            className="rounded-full border-orange-500 bg-red-400 hover:bg-red-600 border-2 m-2"
+            onClick={handleStopReading}
+          >
+            Stop reading
+          </Button>
         </div>
       </div>
     </div>
