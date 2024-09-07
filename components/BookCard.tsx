@@ -116,9 +116,9 @@ export default function BookCard({
 
   return (
     <div className="flex flex-row m-4 h-36 w-11/12 max-w-3xl hover:scale-105 shadow-lg shadow-sky-800 rounded-lg text-sky-800 bg-sky-100 hover:bg-sky-50 cursor-default transition duration-500 ">
-      {book.smallCover && (
-        <div className="flex justify-center items-center p-4 w-1/4">
-          <BookNavigationWrapper id={book.googleBooksId}>
+      <div className="flex justify-center items-center p-4 w-1/4">
+        <BookNavigationWrapper id={book.googleBooksId}>
+          {book.smallCover != null ? (
             <Image
               className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000"
               src={book.smallCover}
@@ -126,9 +126,17 @@ export default function BookCard({
               width={60}
               height={100}
             />
-          </BookNavigationWrapper>
-        </div>
-      )}
+          ) : (
+            <Image
+              className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000"
+              src={"/default_cover.jpg"}
+              alt="cover"
+              width={60}
+              height={100}
+            />
+          )}
+        </BookNavigationWrapper>
+      </div>
 
       <div className="flex flex-col justify-center gap-1 p-1 flex-grow w-1/2">
         <Tooltip arrow title={book.title} placement="top">
