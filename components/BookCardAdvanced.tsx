@@ -20,7 +20,7 @@ export default function BookCardAdvanced({ book }: bookCardAdvancedProps) {
         <BookNavigationWrapper id={book.googleBooksId}>
           {book.smallCover ? (
             <Image
-              className="shadow-lg shadow-sky-600 rounded hover:scale-110 transition duration-1000 w-full h-auto"
+              className="shadow-lg shadow-sky-600 rounded hover:scale-110 transition duration-1000 w-16 h-auto"
               src={book.smallCover}
               alt={book.title}
               width="0"
@@ -34,7 +34,7 @@ export default function BookCardAdvanced({ book }: bookCardAdvancedProps) {
               width="0"
               height="0"
               sizes="75vw"
-              className="rounded w-full h-auto"
+              className="rounded w-16 h-auto"
             />
           )}
         </BookNavigationWrapper>
