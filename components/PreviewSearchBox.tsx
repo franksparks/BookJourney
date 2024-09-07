@@ -1,13 +1,15 @@
 "use client";
 
 import { actionSearchBooksGoogle } from "@/actions/search-books-google";
+import { useBooksSearchContext } from "@/app/context/books-search-context";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
-import { useState, useCallback, HTMLAttributes, useRef } from "react";
 import debounce from "lodash/debounce";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useBooksSearchContext } from "@/app/context/books-search-context";
+import { HTMLAttributes, useCallback, useRef, useState } from "react";
 import BookNavigationWrapper from "./BookNavigationWrapper";
+
 interface Option {
   label: string;
   imageUrl?: string;
@@ -15,7 +17,7 @@ interface Option {
   index: number;
 }
 
-const FIXED_TOTAL_ITEMS = 200; 
+const FIXED_TOTAL_ITEMS = 200;
 
 export default function PreviewSearchBox() {
   const { setResults, setPreviewSearch, setTotalItems } =
@@ -49,14 +51,14 @@ export default function PreviewSearchBox() {
         }`,
         imageUrl: book.smallCover,
         googleBooksId: book.googleBooksId,
-        index
+        index,
       }));
 
       mappedOptions.push({
         label: "See all results",
         imageUrl: "",
         googleBooksId: "",
-        index: 5
+        index: 5,
       });
 
       setPreviewResults(mappedOptions);
@@ -67,7 +69,10 @@ export default function PreviewSearchBox() {
 
   const debouncedSearchBooks = useCallback(debounce(searchBooks, 300), []);
 
-  const handleInputChange = (_event: React.SyntheticEvent, query: string) => {
+  const handleInputChange = (
+    _event: React.SyntheticEvent,
+    query: string
+  ) => {
     setInputValue(query);
     debouncedSearchBooks(query);
   };
@@ -96,33 +101,34 @@ export default function PreviewSearchBox() {
         return (
           <div
             className="flex justify-center"
+            key={option.index}
             onMouseDown={(event) => {
               event.preventDefault();
               handleRedirect();
               clearValues();
             }}
           >
-            <li {...props}>{"See all results"}</li>
+            <li {...props} key={option.index}>
+              {"See all results"}
+            </li>
           </div>
         );
       } else {
         return (
           <BookNavigationWrapper
-            key={option.index}
+            key={option.googleBooksId}
             id={option.googleBooksId}
             clearValues={clearValues}
             handleBlur={handleBlur}
           >
             <li {...props}>
-              <img
-                src={option.imageUrl || "../default_cover.jpg"}
+              <Image
+                src={option.imageUrl || "/default_cover.jpg"}
                 alt={option.label}
-                style={{
-                  width: 50,
-                  height: 75,
-                  marginRight: 10,
-                  objectFit: "cover"
-                }}
+                width="0"
+                height="0"
+                sizes="250vw"
+                className="w-1/12 h-auto mr-2"
               />
               {option.label}
             </li>
@@ -154,18 +160,18 @@ export default function PreviewSearchBox() {
             sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
-                  borderColor: "white"
+                  borderColor: "white",
                 },
                 "&:hover fieldset": {
-                  borderColor: "white"
+                  borderColor: "white",
                 },
                 "&.Mui-focused fieldset": {
-                  borderColor: "white"
-                }
-              }
+                  borderColor: "white",
+                },
+              },
             }}
             InputLabelProps={{
-              shrink: false
+              shrink: false,
             }}
           />
         )}
@@ -175,9 +181,13 @@ export default function PreviewSearchBox() {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <img
-          className="mt-5"
+        <Image
+          width="0"
+          height="0"
+          sizes="250vw"
+          className="w-full h-auto mt-5"
           src={"https://books.google.com/googlebooks/images/poweredby.png"}
+          alt={"Google logo"}
         />
       </a>
     </div>

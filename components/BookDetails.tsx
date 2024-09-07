@@ -15,7 +15,9 @@ import {
 import { useDbUser } from "@/app/context/db-user-context";
 import { Book } from "@/models/book";
 import { inverseRatingMap, Rating, ratingMap } from "@/models/rating";
+import { Review } from "@/models/review";
 import { RatingValue } from "@prisma/client";
+import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import BookToListInjector from "./BookToListInjector";
 import ControlledRating from "./ControlledRating";
@@ -23,9 +25,8 @@ import ReadingStatusDropdown from "./ReadingStatusDropdown";
 import ReadMore from "./ReadMore";
 import ReadRating from "./ReadRating";
 import ReviewDialogue from "./ReviewDialogue";
-import { Separator } from "./ui/separator";
 import Reviews from "./Reviews";
-import { Review } from "@/models/review";
+import { Separator } from "./ui/separator";
 
 type BookDetailsProps = {
   book: Book;
@@ -66,7 +67,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
       const ratings = await actionGetRatingsByBook(bookInDb.id!);
       setNumberOfRatings(ratings.length);
     }
-  }, [bookInDb?.id!]);
+  }, [bookInDb?.id]);
 
   const fetchBookInDb = useCallback(async () => {
     const dbBook: Book = await actionGetBookByGoogleId(book.googleBooksId);
@@ -138,9 +139,13 @@ export default function BookDetails({ book }: BookDetailsProps) {
     <div className="flex justify-center mt-10 ">
       <div className="flex justify-center basis-1/4">
         <div className="flex flex-col">
-          <img
-            className="mb-8"
-            src={book.cover || "../default_cover.jpg"}
+          <Image
+            src={book.cover || "/default_cover.jpg"}
+            alt="cover"
+            width="0"
+            height="0"
+            sizes="100vw"
+            className="w-full h-auto mb-8"
           />
           <div>
             <ReadingStatusDropdown book={book} logged={logged} />
@@ -185,7 +190,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
         <Separator className="my-4" />
         {(book.authors &&
           book.authors.map((author, index) => (
-            <h2 key={index}> {author} </h2>
+            <h2 key={book.googleBooksId}> {author} </h2>
           ))) || <h2> {"Unknown author"} </h2>}
         {book.description && <ReadMore text={book.description} />}
         {book.categories && (

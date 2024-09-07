@@ -1,4 +1,3 @@
-import { actionDeleteRating, actionGetRatingByGoogleBookIdAndUserId } from "@/actions/ratings";
 import { Tooltip } from "@mui/material";
 import Rating from "@mui/material/Rating";
 import { forwardRef } from "react";
@@ -17,17 +16,27 @@ type ControlledRatingProps = {
 
 interface CustomRatingProps {
   value: number | null;
-  onChange: (event: React.ChangeEvent<{}>, newValue: number | null) => void;
+  onChange: (
+    event: React.ChangeEvent<{}>,
+    newValue: number | null
+  ) => void;
   size: "small" | "medium" | "large";
   disabled: boolean;
 }
 
-function ConditionalTooltip({ logged, children }: ConditionalTooltipProps) {
+function ConditionalTooltip({
+  logged,
+  children,
+}: ConditionalTooltipProps) {
   if (logged) {
     return <>{children}</>;
   }
   return (
-    <Tooltip className=" text-white" title="Login to rate this book." arrow>
+    <Tooltip
+      className=" text-white"
+      title="Login to rate this book."
+      arrow
+    >
       {children}
     </Tooltip>
   );
@@ -54,7 +63,7 @@ export default function ControlledRating({
   logged,
   bookRating,
   setBookRating,
-  setFirstInteraction
+  setFirstInteraction,
 }: ControlledRatingProps) {
   return (
     <ConditionalTooltip logged={logged}>

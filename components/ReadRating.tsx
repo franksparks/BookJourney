@@ -1,6 +1,5 @@
 import Rating from "@mui/material/Rating";
-import { OverridableStringUnion } from "@mui/types"
-
+import { OverridableStringUnion } from "@mui/types";
 
 type ReadRatingProps = {
   value: number;
@@ -8,7 +7,14 @@ type ReadRatingProps = {
 };
 
 export default function ReadRating({ value, size }: ReadRatingProps) {
- const ratingSize = size ? size : 'small'
+  const ratingSize = size ? size : "small";
 
-  return <Rating name="read-only" value={value} readOnly size={ratingSize as OverridableStringUnion<'small'|'large'>} />;
+  return (
+    <Rating
+      name="read-only"
+      value={value}
+      readOnly
+      size={ratingSize as OverridableStringUnion<"small" | "large">}
+    />
+  );
 }
