@@ -126,6 +126,7 @@ export default function BookCard({
               width="0"
               height="0"
               sizes="100vw"
+              priority={false}
             />
           </BookNavigationWrapper>
         </div>
