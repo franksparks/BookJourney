@@ -133,9 +133,11 @@ export default function BookCard({
 
       <div className="flex flex-col justify-center gap-1 p-1 flex-grow w-1/2">
         <Tooltip arrow title={book.title} placement="top">
-          <BookNavigationWrapper id={book.googleBooksId}>
-            <p className="italic line-clamp-2">{book.title}</p>
-          </BookNavigationWrapper>
+          <div>
+            <BookNavigationWrapper id={book.googleBooksId}>
+              <p className="italic line-clamp-2">{book.title}</p>
+            </BookNavigationWrapper>
+          </div>
         </Tooltip>
         <Tooltip arrow title={book.authors[0]} placement="bottom">
           <p className="text-slate-500">
