@@ -6,6 +6,7 @@ import { BookStatus } from "@/models/book-status";
 import { useEffect, useState } from "react";
 import BookCard from "./BookCard";
 import Image from "next/image";
+import { Button } from "./ui/button";
 
 interface ReadingListProps {
   onBookRead: () => void;
@@ -64,52 +65,56 @@ export default function ReadingList({
   return (
     <div className="rounded-xl shadow-lg shadow-sky-700 p-8 bg-sky-600 text-slate-100 h-full ">
       <h1 className="font-light text-sky-50 text-center">Currently Reading</h1>
-
-      <div className="flex flex-col items-center">
-        {dbUser && currentBooks.length > 0 && (
-          <>
-            {currentBooks.map((element: BookStatus, index) => (
-              <BookCard
-                key={index}
-                book={element.book}
-                status={element}
-                onStatusChange={handleStatusChange}
-              />
-            ))}
-
-            {readingList.length > booksPerPage && (
-              <div className="flex justify-between w-full mt-4">
-                <Image
-                  className={`cursor-pointer hover:scale-105 transition duration-500 ${
-                    currentPage === 0 ? "opacity-20 pointer-events-none" : ""
-                  }`}
-                  src={"/prev-arrow.svg"}
-                  onClick={handlePrev}
-                  alt={"preview"}
-                  width={50}
-                  height={50}
+      <div className="flex flex-row justify-center h-full">
+        {readingList.length > booksPerPage && (
+          <Image
+            className={`cursor-pointer mb-16 hover:scale-105 transition duration-500 ${
+              currentPage === 0 ? "opacity-20 pointer-events-none" : ""
+            }`}
+            src={"/prev-arrow.svg"}
+            onClick={handlePrev}
+            alt={"preview"}
+            width={40}
+            height={40}
+          />
+        )}
+        <div className="flex flex-col items-center">
+          {dbUser && currentBooks.length > 0 && (
+            <>
+              {currentBooks.map((element: BookStatus, index) => (
+                <BookCard
+                  key={index}
+                  book={element.book}
+                  status={element}
+                  onStatusChange={handleStatusChange}
                 />
-                <Image
-                  className={`cursor-pointer hover:scale-105 transition duration-500 ${
-                    endIndex >= readingList.length
-                      ? "opacity-20 pointer-events-none"
-                      : ""
-                  }`}
-                  src={"/next-arrow.svg"}
-                  onClick={handleNext}
-                  alt={"next"}
-                  width={50}
-                  height={50}
-                />{" "}
-              </div>
-            )}
-          </>
-        )}
+              ))}
+              <Button className="font-light text-2xl m-8 w-fit rounded-full border-4 p-6 border-orange-500">
+                {" "}
+                View More
+              </Button>
+            </>
+          )}
 
-        {dbUser && readingList.length == 0 && (
-          <div>Start reading to see something here!</div>
+          {dbUser && readingList.length == 0 && (
+            <div>Start reading to see something here!</div>
+          )}
+          {!dbUser && <div>Login to see the books you are reading here!</div>}
+        </div>
+        {readingList.length > booksPerPage && (
+          <Image
+            className={`cursor-pointer mb-16 hover:scale-105 transition duration-500 ${
+              endIndex >= readingList.length
+                ? "opacity-20 pointer-events-none"
+                : ""
+            }`}
+            src={"/next-arrow.svg"}
+            onClick={handleNext}
+            alt={"next"}
+            width={40}
+            height={40}
+          />
         )}
-        {!dbUser && <div>Login to see the books you are reading here!</div>}
       </div>
     </div>
   );
