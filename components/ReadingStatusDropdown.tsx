@@ -9,7 +9,7 @@ import {
 } from "@/actions/books";
 import { actionInsertReadingActivityPercentage } from "@/actions/reading-activity";
 import { useDbUser } from "@/app/context/db-user-context";
-import { Book } from "@/models/book";
+import { Book, DbBook } from "@/models/book";
 import { BookStatus } from "@/models/book-status";
 import { ReadStatus } from "@prisma/client";
 import {
@@ -20,7 +20,6 @@ import {
 } from "@radix-ui/react-dropdown-menu";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
-import { Skeleton } from "./ui/skeleton";
 import { useToast } from "./ui/use-toast";
 
 const menuItems = [
@@ -30,7 +29,7 @@ const menuItems = [
 ];
 
 type ReadingStatusDropwdownProps = {
-  book: Book;
+  book: Book | DbBook;
   logged: boolean;
 };
 
@@ -40,7 +39,6 @@ export default function ReadingStatusDropwdown({
 }: ReadingStatusDropwdownProps) {
   const { dbUser } = useDbUser();
   const [currentStatus, setStatus] = useState<BookStatus | null>(null);
-  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -48,28 +46,20 @@ export default function ReadingStatusDropwdown({
   }, [dbUser, book]);
 
   const getStatus = async () => {
-    //Check if the book is on DB
-    setLoading(true);
-    const dbBook = await actionGetBookByGoogleId(book.googleBooksId);
-
-    if (dbUser != null && dbBook != null) {
-      // obtain the bookStatus if the book is on DB.
-
-      const readingStatus: BookStatus =
-        await actionGetBookStatusByBookIdAndUserId(dbBook.id!, dbUser.id);
-
+    if (dbUser != null && (book as DbBook).bookStatuses !== undefined) {
+      const output = (book as DbBook).bookStatuses.filter(status => status.userId === dbUser.id)
+      const readingStatus: BookStatus = output[0];
       setStatus(readingStatus);
     } else {
       setStatus(null);
     }
-    setLoading(false);
   };
 
   const handleDropdownClick = async (status: ReadStatus) => {
     const existing = await actionGetBookByGoogleId(book.googleBooksId);
     let res;
     if (!existing) {
-      res = await actionInsertBook(book);
+      res = await actionInsertBook(book as Book);
     } else {
       res = existing;
     }
@@ -133,9 +123,6 @@ export default function ReadingStatusDropwdown({
       );
     }
   };
-  if (loading) {
-    return <Skeleton className="h-10 w-1/2" />;
-  }
 
   return (
     <>
