@@ -58,13 +58,19 @@ export default function BookDetails({ book }: BookDetailsProps) {
       }
     } */
 
+    if(dbUser && "ratings" in book) {
+
     const ratings = (book as DbBook).ratings
+
+    if(ratings.length > 0 ) {
 
     const userRating: Rating[] = ratings.filter(rating => rating.userId === dbUser.id)
 
     const numericRating = ratingMap[userRating[0].rating];
         setNumericBookRating(numericRating);
         setBookRating(userRating[0]);
+    }
+  }
 
   }, [book.googleBooksId, dbUser]);
 

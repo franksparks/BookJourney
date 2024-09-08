@@ -58,11 +58,8 @@ export default function Reviews({
   const existingReviews = useRef(false);
 
   const fetchReviews = useCallback(async () => {
-    /*
+    
     if (bookInDb && dbUser) {
-      const allReviews: Review[] = await actionGetReviewsByBookId(
-        bookInDb?.id!
-      ); */
 
       const allReviews: Review[] = (bookInDb as DbBook).reviews
 
@@ -87,7 +84,7 @@ export default function Reviews({
         setUserBookReview(review);
         setBookReviews(otherMembersReviews);
       }
-   // }
+    }
   }, [bookInDb, dbUser, bookReview]);
 
   const fetchBookDetailsReviews = useCallback(async () => {
