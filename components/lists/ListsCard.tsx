@@ -13,12 +13,7 @@ import { useDbUser } from "@/app/context/db-user-context";
 import Modal from "@/components/ui/confirmation-modal";
 import { List } from "@/models/list";
 import { Prisma, ReadStatus } from "@prisma/client";
-import {
-  CheckIcon,
-  Cross2Icon,
-  EraserIcon,
-  Pencil2Icon,
-} from "@radix-ui/react-icons";
+import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Button } from "../ui/button";
@@ -197,7 +192,7 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
   };
 
   return (
-    <div className="flex flex-col justify-start rounded-xl shadow-lg shadow-orange-700 bg-sky-600 p-8 text-orange-50 h-full">
+    <div className="flex flex-col justify-start rounded-xl shadow-lg shadow-orange-700 bg-sky-600 p-8  h-full">
       <h1 className="font-light text-orange-50 text-center border-b-2">
         My Lists
       </h1>
@@ -210,7 +205,7 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
                 <hr key={list.id} className={`mb-4`} />
               ) : (
                 <div
-                  className={`items-center mb-2 ${
+                  className={`text-white items-center mb-2 ${
                     pathname === "/" &&
                     !Object.values(ReadStatus).includes(
                       list.id as ReadStatus
@@ -261,46 +256,75 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
                       {!Object.values(ReadStatus).includes(
                         list.id as ReadStatus
                       ) && (
-                        <button
-                          aria-label="close"
+                        <Button
                           className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-800 transition-colors duration-300 ml-auto mr-3"
                           onClick={() => handleEditList(list)}
                         >
-                          <Pencil2Icon className="h-3 w-3" />
-                        </button>
+                          Edit List
+                        </Button>
                       )}
                       {!Object.values(ReadStatus).includes(
                         list.id as ReadStatus
                       ) && (
-                        <button
-                          aria-label="close"
+                        <Button
                           className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-300"
                           onClick={() => handleDeleteList(list.id)}
                         >
-                          <EraserIcon className="h-3 w-3" />
-                        </button>
+                          Delete List
+                        </Button>
                       )}
                     </>
                   )}
                 </div>
               )
             )}
-          {lists.length === 0 && <p>User has no lists.</p>}
+          {lists.length === 0 && (
+            <p className="text-white">User has no lists.</p>
+          )}
         </ul>
         <div className="flex">
+          {showInput ? (
+            <>
+              <div className="mb-4 flex items-center w-full">
+                <input
+                  type="text"
+                  value={newListName}
+                  onChange={handleEditNewListName}
+                  placeholder="Enter list name"
+                  className="p-2 border rounded max-w-80"
+                />
+                <button
+                  aria-label="close"
+                  className="p-2 bg-green-500 text-white rounded-full hover:bg-green-800 transition-colors duration-300 ml-auto mr-3"
+                  onClick={handleCreateList}
+                >
+                  <CheckIcon className="h-3 w-3" />
+                </button>
+                <button
+                  aria-label="close"
+                  className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-300"
+                  onClick={handleCloseInput}
+                >
+                  <Cross2Icon className="h-3 w-3" />
+                </button>
+              </div>
+              {errorMessage && (
+                <label className="text-red-600">{errorMessage}</label>
+              )}
+            </>
+          ) : (
+            <div className="ml-auto">
+              {pathname.includes("/lists") && (
+                <Button
+                  className="rounded-full border-2 border-orange-500 hover:border-sky-500"
+                  onClick={handleAddList}
+                >
+                  New list
+                </Button>
+              )}
+            </div>
+          )}
           {/* Move button to bottom of the div */}
-          {/* Define a dialog to manage this behavior */}
-          {/* Consider the case of an existing list name */}
-          <div className="ml-auto">
-            {pathname.includes("/lists") && (
-              <Button
-                className="rounded-full border-2 border-orange-500 hover:border-sky-500"
-                onClick={handleAddList}
-              >
-                New list
-              </Button>
-            )}
-          </div>
         </div>
       </>
 
