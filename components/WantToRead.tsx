@@ -5,6 +5,7 @@ import { useDbUser } from "@/app/context/db-user-context";
 import { BookStatus } from "@/models/book-status";
 import { useEffect, useState } from "react";
 import BookCardWantToRead from "./BookCardWantToRead";
+import Image from "next/image";
 
 interface WantToReadProps {
   newBookSignal: (bool: boolean) => void;
@@ -52,39 +53,73 @@ export default function WantToRead({
     newBookSignal(true);
   };
 
+  const handleNext = () => {
+    setActiveIndex((prevIndex) =>
+      prevIndex === readingList.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const handlePrev = () => {
+    setActiveIndex((prevIndex) =>
+      prevIndex === 0 ? readingList.length - 1 : prevIndex - 1
+    );
+  };
+
   return (
-    <div className="flex flex-col justify-start rounded-3xl shadow-xl shadow-orange-200 bg-orange-500 p-4 text-orange-50 h-1/3">
-      <h1 className="font-light text-orange-100 text-center">
+    <div className="flex flex-col justify-start rounded-xl shadow-lg shadow-orange-700 bg-orange-500 p-8 text-orange-50 h-1/3">
+      <h1 className="font-light text-orange-50 text-center mb-4">
         Want to Read
       </h1>
-      <div className="relative flex flex-col items-center justify-center h-full w-full">
-        {dbUser && readingList.length > 0 && (
-          <div className="relative w-full h-full">
-            {readingList.map((element, index) => (
-              <div
-                key={index}
-                className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full transition-opacity duration-500 ease-in-out ${
-                  index === activeIndex
-                    ? "opacity-100 pointer-events-auto"
-                    : "opacity-0 pointer-events-none"
-                } flex justify-center items-center`}
-              >
-                <BookCardWantToRead
-                  book={element.book}
-                  status={element}
-                  onStatusChange={handleStatusChange}
-                  newBookSignal={Boolean}
-                />
-              </div>
-            ))}
-          </div>
+      <div className="relative flex flex-row items-center justify-center h-full w-full">
+        {readingList.length > 1 && (
+          <Image
+            className="cursor-pointer opacity-85 hover:opacity-100 hover:scale-110 transition duration-500"
+            src={"/prev-arrow.svg"}
+            onClick={handlePrev}
+            alt={"previous"}
+            width={40}
+            height={40}
+          />
         )}
+
+        {dbUser && readingList.length > 0 && (
+          <>
+            <div className="relative w-full h-full">
+              {readingList.map((element, index) => (
+                <div
+                  key={index}
+                  className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full h-full transition-opacity duration-500 ease-in-out ${
+                    index === activeIndex
+                      ? "opacity-100 pointer-events-auto"
+                      : "opacity-0 pointer-events-none"
+                  } flex justify-center items-center`}
+                >
+                  <BookCardWantToRead
+                    book={element.book}
+                    status={element}
+                    onStatusChange={handleStatusChange}
+                    newBookSignal={Boolean}
+                  />
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+        {readingList.length > 1 && (
+          <Image
+            className="cursor-pointer opacity-85 hover:opacity-100 hover:scale-110 transition duration-500"
+            src={"/next-arrow.svg"}
+            onClick={handleNext}
+            alt={"next"}
+            width={40}
+            height={40}
+          />
+        )}
+
         {dbUser && readingList.length === 0 && (
           <div>Start reading to see something here!</div>
         )}
-        {!dbUser && (
-          <div>Login to see the books you are reading here!</div>
-        )}
+        {!dbUser && <div>Login to see the books you are reading here!</div>}
       </div>
     </div>
   );
