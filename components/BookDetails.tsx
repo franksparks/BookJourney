@@ -1,16 +1,10 @@
 "use client";
 
-import {
-  actionGetBookByGoogleId,
-  actionInsertBook,
-} from "@/actions/books";
+import { actionInsertBook } from "@/actions/books";
 import {
   actionDeleteRating,
-  actionGetAverageRatingByBookId,
-  actionGetRatingByGoogleBookIdAndUserId,
-  actionGetRatingsByBook,
   actionInsertRating,
-  actionUpdateRating,
+  actionUpdateRating
 } from "@/actions/ratings";
 import { useDbUser } from "@/app/context/db-user-context";
 import { Book, DbBook } from "@/models/book";
@@ -33,11 +27,7 @@ type BookDetailsProps = {
 
 export default function BookDetails({ book }: BookDetailsProps) {
   const { dbUser } = useDbUser();
-  const [numericBookRating, setNumericBookRating] = useState<
-    number | null
-  >(0);
-  const [averageBookRating, setAverageBookRating] = useState<number>(0);
-  const [numberOfRatings, setNumberOfRatings] = useState<number>(0);
+  const [numericBookRating, setNumericBookRating] = useState<number | null>(0);
   const [bookInDb, setBookInDb] = useState<DbBook | null>(null);
   const [bookRating, setBookRating] = useState<Rating | null>(null);
   const [bookReview, setBookReview] = useState<Review | null>(null);
@@ -45,53 +35,29 @@ export default function BookDetails({ book }: BookDetailsProps) {
   const logged = dbUser ? true : false;
 
   const fetchRating = useCallback(async () => {
-    /*
-    if (dbUser) {
-      const rating: Rating = await actionGetRatingByGoogleBookIdAndUserId(
-        book.googleBooksId,
-        dbUser.id
-      );
-      if (rating) {
-        setBookRating(rating);
-        const numericRating = ratingMap[rating.rating];
-        setNumericBookRating(numericRating);
+    if (dbUser && "ratings" in book) {
+      const ratings = (book as DbBook).ratings;
+
+      if (ratings.length > 0) {
+        const userRating: Rating[] = ratings.filter(
+          (rating) => rating.userId === dbUser.id
+        );
+
+        if (
+          Array.isArray(userRating) &&
+          userRating.length > 0 &&
+          userRating[0].rating !== undefined
+        ) {
+          const numericRating = ratingMap[userRating[0].rating];
+          setNumericBookRating(numericRating);
+          setBookRating(userRating[0]);
+        }
       }
-    } */
-
-    if(dbUser && "ratings" in book ) {
-
-    const ratings = (book as DbBook).ratings
-
-    if(ratings.length > 0 ) {
-
-    const userRating: Rating[] = ratings.filter(rating => rating.userId === dbUser.id)
-
-    if (Array.isArray(userRating) && userRating.length > 0 && userRating[0].rating !== undefined)  {
-
-    const numericRating = ratingMap[userRating[0].rating];
-        setNumericBookRating(numericRating);
-        setBookRating(userRating[0]);
     }
-
-  }
-  }
-
   }, [book.googleBooksId, dbUser]);
 
-  const fetchAverageRating = useCallback(async () => {
-    if (bookInDb) {
-      const average = await actionGetAverageRatingByBookId(bookInDb.id!);
-      setAverageBookRating(average);
-
-      const ratings = await actionGetRatingsByBook(bookInDb.id!);
-      setNumberOfRatings(ratings.length);
-    }
-  }, [bookInDb?.id!]);
-
   const fetchBookInDb = useCallback(async () => {
-    /*const dbBook: DbBook = await actionGetBookByGoogleId(book.googleBooksId);
-    setBookInDb(dbBook); */
-    if('ratings' in book) {
+    if ("ratings" in book) {
       setBookInDb(book);
     }
   }, []);
@@ -107,14 +73,14 @@ export default function BookDetails({ book }: BookDetailsProps) {
       rating: stringRating as RatingValue,
       book: {
         connect: {
-          id: bookInDb?.id,
-        },
+          id: bookInDb?.id
+        }
       },
       user: {
         connect: {
-          id: dbUser.id,
-        },
-      },
+          id: dbUser.id
+        }
+      }
     };
 
     const rating = await actionInsertRating(ratingCreateInput);
@@ -137,7 +103,6 @@ export default function BookDetails({ book }: BookDetailsProps) {
   useEffect(() => {
     fetchRating();
     fetchBookInDb();
-    //fetchAverageRating();
   }, [fetchRating]);
 
   useEffect(() => {
@@ -161,10 +126,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
     <div className="flex justify-center mt-10 ">
       <div className="flex justify-center basis-1/4">
         <div className="flex flex-col">
-          <img
-            className="mb-8"
-            src={book.cover || "../default_cover.jpg"}
-          />
+          <img className="mb-8" src={book.cover || "../default_cover.jpg"} />
           <div>
             <ReadingStatusDropdown book={book} logged={logged} />
           </div>
@@ -177,9 +139,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
             />
           </div>
           {!bookRating && (
-            <div className="flex justify-center mt-2">
-              {"Rate this book"}
-            </div>
+            <div className="flex justify-center mt-2">{"Rate this book"}</div>
           )}
           {bookRating && (
             <div className="flex justify-center mt-2">
@@ -204,7 +164,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
         </div>
         {logged && (
           <h2>{`Average: ${book.ratingAverage} - Number of ratings: ${
-            'ratings' in book ? book.ratings.length : ''
+            "ratings" in book ? book.ratings.length : ""
           }`}</h2>
         )}
         <Separator className="my-4" />
