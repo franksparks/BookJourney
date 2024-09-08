@@ -63,7 +63,7 @@ export default function Reviews({
 
       const allReviews: Review[] = (bookInDb as DbBook).reviews
 
-      if (allReviews.length > 0) {
+      if (allReviews !== undefined && allReviews.length > 0 ) {
         existingReviews.current = true;
 
         const { userReview, otherMembersReviews } =

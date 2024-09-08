@@ -18,19 +18,22 @@ export default function Page({ params }: PageProps) {
   const [book, setBook] = useState<Book>();
 
   const getBook = async () => {
-    let foundBook: Book | DbBook = results.find(
+    let foundBook: Book = results.find(
       (book: Book) => book.googleBooksId === googleBooksId
     );
 
-    const bookInDb: DbBook = await actionGetBookByGoogleId(googleBooksId);
+    const bookInDb = await actionGetBookByGoogleId(googleBooksId);
 
-    if (bookInDb === null && foundBook === undefined) {
-      const { books } = await actionSearchBooksGoogle(googleBooksId, 0);
-      foundBook = books[0];
-    } else  {
+    if (!foundBook) {
+      if (bookInDb === null) {
+        const { books } = await actionSearchBooksGoogle(googleBooksId, 0);
+        foundBook = books[0];
+      } else {
+        foundBook = bookInDb;
+      }
+    } else if (bookInDb !== null) {
       foundBook = bookInDb;
     }
-
     setBook(foundBook);
   };
 
