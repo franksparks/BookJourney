@@ -17,6 +17,7 @@ import { useDbUser } from "@/app/context/db-user-context";
 import ParametrizedPagination from "./ParametrizedPagination";
 import Skeleton from "@mui/material/Skeleton";
 import { dbGetUserClerkIdByUserId } from "@/db/users";
+import { actionGetReviewByGoogleBookIdAndUserId } from "@/actions/reviews";
 
 type ReviewsProps = {
   bookInDb: Book | DbBook | null;
@@ -79,13 +80,17 @@ export default function Reviews({
             { userReview: [], otherMembersReviews: [] }
           );
 
-        const review: Review = userReview[0] || null;
-
-        setUserBookReview(review);
         setBookReviews(otherMembersReviews);
       }
     }
   }, [bookInDb, dbUser, bookReview]);
+
+  const fetchUserReview = useCallback(async () => {
+    if (bookInDb && dbUser) {
+    const userReview = await actionGetReviewByGoogleBookIdAndUserId(bookInDb?.googleBooksId!, dbUser.id);
+    setUserBookReview(userReview);
+    }
+  }, [userBookReview, bookInDb]);
 
   const fetchBookDetailsReviews = useCallback(async () => {
     if (!bookReviews) return;
@@ -133,6 +138,7 @@ export default function Reviews({
 
   useEffect(() => {
     fetchReviews();
+    fetchUserReview();
   }, [fetchReviews, bookInDb, dbUser]);
 
   useEffect(() => {
