@@ -46,6 +46,7 @@ export default function ReadingList({
     onBookRead();
   };
 
+
   const startIndex = currentPage * booksPerPage;
   const endIndex = startIndex + booksPerPage;
   const currentBooks = readingList.slice(startIndex, endIndex);

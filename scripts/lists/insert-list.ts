@@ -19,7 +19,7 @@ const new_list: Prisma.ListCreateInput = {
   user: list_user,
 };
 
-const result = await actionInsertList(new_list);
+const result = await actionInsertList(new_list, user_id);
 
 if (result != null) {
   console.log(result);

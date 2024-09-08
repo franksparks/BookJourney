@@ -85,6 +85,7 @@ export default function BookToListInjector({
   const saveChanges = async () => {
     if (book.id === undefined) {
       const dbBook = await actionGetBookByGoogleId(book.googleBooksId);
+
       if (dbBook === null) {
         const newBook = await actionInsertBook(book);
 
@@ -92,9 +93,9 @@ export default function BookToListInjector({
           newBook.id!,
           Array.from(selectedLists)
         );
-      } else {
-        await actionUpdateBookLists(dbBook.id, Array.from(selectedLists));
       }
+    } else {
+      await actionUpdateBookLists(book.id, Array.from(selectedLists));
     }
     await getBookLists();
     setIsDialogOpen(false);

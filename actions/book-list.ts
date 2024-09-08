@@ -23,8 +23,8 @@ export const actionInsertBookList = async (
   return console.log("This book is already in the list.");
 };
 
-export const actionGetBookListsByListId = async (listId: string) => {
-  const result = await dbGetBookListsByListId(listId);
+export const actionGetBookListsByListId = async (listId: string, page = 1, pageSize = 10) => {
+  const result = await dbGetBookListsByListId(listId, page, pageSize);
   return result;
 };
 
