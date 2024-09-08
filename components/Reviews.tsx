@@ -7,8 +7,7 @@ import ReadRating from "./ReadRating";
 import {
   actionGetUsersClerkInformation,
 } from "@/actions/clerk-users";
-import { actionGetReviewsByBookId } from "@/actions/reviews";
-import { actionGetClerkIdsByUserIds, actionGetUserByUserId, actionGetUserClerkIdByUserId, actionGetUsersByIds } from "@/actions/users";
+import { actionGetUsersByIds } from "@/actions/users";
 import { Rating, ratingMap } from "@/models/rating";
 import { Book, DbBook } from "@/models/book";
 import { Review } from "@/models/review";

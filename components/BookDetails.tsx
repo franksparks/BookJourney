@@ -64,6 +64,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
 
     const numericRating = ratingMap[userRating[0].rating];
         setNumericBookRating(numericRating);
+        setBookRating(userRating[0]);
 
   }, [book.googleBooksId, dbUser]);
 
@@ -78,8 +79,11 @@ export default function BookDetails({ book }: BookDetailsProps) {
   }, [bookInDb?.id!]);
 
   const fetchBookInDb = useCallback(async () => {
-    const dbBook: DbBook = await actionGetBookByGoogleId(book.googleBooksId);
-    setBookInDb(dbBook);
+    /*const dbBook: DbBook = await actionGetBookByGoogleId(book.googleBooksId);
+    setBookInDb(dbBook); */
+    if('ratings' in book) {
+      setBookInDb(book);
+    }
   }, []);
 
   const addBookToDb = useCallback(async () => {
@@ -122,7 +126,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
 
   useEffect(() => {
     fetchRating();
-    //fetchBookInDb();
+    fetchBookInDb();
     //fetchAverageRating();
   }, [fetchRating]);
 
