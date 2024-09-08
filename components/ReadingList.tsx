@@ -46,7 +46,6 @@ export default function ReadingList({
     onBookRead();
   };
 
-
   const startIndex = currentPage * booksPerPage;
   const endIndex = startIndex + booksPerPage;
   const currentBooks = readingList.slice(startIndex, endIndex);
@@ -65,7 +64,9 @@ export default function ReadingList({
 
   return (
     <div className="rounded-xl shadow-lg shadow-sky-700 p-8 bg-sky-600 text-slate-100 h-full ">
-      <h1 className="font-light text-sky-50 text-center">Currently Reading</h1>
+      <h1 className="font-light text-sky-50 text-center border-b-2">
+        Currently Reading
+      </h1>
       <div className="flex flex-row justify-center h-full">
         {readingList.length > booksPerPage && (
           <Image
@@ -90,8 +91,7 @@ export default function ReadingList({
                   onStatusChange={handleStatusChange}
                 />
               ))}
-              <Button className="font-light text-2xl m-8 w-fit rounded-full border-4 p-6 border-orange-500">
-                {" "}
+              <Button className="rounded-full border-2 border-orange-500">
                 View More
               </Button>
             </>
@@ -100,7 +100,9 @@ export default function ReadingList({
           {dbUser && readingList.length == 0 && (
             <div>Start reading to see something here!</div>
           )}
-          {!dbUser && <div>Login to see the books you are reading here!</div>}
+          {!dbUser && (
+            <div>Login to see the books you are reading here!</div>
+          )}
         </div>
         {readingList.length > booksPerPage && (
           <Image
