@@ -102,18 +102,12 @@ export default function Reviews({
       bookReviews.map(async (review) => {
 
         const currentUser = users.filter(user => review.userId === user.id );
-
-        console.log("CURRENT USER", currentUser); 
         const clerkUser = clerkUsers.filter((ckUser: { id: string; }) => currentUser[0].clerkId === ckUser.id );
-
-        console.log("COOOSA", clerkUser);
-
-       const {username = undefined, imageUrl: userAvatar} = clerkUser[0]; 
-
+        const {username = undefined, imageUrl: userAvatar} = clerkUser[0]; 
 
         (bookInDb as DbBook).ratings.map(userRating => console.log(userRating.user)) 
 
-        const ratings: Rating[] = (bookInDb as DbBook).ratings.filter(userRating => userRating.userId === dbUser?.id) 
+        const ratings: Rating[] = (bookInDb as DbBook).ratings.filter(userRating => userRating.userId === currentUser[0].id) 
         const rating = ratings[0]
         const numericRating: number =
           rating !== undefined ? ratingMap[rating.rating] : 0;
