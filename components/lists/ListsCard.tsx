@@ -199,7 +199,7 @@ export default function ListsCard({
   };
 
   return (
-    <div className="p-4 border shadow-md w-full rounded-3xl bg-orange-500 bg-opacity-50 h-full">
+    <div className="p-4 border shadow-md w-full rounded-3xl bg-orange-500 bg-opacity-50" style={{ height: pathname === "/" ? "33%" : "100%"}}>
       <h1 className="font-light text-orange-700 text-center mt-4 pb-2 border-b-4">My Lists</h1>
       {!dbUser && (
         <div className="text-slate-100 text-center">
@@ -208,7 +208,7 @@ export default function ListsCard({
       )}
       {dbUser && (
         <>
-          <ul className="mb-4 flex-grow overflow-y-auto" style={{ height: 'calc(100% - 136px)'}}>
+          <ul className="mb-4 flex-grow overflow-y-auto" style={{ height: pathname === "/" ? 'calc(100% - 80px)' : 'calc(100% - 136px)'}}>
             {lists.length > 0 &&
               lists.map((list) => (
                 list.id === '--divider--' ? <hr key={list.id} className={`mb-4 ${pathname === '/' ? 'hidden' : ''}`}/> :
