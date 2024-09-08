@@ -1,9 +1,8 @@
 "use client";
 
+import LandingListsCard from "@/components/lists/LandingListsCard";
 import ReadingChallengeCard from "@/components/ReadingChallengeCard";
 import ReadingList from "@/components/ReadingList";
-import ListsCard from "@/components/lists/ListsCard";
-import UserLists from "@/components/UserLists";
 import WantToRead from "@/components/WantToRead";
 import { useCallback, useState } from "react";
 
@@ -36,7 +35,7 @@ export default function Home() {
           />
         </div>
         <div className="w-1/2 flex flex-col h-full gap-6">
-          <ListsCard />
+          <LandingListsCard />
           <WantToRead newBookSignal={newBookSignal} bookRead={bookRead} />
           <ReadingChallengeCard
             bookRead={bookRead}
