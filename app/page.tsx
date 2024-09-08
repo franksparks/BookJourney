@@ -23,7 +23,7 @@ export default function Home() {
     setBookSignal(bool);
   }, []);
   return (
-    <main className="flex justify-center p-8 bg-sky-50 h-screen">
+    <main className="flex justify-center p-8 bg-sky-50 h-full">
       <div
         id="Container"
         className="w-5/6 flex flex-row justify-center gap-20"

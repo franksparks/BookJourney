@@ -25,9 +25,10 @@ export default function RootLayout({
       <DbUserProvider>
         <BooksSearchProvider>
           <html lang="en">
-            <body className=" h-screen flex flex-col bg-neutral-300">
+            <body className=" h-screen flex flex-col bg-neutral-300 overflow-y-hidden">
               <Header />
-              <main className="h-screen">{children}</main>
+              {/* the total height os 100% minus the header and footer */}
+              <main style={{ height: 'calc(100% - 130px)'}}>{children}</main>
               <Toaster />
               <Footer />
             </body>

@@ -9,7 +9,7 @@ export default function Page() {
   const [selectedList, setSelectedList] = useState<List | null>(null);
 
   return (
-    <main className="p-2 bg-sky-50 h-screen">
+    <main className="p-2 bg-sky-50 h-full">
       <div className="flex justify-center p-4 bg-sky-50 h-full">
         <div className="w-1/3 p-2">
           <ListsCard
