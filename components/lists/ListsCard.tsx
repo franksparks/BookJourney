@@ -205,7 +205,7 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
                 <hr key={list.id} className={`mb-4`} />
               ) : (
                 <div
-                  className={`text-white items-center mb-2 ${
+                  className={`text-white items-center mb-4 ${
                     pathname === "/" &&
                     !Object.values(ReadStatus).includes(
                       list.id as ReadStatus
@@ -217,7 +217,7 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
                 >
                   {editingListId === list.id ? (
                     <div className="w-full">
-                      <div className="flex items-center mb-2">
+                      <div className="flex items-center mb-4">
                         <input
                           type="text"
                           value={editingListName}
