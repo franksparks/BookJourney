@@ -9,7 +9,9 @@ import {
 import { useDbUser } from "@/app/context/db-user-context";
 import { Book, DbBook } from "@/models/book";
 import { inverseRatingMap, Rating, ratingMap } from "@/models/rating";
+import { Review } from "@/models/review";
 import { RatingValue } from "@prisma/client";
+import Image from "next/image";
 import { useCallback, useEffect, useState } from "react";
 import BookToListInjector from "./BookToListInjector";
 import ControlledRating from "./ControlledRating";
@@ -17,9 +19,9 @@ import ReadingStatusDropdown from "./ReadingStatusDropdown";
 import ReadMore from "./ReadMore";
 import ReadRating from "./ReadRating";
 import ReviewDialogue from "./ReviewDialogue";
-import { Separator } from "./ui/separator";
 import Reviews from "./Reviews";
-import { Review } from "@/models/review";
+import { Separator } from "./ui/separator";
+import React from "react";
 
 type BookDetailsProps = {
   book: Book | DbBook;
@@ -126,7 +128,14 @@ export default function BookDetails({ book }: BookDetailsProps) {
     <div className="flex justify-center mt-10 ">
       <div className="flex justify-center basis-1/4">
         <div className="flex flex-col">
-          <img className="mb-8" src={book.cover || "../default_cover.jpg"} />
+          <Image
+            src={book.cover || "/default_cover.jpg"}
+            alt="cover"
+            width="0"
+            height="0"
+            sizes="100vw"
+            className="w-full h-auto mb-8"
+          />
           <div>
             <ReadingStatusDropdown book={book} logged={logged} />
           </div>
@@ -169,20 +178,20 @@ export default function BookDetails({ book }: BookDetailsProps) {
         )}
         <Separator className="my-4" />
         {(book.authors &&
-          book.authors.map((author: string, index: number) => (
-            <h2 key={index}> {author} </h2>
+          book.authors.map((author, index) => (
+            <h2 key={`author-${index}`}> {author} </h2>
           ))) || <h2> {"Unknown author"} </h2>}
         {book.description && <ReadMore text={book.description} />}
         {book.categories && (
           <>
             <div className="mt-8 mb-4 font-bold">{"Genres"}</div>
             <div className="flex h-5 items-center space-x-4">
-              {book.categories.map((category: string, index: number) => (
-                <>
+              {book.categories.map((category, index) => (
+                <React.Fragment key={`category-${index}`}>
                   <Separator orientation="vertical" />
-                  <div key={index}>{category}</div>
+                  <div>{category}</div>
                   <Separator orientation="vertical" />
-                </>
+                </React.Fragment>
               ))}
             </div>
           </>

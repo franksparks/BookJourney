@@ -35,25 +35,37 @@ export default function BookCardWantToRead({
   };
 
   return (
-    <div className="flex flex-row m-4 h-36 w-3/4 max-w-4xl hover:scale-105 shadow-lg shadow-sky-800 rounded-lg text-sky-800 bg-sky-100 hover:bg-sky-50 cursor-pointer transition duration-500">
-      {book.smallCover && (
-        <div className="flex justify-center items-center p-4">
-          <BookNavigationWrapper id={book.googleBooksId}>
+    <div className="flex flex-row h-36 max-w-4xl hover:scale-105 shadow-lg shadow-orange-700 rounded-lg text-slate-600 bg-slate-50 hover:bg-orange-50 cursor-default transition duration-500 w-full m-4">
+      <div className="flex justify-center items-center p-4">
+        <BookNavigationWrapper id={book.googleBooksId}>
+          {book.smallCover != null ? (
+            <Image
+              className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000 w-16 h-auto"
+              src={book.smallCover}
+              alt="cover"
+              width="0"
+              height="0"
+              sizes="100vw"
+            />
+          ) : (
             <Image
               className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000"
-              src={book.smallCover}
+              src={"/default_cover.jpg"}
               alt="cover"
               width={60}
               height={100}
             />
-          </BookNavigationWrapper>
-        </div>
-      )}
+          )}
+        </BookNavigationWrapper>
+      </div>
 
       <div className="flex flex-col justify-center gap-1 p-1 flex-grow w-1/2">
         <Tooltip arrow title={book.title} placement="top">
-          <p className="italic line-clamp-2">{book.title}</p>
+          <BookNavigationWrapper id={book.googleBooksId}>
+            <p className="italic line-clamp-2">{book.title}</p>
+          </BookNavigationWrapper>
         </Tooltip>
+
         <Tooltip arrow title={book.authors[0]} placement="bottom">
           <p className="text-slate-500">
             {book.authors && book.authors.length > 0
@@ -66,7 +78,7 @@ export default function BookCardWantToRead({
       <div className="flex justify-center items-center mr-2 w-1/4">
         <Button
           onClick={handleStartBookClick}
-          className="rounded-full border-orange-500 border-2 hover:scale-110 transition duration-500"
+          className="rounded-full border-2 hover:scale-110 transition duration-500"
         >
           Start
         </Button>

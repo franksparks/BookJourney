@@ -1,9 +1,5 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { format } from "date-fns";
-import ReadRating from "./ReadRating";
 import {
   actionGetUsersClerkInformation,
 } from "@/actions/clerk-users";
@@ -12,9 +8,7 @@ import { Rating, ratingMap } from "@/models/rating";
 import { Book, DbBook } from "@/models/book";
 import { Review } from "@/models/review";
 import { User } from "@/models/user";
-import { actionGetRatingByGoogleBookIdAndUserId } from "@/actions/ratings";
-import { useDbUser } from "@/app/context/db-user-context";
-import ParametrizedPagination from "./ParametrizedPagination";
+import { useUser } from "@clerk/nextjs";
 import Skeleton from "@mui/material/Skeleton";
 import { dbGetUserClerkIdByUserId } from "@/db/users";
 import { actionGetReviewByGoogleBookIdAndUserId } from "@/actions/reviews";
@@ -41,18 +35,20 @@ type Accumulator = {
 export default function Reviews({
   bookInDb,
   numericBookRating,
-  bookReview
+  bookReview,
 }: ReviewsProps) {
   const { user } = useUser();
   const { dbUser } = useDbUser();
-  const [userBookReview, setUserBookReview] = useState<Review | null>(null);
+  const [userBookReview, setUserBookReview] = useState<Review | null>(
+    null
+  );
   const [bookReviews, setBookReviews] = useState<Review[] | null>(null);
   const [bookDetailsReviews, setBookDetailsReviews] = useState<
     BookDetailsReview[] | null
   >(null);
-  const [paginatedReviews, setPaginatedReviews] = useState<BookDetailsReview[]>(
-    []
-  );
+  const [paginatedReviews, setPaginatedReviews] = useState<
+    BookDetailsReview[]
+  >([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const itemsPerPage = 5;
@@ -123,7 +119,7 @@ export default function Reviews({
           rating: numericRating,
           userAvatar,
           username,
-          creationDate
+          creationDate,
         };
       })
     
@@ -160,10 +156,18 @@ export default function Reviews({
           <div className="font-bold mb-4">{"My Review"}</div>
           <div className="flex">
             <div className="basis-1/6">
-              <img
-                src={user?.imageUrl}
-                className={"w-8 h-8 mb-2 rounded-full"}
-              />
+              {user?.imageUrl ? (
+                <Image
+                  className="w-8 h-8 mb-2 rounded-full"
+                  src={user?.imageUrl}
+                  alt="cover"
+                  width={60}
+                  height={100}
+                />
+              ) : (
+                <p>To do</p>
+              )}
+
               <div>{user?.username}</div>
             </div>
             <div className="flex flex-col">
@@ -189,9 +193,12 @@ export default function Reviews({
           {paginatedReviews.map((review, index) => (
             <div className="flex mb-4" key={index}>
               <div className="basis-1/6">
-                <img
-                  src={review.userAvatar}
+                <Image
                   className={"w-8 h-8 mb-2 rounded-full"}
+                  src={review.userAvatar}
+                  alt="user avatar picture"
+                  width={60}
+                  height={100}
                 />
                 <div>{review.username}</div>
               </div>

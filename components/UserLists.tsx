@@ -18,7 +18,6 @@ export default function UserLists() {
   const getLists = async () => {
     if (dbUser != null) {
       const userLists = await actionGetListsByUserId(dbUser.id);
-      console.log(JSON.stringify(userLists));
 
       setLists(userLists);
     }
@@ -27,8 +26,8 @@ export default function UserLists() {
   //TODO: Add a loading for this component
 
   return (
-    <div className="flex flex-col justify-start rounded-3xl shadow-xl h-1/3 shadow-orange-200 p-4 bg-orange-500 text-orange-100">
-      <h1 className="font-light text-orange-100 text-center">My Lists</h1>
+    <div className="flex flex-col justify-start rounded-xl shadow-lg h-1/3 shadow-orange-700 p-8 bg-orange-500 text-orange-50">
+      <h1 className="font-light text-orange-50 text-center">My Lists</h1>
 
       {dbUser &&
         lists.map((list: List, index) => (
@@ -52,9 +51,7 @@ export default function UserLists() {
             </div>
           </div>
         ))}
-      {dbUser && lists.length == 0 && (
-        <div>Create a list to store books!</div>
-      )}
+      {dbUser && lists.length == 0 && <div>Create a list to store books!</div>}
       {!dbUser && <div>Login to see your lists here!</div>}
     </div>
   );

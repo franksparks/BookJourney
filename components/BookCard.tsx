@@ -80,11 +80,7 @@ export default function BookCard({
       );
       if (readingProgress === book.pages) {
         await actionUpdateBookStatus(status.id, ReadStatus.READ);
-        await actionInsertReadingActivityPercentage(
-          100,
-          book.id!,
-          dbUser.id
-        );
+        await actionInsertReadingActivityPercentage(100, book.id!, dbUser.id);
         onStatusChange();
       }
     } else {
@@ -95,11 +91,7 @@ export default function BookCard({
       );
       if (readingProgress === 100) {
         await actionUpdateBookStatus(status.id, ReadStatus.READ);
-        await actionInsertReadingActivityPercentage(
-          100,
-          book.id!,
-          dbUser.id
-        );
+        await actionInsertReadingActivityPercentage(100, book.id!, dbUser.id);
         onStatusChange();
       }
     }
@@ -113,28 +105,49 @@ export default function BookCard({
       duration: 5000,
     });
   };
+  const handleStopReading = async () => {
+    await actionUpdateBookStatus(status.id, ReadStatus.WANT_TO_READ);
+    onStatusChange();
+    toast({
+      title: "Book moved back to 'Want to read'!",
+      className: "bg-orange-500 text-white",
+      duration: 5000,
+    });
+  };
 
   return (
-    <div className="flex flex-row m-4 h-36 w-11/12 max-w-3xl hover:scale-105 shadow-lg shadow-sky-800 rounded-lg text-sky-800 bg-sky-100 hover:bg-sky-50 cursor-default transition duration-500 ">
-      {book.smallCover && (
-        <div className="flex justify-center items-center p-4 w-1/4">
-          <BookNavigationWrapper id={book.googleBooksId}>
+    <div className="flex flex-row m-4 h-36 w-11/12 max-w-4xl hover:scale-105 shadow-lg shadow-sky-800 rounded-lg text-sky-800 bg-sky-100 hover:bg-sky-50 cursor-default transition duration-500 ">
+      <div className="flex justify-center items-center p-4 w-1/4">
+        <BookNavigationWrapper id={book.googleBooksId}>
+          {book.smallCover != null ? (
+            <Image
+              className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000 w-16 h-auto"
+              src={book.smallCover}
+              alt="cover"
+              width="0"
+              height="0"
+              sizes="100vw"
+              priority={false}
+            />
+          ) : (
             <Image
               className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000"
-              src={book.smallCover}
+              src={"/default_cover.jpg"}
               alt="cover"
               width={60}
               height={100}
             />
-          </BookNavigationWrapper>
-        </div>
-      )}
+          )}
+        </BookNavigationWrapper>
+      </div>
 
       <div className="flex flex-col justify-center gap-1 p-1 flex-grow w-1/2">
         <Tooltip arrow title={book.title} placement="top">
-          <BookNavigationWrapper id={book.googleBooksId}>
-            <p className="italic line-clamp-2">{book.title}</p>
-          </BookNavigationWrapper>
+          <div>
+            <BookNavigationWrapper id={book.googleBooksId}>
+              <p className="italic line-clamp-2">{book.title}</p>
+            </BookNavigationWrapper>
+          </div>
         </Tooltip>
         <Tooltip arrow title={book.authors[0]} placement="bottom">
           <p className="text-slate-500">
@@ -166,10 +179,7 @@ export default function BookCard({
             <>
               <p>
                 {currentReadingActivity.page}/{book.pages} (
-                {(
-                  (currentReadingActivity.page / book.pages) *
-                  100
-                ).toFixed(1)}
+                {((currentReadingActivity.page / book.pages) * 100).toFixed(1)}
                 %)
               </p>
               <div className="w-36 bg-gray-200 rounded-full h-4 border-2 border-gray-300">
@@ -236,9 +246,7 @@ export default function BookCard({
                         %)
                       </>
                     ) : currentReadingActivity.percentage !== null ? (
-                      <>
-                        Currently read {currentReadingActivity.percentage}%
-                      </>
+                      <>Currently read {currentReadingActivity.percentage}%</>
                     ) : (
                       ""
                     )
@@ -253,29 +261,36 @@ export default function BookCard({
                     id="value"
                     className="col-span-3"
                     value={readingProgress}
-                    onChange={(e) =>
-                      setReadingProgress(Number(e.target.value))
-                    }
+                    onChange={(e) => setReadingProgress(Number(e.target.value))}
                     step="any"
                   />
                 </div>
               </div>
               <DialogFooter>
-                <Button
-                  onClick={handleAddReadingActivity}
-                  className="rounded-full border-orange-500 border-2"
-                >
-                  Save activity
-                </Button>
-                <Button
-                  onClick={() => {
-                    handleDoneClick();
-                    setIsDialogOpen(false);
-                  }}
-                  className="rounded-full border-orange-500 border-2"
-                >
-                  Book Finished!
-                </Button>
+                <div className="flex justify-center space-x-4">
+                  <Button
+                    onClick={handleAddReadingActivity}
+                    className="rounded-full border-orange-500 border-2"
+                  >
+                    Save activity
+                  </Button>
+
+                  <Button
+                    onClick={() => {
+                      handleDoneClick();
+                      setIsDialogOpen(false);
+                    }}
+                    className="rounded-full border-orange-500 border-2 "
+                  >
+                    Book Finished!
+                  </Button>
+                  <Button
+                    className="rounded-full border-orange-500 bg-red-400 hover:bg-red-600 border-2"
+                    onClick={handleStopReading}
+                  >
+                    Stop reading
+                  </Button>
+                </div>
               </DialogFooter>
             </DialogContent>
           </Dialog>
