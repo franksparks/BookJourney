@@ -21,19 +21,16 @@ export default function Page({ params }: PageProps) {
     let foundBook: Book = results.find(
       (book: Book) => book.googleBooksId === googleBooksId
     );
-
+    
     const bookInDb = await actionGetBookByGoogleId(googleBooksId);
 
     if (!foundBook) {
-      if (bookInDb === null) {
-        const { books } = await actionSearchBooksGoogle(googleBooksId, 0);
-        foundBook = books[0];
-      } else {
-        foundBook = bookInDb;
-      }
-    } else if (bookInDb !== null) {
-      foundBook = bookInDb;
+      foundBook =
+        bookInDb ?? (await actionSearchBooksGoogle(googleBooksId, 0)).books[0];
+    } else {
+      foundBook = bookInDb ?? foundBook;
     }
+
     setBook(foundBook);
   };
 
