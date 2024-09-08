@@ -1,10 +1,10 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
-import { Input } from "./ui/input";
-import SearchRadioButtons from "./SearchRadioButtons";
-import { Button } from "@/components/ui/button";
 import { useBooksSearchContext } from "@/app/context/books-search-context";
+import { Button } from "@/components/ui/button";
+import { useCallback } from "react";
+import SearchRadioButtons from "./SearchRadioButtons";
+import { Input } from "./ui/input";
 
 type SearchBoxProps = {
   advancedQuery: string;
@@ -17,7 +17,6 @@ type SearchBoxProps = {
   setRadioValue: (option: string) => void;
 };
 
-// Todo: Change the img for the next.js Image component
 export default function SearchBox({
   advancedQuery,
   radioValue,

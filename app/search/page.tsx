@@ -12,7 +12,7 @@ import { useState, useCallback, useEffect, Suspense } from "react";
 const queryMap: { [key: string]: string } = {
   author: ":inauthor:",
   title: ":intitle:",
-  all: ""
+  all: "",
 };
 
 const calculateIndex = (page: number): number => {
@@ -29,7 +29,7 @@ export default function Home() {
     previewSearch,
     setPreviewSearch,
     setTotalItems,
-    totalItems
+    totalItems,
   } = useBooksSearchContext();
   const [advancedResults, setAdvancedResults] = useState<Book[]>([]);
   const [advancedTotalItems, setAdvancedTotalItems] = useState(0);
@@ -47,7 +47,9 @@ export default function Home() {
     try {
       const index = calculateIndex(page);
 
-      const queryString = queryMap ? `${queryMap[radioValue]}${query}` : query;
+      const queryString = queryMap
+        ? `${queryMap[radioValue]}${query}`
+        : query;
 
       const result = await actionSearchBooksGoogle(queryString, index);
       setResults(result.books);
@@ -57,7 +59,7 @@ export default function Home() {
           : result.totalItems;
       setTotalItems(totalItems);
       setAdvancedResults(result.books);
-      
+
       if (advancedTotalItems === 0) {
         setAdvancedTotalItems(totalItems);
       }

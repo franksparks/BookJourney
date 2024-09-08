@@ -14,7 +14,7 @@ export default function BookNavigationWrapper({
   id,
   children,
   clearValues,
-  handleBlur
+  handleBlur,
 }: WrapperProps) {
   const router = useRouter();
   const handleClick = (event: MouseEvent<HTMLDivElement>) => {
@@ -25,7 +25,10 @@ export default function BookNavigationWrapper({
     event.preventDefault();
   };
   return (
-    <div className="cursor-pointer" onMouseDown={(event) => handleClick(event)}>
+    <div
+      className="cursor-pointer"
+      onMouseDown={(event) => handleClick(event)}
+    >
       {children}
     </div>
   );

@@ -18,7 +18,6 @@ export default function UserLists() {
   const getLists = async () => {
     if (dbUser != null) {
       const userLists = await actionGetListsByUserId(dbUser.id);
-      console.log(JSON.stringify(userLists));
 
       setLists(userLists);
     }
