@@ -1,23 +1,24 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { format } from "date-fns";
-import ReadRating from "./ReadRating";
 import {
   actionGetAvatarFromClerk,
-  actionGetUsernameFromClerk
+  actionGetUsernameFromClerk,
 } from "@/actions/clerk-users";
+import { actionGetRatingByGoogleBookIdAndUserId } from "@/actions/ratings";
 import { actionGetReviewsByBookId } from "@/actions/reviews";
 import { actionGetUserByUserId } from "@/actions/users";
-import { ratingMap } from "@/models/rating";
+import { useDbUser } from "@/app/context/db-user-context";
 import { Book } from "@/models/book";
+import { ratingMap } from "@/models/rating";
 import { Review } from "@/models/review";
 import { User } from "@/models/user";
-import { actionGetRatingByGoogleBookIdAndUserId } from "@/actions/ratings";
-import { useDbUser } from "@/app/context/db-user-context";
-import ParametrizedPagination from "./ParametrizedPagination";
+import { useUser } from "@clerk/nextjs";
 import Skeleton from "@mui/material/Skeleton";
+import { format } from "date-fns";
+import Image from "next/image";
+import { useCallback, useEffect, useRef, useState } from "react";
+import ParametrizedPagination from "./ParametrizedPagination";
+import ReadRating from "./ReadRating";
 
 type ReviewsProps = {
   bookInDb: Book | null;
@@ -41,18 +42,20 @@ type Accumulator = {
 export default function Reviews({
   bookInDb,
   numericBookRating,
-  bookReview
+  bookReview,
 }: ReviewsProps) {
   const { user } = useUser();
   const { dbUser } = useDbUser();
-  const [userBookReview, setUserBookReview] = useState<Review | null>(null);
+  const [userBookReview, setUserBookReview] = useState<Review | null>(
+    null
+  );
   const [bookReviews, setBookReviews] = useState<Review[] | null>(null);
   const [bookDetailsReviews, setBookDetailsReviews] = useState<
     BookDetailsReview[] | null
   >(null);
-  const [paginatedReviews, setPaginatedReviews] = useState<BookDetailsReview[]>(
-    []
-  );
+  const [paginatedReviews, setPaginatedReviews] = useState<
+    BookDetailsReview[]
+  >([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const itemsPerPage = 5;
@@ -95,7 +98,9 @@ export default function Reviews({
 
     const reviews: BookDetailsReview[] = await Promise.all(
       bookReviews.map(async (review) => {
-        const dbUser: User | null = await actionGetUserByUserId(review.userId);
+        const dbUser: User | null = await actionGetUserByUserId(
+          review.userId
+        );
         const username: string =
           (await actionGetUsernameFromClerk(dbUser?.clerkId!)) || "";
         const userAvatar: string = await actionGetAvatarFromClerk(
@@ -114,7 +119,7 @@ export default function Reviews({
           rating: numericRating,
           userAvatar,
           username,
-          creationDate
+          creationDate,
         };
       })
     );
@@ -147,10 +152,18 @@ export default function Reviews({
           <div className="font-bold mb-4">{"My Review"}</div>
           <div className="flex">
             <div className="basis-1/6">
-              <img
-                src={user?.imageUrl}
-                className={"w-8 h-8 mb-2 rounded-full"}
-              />
+              {user?.imageUrl ? (
+                <Image
+                  className="w-8 h-8 mb-2 rounded-full"
+                  src={user?.imageUrl}
+                  alt="cover"
+                  width={60}
+                  height={100}
+                />
+              ) : (
+                <p>To do</p>
+              )}
+
               <div>{user?.username}</div>
             </div>
             <div className="flex flex-col">
@@ -176,9 +189,12 @@ export default function Reviews({
           {paginatedReviews.map((review, index) => (
             <div className="flex mb-4" key={index}>
               <div className="basis-1/6">
-                <img
-                  src={review.userAvatar}
+                <Image
                   className={"w-8 h-8 mb-2 rounded-full"}
+                  src={review.userAvatar}
+                  alt="user avatar picture"
+                  width={60}
+                  height={100}
                 />
                 <div>{review.username}</div>
               </div>

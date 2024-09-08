@@ -44,7 +44,9 @@ export default function Header() {
           className="flex items-center gap-x-1 cursor-pointer mt-2"
         >
           <h1 className="text-white text-4xl font-thin">book</h1>
-          <h1 className="text-orange-500 text-4xl tracking-wide">journey</h1>
+          <h1 className="text-orange-500 text-4xl tracking-wide">
+            journey
+          </h1>
         </div>
         <PreviewSearchBox />
         <div style={{ minWidth: "150px" }}>

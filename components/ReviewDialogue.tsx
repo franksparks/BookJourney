@@ -9,7 +9,7 @@ import {
   actionDeleteReview,
   actionGetReviewByGoogleBookIdAndUserId,
   actionInsertReview,
-  actionUpdateReview
+  actionUpdateReview,
 } from "@/actions/reviews";
 
 type ReviewDialogueProps = {
@@ -25,9 +25,8 @@ export default function ReviewDialogue({
   dbUser,
   numericBookRating,
   bookReview,
-  setBookReview
+  setBookReview,
 }: ReviewDialogueProps) {
-
   const [commentBookReview, setCommentBookReview] = useState<string>("");
   const [open, setOpen] = useState(false);
 
@@ -46,11 +45,18 @@ export default function ReviewDialogue({
 
   const saveReview = useCallback(async () => {
     if (bookReview === null) {
-      const review = await actionInsertReview(commentBookReview, bookInDb?.id!, dbUser?.id);
+      const review = await actionInsertReview(
+        commentBookReview,
+        bookInDb?.id!,
+        dbUser?.id
+      );
       setBookReview(review);
       setCommentBookReview(review.comment);
     } else {
-      const review = await actionUpdateReview(bookReview.id!, commentBookReview);
+      const review = await actionUpdateReview(
+        bookReview.id!,
+        commentBookReview
+      );
       setBookReview(review);
     }
   }, [commentBookReview]);
