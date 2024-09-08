@@ -97,11 +97,7 @@ export default function ReadingChallengeCard({
       alert("Please enter a valid number.");
       return;
     }
-    const res = await actionInsertReadingChallenge(
-      newGoal,
-      year,
-      dbUser.id
-    );
+    const res = await actionInsertReadingChallenge(newGoal, year, dbUser.id);
     setCurrentChallenge(res);
     setIsDialogOpen(false);
   };
@@ -112,10 +108,7 @@ export default function ReadingChallengeCard({
       return;
     }
     if (currentChallenge) {
-      const res = await actionUpdateChallenge(
-        currentChallenge.id,
-        newGoal
-      );
+      const res = await actionUpdateChallenge(currentChallenge.id, newGoal);
       setCurrentChallenge(res);
       actionMarkChallengeAsNotCelebrated(currentChallenge.id);
       setIsDialogOpen(false);
@@ -133,8 +126,8 @@ export default function ReadingChallengeCard({
     <>
       {showConfetti && <Confetti />}
 
-      <div className="flex flex-col items-center rounded-3xl shadow-xl shadow-orange-200 p-8 bg-orange-500 text-orange-100 h-1/3">
-        <h1 className="font-light text-orange-100 text-center mb-2">
+      <div className="flex flex-col items-center rounded-xl shadow-lg shadow-orange-700 p-8 bg-orange-500 text-white h-1/3">
+        <h1 className="font-light text-orange-50 text-center mb-2">
           {year} Reading Challenge
         </h1>
         <div className="flex flex-row items-center">
@@ -204,10 +197,7 @@ export default function ReadingChallengeCard({
               </p>
               <p className="mb-2">
                 {readBooks.length}/{currentChallenge.goal} (
-                {(
-                  (readBooks.length / currentChallenge.goal) *
-                  100
-                ).toFixed(1)}
+                {((readBooks.length / currentChallenge.goal) * 100).toFixed(1)}
                 %)
               </p>
               <div className="w-36 bg-gray-200 rounded-full h-4 border-2 border-gray-300 mb-2">

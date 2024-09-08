@@ -62,8 +62,8 @@ export default function ReadingList({
   };
 
   return (
-    <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-sky-600 text-slate-100 h-full ">
-      <h1 className="font-light text-sky-200 text-center">Currently Reading</h1>
+    <div className="rounded-xl shadow-lg shadow-sky-700 p-8 bg-sky-600 text-slate-100 h-full ">
+      <h1 className="font-light text-sky-50 text-center">Currently Reading</h1>
 
       <div className="flex flex-col items-center">
         {dbUser && currentBooks.length > 0 && (
