@@ -51,6 +51,7 @@ export default function Reviews({
     []
   );
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
 
   const itemsPerPage = 5;
 
@@ -88,9 +89,11 @@ export default function Reviews({
 
   const fetchBookDetailsReviews = useCallback(async () => { 
     if (!bookReviews){
+      setLoading(false);
       return
     } 
     
+    setLoading(true);
     const userIds: string[] = bookReviews.map((review) => review.userId);
     const users: User[] = await actionGetUsersByIds(userIds);
     const clerkUsers = await actionGetUsersClerkInformation(users);
@@ -127,6 +130,7 @@ export default function Reviews({
 
      
       setBookDetailsReviews(reviews);
+      setLoading(false);
     }
   }, [bookReviews, bookInDb]);
 
@@ -177,7 +181,7 @@ export default function Reviews({
         </>
       )}
 
-      { dbUser === false && bookDetailsReviews!.length > 0 && (
+      { dbUser && loading && (
         <>
           {[...Array(2)].map((_, index) => (
             <Skeleton key={index} className="h-10 w-1/2" />
