@@ -4,7 +4,7 @@ import { actionInsertBook } from "@/actions/books";
 import {
   actionDeleteRating,
   actionInsertRating,
-  actionUpdateRating
+  actionUpdateRating,
 } from "@/actions/ratings";
 import { useDbUser } from "@/app/context/db-user-context";
 import { Book, DbBook } from "@/models/book";
@@ -75,14 +75,14 @@ export default function BookDetails({ book }: BookDetailsProps) {
       rating: stringRating as RatingValue,
       book: {
         connect: {
-          id: bookInDb?.id
-        }
+          id: bookInDb?.id,
+        },
       },
       user: {
         connect: {
-          id: dbUser.id
-        }
-      }
+          id: dbUser.id,
+        },
+      },
     };
 
     const rating = await actionInsertRating(ratingCreateInput);
@@ -125,16 +125,16 @@ export default function BookDetails({ book }: BookDetailsProps) {
   }, [numericBookRating, bookInDb]);
 
   return (
-    <div className="flex justify-center mt-10 ">
-      <div className="flex justify-center basis-1/4">
-        <div className="flex flex-col">
+    <div className="flex justify-center m-8 bg-sky-50 shadow-lg shadow-sky-600 p-12 rounded-3xl">
+      <div className="flex justify-center w-1/4">
+        <div className="flex flex-col items-center">
           <Image
             src={book.cover || "/default_cover.jpg"}
             alt="cover"
             width="0"
             height="0"
             sizes="100vw"
-            className="w-full h-auto mb-8"
+            className="rounded w-full h-auto mb-8 shadow-lg shadow-sky-600"
           />
           <div>
             <ReadingStatusDropdown book={book} logged={logged} />
@@ -166,7 +166,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
           </div>
         </div>
       </div>
-      <div className="flex w-screen justify-start flex-col mr-4">
+      <div className="flex justify-start flex-col mr-4 w-3/4">
         <div className="flex flex-row">
           <h1 className="mr-4">{book.title}</h1>
           {logged && <ReadRating value={book.ratingAverage!} />}
@@ -179,12 +179,18 @@ export default function BookDetails({ book }: BookDetailsProps) {
         <Separator className="my-4" />
         {(book.authors &&
           book.authors.map((author, index) => (
-            <h2 key={`author-${index}`}> {author} </h2>
+            <h2
+              className="text-3xl italic text-slate-600"
+              key={`author-${index}`}
+            >
+              {" "}
+              {author}{" "}
+            </h2>
           ))) || <h2> {"Unknown author"} </h2>}
         {book.description && <ReadMore text={book.description} />}
         {book.categories && (
           <>
-            <div className="mt-8 mb-4 font-bold">{"Genres"}</div>
+            <div className="mt-8 mb-4 text-xl">{"Genres"}</div>
             <div className="flex h-5 items-center space-x-4">
               {book.categories.map((category, index) => (
                 <React.Fragment key={`category-${index}`}>
@@ -197,31 +203,42 @@ export default function BookDetails({ book }: BookDetailsProps) {
           </>
         )}
         {
-          <>
-            <div className="mt-8 font-bold">{"This edition"}</div>
-            <Separator className="my-4" />
-          </>
+          <div className="mt-8 flex flex-row w-full justify-between">
+            <div className=" text-xl">{"This edition"}</div>
+            {book.pages !== 0 && (
+              <div className="flex items-center gap-2">
+                <div className="font-semibold">Pages</div>
+                <Image src={"/pages.svg"} alt="pages" width={40} height={40} />
+                <div>{book.pages}</div>
+              </div>
+            )}
+            {book.language && (
+              <div className="flex items-center gap-4">
+                <div className="font-semibold">Published</div>
+                <Image
+                  src={"/calendar.svg"}
+                  alt="calendar"
+                  width={40}
+                  height={40}
+                />
+                <div>{book.publishedDate}</div>
+              </div>
+            )}
+            {book.language && (
+              <div className="flex items-center gap-4 mr-12">
+                <div className="font-semibold">Language</div>
+                <Image
+                  src={"/language.svg"}
+                  alt="language"
+                  width={40}
+                  height={40}
+                />
+                <div>{book.language.toUpperCase()}</div>
+              </div>
+            )}
+          </div>
         }
-        <div className="grid gap-4">
-          {book.pages !== 0 && (
-            <div className="flex items-center">
-              <div className="font-semibold">Pages</div>
-              <div className="ml-11">{book.pages}</div>
-            </div>
-          )}
-          {book.language && (
-            <div className="flex items-center">
-              <div className="font-semibold">Published</div>
-              <div className="ml-4">{book.publishedDate}</div>
-            </div>
-          )}
-          {book.language && (
-            <div className="flex items-center">
-              <div className="font-semibold">Language</div>
-              <div className="ml-4">{book.language.toUpperCase()}</div>
-            </div>
-          )}
-        </div>
+        <div className="grid gap-4"></div>
         <>
           <Separator className="my-4" />
         </>
