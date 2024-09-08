@@ -41,10 +41,6 @@ export default function ReviewDialogue({
         setBookReview(review);
         setCommentBookReview(review.comment);
       }
-
-      setBookReview(review);
-      setCommentBookReview(review.comment);
-
     }
   }, [dbUser, bookInDb, bookReview]);
 
