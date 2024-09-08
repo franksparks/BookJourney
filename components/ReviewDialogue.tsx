@@ -11,6 +11,7 @@ import {
   actionInsertReview,
   actionUpdateReview,
 } from "@/actions/reviews";
+import { actionGetBookByGoogleId } from "@/actions/books";
 
 type ReviewDialogueProps = {
   bookInDb: Book | DbBook | null;
@@ -52,13 +53,22 @@ export default function ReviewDialogue({
         setCommentBookReview(review.comment);
       }
     }
-  }, [dbUser, bookInDb, bookReview]);
+  }, [dbUser, bookInDb, bookReview, commentBookReview]);
 
   const saveReview = useCallback(async () => {
-    if (bookReview === null) {
+
+    let book: Book;
+    if(bookInDb?.id === undefined) {
+      book = await actionGetBookByGoogleId(bookInDb?.googleBooksId!)
+      console.log(book)
+    } else {
+      book = bookInDb;
+      console.log(book)
+    }
+    if (bookReview === null || bookReview === undefined) {
       const review = await actionInsertReview(
         commentBookReview,
-        bookInDb?.id!,
+        book.id!,
         dbUser?.id
       );
       setBookReview(review);

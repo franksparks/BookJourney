@@ -1,6 +1,5 @@
 "use client";
 
-
 import { useDbUser } from "@/app/context/db-user-context";
 import { Book, DbBook } from "@/models/book";
 import { Rating, ratingMap } from "@/models/rating";
@@ -39,34 +38,26 @@ type Accumulator = {
 export default function Reviews({
   bookInDb,
   numericBookRating,
-  bookReview,
+  bookReview
 }: ReviewsProps) {
   const { user } = useUser();
   const { dbUser } = useDbUser();
-  const [userBookReview, setUserBookReview] = useState<Review | null>(
-    null
-  );
+  const [userBookReview, setUserBookReview] = useState<Review | null>(null);
   const [bookReviews, setBookReviews] = useState<Review[] | null>(null);
   const [bookDetailsReviews, setBookDetailsReviews] = useState<
     BookDetailsReview[] | null
   >(null);
-  const [paginatedReviews, setPaginatedReviews] = useState<
-    BookDetailsReview[]
-  >([]);
+  const [paginatedReviews, setPaginatedReviews] = useState<BookDetailsReview[]>(
+    []
+  );
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(true);
+
   const itemsPerPage = 5;
-  const existingReviews = useRef(false);
 
   const fetchReviews = useCallback(async () => {
-    
     if (bookInDb && dbUser) {
-
-      const allReviews: Review[] = (bookInDb as DbBook).reviews
-
-      if (allReviews !== undefined && allReviews.length > 0 ) {
-        existingReviews.current = true;
-
+      const allReviews: Review[] = (bookInDb as DbBook).reviews;
+      if (allReviews !== undefined && allReviews.length > 0) {
         const { userReview, otherMembersReviews } =
           allReviews.reduce<Accumulator>(
             (acc, review) => {
@@ -87,53 +78,56 @@ export default function Reviews({
 
   const fetchUserReview = useCallback(async () => {
     if (bookInDb && dbUser) {
-    const userReview = await actionGetReviewByGoogleBookIdAndUserId(bookInDb?.googleBooksId!, dbUser.id);
-    setUserBookReview(userReview);
+      const userReview = await actionGetReviewByGoogleBookIdAndUserId(
+        bookInDb?.googleBooksId!,
+        dbUser.id
+      );
+      setUserBookReview(userReview);
     }
   }, [userBookReview, bookInDb]);
 
-  const fetchBookDetailsReviews = useCallback(async () => {
-    if (!bookReviews) return;
-
-    setLoading(true);
-
-    const userIds: string[] = bookReviews.map(review => review.userId);
+  const fetchBookDetailsReviews = useCallback(async () => { 
+    if (!bookReviews){
+      return
+    } 
+    
+    const userIds: string[] = bookReviews.map((review) => review.userId);
     const users: User[] = await actionGetUsersByIds(userIds);
     const clerkUsers = await actionGetUsersClerkInformation(users);
+    if (clerkUsers) {
+      const reviews: BookDetailsReview[] = await Promise.all(
+        bookReviews.map(async (review) => {
+          const currentUser = users.filter((user) => review.userId === user.id);
+          const clerkUser = clerkUsers.filter(
+            (ckUser: { id: string }) => currentUser[0].clerkId === ckUser.id
+          );
+          const { username = undefined, imageUrl: userAvatar } = clerkUser[0];
 
-    if(clerkUsers) {
+          (bookInDb as DbBook).ratings.map((userRating) =>
+            console.log(userRating.user)
+          );
 
-    const reviews: BookDetailsReview[] = await Promise.all(
-      bookReviews.map(async (review) => {
+          const ratings: Rating[] = (bookInDb as DbBook).ratings.filter(
+            (userRating) => userRating.userId === currentUser[0].id
+          );
+          const rating = ratings[0];
+          const numericRating: number =
+            rating !== undefined ? ratingMap[rating.rating] : 0;
+          const creationDate = review.createdAt || "";
 
-        const currentUser = users.filter(user => review.userId === user.id );
-        const clerkUser = clerkUsers.filter((ckUser: { id: string; }) => currentUser[0].clerkId === ckUser.id );
-        const {username = undefined, imageUrl: userAvatar} = clerkUser[0]; 
+          return {
+            comment: review.comment,
+            rating: numericRating,
+            userAvatar,
+            username,
+            creationDate
+          };
+        })
+      );
 
-        (bookInDb as DbBook).ratings.map(userRating => console.log(userRating.user)) 
-
-        const ratings: Rating[] = (bookInDb as DbBook).ratings.filter(userRating => userRating.userId === currentUser[0].id) 
-        const rating = ratings[0]
-        const numericRating: number =
-          rating !== undefined ? ratingMap[rating.rating] : 0;
-        const creationDate = review.createdAt || "";
-
-        return {
-          comment: review.comment,
-          rating: numericRating,
-          userAvatar,
-          username,
-          creationDate,
-        };
-      })
-    
-    );
-
-    setBookDetailsReviews(reviews);
-
-    setLoading(false);
-
-  }
+     
+      setBookDetailsReviews(reviews);
+    }
   }, [bookReviews, bookInDb]);
 
   useEffect(() => {
@@ -183,9 +177,9 @@ export default function Reviews({
         </>
       )}
 
-      {loading && dbUser && existingReviews.current === true && (
+      { dbUser === false && bookDetailsReviews!.length > 0 && (
         <>
-          {[...Array(5)].map((_, index) => (
+          {[...Array(2)].map((_, index) => (
             <Skeleton key={index} className="h-10 w-1/2" />
           ))}
         </>
