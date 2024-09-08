@@ -66,8 +66,8 @@ export default function WantToRead({
   };
 
   return (
-    <div className="flex flex-col justify-start rounded-xl shadow-lg shadow-orange-700 bg-orange-500 p-8 text-orange-50 h-1/3">
-      <h1 className="font-light text-orange-50 text-center mb-4 border-b-2">
+    <div className="flex flex-col justify-start rounded-xl shadow-lg shadow-orange-700 bg-orange-500 p-6 text-orange-50 h-1/3">
+      <h1 className="font-light text-orange-50 text-center mb-4">
         Want to Read
       </h1>
       <div className="relative flex flex-row items-center justify-center h-full w-full">
@@ -119,9 +119,7 @@ export default function WantToRead({
         {dbUser && readingList.length === 0 && (
           <div>Start reading to see something here!</div>
         )}
-        {!dbUser && (
-          <div>Login to see the books you are reading here!</div>
-        )}
+        {!dbUser && <div>Login to see the books you are reading here!</div>}
       </div>
     </div>
   );

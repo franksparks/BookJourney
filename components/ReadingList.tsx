@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import BookCard from "./BookCard";
 import Image from "next/image";
 import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
 
 interface ReadingListProps {
   onBookRead: () => void;
@@ -20,6 +21,7 @@ export default function ReadingList({
   newBookSignal,
 }: ReadingListProps) {
   const { dbUser } = useDbUser();
+  const router = useRouter();
 
   const [readingList, setReadingList] = useState<BookStatus[]>([]);
   const [currentPage, setCurrentPage] = useState(0); // State for pagination
@@ -64,9 +66,7 @@ export default function ReadingList({
 
   return (
     <div className="rounded-xl shadow-lg shadow-sky-700 p-8 bg-sky-600 text-slate-100 h-full ">
-      <h1 className="font-light text-sky-50 text-center border-b-2">
-        Currently Reading
-      </h1>
+      <h1 className="font-light text-sky-50 text-center">Currently Reading</h1>
       <div className="flex flex-row justify-center h-full">
         {readingList.length > booksPerPage && (
           <Image
@@ -91,7 +91,11 @@ export default function ReadingList({
                   onStatusChange={handleStatusChange}
                 />
               ))}
-              <Button className="rounded-full border-2 border-orange-500">
+              <Button
+                disabled={dbUser === null}
+                onClick={() => router.push("/lists?listId=READING")}
+                className="text-xl w-52 p-6 shadow-lg mt-12 rounded-full border-2 border-orange-500 "
+              >
                 View More
               </Button>
             </>
@@ -100,9 +104,7 @@ export default function ReadingList({
           {dbUser && readingList.length == 0 && (
             <div>Start reading to see something here!</div>
           )}
-          {!dbUser && (
-            <div>Login to see the books you are reading here!</div>
-          )}
+          {!dbUser && <div>Login to see the books you are reading here!</div>}
         </div>
         {readingList.length > booksPerPage && (
           <Image

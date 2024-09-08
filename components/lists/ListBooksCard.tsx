@@ -93,7 +93,7 @@ export default function ListBooksCard({ list }: BooksListProps) {
   };
 
   return (
-    <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-orange-500 text-slate-100 h-full flex flex-col">
+    <div className="rounded-3xl shadow-xl shadow-sky-600 p-8 bg-sky-100 text-sky-600 h-full flex flex-col">
       <h1 className="font-light text-center border-b-2">
         <strong>{list?.book_count}</strong> Books in <i>{list?.name}</i>
       </h1>
@@ -109,9 +109,7 @@ export default function ListBooksCard({ list }: BooksListProps) {
         )}
       </div>
       {loading && <div className="text-center">Loading more books...</div>}
-      {!hasMore && (
-        <div className="text-center">No more books to load.</div>
-      )}
+      {!hasMore && <div className="text-center">No more books to load.</div>}
     </div>
   );
 }

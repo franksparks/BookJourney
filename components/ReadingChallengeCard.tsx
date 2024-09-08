@@ -24,6 +24,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Input } from "./ui/input";
+import Image from "next/image";
 
 interface ReadingChallengeCardProps {
   bookRead: boolean;
@@ -97,11 +98,7 @@ export default function ReadingChallengeCard({
       alert("Please enter a valid number.");
       return;
     }
-    const res = await actionInsertReadingChallenge(
-      newGoal,
-      year,
-      dbUser.id
-    );
+    const res = await actionInsertReadingChallenge(newGoal, year, dbUser.id);
     setCurrentChallenge(res);
     setIsDialogOpen(false);
   };
@@ -112,10 +109,7 @@ export default function ReadingChallengeCard({
       return;
     }
     if (currentChallenge) {
-      const res = await actionUpdateChallenge(
-        currentChallenge.id,
-        newGoal
-      );
+      const res = await actionUpdateChallenge(currentChallenge.id, newGoal);
       setCurrentChallenge(res);
       actionMarkChallengeAsNotCelebrated(currentChallenge.id);
       setIsDialogOpen(false);
@@ -134,7 +128,7 @@ export default function ReadingChallengeCard({
       {showConfetti && <Confetti />}
 
       <div className="flex flex-col justify-start rounded-xl shadow-lg shadow-orange-700 p-8 bg-orange-500 text-white h-1/3">
-        <h1 className="font-light text-orange-50 text-center mb-4 border-b-2">
+        <h1 className="font-light text-orange-50 text-center mb-4">
           {year} Reading Challenge
         </h1>
         <div className="flex flex-row items-center">
@@ -197,125 +191,129 @@ export default function ReadingChallengeCard({
               </Dialog>
             </div>
           ) : (
-            <div className="ml-10">
-              <p className="mb-2">
-                <span className="text-3xl">{readBooks.length}</span> books
-                completed
-              </p>
-              <p className="mb-2">
-                {readBooks.length}/{currentChallenge.goal} (
-                {(
-                  (readBooks.length / currentChallenge.goal) *
-                  100
-                ).toFixed(1)}
-                %)
-              </p>
-              <div className="w-36 bg-gray-200 rounded-full h-4 border-2 border-gray-300 mb-2">
-                <div
-                  className={`h-3 rounded-full transition-all duration-300 ${
-                    readBooks.length >= currentChallenge.goal
-                      ? "bg-green-500"
-                      : "bg-blue-500"
-                  }`}
-                  style={{
-                    width: `${Math.min(
-                      (readBooks.length / currentChallenge.goal) * 100,
-                      100
-                    )}%`,
-                  }}
-                ></div>
+            <div className="flex flex-row w-full h-full justify-around items-center">
+              <Image src={"/book.svg"} alt="book" width={120} height={120} />
+              <div className="flex flex-col justify-center items-center">
+                <p className="mb-2 text-2xl">
+                  <span className="text-3xl">{readBooks.length}</span> books
+                  completed
+                </p>
+                <p className="mb-2">
+                  {readBooks.length}/{currentChallenge.goal} (
+                  {((readBooks.length / currentChallenge.goal) * 100).toFixed(
+                    1
+                  )}
+                  %)
+                </p>
+                <div className="w-36 bg-gray-200 rounded-full h-4 border-2 border-gray-300 mb-2">
+                  <div
+                    className={`h-3 rounded-full transition-all duration-300 ${
+                      readBooks.length >= currentChallenge.goal
+                        ? "bg-green-500"
+                        : "bg-blue-500"
+                    }`}
+                    style={{
+                      width: `${Math.min(
+                        (readBooks.length / currentChallenge.goal) * 100,
+                        100
+                      )}%`,
+                    }}
+                  ></div>
+                </div>
               </div>
-              <div className="flex flex-row gap-2">
-                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                  <DialogTrigger asChild>
-                    <Button className="rounded-full border-orange-400 border-2 hover:border-blue-600">
-                      Edit challenge
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Reading challenge!</DialogTitle>
-                      <DialogDescription>
-                        Edit your goal for this year
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div>
-                      <div className="items-center gap-4 mt-4">
-                        <Input
-                          id="value"
-                          className="col-span-3"
-                          type="number"
-                          value={newGoal === 0 ? "" : newGoal}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            if (value === "" || Number(value) > 0) {
-                              setNewGoal(Number(value));
-                            }
-                          }}
-                          step="1"
-                        />
+              <div>
+                <div className="flex flex-col gap-2">
+                  <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                    <DialogTrigger asChild>
+                      <Button className="rounded-full border-orange-400 border-2 hover:border-blue-600">
+                        Edit challenge
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Reading challenge!</DialogTitle>
+                        <DialogDescription>
+                          Edit your goal for this year
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div>
+                        <div className="items-center gap-4 mt-4">
+                          <Input
+                            id="value"
+                            className="col-span-3"
+                            type="number"
+                            value={newGoal === 0 ? "" : newGoal}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              if (value === "" || Number(value) > 0) {
+                                setNewGoal(Number(value));
+                              }
+                            }}
+                            step="1"
+                          />
+                        </div>
                       </div>
-                    </div>
-                    <DialogFooter>
-                      <Button
-                        onClick={handleEditReadingChallenge}
-                        className="rounded-full border-orange-400 border-2"
-                      >
-                        Set reading challenge
-                      </Button>
+                      <DialogFooter>
+                        <Button
+                          onClick={handleEditReadingChallenge}
+                          className="rounded-full border-orange-400 border-2"
+                        >
+                          Set reading challenge
+                        </Button>
 
-                      <Button
-                        onClick={() => {
-                          setIsDialogOpen(false);
-                        }}
-                        className="rounded-full border-orange-400 border-2"
-                      >
-                        Cancel
-                      </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
+                        <Button
+                          onClick={() => {
+                            setIsDialogOpen(false);
+                          }}
+                          className="rounded-full border-orange-400 border-2"
+                        >
+                          Cancel
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
 
-                <Dialog
-                  open={isConfirmationDialogOpen}
-                  onOpenChange={setConfirmationIsDialogOpen}
-                >
-                  <DialogTrigger asChild>
-                    <Button className="rounded-full border-orange-400 bg-red-400 hover:bg-red-600 border-2">
-                      Delete reading challenge
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Remove reading challenge!</DialogTitle>
-                      <DialogDescription>
-                        Delete your reading goal for this year
-                      </DialogDescription>
-                    </DialogHeader>
-
-                    <DialogFooter>
-                      <Button
-                        onClick={handleDeleteReadingChallenge}
-                        className="rounded-full border-orange-400 bg-red-400 hover:bg-red-600 border-2"
-                      >
-                        Confirm
+                  <Dialog
+                    open={isConfirmationDialogOpen}
+                    onOpenChange={setConfirmationIsDialogOpen}
+                  >
+                    <DialogTrigger asChild>
+                      <Button className="rounded-full border-orange-400 bg-red-400 hover:bg-red-600 border-2">
+                        Delete reading challenge
                       </Button>
-                      <Button
-                        onClick={() => {
-                          setConfirmationIsDialogOpen(false);
-                        }}
-                        className="rounded-full border-orange-400 border-2"
-                      >
-                        Cancel
-                      </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Remove reading challenge!</DialogTitle>
+                        <DialogDescription>
+                          Delete your reading goal for this year
+                        </DialogDescription>
+                      </DialogHeader>
 
-                {/*Todo: Redirect to a list of the read books this year*/}
-                <Button className="rounded-full border-orange-400 border-2  cursor-not-allowed">
-                  View challenge
-                </Button>
+                      <DialogFooter>
+                        <Button
+                          onClick={handleDeleteReadingChallenge}
+                          className="rounded-full border-orange-400 bg-red-400 hover:bg-red-600 border-2"
+                        >
+                          Confirm
+                        </Button>
+                        <Button
+                          onClick={() => {
+                            setConfirmationIsDialogOpen(false);
+                          }}
+                          className="rounded-full border-orange-400 border-2"
+                        >
+                          Cancel
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+
+                  {/*Todo: Redirect to a list of the read books this year*/}
+                  <Button className="rounded-full border-orange-400 border-2  cursor-not-allowed">
+                    View challenge
+                  </Button>
+                </div>
               </div>
             </div>
           )}

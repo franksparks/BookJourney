@@ -29,9 +29,7 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
   const [newListName, setNewListName] = useState<string>("");
   const [editingListId, setEditingListId] = useState<string | null>(null);
   const [editingListName, setEditingListName] = useState<string>("");
-  const [deletingListId, setDeletingListId] = useState<string | null>(
-    null
-  );
+  const [deletingListId, setDeletingListId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -53,9 +51,7 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
 
   const getLists = async () => {
     const listsResult = await actionGetListsBookCountByUserId(dbUser!.id);
-    const statusResult = await actionGetBookStatusCountByUserId(
-      dbUser!.id
-    );
+    const statusResult = await actionGetBookStatusCountByUserId(dbUser!.id);
     const allLists: List[] = [];
     for (const bookStatus of statusResult) {
       allLists.push({
@@ -192,8 +188,8 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
   };
 
   return (
-    <div className="flex flex-col justify-start rounded-xl shadow-lg shadow-orange-700 bg-sky-600 p-8  h-full">
-      <h1 className="font-light text-orange-50 text-center border-b-2">
+    <div className="flex flex-col justify-start rounded-xl shadow-lg shadow-sky-700 bg-sky-600 p-8  h-full">
+      <h1 className="font-light text-sky-50 text-center border-b-2">
         My Lists
       </h1>
 
@@ -207,9 +203,7 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
                 <div
                   className={`text-white items-center mb-4 ${
                     pathname === "/" &&
-                    !Object.values(ReadStatus).includes(
-                      list.id as ReadStatus
-                    )
+                    !Object.values(ReadStatus).includes(list.id as ReadStatus)
                       ? "hidden"
                       : "flex"
                   }`}
@@ -316,7 +310,7 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
             <div className="ml-auto">
               {pathname.includes("/lists") && (
                 <Button
-                  className="rounded-full border-2 border-orange-500 hover:border-sky-500"
+                  className="rounded-full border-2 border-orange-500"
                   onClick={handleAddList}
                 >
                   New list
