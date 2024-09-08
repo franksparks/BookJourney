@@ -67,14 +67,16 @@ export default function WantToRead({ newBookSignal }: WantToReadProps) {
     <div className="flex flex-col justify-start rounded-3xl shadow-xl shadow-orange-200 bg-orange-500 p-4 text-orange-50 h-1/3">
       <h1 className="font-light text-orange-100 text-center">Want to Read</h1>
       <div className="relative flex flex-row items-center justify-center h-full w-full">
-        <Image
-          className="cursor-pointer opacity-90 hover:opacity-100 hover:scale-105 transition duration-500"
-          src={"/prev-arrow.svg"}
-          onClick={handlePrev}
-          alt={"preview"}
-          width={50}
-          height={50}
-        />
+        {readingList.length > 1 && (
+          <Image
+            className="cursor-pointer opacity-90 hover:opacity-100 hover:scale-105 transition duration-500"
+            src={"/prev-arrow.svg"}
+            onClick={handlePrev}
+            alt={"previous"}
+            width={50}
+            height={50}
+          />
+        )}
 
         {dbUser && readingList.length > 0 && (
           <>
@@ -97,17 +99,18 @@ export default function WantToRead({ newBookSignal }: WantToReadProps) {
                 </div>
               ))}
             </div>
-            {/* Navigation Buttons */}
           </>
         )}
-        <Image
-          className="cursor-pointer opacity-90 hover:opacity-100 hover:scale-105 transition duration-500"
-          src={"/next-arrow.svg"}
-          onClick={handlePrev}
-          alt={"next"}
-          width={50}
-          height={50}
-        />
+        {readingList.length > 1 && (
+          <Image
+            className="cursor-pointer opacity-90 hover:opacity-100 hover:scale-105 transition duration-500"
+            src={"/next-arrow.svg"}
+            onClick={handleNext}
+            alt={"next"}
+            width={50}
+            height={50}
+          />
+        )}
 
         {dbUser && readingList.length === 0 && (
           <div>Start reading to see something here!</div>

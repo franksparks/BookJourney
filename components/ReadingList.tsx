@@ -63,7 +63,7 @@ export default function ReadingList({
   };
 
   return (
-    <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-sky-600 text-slate-100 h-full overflow-y-auto">
+    <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-sky-600 text-slate-100 h-full ">
       <h1 className="font-light text-sky-200 text-center">Currently Reading</h1>
 
       <div className="flex flex-col items-center">
@@ -78,31 +78,32 @@ export default function ReadingList({
               />
             ))}
 
-            <div className="flex justify-between w-full mt-4">
-              <Image
-                className={`cursor-pointer opacity-90 hover:opacity-100 hover:scale-105 transition duration-500 ${
-                  currentPage === 0 ? "opacity-50 pointer-events-none" : ""
-                }`}
-                src={"/prev-arrow.svg"}
-                onClick={handlePrev}
-                alt={"preview"}
-                width={50}
-                height={50}
-              />
-
-              <Image
-                className={`cursor-pointer opacity-90 hover:opacity-100 hover:scale-105 transition duration-500 ${
-                  endIndex >= readingList.length
-                    ? "opacity-50 pointer-events-none"
-                    : ""
-                }`}
-                src={"/next-arrow.svg"}
-                onClick={handleNext}
-                alt={"next"}
-                width={50}
-                height={50}
-              />
-            </div>
+            {readingList.length > 3 && (
+              <div className="flex justify-between w-full mt-4">
+                <Image
+                  className={`cursor-pointer opacity-90 hover:opacity-100 hover:scale-105 transition duration-500 ${
+                    currentPage === 0 ? "opacity-20 pointer-events-none" : ""
+                  }`}
+                  src={"/prev-arrow.svg"}
+                  onClick={handlePrev}
+                  alt={"preview"}
+                  width={50}
+                  height={50}
+                />
+                <Image
+                  className={`cursor-pointer opacity-90 hover:opacity-100 hover:scale-105 transition duration-500 ${
+                    endIndex >= readingList.length
+                      ? "opacity-20 pointer-events-none"
+                      : ""
+                  }`}
+                  src={"/next-arrow.svg"}
+                  onClick={handleNext}
+                  alt={"next"}
+                  width={50}
+                  height={50}
+                />{" "}
+              </div>
+            )}
           </>
         )}
 
