@@ -36,7 +36,7 @@ export default function Home() {
           />
         </div>
         <div className="w-1/2 flex flex-col h-full gap-6">
-          <UserLists />
+          <ListsCard />
           <WantToRead newBookSignal={newBookSignal} bookRead={bookRead} />
           <ReadingChallengeCard
             bookRead={bookRead}
