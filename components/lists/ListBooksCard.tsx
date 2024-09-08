@@ -94,7 +94,7 @@ export default function ListBooksCard({ list }: BooksListProps) {
 
   return (
     <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-orange-500 text-slate-100 h-full flex flex-col">
-      <h1 className="font-light  text-center pb-2 border-b-4">
+      <h1 className="font-light text-center border-b-2">
         <strong>{list?.book_count}</strong> Books in <i>{list?.name}</i>
       </h1>
       <div ref={containerRef} className="flex-grow overflow-y-auto">
