@@ -35,17 +35,16 @@ export default function ReadingList({
         "READING"
       );
       setReadingList(userReadingList);
-      setCurrentPage(0); // Reset to the first page
+      setCurrentPage(0);
     }
     newBookSignal(false);
   };
 
   const handleStatusChange = async () => {
-    await getReadingList(); // Refresh the list
+    await getReadingList();
     onBookRead();
   };
 
-  // Calculate the indices for slicing the reading list
   const startIndex = currentPage * booksPerPage;
   const endIndex = startIndex + booksPerPage;
   const currentBooks = readingList.slice(startIndex, endIndex);
@@ -78,10 +77,10 @@ export default function ReadingList({
               />
             ))}
 
-            {readingList.length > 3 && (
+            {readingList.length > booksPerPage && (
               <div className="flex justify-between w-full mt-4">
                 <Image
-                  className={`cursor-pointer opacity-90 hover:opacity-100 hover:scale-105 transition duration-500 ${
+                  className={`cursor-pointer hover:scale-105 transition duration-500 ${
                     currentPage === 0 ? "opacity-20 pointer-events-none" : ""
                   }`}
                   src={"/prev-arrow.svg"}
@@ -91,7 +90,7 @@ export default function ReadingList({
                   height={50}
                 />
                 <Image
-                  className={`cursor-pointer opacity-90 hover:opacity-100 hover:scale-105 transition duration-500 ${
+                  className={`cursor-pointer hover:scale-105 transition duration-500 ${
                     endIndex >= readingList.length
                       ? "opacity-20 pointer-events-none"
                       : ""
