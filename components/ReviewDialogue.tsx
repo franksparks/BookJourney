@@ -4,7 +4,7 @@ import DialogActions from "@mui/material/DialogActions";
 import { useCallback, useEffect, useState } from "react";
 import { TextareaAutosize } from "@mui/material";
 import { Review } from "@/models/review";
-import { Book } from "@/models/book";
+import { Book, DbBook } from "@/models/book";
 import {
   actionDeleteReview,
   actionGetReviewByGoogleBookIdAndUserId,
@@ -13,7 +13,7 @@ import {
 } from "@/actions/reviews";
 
 type ReviewDialogueProps = {
-  bookInDb: Book | null;
+  bookInDb: Book | DbBook | null;
   dbUser: any;
   numericBookRating: number | null;
   bookReview: Review | null;
@@ -32,8 +32,19 @@ export default function ReviewDialogue({
   const [open, setOpen] = useState(false);
 
   const fetchReview = useCallback(async () => {
-    if (dbUser && bookInDb) {
-      const review: Review = await actionGetReviewByGoogleBookIdAndUserId(
+    
+    let review: Review | null;
+
+    if(dbUser && "reviews" in bookInDb! && (bookInDb as DbBook).reviews!== undefined) {
+
+      const result = (bookInDb as DbBook).reviews.filter(review => review.userId == dbUser.id)
+      review = result[0];
+      if (review) {
+        setBookReview(review);
+        setCommentBookReview(review.comment);
+      }
+    } else if (dbUser && bookInDb) {
+      review = await actionGetReviewByGoogleBookIdAndUserId(
         bookInDb!.googleBooksId,
         dbUser.id
       );
