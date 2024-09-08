@@ -1,19 +1,23 @@
 "use client";
 
-import { useDbUser } from "@/app/context/db-user-context";
-import { useEffect, useState } from "react";
 import { actionGetBooksByUserIdAndReadingStatus } from "@/actions/book-status";
+import { useDbUser } from "@/app/context/db-user-context";
 import { BookStatus } from "@/models/book-status";
+import { useEffect, useState } from "react";
 import BookCardWantToRead from "./BookCardWantToRead";
 import Image from "next/image";
 
 interface WantToReadProps {
   newBookSignal: (bool: boolean) => void;
+  bookRead: boolean;
 }
 
 const initialState: BookStatus[] = [];
 
-export default function WantToRead({ newBookSignal }: WantToReadProps) {
+export default function WantToRead({
+  newBookSignal,
+  bookRead,
+}: WantToReadProps) {
   const { dbUser } = useDbUser();
 
   const [readingList, setLists] = useState(initialState);
@@ -21,7 +25,7 @@ export default function WantToRead({ newBookSignal }: WantToReadProps) {
 
   useEffect(() => {
     getLists();
-  }, [dbUser]);
+  }, [dbUser, bookRead]);
 
   const getLists = async () => {
     if (dbUser != null) {

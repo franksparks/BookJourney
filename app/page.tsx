@@ -3,8 +3,8 @@
 import ReadingChallengeCard from "@/components/ReadingChallengeCard";
 import ReadingList from "@/components/ReadingList";
 import UserLists from "@/components/UserLists";
-import { useCallback, useState } from "react";
 import WantToRead from "@/components/WantToRead";
+import { useCallback, useState } from "react";
 
 export default function Home() {
   const [bookRead, setBookRead] = useState(false);
@@ -33,7 +33,7 @@ export default function Home() {
         </div>
         <div className="w-1/2 flex flex-col h-full gap-6">
           <UserLists />
-          <WantToRead newBookSignal={newBookSignal} />
+          <WantToRead newBookSignal={newBookSignal} bookRead={bookRead} />
           <ReadingChallengeCard
             bookRead={bookRead}
             onReset={handleResetBookRead}
