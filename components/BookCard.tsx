@@ -80,11 +80,7 @@ export default function BookCard({
       );
       if (readingProgress === book.pages) {
         await actionUpdateBookStatus(status.id, ReadStatus.READ);
-        await actionInsertReadingActivityPercentage(
-          100,
-          book.id!,
-          dbUser.id
-        );
+        await actionInsertReadingActivityPercentage(100, book.id!, dbUser.id);
         onStatusChange();
       }
     } else {
@@ -95,11 +91,7 @@ export default function BookCard({
       );
       if (readingProgress === 100) {
         await actionUpdateBookStatus(status.id, ReadStatus.READ);
-        await actionInsertReadingActivityPercentage(
-          100,
-          book.id!,
-          dbUser.id
-        );
+        await actionInsertReadingActivityPercentage(100, book.id!, dbUser.id);
         onStatusChange();
       }
     }
@@ -115,7 +107,7 @@ export default function BookCard({
   };
 
   return (
-    <div className="flex flex-row m-4 h-36 w-11/12 max-w-3xl hover:scale-105 shadow-lg shadow-sky-800 rounded-lg text-sky-800 bg-sky-100 hover:bg-sky-50 cursor-default transition duration-500 ">
+    <div className="flex flex-row m-4 h-36 w-11/12 max-w-4xl hover:scale-105 shadow-lg shadow-sky-800 rounded-lg text-sky-800 bg-sky-100 hover:bg-sky-50 cursor-default transition duration-500 ">
       <div className="flex justify-center items-center p-4 w-1/4">
         <BookNavigationWrapper id={book.googleBooksId}>
           {book.smallCover != null ? (
@@ -174,10 +166,7 @@ export default function BookCard({
             <>
               <p>
                 {currentReadingActivity.page}/{book.pages} (
-                {(
-                  (currentReadingActivity.page / book.pages) *
-                  100
-                ).toFixed(1)}
+                {((currentReadingActivity.page / book.pages) * 100).toFixed(1)}
                 %)
               </p>
               <div className="w-36 bg-gray-200 rounded-full h-4 border-2 border-gray-300">
@@ -244,9 +233,7 @@ export default function BookCard({
                         %)
                       </>
                     ) : currentReadingActivity.percentage !== null ? (
-                      <>
-                        Currently read {currentReadingActivity.percentage}%
-                      </>
+                      <>Currently read {currentReadingActivity.percentage}%</>
                     ) : (
                       ""
                     )
@@ -261,9 +248,7 @@ export default function BookCard({
                     id="value"
                     className="col-span-3"
                     value={readingProgress}
-                    onChange={(e) =>
-                      setReadingProgress(Number(e.target.value))
-                    }
+                    onChange={(e) => setReadingProgress(Number(e.target.value))}
                     step="any"
                   />
                 </div>
