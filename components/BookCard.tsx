@@ -124,7 +124,7 @@ export default function BookCard({
   };
 
   return (
-    <div className="flex flex-row m-4 h-48 w-11/12 max-w-3xl hover:scale-105 shadow-lg shadow-sky-800 rounded-lg text-sky-800 bg-sky-100 hover:bg-sky-50 cursor-default transition duration-500 ">
+    <div className="flex flex-row m-4 h-36 w-11/12 max-w-3xl hover:scale-105 shadow-lg shadow-sky-800 rounded-lg text-sky-800 bg-sky-100 hover:bg-sky-50 cursor-default transition duration-500 ">
       <div className="flex justify-center items-center p-4 w-1/4">
         <BookNavigationWrapper id={book.googleBooksId}>
           {book.smallCover != null ? (
@@ -278,30 +278,33 @@ export default function BookCard({
                 </div>
               </div>
               <DialogFooter>
-                <Button
-                  onClick={handleAddReadingActivity}
-                  className="rounded-full border-orange-500 border-2"
-                >
-                  Save activity
-                </Button>
-                <Button
-                  onClick={() => {
-                    handleDoneClick();
-                    setIsDialogOpen(false);
-                  }}
-                  className="rounded-full border-orange-500 border-2"
-                >
-                  Book Finished!
-                </Button>
+                <div className="flex justify-center space-x-4">
+                  <Button
+                    onClick={handleAddReadingActivity}
+                    className="rounded-full border-orange-500 border-2"
+                  >
+                    Save activity
+                  </Button>
+
+                  <Button
+                    onClick={() => {
+                      handleDoneClick();
+                      setIsDialogOpen(false);
+                    }}
+                    className="rounded-full border-orange-500 border-2 "
+                  >
+                    Book Finished!
+                  </Button>
+                  <Button
+                    className="rounded-full border-orange-500 bg-red-400 hover:bg-red-600 border-2"
+                    onClick={handleStopReading}
+                  >
+                    Stop reading
+                  </Button>
+                </div>
               </DialogFooter>
             </DialogContent>
           </Dialog>
-          <Button
-            className="rounded-full border-orange-500 bg-red-400 hover:bg-red-600 border-2 m-2"
-            onClick={handleStopReading}
-          >
-            Stop reading
-          </Button>
         </div>
       </div>
     </div>
