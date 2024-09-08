@@ -16,7 +16,16 @@ export const dbGetBookById = catchErrors(async (id: string) => {
 
 export const dbGetBookByGoogleId = catchErrors(
   async (googleBooksId: string) => {
-    const result = await db.book.findFirst({ where: { googleBooksId } });
+    const result = await db.book.findFirst({
+      where: { googleBooksId },
+      include: {
+        reviews: true, 
+        ratings: true,
+        lists: true,
+        bookStatuses: true, 
+        readingActivity: true
+      }
+    });
     return result;
   }
 );
@@ -27,10 +36,10 @@ export const dbGetBooksInList = catchErrors(async (listId: string) => {
     include: {
       books: {
         include: {
-          book: true,
-        },
-      },
-    },
+          book: true
+        }
+      }
+    }
   });
 
   if (!list) {
@@ -54,7 +63,7 @@ export const dbUpdateBookRatingAverage = catchErrors(
     ratingAverage = parseFloat(ratingAverage.toFixed(2));
     const result = await db.book.update({
       where: { id },
-      data: { ratingAverage },
+      data: { ratingAverage }
     });
     return result;
   }

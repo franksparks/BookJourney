@@ -1,3 +1,9 @@
+import { BookList } from "./book-list";
+import { BookStatus } from "./book-status";
+import { Rating } from "./rating";
+import { ReadingActivity } from "./reading-activity";
+import { Review } from "./review";
+
 export type Book = {
   id?: string;
   isbn10: string;
@@ -14,4 +20,12 @@ export type Book = {
   cover?: string;
   smallCover?: string;
   ratingAverage?: number;
+};
+
+export type DbBook = Book & {
+  reviews: Review[]
+  ratings: Rating[]
+  lists: BookList[]
+  bookStatuses: BookStatus[]
+  readingActivity: ReadingActivity[]
 };

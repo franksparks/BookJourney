@@ -12,6 +12,28 @@ export async function dbGetUserByUserId(id: string) {
   });
 }
 
+export async function dbGetUserClerkIdByUserId(id: string) {
+  return db.user.findUnique({
+    where: { id },
+    select: {
+      clerkId: true
+    }
+  });
+}
+
+export async function dbGetUsersByIds(ids: string[]) {
+  const users = await db.user.findMany({
+    where: {
+      id: {
+        in: ids 
+      }
+    }
+  });
+
+  return users;
+}
+
+
 export async function dbGetUserByClerkId(clerkId: string) {
   return await db.user.findFirst({
     where: { clerkId },

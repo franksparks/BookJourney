@@ -27,4 +27,5 @@ export type Rating = {
   createdAt?: string;
   book: Book;
   user: User;
+  userId?: string;
 };
