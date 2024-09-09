@@ -25,6 +25,7 @@ import {
 } from "./ui/dialog";
 import { Input } from "./ui/input";
 import { useToast } from "./ui/use-toast";
+import { describe } from "node:test";
 
 type bookCardProps = {
   book: Book;
@@ -80,7 +81,11 @@ export default function BookCard({
       );
       if (readingProgress === book.pages) {
         await actionUpdateBookStatus(status.id, ReadStatus.READ);
-        await actionInsertReadingActivityPercentage(100, book.id!, dbUser.id);
+        await actionInsertReadingActivityPercentage(
+          100,
+          book.id!,
+          dbUser.id
+        );
         onStatusChange();
       }
     } else {
@@ -91,7 +96,11 @@ export default function BookCard({
       );
       if (readingProgress === 100) {
         await actionUpdateBookStatus(status.id, ReadStatus.READ);
-        await actionInsertReadingActivityPercentage(100, book.id!, dbUser.id);
+        await actionInsertReadingActivityPercentage(
+          100,
+          book.id!,
+          dbUser.id
+        );
         onStatusChange();
       }
     }
@@ -179,7 +188,10 @@ export default function BookCard({
             <>
               <p>
                 {currentReadingActivity.page}/{book.pages} (
-                {((currentReadingActivity.page / book.pages) * 100).toFixed(1)}
+                {(
+                  (currentReadingActivity.page / book.pages) *
+                  100
+                ).toFixed(1)}
                 %)
               </p>
               <div className="w-36 bg-gray-200 rounded-full h-4 border-2 border-gray-300">
@@ -199,9 +211,7 @@ export default function BookCard({
         <div className="flex flex-col justify-center items-center p-4">
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="rounded-full border-orange-500 border-2">
-                Update progress
-              </Button>
+              <Button>Update progress</Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
@@ -246,7 +256,9 @@ export default function BookCard({
                         %)
                       </>
                     ) : currentReadingActivity.percentage !== null ? (
-                      <>Currently read {currentReadingActivity.percentage}%</>
+                      <>
+                        Currently read {currentReadingActivity.percentage}%
+                      </>
                     ) : (
                       ""
                     )
@@ -261,17 +273,16 @@ export default function BookCard({
                     id="value"
                     className="col-span-3"
                     value={readingProgress}
-                    onChange={(e) => setReadingProgress(Number(e.target.value))}
+                    onChange={(e) =>
+                      setReadingProgress(Number(e.target.value))
+                    }
                     step="any"
                   />
                 </div>
               </div>
               <DialogFooter>
                 <div className="flex justify-center space-x-4">
-                  <Button
-                    onClick={handleAddReadingActivity}
-                    className="rounded-full border-orange-500 border-2"
-                  >
+                  <Button onClick={handleAddReadingActivity}>
                     Save activity
                   </Button>
 
@@ -280,12 +291,11 @@ export default function BookCard({
                       handleDoneClick();
                       setIsDialogOpen(false);
                     }}
-                    className="rounded-full border-orange-500 border-2 "
                   >
                     Book Finished!
                   </Button>
                   <Button
-                    className="rounded-full border-orange-500 bg-red-400 hover:bg-red-600 border-2"
+                    variant={"destructive"}
                     onClick={handleStopReading}
                   >
                     Stop reading

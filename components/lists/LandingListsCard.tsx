@@ -21,7 +21,6 @@ export default function ListsCard() {
       {dbUser && (
         <div className="flex flex-col w-1/3 mx-auto gap-1">
           <Button
-            className="rounded-full border-2 border-orange-500 hover:border-sky-500"
             onClick={() =>
               router.push("http://localhost:3000/lists?listId=READ")
             }
@@ -29,7 +28,6 @@ export default function ListsCard() {
             Read books
           </Button>
           <Button
-            className="rounded-full border-2 border-orange-500 hover:border-sky-500"
             onClick={() =>
               router.push("http://localhost:3000/lists?listId=READING")
             }
@@ -37,7 +35,6 @@ export default function ListsCard() {
             Books you are reading
           </Button>
           <Button
-            className="rounded-full border-2 border-orange-500 hover:border-sky-500"
             onClick={() =>
               router.push(
                 "http://localhost:3000/lists?listId=WANT_TO_READ"
@@ -47,7 +44,6 @@ export default function ListsCard() {
             Books you want to read
           </Button>
           <Button
-            className="rounded-full border-2 border-orange-500 hover:border-sky-500"
             onClick={() => router.push("http://localhost:3000/lists")}
           >
             All lists

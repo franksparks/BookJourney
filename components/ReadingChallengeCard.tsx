@@ -146,12 +146,7 @@ export default function ReadingChallengeCard({
 
               <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button
-                    disabled={!logged}
-                    className="rounded-full border-orange-400 border-2 hover:border-blue-600"
-                  >
-                    Set reading challenge
-                  </Button>
+                  <Button disabled={!logged}>Set reading challenge</Button>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
@@ -178,17 +173,13 @@ export default function ReadingChallengeCard({
                     </div>
                   </div>
                   <DialogFooter>
-                    <Button
-                      onClick={handleSetReadingChallenge}
-                      className="rounded-full border-orange-400 border-2"
-                    >
+                    <Button onClick={handleSetReadingChallenge}>
                       Set reading challenge
                     </Button>
                     <Button
                       onClick={() => {
                         setConfirmationIsDialogOpen(false);
                       }}
-                      className="rounded-full border-orange-400 border-2"
                     >
                       Cancel
                     </Button>
@@ -228,9 +219,7 @@ export default function ReadingChallengeCard({
               <div className="flex flex-row gap-2">
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                   <DialogTrigger asChild>
-                    <Button className="rounded-full border-orange-400 border-2 hover:border-blue-600">
-                      Edit challenge
-                    </Button>
+                    <Button>Edit challenge</Button>
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
@@ -257,10 +246,7 @@ export default function ReadingChallengeCard({
                       </div>
                     </div>
                     <DialogFooter>
-                      <Button
-                        onClick={handleEditReadingChallenge}
-                        className="rounded-full border-orange-400 border-2"
-                      >
+                      <Button onClick={handleEditReadingChallenge}>
                         Set reading challenge
                       </Button>
 
@@ -268,7 +254,6 @@ export default function ReadingChallengeCard({
                         onClick={() => {
                           setIsDialogOpen(false);
                         }}
-                        className="rounded-full border-orange-400 border-2"
                       >
                         Cancel
                       </Button>
@@ -281,7 +266,7 @@ export default function ReadingChallengeCard({
                   onOpenChange={setConfirmationIsDialogOpen}
                 >
                   <DialogTrigger asChild>
-                    <Button className="rounded-full border-orange-400 bg-red-400 hover:bg-red-600 border-2">
+                    <Button variant={"destructive"}>
                       Delete reading challenge
                     </Button>
                   </DialogTrigger>
@@ -295,16 +280,15 @@ export default function ReadingChallengeCard({
 
                     <DialogFooter>
                       <Button
+                        variant={"destructive"}
                         onClick={handleDeleteReadingChallenge}
-                        className="rounded-full border-orange-400 bg-red-400 hover:bg-red-600 border-2"
                       >
-                        Confirm
+                        Delete challenge
                       </Button>
                       <Button
                         onClick={() => {
                           setConfirmationIsDialogOpen(false);
                         }}
-                        className="rounded-full border-orange-400 border-2"
                       >
                         Cancel
                       </Button>
@@ -313,9 +297,7 @@ export default function ReadingChallengeCard({
                 </Dialog>
 
                 {/*Todo: Redirect to a list of the read books this year*/}
-                <Button className="rounded-full border-orange-400 border-2  cursor-not-allowed">
-                  View challenge
-                </Button>
+                <Button>View challenge</Button>
               </div>
             </div>
           )}

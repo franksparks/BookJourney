@@ -257,7 +257,7 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
                         list.id as ReadStatus
                       ) && (
                         <Button
-                          className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-800 transition-colors duration-300 ml-auto mr-3"
+                          className="p-2text-white  transition-colors duration-300 ml-auto mr-3"
                           onClick={() => handleEditList(list)}
                         >
                           Edit List
@@ -267,7 +267,7 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
                         list.id as ReadStatus
                       ) && (
                         <Button
-                          className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-300"
+                          variant={"destructive"}
                           onClick={() => handleDeleteList(list.id)}
                         >
                           Delete List
@@ -315,12 +315,7 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
           ) : (
             <div className="ml-auto">
               {pathname.includes("/lists") && (
-                <Button
-                  className="rounded-full border-2 border-orange-500 hover:border-sky-500"
-                  onClick={handleAddList}
-                >
-                  New list
-                </Button>
+                <Button onClick={handleAddList}>New list</Button>
               )}
             </div>
           )}

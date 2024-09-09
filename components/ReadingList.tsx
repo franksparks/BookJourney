@@ -91,9 +91,7 @@ export default function ReadingList({
                   onStatusChange={handleStatusChange}
                 />
               ))}
-              <Button className="rounded-full border-2 border-orange-500">
-                View More
-              </Button>
+              <Button>View More</Button>
             </>
           )}
 
