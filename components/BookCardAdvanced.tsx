@@ -7,7 +7,6 @@ import BookNavigationWrapper from "./BookNavigationWrapper";
 import ReadingStatusDropwdown from "./ReadingStatusDropdown";
 import { TrashIcon } from "@radix-ui/react-icons";
 import { usePathname } from "next/navigation";
-import { ReadStatus } from "@prisma/client";
 
 type bookCardAdvancedProps = {
   book: Book;
