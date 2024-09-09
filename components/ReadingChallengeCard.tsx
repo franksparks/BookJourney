@@ -24,6 +24,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Input } from "./ui/input";
+import { Tooltip } from "@mui/material";
 
 interface ReadingChallengeCardProps {
   bookRead: boolean;
@@ -143,58 +144,68 @@ export default function ReadingChallengeCard({
           dbUser === null ? (
             <div className="ml-10">
               <p className="mb-2">No reading challenge set yet.</p>
-
-              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                <DialogTrigger asChild>
-                  <Button
-                    disabled={!logged}
-                    className="rounded-full border-orange-400 border-2 hover:border-blue-600"
+              <Tooltip
+                className=" text-white"
+                title="Login to perform this action."
+                arrow
+              >
+                <span>
+                  <Dialog
+                    open={isDialogOpen}
+                    onOpenChange={setIsDialogOpen}
                   >
-                    Set reading challenge
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Reading challenge!</DialogTitle>
-                    <DialogDescription>
-                      Set a reading challenge for {year}
-                    </DialogDescription>
-                  </DialogHeader>
-                  <div>
-                    <div className="items-center gap-4 mt-4">
-                      <Input
-                        id="value"
-                        className="col-span-3"
-                        type="number"
-                        value={newGoal === 0 ? "" : newGoal}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          if (value === "" || Number(value) > 0) {
-                            setNewGoal(Number(value));
-                          }
-                        }}
-                        step="1"
-                      />
-                    </div>
-                  </div>
-                  <DialogFooter>
-                    <Button
-                      onClick={handleSetReadingChallenge}
-                      className="rounded-full border-orange-400 border-2"
-                    >
-                      Set reading challenge
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        setConfirmationIsDialogOpen(false);
-                      }}
-                      className="rounded-full border-orange-400 border-2"
-                    >
-                      Cancel
-                    </Button>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        disabled={!logged}
+                        className="rounded-full border-orange-400 border-2 hover:border-blue-600"
+                      >
+                        Set reading challenge
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Reading challenge!</DialogTitle>
+                        <DialogDescription>
+                          Set a reading challenge for {year}
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div>
+                        <div className="items-center gap-4 mt-4">
+                          <Input
+                            id="value"
+                            className="col-span-3"
+                            type="number"
+                            value={newGoal === 0 ? "" : newGoal}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              if (value === "" || Number(value) > 0) {
+                                setNewGoal(Number(value));
+                              }
+                            }}
+                            step="1"
+                          />
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <Button
+                          onClick={handleSetReadingChallenge}
+                          className="rounded-full border-orange-400 border-2"
+                        >
+                          Set reading challenge
+                        </Button>
+                        <Button
+                          onClick={() => {
+                            setConfirmationIsDialogOpen(false);
+                          }}
+                          className="rounded-full border-orange-400 border-2"
+                        >
+                          Cancel
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </span>
+              </Tooltip>
             </div>
           ) : (
             <div className="ml-10">

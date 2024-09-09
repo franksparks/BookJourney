@@ -20,6 +20,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
+import { Tooltip } from "@mui/material";
 
 type BookToListInjectorProps = {
   book: Book;
@@ -124,55 +125,68 @@ export default function BookToListInjector({
         </ul>
       )}
       <div className="flex justify-center mt-4">
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button
-              className="rounded-full border-orange-500 border-2"
-              disabled={!logged}
-            >
-              Manage lists
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Manage Lists</DialogTitle>
-            </DialogHeader>
-            <ul>
-              {userLists && userLists.length > 0 ? (
-                userLists.map((list) => (
-                  <li key={list.id}>
-                    <label>
-                      <input
-                        type="checkbox"
-                        checked={selectedLists.has(list.id)}
-                        onChange={() => toggleListSelection(list.id)}
-                      />
-                      {list.name}
-                    </label>
-                  </li>
-                ))
-              ) : (
-                <p>No lists available.</p>
-              )}
-            </ul>
-            <DialogFooter>
+        {dbUser === null ? (
+          <Tooltip title="Login to perform this action." arrow>
+            <span>
               <Button
                 className="rounded-full border-orange-500 border-2"
-                onClick={saveChanges}
+                disabled={!logged}
               >
-                Save
+                Manage lists
               </Button>
+            </span>
+          </Tooltip>
+        ) : (
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
               <Button
-                onClick={() => {
-                  setIsDialogOpen(false);
-                }}
                 className="rounded-full border-orange-500 border-2"
+                disabled={!logged}
               >
-                Cancel
+                Manage lists
               </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Manage Lists</DialogTitle>
+              </DialogHeader>
+              <ul>
+                {userLists && userLists.length > 0 ? (
+                  userLists.map((list) => (
+                    <li key={list.id}>
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={selectedLists.has(list.id)}
+                          onChange={() => toggleListSelection(list.id)}
+                        />
+                        {list.name}
+                      </label>
+                    </li>
+                  ))
+                ) : (
+                  <p>No lists available.</p>
+                )}
+              </ul>
+              <DialogFooter>
+                <Button
+                  className="rounded-full border-orange-500 border-2"
+                  onClick={saveChanges}
+                >
+                  Save
+                </Button>
+                <Button
+                  onClick={() => {
+                    setIsDialogOpen(false);
+                  }}
+                  className="rounded-full border-orange-500 border-2"
+                >
+                  Cancel
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
       </div>
     </div>
   );
