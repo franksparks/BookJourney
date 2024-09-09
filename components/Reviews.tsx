@@ -1,15 +1,8 @@
 "use client";
 
-import {
-  actionGetAvatarFromClerk,
-  actionGetUsernameFromClerk,
-} from "@/actions/clerk-users";
-import { actionGetRatingByGoogleBookIdAndUserId } from "@/actions/ratings";
-import { actionGetReviewsByBookId } from "@/actions/reviews";
-import { actionGetUserByUserId } from "@/actions/users";
 import { useDbUser } from "@/app/context/db-user-context";
-import { Book } from "@/models/book";
-import { ratingMap } from "@/models/rating";
+import { Book, DbBook } from "@/models/book";
+import { Rating, ratingMap } from "@/models/rating";
 import { Review } from "@/models/review";
 import { User } from "@/models/user";
 import { useUser } from "@clerk/nextjs";
@@ -19,9 +12,12 @@ import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import ParametrizedPagination from "./ParametrizedPagination";
 import ReadRating from "./ReadRating";
+import { actionGetReviewByGoogleBookIdAndUserId } from "@/actions/reviews";
+import { actionGetUsersClerkInformation } from "@/actions/clerk-users";
+import { actionGetUsersByIds } from "@/actions/users";
 
 type ReviewsProps = {
-  bookInDb: Book | null;
+  bookInDb: Book | DbBook | null;
   numericBookRating: number | null;
   bookReview: Review | null;
 };
@@ -42,34 +38,27 @@ type Accumulator = {
 export default function Reviews({
   bookInDb,
   numericBookRating,
-  bookReview,
+  bookReview
 }: ReviewsProps) {
   const { user } = useUser();
   const { dbUser } = useDbUser();
-  const [userBookReview, setUserBookReview] = useState<Review | null>(
-    null
-  );
+  const [userBookReview, setUserBookReview] = useState<Review | null>(null);
   const [bookReviews, setBookReviews] = useState<Review[] | null>(null);
   const [bookDetailsReviews, setBookDetailsReviews] = useState<
     BookDetailsReview[] | null
   >(null);
-  const [paginatedReviews, setPaginatedReviews] = useState<
-    BookDetailsReview[]
-  >([]);
+  const [paginatedReviews, setPaginatedReviews] = useState<BookDetailsReview[]>(
+    []
+  );
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+
   const itemsPerPage = 5;
-  const existingReviews = useRef(false);
 
   const fetchReviews = useCallback(async () => {
     if (bookInDb && dbUser) {
-      const allReviews: Review[] = await actionGetReviewsByBookId(
-        bookInDb?.id!
-      );
-
-      if (allReviews.length > 0) {
-        existingReviews.current = true;
-
+      const allReviews: Review[] = (bookInDb as DbBook).reviews;
+      if (allReviews !== undefined && allReviews.length > 0) {
         const { userReview, otherMembersReviews } =
           allReviews.reduce<Accumulator>(
             (acc, review) => {
@@ -83,54 +72,71 @@ export default function Reviews({
             { userReview: [], otherMembersReviews: [] }
           );
 
-        const review: Review = userReview[0] || null;
-
-        setUserBookReview(review);
         setBookReviews(otherMembersReviews);
       }
     }
   }, [bookInDb, dbUser, bookReview]);
 
-  const fetchBookDetailsReviews = useCallback(async () => {
-    if (!bookReviews) return;
+  const fetchUserReview = useCallback(async () => {
+    if (bookInDb && dbUser) {
+      const userReview = await actionGetReviewByGoogleBookIdAndUserId(
+        bookInDb?.googleBooksId!,
+        dbUser.id
+      );
+      setUserBookReview(userReview);
+    }
+  }, [userBookReview, bookInDb]);
 
+  const fetchBookDetailsReviews = useCallback(async () => { 
+    if (!bookReviews){
+      setLoading(false);
+      return
+    } 
+    
     setLoading(true);
+    const userIds: string[] = bookReviews.map((review) => review.userId);
+    const users: User[] = await actionGetUsersByIds(userIds);
+    const clerkUsers = await actionGetUsersClerkInformation(users);
+    if (clerkUsers) {
+      const reviews: BookDetailsReview[] = await Promise.all(
+        bookReviews.map(async (review) => {
+          const currentUser = users.filter((user) => review.userId === user.id);
+          const clerkUser = clerkUsers.filter(
+            (ckUser: { id: string }) => currentUser[0].clerkId === ckUser.id
+          );
+          const { username = undefined, imageUrl: userAvatar } = clerkUser[0];
 
-    const reviews: BookDetailsReview[] = await Promise.all(
-      bookReviews.map(async (review) => {
-        const dbUser: User | null = await actionGetUserByUserId(
-          review.userId
-        );
-        const username: string =
-          (await actionGetUsernameFromClerk(dbUser?.clerkId!)) || "";
-        const userAvatar: string = await actionGetAvatarFromClerk(
-          dbUser?.clerkId!
-        );
-        const rating = await actionGetRatingByGoogleBookIdAndUserId(
-          bookInDb?.googleBooksId!,
-          dbUser?.id!
-        );
-        const numericRating: number =
-          rating !== undefined ? ratingMap[rating.rating] : 0;
-        const creationDate = review.createdAt || "";
+          (bookInDb as DbBook).ratings.map((userRating) =>
+            console.log(userRating.user)
+          );
 
-        return {
-          comment: review.comment,
-          rating: numericRating,
-          userAvatar,
-          username,
-          creationDate,
-        };
-      })
-    );
+          const ratings: Rating[] = (bookInDb as DbBook).ratings.filter(
+            (userRating) => userRating.userId === currentUser[0].id
+          );
+          const rating = ratings[0];
+          const numericRating: number =
+            rating !== undefined ? ratingMap[rating.rating] : 0;
+          const creationDate = review.createdAt || "";
 
-    setBookDetailsReviews(reviews);
+          return {
+            comment: review.comment,
+            rating: numericRating,
+            userAvatar,
+            username,
+            creationDate
+          };
+        })
+      );
 
-    setLoading(false);
+     
+      setBookDetailsReviews(reviews);
+      setLoading(false);
+    }
   }, [bookReviews, bookInDb]);
 
   useEffect(() => {
     fetchReviews();
+    fetchUserReview();
   }, [fetchReviews, bookInDb, dbUser]);
 
   useEffect(() => {
@@ -175,9 +181,9 @@ export default function Reviews({
         </>
       )}
 
-      {loading && dbUser && existingReviews.current === true && (
+      { dbUser && loading && (
         <>
-          {[...Array(5)].map((_, index) => (
+          {[...Array(2)].map((_, index) => (
             <Skeleton key={index} className="h-10 w-1/2" />
           ))}
         </>

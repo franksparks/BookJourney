@@ -8,15 +8,18 @@ import {
   dbInsertList,
   dbUpdateList,
   dbGetListByNameAndUserId,
-  dbGetListsBookCountByUserId
+  dbGetListsBookCountByUserId,
 } from "@/db/lists";
 import { List, Prisma } from "@prisma/client";
 
 export const actionGetListById = async (id: string) => {
   const result = await dbGetListById(id);
   return result;
-}
-export const actionInsertList = async (list: Prisma.ListCreateInput, userId: string) => {
+};
+export const actionInsertList = async (
+  list: Prisma.ListCreateInput,
+  userId: string
+) => {
   const result = await dbInsertList(list, userId);
   return result;
 };
@@ -27,10 +30,11 @@ export const actionGetListsByUserId = async (id: string) => {
 };
 
 export const actionGetListByNameAndUserId = async (
-  name: string, userId: string
+  name: string,
+  userId: string
 ): Promise<List> => {
   return await dbGetListByNameAndUserId(name, userId);
-}
+};
 
 export const actionGetListsByBookIdAndUserId = async (
   bookId: string,
@@ -50,13 +54,17 @@ export const actionDeleteList = async (id: string) => {
   return result;
 };
 
-export const actionCapitalizeAndReplaceUnderscores = (input: string): string => {
+export const actionCapitalizeAndReplaceUnderscores = (
+  input: string
+): string => {
   return input
-    .split('_') // Divide la cadena en palabras separadas por guiones bajos
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()) // Capitaliza la primera letra de cada palabra
-    .join(' '); // Une las palabras con un espacio
-}
+    .split("_")
+    .map(
+      (word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+    )
+    .join(" ");
+};
 export const actionGetListsBookCountByUserId = async (userId: string) => {
   const result = await dbGetListsBookCountByUserId(userId);
   return result;
-}
+};

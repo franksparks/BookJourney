@@ -1,10 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
-import ListsCard from "@/components/lists/ListsCard";
 import ListBooksCard from "@/components/lists/ListBooksCard";
-import { Book } from "@/models/book";
+import ListsCard from "@/components/lists/ListsCard";
 import { List } from "@/models/list";
+import { useState } from "react";
 export default function Page() {
   const [selectedList, setSelectedList] = useState<List | null>(null);
 

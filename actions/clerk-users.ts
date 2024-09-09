@@ -1,19 +1,11 @@
 "use server";
 
+import { User } from "@/models/user";
 import { clerkClient } from "@clerk/nextjs/server";
 
-export async function actionGetUsernameFromClerk(clerkId: string) {
+export async function actionGetUsersClerkInformation( users: User[]) {
+  const clerkIds = users.map(user => user.clerkId);
   const client = clerkClient();
-  const user = await client.users.getUserList({ userId: [clerkId] });
-  const username = user.data[0].username;
-
-  return username;
-}
-
-export async function actionGetAvatarFromClerk(clerkId: string) {
-  const client = clerkClient();
-  const user = await client.users.getUserList({ userId: [clerkId] });
-  const imageUrl = user.data[0].imageUrl;
-
-  return imageUrl;
+  const clerkUsers = await client.users.getUserList({ userId: clerkIds });
+  return JSON.parse(JSON.stringify(clerkUsers.data));
 }

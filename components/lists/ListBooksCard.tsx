@@ -116,11 +116,10 @@ export default function ListBooksCard({ list, setSelectedList }: BooksListProps)
   };
 
   return (
-    <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-sky-300 text-slate-100 h-full flex flex-col">
-      <h1 className="font-light text-sky-700 text-center pb-2 border-b-4">
+    <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-orange-500 text-slate-100 h-full flex flex-col">
+      <h1 className="font-light text-center border-b-2">
         <strong>{list?.book_count}</strong> Books in <i>{list?.name}</i>
       </h1>
-      {/* Ajustamos el contenedor para que tenga scroll */}
       <div ref={containerRef} className="flex-grow overflow-y-auto">
         {books.length > 0 ? (
           books.map((book) => (
@@ -133,7 +132,6 @@ export default function ListBooksCard({ list, setSelectedList }: BooksListProps)
         )}
       </div>
       {loading && <div className="text-center">Loading more books...</div>}
-      {!hasMore && <div className="text-center">No more books to load.</div>}
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -141,6 +139,9 @@ export default function ListBooksCard({ list, setSelectedList }: BooksListProps)
         title="Delete Book"
         message="Are you sure you want to delete this book from list?"
       />
+      {!hasMore && (
+        <div className="text-center">No more books to load.</div>
+      )}
     </div>
   );
 }

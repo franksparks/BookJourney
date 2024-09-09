@@ -1,7 +1,7 @@
 "use client";
 
 import { useBooksSearchContext } from "@/app/context/books-search-context";
-import { Book } from "../../../models/book";
+import { Book, DbBook } from "../../../models/book";
 import BookDetails from "@/components/BookDetails";
 import { useEffect, useState } from "react";
 import { actionSearchBooksGoogle } from "@/actions/search-books-google";
@@ -21,16 +21,16 @@ export default function Page({ params }: PageProps) {
     let foundBook: Book = results.find(
       (book: Book) => book.googleBooksId === googleBooksId
     );
+    
+    const bookInDb = await actionGetBookByGoogleId(googleBooksId);
 
     if (!foundBook) {
-      const bookInDb = await actionGetBookByGoogleId(googleBooksId);
-      if (bookInDb === null) {
-        const { books } = await actionSearchBooksGoogle(googleBooksId, 0);
-        foundBook = books[0];
-      } else {
-        foundBook = bookInDb;
-      }
+      foundBook =
+        bookInDb ?? (await actionSearchBooksGoogle(googleBooksId, 0)).books[0];
+    } else {
+      foundBook = bookInDb ?? foundBook;
     }
+
     setBook(foundBook);
   };
 
