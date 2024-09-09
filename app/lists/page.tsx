@@ -18,7 +18,7 @@ export default function Page() {
           />
         </div>
         <div className="w-2/3 p-2">
-          <ListBooksCard list={selectedList} />
+          <ListBooksCard list={selectedList} setSelectedList={setSelectedList}/>
         </div>
       </div>
     </main>

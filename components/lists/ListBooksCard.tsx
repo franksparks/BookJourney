@@ -6,13 +6,16 @@ import { Book } from "@/models/book";
 import BookCardAdvanced from "../BookCardAdvanced";
 import { ReadStatus } from "@prisma/client";
 import { actionGetBookStatusByStatusAndUserId } from "@/actions/book-status";
-import { actionGetBookListsByListId } from "@/actions/book-list";
+import { actionGetBookListsByListId, actionDeleteBookListByBookIdAndListId } from "@/actions/book-list";
+import Modal from "../ui/confirmation-modal";
+import { usePathname } from "next/navigation";
 
 interface BooksListProps {
   list: List | null;
+  setSelectedList: (list: List | null) => void;
 }
 
-export default function ListBooksCard({ list }: BooksListProps) {
+export default function ListBooksCard({ list, setSelectedList }: BooksListProps) {
   const [page, setPage] = useState(1);
   const pageSize = 10;
   const totalPages = list?.book_count
@@ -21,7 +24,10 @@ export default function ListBooksCard({ list }: BooksListProps) {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [bookToDelete, setBookToDelete] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     if (list) {
@@ -92,6 +98,23 @@ export default function ListBooksCard({ list }: BooksListProps) {
     }
   };
 
+  const handleOnDelete = (id: string) => {
+    setBookToDelete(id);
+    setIsModalOpen(true);
+  };
+  
+  const confirmDelete = async () => {
+    if (bookToDelete && list) {
+      await actionDeleteBookListByBookIdAndListId(bookToDelete, list.id);
+      const actualList = list;
+      actualList.book_count = (actualList.book_count ?? 0) - 1;
+      setBooks(books.filter((book) => book.id !== bookToDelete));
+      setSelectedList(actualList);
+      setBookToDelete(null);
+      setIsModalOpen(false);
+    }
+  };
+
   return (
     <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-sky-300 text-slate-100 h-full flex flex-col">
       <h1 className="font-light text-sky-700 text-center pb-2 border-b-4">
@@ -101,8 +124,8 @@ export default function ListBooksCard({ list }: BooksListProps) {
       <div ref={containerRef} className="flex-grow overflow-y-auto">
         {books.length > 0 ? (
           books.map((book) => (
-            <div key={book.id} className="mb-2">
-              <BookCardAdvanced book={book} />
+            <div key={`${book.id}-book`} className="mb-2">
+              <BookCardAdvanced book={book} onDelete={() => handleOnDelete(book.id ?? "")} deleteVisible={pathname === "/lists" && !Object.values(ReadStatus).includes(list?.id as ReadStatus)} />
             </div>
           ))
         ) : (
@@ -111,6 +134,13 @@ export default function ListBooksCard({ list }: BooksListProps) {
       </div>
       {loading && <div className="text-center">Loading more books...</div>}
       {!hasMore && <div className="text-center">No more books to load.</div>}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={() => confirmDelete()}
+        title="Delete Book"
+        message="Are you sure you want to delete this book from list?"
+      />
     </div>
   );
 }

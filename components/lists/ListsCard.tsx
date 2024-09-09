@@ -21,7 +21,6 @@ import { useDbUser } from "@/app/context/db-user-context";
 import { Prisma } from "@prisma/client";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import Modal from "@/components/ui/confirmation-modal";
-import { Book } from "@/models/book";
 import { ReadStatus } from "@prisma/client";
 import StyledButton from "@/components/lists/StyledButton";
 import BookGif from '../../assets/book-gif.gif';
