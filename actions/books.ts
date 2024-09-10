@@ -27,7 +27,7 @@ export const actionGetBookByGoogleId = async (id: string) => {
   return result;
 };
 
-export const actionGetBooksByGoogleId = async (id: string) => {
+export const actionGetBooksByGoogleId = async (id: string[]) => {
   const result = await dbGetBooksByGoogleId(id);
   return result;
 }

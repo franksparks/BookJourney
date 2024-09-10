@@ -9,6 +9,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { HTMLAttributes, useCallback, useRef, useState } from "react";
 import BookNavigationWrapper from "./BookNavigationWrapper";
+import { actionGetBooksByGoogleId } from "@/actions/books";
 
 interface Option {
   label: string;
@@ -40,6 +41,10 @@ export default function PreviewSearchBox() {
       const googleBooksIds: string[] = result.books.map(book => book.googleBooksId); 
 
       console.log("googleBooksIds", googleBooksIds)
+
+      const booksInDb = await actionGetBooksByGoogleId(googleBooksIds)
+
+      console.log("booksInDb", booksInDb);
 
       setResults(result.books);
 
