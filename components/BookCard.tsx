@@ -25,6 +25,7 @@ import {
 } from "./ui/dialog";
 import { Input } from "./ui/input";
 import { useToast } from "./ui/use-toast";
+import { describe } from "node:test";
 
 type bookCardProps = {
   book: Book;
@@ -210,9 +211,7 @@ export default function BookCard({
         <div className="flex flex-col justify-center items-center p-4">
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="rounded-full border-orange-500 border-2">
-                Update progress
-              </Button>
+              <Button>Update progress</Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
@@ -283,10 +282,7 @@ export default function BookCard({
               </div>
               <DialogFooter>
                 <div className="flex justify-center space-x-4">
-                  <Button
-                    onClick={handleAddReadingActivity}
-                    className="rounded-full border-orange-500 border-2"
-                  >
+                  <Button onClick={handleAddReadingActivity}>
                     Save activity
                   </Button>
 
@@ -295,12 +291,11 @@ export default function BookCard({
                       handleDoneClick();
                       setIsDialogOpen(false);
                     }}
-                    className="rounded-full border-orange-500 border-2 "
                   >
                     Book Finished!
                   </Button>
                   <Button
-                    className="rounded-full border-orange-500 bg-red-400 hover:bg-red-600 border-2"
+                    variant={"destructive"}
                     onClick={handleStopReading}
                   >
                     Stop reading

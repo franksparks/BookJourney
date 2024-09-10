@@ -132,6 +132,7 @@ export default function ReadingStatusDropwdown({
     } else {
       return menuItems.filter(
         (item: any) => item.value !== ReadStatus.WANT_TO_READ
+
       );
     }
   };

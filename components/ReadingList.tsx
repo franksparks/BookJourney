@@ -96,7 +96,6 @@ export default function ReadingList({
               <Button
                 disabled={dbUser === null}
                 onClick={() => router.push("/lists?listId=READING")}
-                className="text-xl w-52 p-6 shadow-lg mt-12 rounded-full border-2 border-orange-500 "
               >
                 View More
               </Button>
