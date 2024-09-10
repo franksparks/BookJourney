@@ -15,6 +15,8 @@ const buttonVariants = cva(
           "bg-destructive text-destructive-foreground hover:bg-destructive/90 rounded-full border-orange-500 bg-red-600 hover:bg-red-800 border-2",
         dropdown:
           "bg-sky-600 text-primary-foreground hover:bg-orange-500 transition duration-500 ease-out  rounded-l-none",
+        cancel:
+          "bg-gray-500 text-primary-foreground hover:bg-gray-600 transition duration-500 ease-out rounded-full border-orange-500 border-2 hover:border-sky-700",
       },
       size: {
         default: "h-10 px-4 py-2",

@@ -153,6 +153,7 @@ export default function BookToListInjector({
             <DialogFooter>
               <Button onClick={saveChanges}>Save</Button>
               <Button
+                variant={"cancel"}
                 onClick={() => {
                   setIsDialogOpen(false);
                 }}
