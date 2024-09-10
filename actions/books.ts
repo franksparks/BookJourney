@@ -4,6 +4,7 @@ import {
   dbDeleteBook,
   dbGetBookByGoogleId,
   dbGetBookById,
+  dbGetBooksByGoogleId,
   dbGetBooksInList,
   dbInsertBook,
   dbUpdateBook,
@@ -25,6 +26,11 @@ export const actionGetBookByGoogleId = async (id: string) => {
   const result = await dbGetBookByGoogleId(id);
   return result;
 };
+
+export const actionGetBooksByGoogleId = async (id: string) => {
+  const result = await dbGetBooksByGoogleId(id);
+  return result;
+}
 
 export const actionGetBooksInList = async (listId: string) => {
   const result = await dbGetBooksInList(listId);
