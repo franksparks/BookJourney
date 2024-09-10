@@ -8,7 +8,6 @@ import SearchResults from "@/components/SearchResults";
 import { DbBook } from "@/models/book";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useCallback, useEffect, Suspense } from "react";
-import { catchErrors } from "@/lib/error-handling";
 import { actionGetBooksByGoogleId } from "@/actions/books";
 
 const queryMap: { [key: string]: string } = {
