@@ -49,7 +49,7 @@ export default function ReadingStatusDropwdown({
       const output = (book as DbBook).bookStatuses.filter(
         (status) => status.userId === dbUser.id
       );
-      const readingStatus: BookStatus = output[0];
+      const readingStatus: BookStatus | null = output[0] || null;
       setStatus(readingStatus);
     } else {
       setLoading(true);
@@ -57,7 +57,6 @@ export default function ReadingStatusDropwdown({
 
       if (dbUser != null && dbBook != null) {
         // obtain the bookStatus if the book is on DB.
-
         const readingStatus: BookStatus =
           await actionGetBookStatusByBookIdAndUserId(dbBook.id!, dbUser.id);
 
