@@ -22,33 +22,25 @@ export default function ListsCard() {
         <div className="flex flex-col w-1/3 mx-auto gap-1">
           <Button
             className="rounded-full border-2 border-orange-500 hover:border-sky-500"
-            onClick={() =>
-              router.push("http://localhost:3000/lists?listId=READ")
-            }
+            onClick={() => router.push("/lists?listId=READ")}
           >
             Read books
           </Button>
           <Button
             className="rounded-full border-2 border-orange-500 hover:border-sky-500"
-            onClick={() =>
-              router.push("http://localhost:3000/lists?listId=READING")
-            }
+            onClick={() => router.push("/lists?listId=READING")}
           >
             Books you are reading
           </Button>
           <Button
             className="rounded-full border-2 border-orange-500 hover:border-sky-500"
-            onClick={() =>
-              router.push(
-                "http://localhost:3000/lists?listId=WANT_TO_READ"
-              )
-            }
+            onClick={() => router.push("/lists?listId=WANT_TO_READ")}
           >
             Books you want to read
           </Button>
           <Button
             className="rounded-full border-2 border-orange-500 hover:border-sky-500"
-            onClick={() => router.push("http://localhost:3000/lists")}
+            onClick={() => router.push("/lists")}
           >
             All lists
           </Button>
