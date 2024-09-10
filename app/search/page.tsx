@@ -8,11 +8,12 @@ import SearchResults from "@/components/SearchResults";
 import { Book } from "@/models/book";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useCallback, useEffect, Suspense } from "react";
+import { catchErrors } from "@/lib/error-handling";
 
 const queryMap: { [key: string]: string } = {
   author: ":inauthor:",
   title: ":intitle:",
-  all: "",
+  all: ""
 };
 
 const calculateIndex = (page: number): number => {
@@ -29,7 +30,7 @@ export default function Home() {
     previewSearch,
     setPreviewSearch,
     setTotalItems,
-    totalItems,
+    totalItems
   } = useBooksSearchContext();
   const [advancedResults, setAdvancedResults] = useState<Book[]>([]);
   const [advancedTotalItems, setAdvancedTotalItems] = useState(0);
@@ -44,12 +45,10 @@ export default function Home() {
     query: string,
     queryMap?: { [key: string]: string }
   ) => {
-    try {
+    catchErrors(async () => {
       const index = calculateIndex(page);
 
-      const queryString = queryMap
-        ? `${queryMap[radioValue]}${query}`
-        : query;
+      const queryString = queryMap ? `${queryMap[radioValue]}${query}` : query;
 
       const result = await actionSearchBooksGoogle(queryString, index);
       setResults(result.books);
@@ -66,9 +65,7 @@ export default function Home() {
       if (queryMap && query) {
         router.push(`/search?q=${encodeURIComponent(query)}`);
       }
-    } catch (error) {
-      console.error("Error fetching books:", error);
-    }
+    });
   };
 
   useEffect(() => {
