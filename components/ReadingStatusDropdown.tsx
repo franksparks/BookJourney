@@ -23,6 +23,7 @@ import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Skeleton } from "./ui/skeleton";
 import { useToast } from "./ui/use-toast";
+import { Tooltip } from "@mui/material";
 
 type ReadingStatusDropwdownProps = {
   book: Book | DbBook;
@@ -143,42 +144,68 @@ export default function ReadingStatusDropwdown({
     <>
       <div className="w-full">
         <DropdownMenu>
-          <Button
-            disabled={!logged}
-            onClick={() => {
-              if (getSelectedLabel() === "Want to read")
-                handleDropdownClick(ReadStatus.WANT_TO_READ);
-            }}
-            className={
-              currentStatus
-                ? "rounded-r-none bg-blue-300 hover:bg-blue-300 text-black cursor-not-allowed"
-                : "rounded-r-none"
-            }
-          >
-            {getSelectedLabel()}
-          </Button>
-          <DropdownMenuTrigger asChild>
-            <Button disabled={!logged} className="rounded-l-none">
-              &#9660;
+          {dbUser === null ? (
+            <Tooltip title="Login to perform this action." arrow>
+              <span>
+                <Button className="rounded-r-none" disabled={!logged}>
+                  {" "}
+                  {getSelectedLabel()}
+                </Button>
+              </span>
+            </Tooltip>
+          ) : (
+            <Button
+              disabled={!logged}
+              onClick={() => {
+                if (getSelectedLabel() === "Want to read")
+                  handleDropdownClick(ReadStatus.WANT_TO_READ);
+              }}
+              className={
+                currentStatus
+                  ? "rounded-r-none bg-blue-300 hover:bg-blue-300 text-black cursor-not-allowed"
+                  : "rounded-r-none"
+              }
+            >
+              {getSelectedLabel()}
             </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="flex flex-col">
-            {getDropdownItems().map((item: any, index: number) => (
-              <DropdownMenuItem
-                key={index}
-                className={
-                  index === 0 && String(currentStatus) === item.value
-                    ? "rounded-l-none bg-blue-200"
-                    : "rounded-l-none"
-                }
-                onClick={() => {
-                  handleDropdownClick(item.value);
-                }}
-              >
-                <Button>{item.label}</Button>
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
+          )}
+
+          {dbUser === null ? (
+            <Tooltip title="Login to perform this action." arrow>
+              <span>
+                <Button className="rounded-l-none" disabled={!logged}>
+                  {" "}
+                  &#9660;
+                </Button>
+              </span>
+            </Tooltip>
+          ) : (
+            <>
+              {" "}
+              <DropdownMenuTrigger asChild>
+                <Button disabled={!logged} className="rounded-l-none">
+                  &#9660;
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="flex flex-col">
+                {getDropdownItems().map((item: any, index: number) => (
+                  <DropdownMenuItem
+                    key={index}
+                    className={
+                      index === 0 && String(currentStatus) === item.value
+                        ? "rounded-l-none bg-blue-200"
+                        : "rounded-l-none"
+                    }
+                    onClick={() => {
+                      handleDropdownClick(item.value);
+                    }}
+                  >
+                    <Button>{item.label}</Button>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </>
+          )}
         </DropdownMenu>
       </div>
     </>
