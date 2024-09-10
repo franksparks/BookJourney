@@ -19,10 +19,26 @@ export const dbGetBookByGoogleId = catchErrors(
     const result = await db.book.findFirst({
       where: { googleBooksId },
       include: {
-        reviews: true, 
+        reviews: true,
         ratings: true,
         lists: true,
-        bookStatuses: true, 
+        bookStatuses: true,
+        readingActivity: true
+      }
+    });
+    return result;
+  }
+);
+
+export const dbGetBooksByGoogleId = catchErrors(
+  async (googleBooksIds: string[]) => {
+    const result = await db.book.findMany({
+      where: { googleBooksId: { in: googleBooksIds } },
+      include: {
+        reviews: true,
+        ratings: true,
+        lists: true,
+        bookStatuses: true,
         readingActivity: true
       }
     });
