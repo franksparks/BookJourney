@@ -3,9 +3,9 @@
 import { actionGetBooksByUserIdAndReadingStatus } from "@/actions/book-status";
 import { useDbUser } from "@/app/context/db-user-context";
 import { BookStatus } from "@/models/book-status";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import BookCardWantToRead from "./BookCardWantToRead";
-import Image from "next/image";
 
 interface WantToReadProps {
   newBookSignal: (bool: boolean) => void;
@@ -66,8 +66,8 @@ export default function WantToRead({
   };
 
   return (
-    <div className="flex flex-col justify-start rounded-xl shadow-lg shadow-orange-700 bg-orange-500 p-8 text-orange-50 h-1/3">
-      <h1 className="font-light text-orange-50 text-center mb-4 border-b-2">
+    <div className="flex flex-col justify-start rounded-xl shadow-lg shadow-orange-700 bg-orange-500 p-6 text-orange-50 h-1/3">
+      <h1 className="font-light text-orange-50 text-center mb-4">
         Want to Read
       </h1>
       <div className="relative flex flex-row items-center justify-center h-full w-full">
@@ -117,11 +117,9 @@ export default function WantToRead({
         )}
 
         {dbUser && readingList.length === 0 && (
-          <div>Start reading to see something here!</div>
+          <p>Save some books to see something here!</p>
         )}
-        {!dbUser && (
-          <div>Login to see the books you are reading here!</div>
-        )}
+        {!dbUser && <p>Login to see the books you want to read here!</p>}
       </div>
     </div>
   );

@@ -80,7 +80,11 @@ export default function BookCard({
       );
       if (readingProgress === book.pages) {
         await actionUpdateBookStatus(status.id, ReadStatus.READ);
-        await actionInsertReadingActivityPercentage(100, book.id!, dbUser.id);
+        await actionInsertReadingActivityPercentage(
+          100,
+          book.id!,
+          dbUser.id
+        );
         onStatusChange();
       }
     } else {
@@ -91,7 +95,11 @@ export default function BookCard({
       );
       if (readingProgress === 100) {
         await actionUpdateBookStatus(status.id, ReadStatus.READ);
-        await actionInsertReadingActivityPercentage(100, book.id!, dbUser.id);
+        await actionInsertReadingActivityPercentage(
+          100,
+          book.id!,
+          dbUser.id
+        );
         onStatusChange();
       }
     }
@@ -179,7 +187,10 @@ export default function BookCard({
             <>
               <p>
                 {currentReadingActivity.page}/{book.pages} (
-                {((currentReadingActivity.page / book.pages) * 100).toFixed(1)}
+                {(
+                  (currentReadingActivity.page / book.pages) *
+                  100
+                ).toFixed(1)}
                 %)
               </p>
               <div className="w-36 bg-gray-200 rounded-full h-4 border-2 border-gray-300">
@@ -246,12 +257,14 @@ export default function BookCard({
                         %)
                       </>
                     ) : currentReadingActivity.percentage !== null ? (
-                      <>Currently read {currentReadingActivity.percentage}%</>
+                      <>
+                        Currently read {currentReadingActivity.percentage}%
+                      </>
                     ) : (
                       ""
                     )
                   ) : (
-                    ""
+                    <>Total pages: {book.pages}</>
                   )}
                   <p>
                     {progressType === "pages" ? "Pages " : "Percentage "}
@@ -261,7 +274,9 @@ export default function BookCard({
                     id="value"
                     className="col-span-3"
                     value={readingProgress}
-                    onChange={(e) => setReadingProgress(Number(e.target.value))}
+                    onChange={(e) =>
+                      setReadingProgress(Number(e.target.value))
+                    }
                     step="any"
                   />
                 </div>

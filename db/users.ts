@@ -1,54 +1,56 @@
 import { db } from "@/db/db";
+import { catchErrors } from "@/lib/error-handling";
 
-export async function dbGetUsers() {
+export const dbGetUsers = catchErrors(async () => {
   return await db.user.findMany({
-    orderBy: { id: "asc" },
+    orderBy: { id: "asc" }
   });
-}
+});
 
-export async function dbGetUserByUserId(id: string) {
+export const dbGetUserByUserId = catchErrors(async (id: string) => {
   return await db.user.findUnique({
-    where: { id },
+    where: { id }
   });
-}
+});
 
-export async function dbGetUserClerkIdByUserId(id: string) {
+export const dbGetUserClerkIdByUserId = catchErrors(async (id: string) => {
   return db.user.findUnique({
     where: { id },
     select: {
       clerkId: true
     }
   });
-}
+});
 
-export async function dbGetUsersByIds(ids: string[]) {
+export const dbGetUsersByIds = catchErrors(async (ids: string[]) => {
   const users = await db.user.findMany({
     where: {
       id: {
-        in: ids 
+        in: ids
       }
     }
   });
 
   return users;
-}
+});
 
-
-export async function dbGetUserByClerkId(clerkId: string) {
+export const dbGetUserByClerkId = catchErrors(async (clerkId: string) => {
   return await db.user.findFirst({
-    where: { clerkId },
+    where: { clerkId }
   });
-}
+});
 
-export async function dbInsertUser(clerkId: string, email: string) {
-  const user = await dbGetUserByClerkId(clerkId);
-  if (user === null) {
-    return await db.user.create({
-      data: {
-        clerkId,
-        email,
-      },
-    });
+export const dbInsertUser = catchErrors(
+  async (clerkId: string, email: string) => {
+    const user = await dbGetUserByClerkId(clerkId);
+    if (user === null) {
+      return await db.user.create({
+        data: {
+          clerkId,
+          email
+        }
+      });
+    }
+    return console.log("User already exists on database");
   }
-  return console.log("User already exists on database");
-}
+);

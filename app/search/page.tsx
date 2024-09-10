@@ -5,14 +5,16 @@ import { useBooksSearchContext } from "@/app/context/books-search-context";
 import SearchBox from "@/components/SearchBox";
 import ParametrizedPagination from "@/components/ParametrizedPagination";
 import SearchResults from "@/components/SearchResults";
-import { Book } from "@/models/book";
+import { DbBook } from "@/models/book";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useCallback, useEffect, Suspense } from "react";
+import { catchErrors } from "@/lib/error-handling";
+import { actionGetBooksByGoogleId } from "@/actions/books";
 
 const queryMap: { [key: string]: string } = {
   author: ":inauthor:",
   title: ":intitle:",
-  all: "",
+  all: ""
 };
 
 const calculateIndex = (page: number): number => {
@@ -29,9 +31,9 @@ export default function Home() {
     previewSearch,
     setPreviewSearch,
     setTotalItems,
-    totalItems,
+    totalItems
   } = useBooksSearchContext();
-  const [advancedResults, setAdvancedResults] = useState<Book[]>([]);
+  const [advancedResults, setAdvancedResults] = useState<DbBook[]>([]);
   const [advancedTotalItems, setAdvancedTotalItems] = useState(0);
   const [page, setPage] = useState(1);
   const [advancedQuery, setAdvancedQuery] = useState("");
@@ -44,21 +46,35 @@ export default function Home() {
     query: string,
     queryMap?: { [key: string]: string }
   ) => {
-    try {
       const index = calculateIndex(page);
 
-      const queryString = queryMap
-        ? `${queryMap[radioValue]}${query}`
-        : query;
+      const queryString = queryMap ? `${queryMap[radioValue]}${query}` : query;
 
       const result = await actionSearchBooksGoogle(queryString, index);
-      setResults(result.books);
+
+      const googleBooksIds: string[] = result.books.map(
+        (book) => book.googleBooksId
+      );
+      const booksInDb = await actionGetBooksByGoogleId(googleBooksIds);
+      
+      const resultWithBooksInDb = result.books.map((book) => {
+        const bookInDb = booksInDb.find(
+          (dbBook: DbBook) => dbBook.googleBooksId === book.googleBooksId
+        );
+        return {
+          ...book,
+          ...(bookInDb ? bookInDb : {}),
+          bookStatuses: bookInDb ? bookInDb.bookStatuses : []
+        };
+      });
+
+      setResults(resultWithBooksInDb);
       const totalItems =
         result.totalItems >= FIXED_TOTAL_ITEMS
           ? FIXED_TOTAL_ITEMS
           : result.totalItems;
       setTotalItems(totalItems);
-      setAdvancedResults(result.books);
+      setAdvancedResults(resultWithBooksInDb);
 
       if (advancedTotalItems === 0) {
         setAdvancedTotalItems(totalItems);
@@ -66,10 +82,7 @@ export default function Home() {
       if (queryMap && query) {
         router.push(`/search?q=${encodeURIComponent(query)}`);
       }
-    } catch (error) {
-      console.error("Error fetching books:", error);
-    }
-  };
+    };
 
   useEffect(() => {
     const urlQuery = searchParams?.get("q");
