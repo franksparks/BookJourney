@@ -14,8 +14,8 @@ export default function ListsCard() {
         My Lists
       </h1>
       {!dbUser && (
-        <div className="text-slate-100 text-center">
-          You must register or login to create a list
+        <div className="flex flex-col justify-center items-center h-full w-full">
+          <p className="mb-2">Login to create and view lists!</p>
         </div>
       )}
       {dbUser && (
