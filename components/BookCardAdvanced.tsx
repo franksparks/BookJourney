@@ -1,13 +1,13 @@
 import { useDbUser } from "@/app/context/db-user-context";
 import { capitalizeFirstLetter } from "@/lib/capitalize";
-import { Book } from "@/models/book";
+import { Book, DbBook } from "@/models/book";
 import { Tooltip } from "@mui/material";
 import Image from "next/image";
 import BookNavigationWrapper from "./BookNavigationWrapper";
 import ReadingStatusDropwdown from "./ReadingStatusDropdown";
 
 type bookCardAdvancedProps = {
-  book: Book;
+  book: DbBook | Book;
 };
 
 export default function BookCardAdvanced({ book }: bookCardAdvancedProps) {

@@ -263,7 +263,7 @@ export default function BookCard({
                       ""
                     )
                   ) : (
-                    ""
+                    <>Total pages: {book.pages}</>
                   )}
                   <p>
                     {progressType === "pages" ? "Pages " : "Percentage "}

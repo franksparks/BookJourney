@@ -14,37 +14,33 @@ export default function ListsCard() {
         My Lists
       </h1>
       {!dbUser && (
-        <div className="text-slate-100 text-center">
-          You must register or login to create a list
+        <div className="flex flex-col justify-center items-center h-full w-full">
+          <p className="mb-2">Login to create and view lists!</p>
         </div>
       )}
       {dbUser && (
         <div className="flex flex-col w-1/3 mx-auto gap-1">
           <Button
-            onClick={() =>
-              router.push("http://localhost:3000/lists?listId=READ")
-            }
+            className="rounded-full border-2 border-orange-500 hover:border-sky-500"
+            onClick={() => router.push("/lists?listId=READ")}
           >
             Read books
           </Button>
           <Button
-            onClick={() =>
-              router.push("http://localhost:3000/lists?listId=READING")
-            }
+            className="rounded-full border-2 border-orange-500 hover:border-sky-500"
+            onClick={() => router.push("/lists?listId=READING")}
           >
             Books you are reading
           </Button>
           <Button
-            onClick={() =>
-              router.push(
-                "http://localhost:3000/lists?listId=WANT_TO_READ"
-              )
-            }
+            className="rounded-full border-2 border-orange-500 hover:border-sky-500"
+            onClick={() => router.push("/lists?listId=WANT_TO_READ")}
           >
             Books you want to read
           </Button>
           <Button
-            onClick={() => router.push("http://localhost:3000/lists")}
+            className="rounded-full border-2 border-orange-500 hover:border-sky-500"
+            onClick={() => router.push("/lists")}
           >
             All lists
           </Button>

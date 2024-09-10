@@ -11,6 +11,7 @@ import {
 } from "@/actions/reading-challenge";
 import { useDbUser } from "@/app/context/db-user-context";
 import { ReadingChallenge } from "@prisma/client";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import Confetti from "react-confetti";
 import { Button } from "./ui/button";
@@ -134,19 +135,24 @@ export default function ReadingChallengeCard({
       {showConfetti && <Confetti />}
 
       <div className="flex flex-col justify-start rounded-xl shadow-lg shadow-orange-700 p-8 bg-orange-500 text-white h-1/3">
-        <h1 className="font-light text-orange-50 text-center mb-4 border-b-2">
+        <h1 className="font-light text-orange-50 text-center mb-4">
           {year} Reading Challenge
         </h1>
-        <div className="flex flex-row items-center">
-          {currentChallenge === null ||
-          currentChallenge === undefined ||
-          dbUser === null ? (
-            <div className="ml-10">
-              <p className="mb-2">No reading challenge set yet.</p>
+        <div className="flex flex-row items-center h-full">
+          {dbUser === null ? (
+            <div className="flex flex-col justify-center items-center h-full w-full">
+              <p className="mb-2">Login to set a reading challenge!</p>
+            </div>
+          ) : currentChallenge === null ||
+            currentChallenge === undefined ? (
+            <div className="flex flex-col justify-center items-center h-full w-full ml-10 mt-5 gap-5">
+              <p className="mb-2">Set a reading challenge!</p>
 
               <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button disabled={!logged}>Set reading challenge</Button>
+                  <Button disabled={!logged}>
+                    Set a reading challenge
+                  </Button>
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
@@ -177,6 +183,7 @@ export default function ReadingChallengeCard({
                       Set reading challenge
                     </Button>
                     <Button
+                      variant={"cancel"}
                       onClick={() => {
                         setConfirmationIsDialogOpen(false);
                       }}
@@ -188,35 +195,37 @@ export default function ReadingChallengeCard({
               </Dialog>
             </div>
           ) : (
-            <div className="ml-10">
-              <p className="mb-2">
-                <span className="text-3xl">{readBooks.length}</span> books
-                completed
-              </p>
-              <p className="mb-2">
-                {readBooks.length}/{currentChallenge.goal} (
-                {(
-                  (readBooks.length / currentChallenge.goal) *
-                  100
-                ).toFixed(1)}
-                %)
-              </p>
-              <div className="w-36 bg-gray-200 rounded-full h-4 border-2 border-gray-300 mb-2">
-                <div
-                  className={`h-3 rounded-full transition-all duration-300 ${
-                    readBooks.length >= currentChallenge.goal
-                      ? "bg-green-500"
-                      : "bg-blue-500"
-                  }`}
-                  style={{
-                    width: `${Math.min(
-                      (readBooks.length / currentChallenge.goal) * 100,
-                      100
-                    )}%`,
-                  }}
-                ></div>
+            <div className="flex flex-row w-full h-full justify-around items-center">
+              <div className="flex flex-col justify-center items-center">
+                <p className="mb-2 text-2xl">
+                  <span className="text-3xl">{readBooks.length}</span>{" "}
+                  books completed
+                </p>
+                <p className="mb-2">
+                  {readBooks.length}/{currentChallenge.goal} (
+                  {(
+                    (readBooks.length / currentChallenge.goal) *
+                    100
+                  ).toFixed(1)}
+                  %)
+                </p>
+                <div className="w-36 bg-gray-200 rounded-full h-4 border-2 border-gray-300 mb-2">
+                  <div
+                    className={`h-3 rounded-full transition-all duration-300 ${
+                      readBooks.length >= currentChallenge.goal
+                        ? "bg-green-500"
+                        : "bg-blue-500"
+                    }`}
+                    style={{
+                      width: `${Math.min(
+                        (readBooks.length / currentChallenge.goal) * 100,
+                        100
+                      )}%`,
+                    }}
+                  ></div>
+                </div>
               </div>
-              <div className="flex flex-row gap-2">
+              <div className="flex flex-col gap-2">
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                   <DialogTrigger asChild>
                     <Button>Edit challenge</Button>
@@ -251,6 +260,7 @@ export default function ReadingChallengeCard({
                       </Button>
 
                       <Button
+                        variant={"cancel"}
                         onClick={() => {
                           setIsDialogOpen(false);
                         }}
@@ -286,6 +296,7 @@ export default function ReadingChallengeCard({
                         Delete challenge
                       </Button>
                       <Button
+                        variant={"cancel"}
                         onClick={() => {
                           setConfirmationIsDialogOpen(false);
                         }}
@@ -297,7 +308,9 @@ export default function ReadingChallengeCard({
                 </Dialog>
 
                 {/*Todo: Redirect to a list of the read books this year*/}
-                <Button>View challenge</Button>
+                <Button className="cursor-not-allowed">
+                  View challenge
+                </Button>
               </div>
             </div>
           )}
