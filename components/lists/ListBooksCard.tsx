@@ -5,7 +5,7 @@ import { List } from "@/models/list";
 import { Book } from "@/models/book";
 import BookCardAdvanced from "../BookCardAdvanced";
 import { ReadStatus } from "@prisma/client";
-import { actionGetBookListsByListId } from "@/actions/book-list";
+import { actionGetBooksByListId } from "@/actions/book-list";
 import { actionGetBooksByStatusAndUserId } from "@/actions/book-status";
 
 interface BooksListProps {
@@ -65,13 +65,6 @@ export default function ListBooksCard({ list }: BooksListProps) {
         pageSize
       );
 
-       
-
-      console.log("status", statusBooks)
-
-      const newBooks = statusBooks.map((status: any) => status.book);
-
-      console.log ("NEW BOOKS", newBooks)
 
       setBooks((prevBooks) => [
         ...prevBooks,
@@ -82,7 +75,7 @@ export default function ListBooksCard({ list }: BooksListProps) {
 
       setHasMore(page < totalPages);
     } else {
-      const listBooks = await actionGetBookListsByListId(
+      const listBooks = await actionGetBooksByListId(
         list.id,
         page,
         pageSize
