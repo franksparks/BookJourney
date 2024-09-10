@@ -36,6 +36,11 @@ export default function PreviewSearchBox() {
 
     try {
       const result = await actionSearchBooksGoogle(query, 0);
+
+      const googleBooksIds: string[] = result.books.map(book => book.googleBooksId); 
+
+      console.log("googleBooksIds", googleBooksIds)
+
       setResults(result.books);
 
       const totalItems =
