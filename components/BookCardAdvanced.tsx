@@ -7,7 +7,7 @@ import BookNavigationWrapper from "./BookNavigationWrapper";
 import ReadingStatusDropwdown from "./ReadingStatusDropdown";
 
 type bookCardAdvancedProps = {
-  book: DbBook;
+  book: DbBook | Book;
 };
 
 export default function BookCardAdvanced({ book }: bookCardAdvancedProps) {
