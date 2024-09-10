@@ -9,6 +9,7 @@ import { DbBook } from "@/models/book";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useCallback, useEffect, Suspense } from "react";
 import { catchErrors } from "@/lib/error-handling";
+import { actionGetBooksByGoogleId } from "@/actions/books";
 
 const queryMap: { [key: string]: string } = {
   author: ":inauthor:",
@@ -45,7 +46,6 @@ export default function Home() {
     query: string,
     queryMap?: { [key: string]: string }
   ) => {
-    catchErrors(async () => {
       const index = calculateIndex(page);
 
       const queryString = queryMap ? `${queryMap[radioValue]}${query}` : query;
@@ -55,11 +55,8 @@ export default function Home() {
       const googleBooksIds: string[] = result.books.map(
         (book) => book.googleBooksId
       );
-      const booksInDb = await 
+      const booksInDb = await actionGetBooksByGoogleId(googleBooksIds);
       
-      
-      
-      (googleBooksIds);
       const resultWithBooksInDb = result.books.map((book) => {
         const bookInDb = booksInDb.find(
           (dbBook: DbBook) => dbBook.googleBooksId === book.googleBooksId
@@ -85,8 +82,7 @@ export default function Home() {
       if (queryMap && query) {
         router.push(`/search?q=${encodeURIComponent(query)}`);
       }
-    });
-  };
+    };
 
   useEffect(() => {
     const urlQuery = searchParams?.get("q");
