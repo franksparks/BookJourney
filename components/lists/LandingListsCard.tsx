@@ -15,7 +15,7 @@ export default function ListsCard() {
       </h1>
       {!dbUser && (
         <div className="flex flex-col justify-center items-center h-full w-full">
-          <p className="mb-2">Login to create a list and view lists!</p>
+          <p className="mb-2">Login to create and view lists!</p>
         </div>
       )}
       {dbUser && (
