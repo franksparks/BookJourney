@@ -132,7 +132,6 @@ export default function ReadingStatusDropwdown({
     } else {
       return menuItems.filter(
         (item: any) => item.value !== ReadStatus.WANT_TO_READ
-
       );
     }
   };
@@ -148,8 +147,11 @@ export default function ReadingStatusDropwdown({
           {dbUser === null ? (
             <Tooltip title="Login to perform this action." arrow>
               <span>
-                <Button className="rounded-r-none" disabled={!logged}>
-                  {" "}
+                <Button
+                  className="rounded-r-none"
+                  disabled={!logged}
+                  variant={"dropdown"}
+                >
                   {getSelectedLabel()}
                 </Button>
               </span>
@@ -157,6 +159,7 @@ export default function ReadingStatusDropwdown({
           ) : (
             <Button
               disabled={!logged}
+              variant={"dropdown"}
               onClick={() => {
                 if (getSelectedLabel() === "Want to read")
                   handleDropdownClick(ReadStatus.WANT_TO_READ);
@@ -174,7 +177,11 @@ export default function ReadingStatusDropwdown({
           {dbUser === null ? (
             <Tooltip title="Login to perform this action." arrow>
               <span>
-                <Button className="rounded-l-none" disabled={!logged}>
+                <Button
+                  variant={"dropdown"}
+                  className="rounded-l-none"
+                  disabled={!logged}
+                >
                   {" "}
                   &#9660;
                 </Button>
@@ -184,7 +191,11 @@ export default function ReadingStatusDropwdown({
             <>
               {" "}
               <DropdownMenuTrigger asChild>
-                <Button disabled={!logged} className="rounded-l-none">
+                <Button
+                  disabled={!logged}
+                  className="rounded-l-none"
+                  variant={"dropdown"}
+                >
                   &#9660;
                 </Button>
               </DropdownMenuTrigger>
