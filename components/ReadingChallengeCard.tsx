@@ -150,11 +150,8 @@ export default function ReadingChallengeCard({
 
               <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button
-                    disabled={!logged}
-                    className="rounded-full border-orange-400 border-2 hover:border-blue-600"
-                  >
-                    Set reading challenge
+                  <Button disabled={!logged}>
+                    Set a reading challenge
                   </Button>
                 </DialogTrigger>
                 <DialogContent>
@@ -182,17 +179,14 @@ export default function ReadingChallengeCard({
                     </div>
                   </div>
                   <DialogFooter>
-                    <Button
-                      onClick={handleSetReadingChallenge}
-                      className="rounded-full border-orange-400 border-2"
-                    >
+                    <Button onClick={handleSetReadingChallenge}>
                       Set reading challenge
                     </Button>
                     <Button
+                      variant={"cancel"}
                       onClick={() => {
                         setConfirmationIsDialogOpen(false);
                       }}
-                      className="rounded-full border-orange-400 border-2"
                     >
                       Cancel
                     </Button>
@@ -231,104 +225,92 @@ export default function ReadingChallengeCard({
                   ></div>
                 </div>
               </div>
-              <div>
-                <div className="flex flex-col gap-2">
-                  <Dialog
-                    open={isDialogOpen}
-                    onOpenChange={setIsDialogOpen}
-                  >
-                    <DialogTrigger asChild>
-                      <Button className="rounded-full border-orange-400 border-2 hover:border-blue-600">
-                        Edit challenge
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>Reading challenge!</DialogTitle>
-                        <DialogDescription>
-                          Edit your goal for this year
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div>
-                        <div className="items-center gap-4 mt-4">
-                          <Input
-                            id="value"
-                            className="col-span-3"
-                            type="number"
-                            value={newGoal === 0 ? "" : newGoal}
-                            onChange={(e) => {
-                              const value = e.target.value;
-                              if (value === "" || Number(value) > 0) {
-                                setNewGoal(Number(value));
-                              }
-                            }}
-                            step="1"
-                          />
-                        </div>
+              <div className="flex flex-col gap-2">
+                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button>Edit challenge</Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Reading challenge!</DialogTitle>
+                      <DialogDescription>
+                        Edit your goal for this year
+                      </DialogDescription>
+                    </DialogHeader>
+                    <div>
+                      <div className="items-center gap-4 mt-4">
+                        <Input
+                          id="value"
+                          className="col-span-3"
+                          type="number"
+                          value={newGoal === 0 ? "" : newGoal}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            if (value === "" || Number(value) > 0) {
+                              setNewGoal(Number(value));
+                            }
+                          }}
+                          step="1"
+                        />
                       </div>
-                      <DialogFooter>
-                        <Button
-                          onClick={handleEditReadingChallenge}
-                          className="rounded-full border-orange-400 border-2"
-                        >
-                          Set reading challenge
-                        </Button>
-
-                        <Button
-                          onClick={() => {
-                            setIsDialogOpen(false);
-                          }}
-                          className="rounded-full border-orange-400 border-2"
-                        >
-                          Cancel
-                        </Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
-
-                  <Dialog
-                    open={isConfirmationDialogOpen}
-                    onOpenChange={setConfirmationIsDialogOpen}
-                  >
-                    <DialogTrigger asChild>
-                      <Button className="rounded-full border-orange-400 bg-red-400 hover:bg-red-600 border-2">
-                        Delete reading challenge
+                    </div>
+                    <DialogFooter>
+                      <Button onClick={handleEditReadingChallenge}>
+                        Set reading challenge
                       </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle>
-                          Remove reading challenge!
-                        </DialogTitle>
-                        <DialogDescription>
-                          Delete your reading goal for this year
-                        </DialogDescription>
-                      </DialogHeader>
 
-                      <DialogFooter>
-                        <Button
-                          onClick={handleDeleteReadingChallenge}
-                          className="rounded-full border-orange-400 bg-red-400 hover:bg-red-600 border-2"
-                        >
-                          Confirm
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            setConfirmationIsDialogOpen(false);
-                          }}
-                          className="rounded-full border-orange-400 border-2"
-                        >
-                          Cancel
-                        </Button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
+                      <Button
+                        variant={"cancel"}
+                        onClick={() => {
+                          setIsDialogOpen(false);
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
 
-                  {/*Todo: Redirect to a list of the read books this year*/}
-                  <Button className="rounded-full border-orange-400 border-2  cursor-not-allowed">
-                    View challenge
-                  </Button>
-                </div>
+                <Dialog
+                  open={isConfirmationDialogOpen}
+                  onOpenChange={setConfirmationIsDialogOpen}
+                >
+                  <DialogTrigger asChild>
+                    <Button variant={"destructive"}>
+                      Delete reading challenge
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Remove reading challenge!</DialogTitle>
+                      <DialogDescription>
+                        Delete your reading goal for this year
+                      </DialogDescription>
+                    </DialogHeader>
+
+                    <DialogFooter>
+                      <Button
+                        variant={"destructive"}
+                        onClick={handleDeleteReadingChallenge}
+                      >
+                        Delete challenge
+                      </Button>
+                      <Button
+                        variant={"cancel"}
+                        onClick={() => {
+                          setConfirmationIsDialogOpen(false);
+                        }}
+                      >
+                        Cancel
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+
+                {/*Todo: Redirect to a list of the read books this year*/}
+                <Button className="cursor-not-allowed">
+                  View challenge
+                </Button>
               </div>
             </div>
           )}

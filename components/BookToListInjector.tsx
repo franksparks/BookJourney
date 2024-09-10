@@ -126,12 +126,7 @@ export default function BookToListInjector({
       <div className="flex justify-center mt-4">
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button
-              className="rounded-full border-orange-500 border-2"
-              disabled={!logged}
-            >
-              Manage lists
-            </Button>
+            <Button disabled={!logged}>Manage lists</Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
@@ -156,17 +151,12 @@ export default function BookToListInjector({
               )}
             </ul>
             <DialogFooter>
+              <Button onClick={saveChanges}>Save</Button>
               <Button
-                className="rounded-full border-orange-500 border-2"
-                onClick={saveChanges}
-              >
-                Save
-              </Button>
-              <Button
+                variant={"cancel"}
                 onClick={() => {
                   setIsDialogOpen(false);
                 }}
-                className="rounded-full border-orange-500 border-2"
               >
                 Cancel
               </Button>
