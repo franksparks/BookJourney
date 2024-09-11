@@ -25,7 +25,7 @@ export default function SearchBox({
   setPage,
   setTotalItems,
   setAvoidAdvancedSearch,
-  setRadioValue,
+  setRadioValue
 }: SearchBoxProps) {
   const { setResetRadio, setPreviewSearch } = useBooksSearchContext();
 
@@ -37,6 +37,16 @@ export default function SearchBox({
     },
     [setAdvancedQuery, setAvoidAdvancedSearch]
   );
+
+  const handleKeyDown = useCallback((event: { key: string; }) => {
+    if (event.key === 'Enter') {
+      setTotalItems(0);
+      setPage(1);
+      setAvoidAdvancedSearch(false);
+      setResetRadio(false);
+      handleAdvancedSearch();
+    }
+  }, [handleAdvancedSearch]);
 
   const handleRadioButtonChange = useCallback(
     (event: React.SyntheticEvent) => {
@@ -66,6 +76,7 @@ export default function SearchBox({
           placeholder="Search by book title or author"
           value={advancedQuery}
           onChange={handleChange}
+          onKeyDown={handleKeyDown}
         />
         <Button
           onMouseDown={onSearchMouseDown}
