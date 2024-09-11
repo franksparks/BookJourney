@@ -160,7 +160,6 @@ export default function PreviewSearchBox() {
   return (
     <div className="flex">
       <Autocomplete
-        freeSolo
         filterOptions={(x) => x}
         className="bg-orange-100 mt-4 mb-4 mr-4 rounded-md border-none"
         size="small"
