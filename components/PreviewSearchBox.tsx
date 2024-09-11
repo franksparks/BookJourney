@@ -25,6 +25,7 @@ export default function PreviewSearchBox() {
   const { setResults, setPreviewSearch, setTotalItems } =
     useBooksSearchContext();
   const [previewResults, setPreviewResults] = useState<Option[]>([]);
+  const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -89,7 +90,9 @@ export default function PreviewSearchBox() {
 
   const handleInputChange = (_event: React.SyntheticEvent, query: string) => {
     setInputValue(query);
-    debouncedSearchBooks(query);
+    if (query !== "") {
+      debouncedSearchBooks(query);
+    }
   };
 
   const handleBlur = () => {
@@ -157,6 +160,7 @@ export default function PreviewSearchBox() {
   return (
     <div className="flex">
       <Autocomplete
+        freeSolo
         filterOptions={(x) => x}
         className="bg-orange-100 mt-4 mb-4 mr-4 rounded-md border-none"
         size="small"
@@ -164,7 +168,9 @@ export default function PreviewSearchBox() {
         forcePopupIcon={false}
         onInputChange={handleInputChange}
         options={previewResults}
-        open={inputValue.length > 0 && previewResults.length > 0}
+        open={inputValue.length > 0 && previewResults.length > 0 && open}
+        onOpen={() => setOpen(true)}
+        onClose={() => setOpen(false)}
         renderOption={handleOptionsRendering}
         sx={{ width: 500 }}
         renderInput={(params) => (
