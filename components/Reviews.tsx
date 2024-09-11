@@ -215,10 +215,9 @@ export default function Reviews({
           ))}
         </>
       )}
-      {bookReviews === null ||
-        (bookReviews.length <= 0 && dbUser && !loading && (
+      {(bookReviews === null || bookReviews.length<=0) && dbUser && !loading && (
           <div>{"This book does not have reviews."}</div>
-        ))}
+        )}
 
       {dbUser && loading && (
         <>
