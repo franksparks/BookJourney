@@ -32,10 +32,10 @@ export default function ReviewDialogue({
   const [open, setOpen] = useState(false);
 
   const fetchReview = useCallback(async () => {
-    
+
     let review: Review | null;
 
-    if(dbUser && "reviews" in bookInDb! && (bookInDb as DbBook).reviews!== undefined) {
+    if (dbUser && "reviews" in bookInDb! && (bookInDb as DbBook).reviews !== undefined) {
 
       const result = (bookInDb as DbBook).reviews.filter(review => review.userId == dbUser.id)
       review = result[0];
@@ -58,7 +58,7 @@ export default function ReviewDialogue({
   const saveReview = useCallback(async () => {
 
     let book: Book;
-    if(bookInDb?.id === undefined) {
+    if (bookInDb?.id === undefined) {
       book = await actionGetBookByGoogleId(bookInDb?.googleBooksId!)
       console.log(book)
     } else {
@@ -83,16 +83,16 @@ export default function ReviewDialogue({
   }, [commentBookReview]);
 
   const deleteReview = useCallback(async () => {
-    if (bookReview) {
-      await actionDeleteReview(bookReview?.id!);
-      setBookReview(null);
-      setCommentBookReview("");
-    } else {
+    let reviewId: string
+    if (!bookReview) {
       const review: Review = await actionGetReviewByGoogleBookIdAndUserId(bookInDb!.googleBooksId, dbUser.id)
-      await actionDeleteReview(review.id);
-      setBookReview(null);
-      setCommentBookReview("");
+      reviewId = review.id
+    } else {
+      reviewId = bookReview?.id
     }
+    await actionDeleteReview(reviewId);
+    setBookReview(null);
+    setCommentBookReview("");
   }, [bookReview]);
 
   const handleTextChange = (event: { target: { value: string } }) => {
