@@ -41,13 +41,11 @@ export default function BookCardAdvanced({ book }: bookCardAdvancedProps) {
       </div>
       <div className="flex flex-col justify-center w-2/3 gap-2 m-2 mr-5 cursor-default">
         <BookNavigationWrapper id={book.googleBooksId}>
-          {book.title && (
-            <Tooltip arrow title={book.title} placement="top-start">
-              <b className="text-base line-clamp-1 text-sky-700">{`${capitalizeFirstLetter(
-                book.title
-              )}`}</b>
-            </Tooltip>
-          )}
+          <Tooltip arrow title={book.title} placement="top-start">
+            <b className="text-base line-clamp-1 text-sky-700">{`${capitalizeFirstLetter(
+              book.title || "Title not available"
+            )}`}</b>
+          </Tooltip>
         </BookNavigationWrapper>
         <Tooltip arrow title={book.authors} placement="bottom-start">
           <div className="text-base line-clamp-1 text-sky-700">
