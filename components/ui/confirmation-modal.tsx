@@ -22,12 +22,8 @@ export default function ConfirmationModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-3xl shadow-2xl transition-transform transform-gpu scale-100 w-full max-w-md">
-        {/* Título del modal */}
         <h2 className="text-2xl font-semibold text-sky-700 mb-4">{title}</h2>
-        {/* Mensaje */}
         <p className="text-gray-600 mb-6">{message}</p>
-
-        {/* Botones */}
         <div className="flex justify-end space-x-3">
           <button
             onClick={onClose}

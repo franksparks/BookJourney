@@ -7,11 +7,12 @@ import BookNavigationWrapper from "./BookNavigationWrapper";
 import ReadingStatusDropwdown from "./ReadingStatusDropdown";
 import { TrashIcon } from "@radix-ui/react-icons";
 import { usePathname } from "next/navigation";
+import { Button } from "./ui/button";
 
 type bookCardAdvancedProps = {
   book: Book;
   deleteVisible: boolean;
-  onDelete: (bookId: string) => void; // Agregamos una función onDelete como prop
+  onDelete: (bookId: string) => void;
 };
 
 export default function BookCardAdvanced({
@@ -67,13 +68,9 @@ export default function BookCardAdvanced({
         </Tooltip>
         <div className="flex" >
           <ReadingStatusDropwdown book={book} logged={logged} />
-          {/* Botón de eliminación */}
-          <button
-            onClick={() => onDelete(book.googleBooksId)}
-            className={`bg-red-500 text-white rounded-full hover:bg-red-700 transition duration-300 p-1 pr-2 h-8 mt-auto mb-auto ${deleteVisible ? 'flex' : 'hidden'}`}
-          >
-          <TrashIcon className="w-5 h-5 mt-0.5" /> Remove
-        </button>
+          <Button onClick={() => onDelete(book.googleBooksId)} className={`bg-red-500 text-white rounded-full hover:bg-red-700 transition duration-300 p-1 pr-2 h-8 mt-auto mb-auto ${deleteVisible ? 'flex' : 'hidden'}`}>
+            <TrashIcon className="w-5 h-5 mt-0.5" /> Remove
+          </Button>
         </div>
       </div>
     </div>

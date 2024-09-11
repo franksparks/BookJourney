@@ -12,10 +12,12 @@ import { usePathname } from "next/navigation";
 
 interface BooksListProps {
   list: List | null;
+  lists: List[];
+  setLists: (lists: List[]) => void;
   setSelectedList: (list: List | null) => void;
 }
 
-export default function ListBooksCard({ list, setSelectedList }: BooksListProps) {
+export default function ListBooksCard({ list, lists, setLists, setSelectedList }: BooksListProps) {
   const [page, setPage] = useState(1);
   const pageSize = 10;
   const totalPages = list?.book_count
@@ -105,11 +107,14 @@ export default function ListBooksCard({ list, setSelectedList }: BooksListProps)
   
   const confirmDelete = async () => {
     if (bookToDelete && list) {
+      setSelectedList(null);
       await actionDeleteBookListByBookIdAndListId(bookToDelete, list.id);
-      const actualList = list;
-      actualList.book_count = (actualList.book_count ?? 0) - 1;
+      const listIndex = lists.findIndex((l) => l.id === list.id);
+      const allLists = lists;
+      allLists[listIndex].book_count = (allLists[listIndex].book_count ?? 0) - 1;
+      setLists(allLists);
+      setSelectedList(allLists[listIndex]);
       setBooks(books.filter((book) => book.id !== bookToDelete));
-      setSelectedList(actualList);
       setBookToDelete(null);
       setIsModalOpen(false);
     }
