@@ -276,7 +276,8 @@ export default function ListsCard({ lists, setLists, selectedList, setSelectedLi
                         list.id as ReadStatus
                       ) && (
                         <Button
-                          className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-300 h-8"
+                          className="h-8"
+                          variant={"destructive"}
                           onClick={() => handleDeleteList(list.id)}
                         >
                           Delete List
@@ -324,12 +325,7 @@ export default function ListsCard({ lists, setLists, selectedList, setSelectedLi
           ) : (
             <div className="ml-auto mt-2">
               {pathname.includes("/lists") && (
-                <Button
-                  className="rounded-full border-2 border-orange-500 hover:border-sky-500"
-                  onClick={handleAddList}
-                >
-                  New list
-                </Button>
+                <Button onClick={handleAddList}>New list</Button>
               )}
             </div>
           )}

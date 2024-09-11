@@ -1,9 +1,12 @@
 import {
   actionGetBookStatusByBookIdAndUserId,
   actionInsertBookStatus,
-  actionUpdateBookStatus
+  actionUpdateBookStatus,
 } from "@/actions/book-status";
-import { actionGetBookByGoogleId, actionInsertBook } from "@/actions/books";
+import {
+  actionGetBookByGoogleId,
+  actionInsertBook,
+} from "@/actions/books";
 import { actionInsertReadingActivityPercentage } from "@/actions/reading-activity";
 import { useDbUser } from "@/app/context/db-user-context";
 import { Book, DbBook } from "@/models/book";
@@ -13,7 +16,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@radix-ui/react-dropdown-menu";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
@@ -23,7 +26,7 @@ import { useToast } from "./ui/use-toast";
 const menuItems = [
   { label: "Read", value: ReadStatus.READ },
   { label: "Currently reading", value: ReadStatus.READING },
-  { label: "Want to read", value: ReadStatus.WANT_TO_READ }
+  { label: "Want to read", value: ReadStatus.WANT_TO_READ },
 ];
 
 type ReadingStatusDropwdownProps = {
@@ -33,7 +36,7 @@ type ReadingStatusDropwdownProps = {
 
 export default function ReadingStatusDropwdown({
   book,
-  logged
+  logged,
 }: ReadingStatusDropwdownProps) {
   const { dbUser } = useDbUser();
   const [currentStatus, setStatus] = useState<BookStatus | null>(null);
@@ -49,7 +52,7 @@ export default function ReadingStatusDropwdown({
       const output = (book as DbBook).bookStatuses.filter(
         (status) => status.userId === dbUser.id
       );
-      const readingStatus: BookStatus = output[0];
+      const readingStatus: BookStatus | null = output[0] || null;
       setStatus(readingStatus);
     } else {
       setLoading(true);
@@ -57,9 +60,11 @@ export default function ReadingStatusDropwdown({
 
       if (dbUser != null && dbBook != null) {
         // obtain the bookStatus if the book is on DB.
-
         const readingStatus: BookStatus =
-          await actionGetBookStatusByBookIdAndUserId(dbBook.id!, dbUser.id);
+          await actionGetBookStatusByBookIdAndUserId(
+            dbBook.id!,
+            dbUser.id
+          );
 
         setStatus(readingStatus);
       } else {
@@ -83,12 +88,16 @@ export default function ReadingStatusDropwdown({
       const newStatus = await actionInsertBookStatus(status, res, dbUser);
       setStatus(newStatus);
       if (status === ReadStatus.READ) {
-        await actionInsertReadingActivityPercentage(100, res.id!, dbUser.id);
+        await actionInsertReadingActivityPercentage(
+          100,
+          res.id!,
+          dbUser.id
+        );
       }
       toast({
         title: "Book status stored correctly!",
         className: "bg-orange-500 text-white",
-        duration: 5000
+        duration: 5000,
       });
     } else {
       //If bookStatus exists, call to update action
@@ -107,7 +116,7 @@ export default function ReadingStatusDropwdown({
       toast({
         title: "Book status updated correctly!",
         className: "bg-orange-500 text-white",
-        duration: 5000
+        duration: 5000,
       });
     }
   };
@@ -124,9 +133,13 @@ export default function ReadingStatusDropwdown({
 
   const getDropdownItems = () => {
     if (currentStatus) {
-      return menuItems.filter((item) => item.value !== currentStatus.status);
+      return menuItems.filter(
+        (item) => item.value !== currentStatus.status
+      );
     } else {
-      return menuItems.filter((item) => item.value !== ReadStatus.WANT_TO_READ);
+      return menuItems.filter(
+        (item) => item.value !== ReadStatus.WANT_TO_READ
+      );
     }
   };
 
@@ -144,6 +157,7 @@ export default function ReadingStatusDropwdown({
               if (getSelectedLabel() === "Want to read")
                 handleDropdownClick(ReadStatus.WANT_TO_READ);
             }}
+            variant={"dropdown"}
             className={
               currentStatus
                 ? "rounded-r-none bg-blue-300 hover:bg-blue-300 text-black cursor-not-allowed"
@@ -153,7 +167,7 @@ export default function ReadingStatusDropwdown({
             {getSelectedLabel()}
           </Button>
           <DropdownMenuTrigger asChild>
-            <Button disabled={!logged} className="rounded-l-none">
+            <Button disabled={!logged} variant={"dropdown"}>
               &#9660;
             </Button>
           </DropdownMenuTrigger>

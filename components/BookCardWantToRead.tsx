@@ -76,12 +76,7 @@ export default function BookCardWantToRead({
       </div>
 
       <div className="flex justify-center items-center mr-2 w-1/4">
-        <Button
-          onClick={handleStartBookClick}
-          className="rounded-full border-2 hover:scale-110 transition duration-500"
-        >
-          Start
-        </Button>
+        <Button onClick={handleStartBookClick}>Start</Button>
       </div>
     </div>
   );

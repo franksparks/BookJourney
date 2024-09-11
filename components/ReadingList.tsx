@@ -3,9 +3,10 @@
 import { actionGetBooksByUserIdAndReadingStatus } from "@/actions/book-status";
 import { useDbUser } from "@/app/context/db-user-context";
 import { BookStatus } from "@/models/book-status";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import BookCard from "./BookCard";
-import Image from "next/image";
 import { Button } from "./ui/button";
 
 interface ReadingListProps {
@@ -20,6 +21,7 @@ export default function ReadingList({
   newBookSignal,
 }: ReadingListProps) {
   const { dbUser } = useDbUser();
+  const router = useRouter();
 
   const [readingList, setReadingList] = useState<BookStatus[]>([]);
   const [currentPage, setCurrentPage] = useState(0); // State for pagination
@@ -64,7 +66,7 @@ export default function ReadingList({
 
   return (
     <div className="rounded-xl shadow-lg shadow-sky-700 p-8 bg-sky-600 text-slate-100 h-full ">
-      <h1 className="font-light text-sky-50 text-center border-b-2">
+      <h1 className="font-light text-sky-50 text-center">
         Currently Reading
       </h1>
       <div className="flex flex-row justify-center h-full">
@@ -91,17 +93,25 @@ export default function ReadingList({
                   onStatusChange={handleStatusChange}
                 />
               ))}
-              <Button className="rounded-full border-2 border-orange-500">
+              <Button
+                disabled={dbUser === null}
+                onClick={() => router.push("/lists?listId=READING")}
+              >
                 View More
               </Button>
             </>
           )}
 
           {dbUser && readingList.length == 0 && (
-            <div>Start reading to see something here!</div>
+            <div className="flex justify-center items-center h-full">
+              <p>Start reading to see something here!</p>
+            </div>
           )}
+
           {!dbUser && (
-            <div>Login to see the books you are reading here!</div>
+            <div className="flex justify-center items-center h-full">
+              <p>Login to see the books you are reading here!</p>
+            </div>
           )}
         </div>
         {readingList.length > booksPerPage && (

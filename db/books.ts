@@ -4,7 +4,9 @@ import { db } from "./db";
 
 export const dbInsertBook = catchErrors(
   async (book: Prisma.BookCreateInput) => {
-    const result = await db.book.create({ data: book });
+    const { bookStatuses, ...bookData } = book;
+
+    const result = await db.book.create({ data: bookData });
     return result;
   }
 );
@@ -19,12 +21,28 @@ export const dbGetBookByGoogleId = catchErrors(
     const result = await db.book.findFirst({
       where: { googleBooksId },
       include: {
-        reviews: true, 
+        reviews: true,
         ratings: true,
         lists: true,
-        bookStatuses: true, 
-        readingActivity: true
-      }
+        bookStatuses: true,
+        readingActivity: true,
+      },
+    });
+    return result;
+  }
+);
+
+export const dbGetBooksByGoogleId = catchErrors(
+  async (googleBooksIds: string[]) => {
+    const result = await db.book.findMany({
+      where: { googleBooksId: { in: googleBooksIds } },
+      include: {
+        reviews: true,
+        ratings: true,
+        lists: true,
+        bookStatuses: true,
+        readingActivity: true,
+      },
     });
     return result;
   }
@@ -36,10 +54,10 @@ export const dbGetBooksInList = catchErrors(async (listId: string) => {
     include: {
       books: {
         include: {
-          book: true
-        }
-      }
-    }
+          book: true,
+        },
+      },
+    },
   });
 
   if (!list) {
@@ -63,7 +81,7 @@ export const dbUpdateBookRatingAverage = catchErrors(
     ratingAverage = parseFloat(ratingAverage.toFixed(2));
     const result = await db.book.update({
       where: { id },
-      data: { ratingAverage }
+      data: { ratingAverage },
     });
     return result;
   }

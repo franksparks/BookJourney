@@ -1,6 +1,6 @@
 import { useDbUser } from "@/app/context/db-user-context";
 import { capitalizeFirstLetter } from "@/lib/capitalize";
-import { Book } from "@/models/book";
+import { Book, DbBook } from "@/models/book";
 import { Tooltip } from "@mui/material";
 import Image from "next/image";
 import BookNavigationWrapper from "./BookNavigationWrapper";
@@ -10,9 +10,9 @@ import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
 
 type bookCardAdvancedProps = {
-  book: Book;
   deleteVisible: boolean;
   onDelete: (bookId: string) => void;
+  book: DbBook | Book;
 };
 
 export default function BookCardAdvanced({

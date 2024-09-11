@@ -14,8 +14,8 @@ export default function ListsCard() {
         My Lists
       </h1>
       {!dbUser && (
-        <div className="text-slate-100 text-center">
-          You must register or login to create a list
+        <div className="flex flex-col justify-center items-center h-full w-full">
+          <p className="mb-2">Login to create and view lists!</p>
         </div>
       )}
       {dbUser && (
@@ -23,7 +23,7 @@ export default function ListsCard() {
           <Button
             className="rounded-full border-2 border-orange-500 hover:border-sky-500 block m-auto"
             onClick={() =>
-              router.push("http://localhost:3000/lists?listId=READ")
+              router.push("/lists?listId=READ")
             }
           >
             Read books
@@ -31,7 +31,7 @@ export default function ListsCard() {
           <Button
             className="rounded-full border-2 border-orange-500 hover:border-sky-500 block m-auto"
             onClick={() =>
-              router.push("http://localhost:3000/lists?listId=READING")
+              router.push("/lists?listId=READING")
             }
           >
             Books you are reading
@@ -40,7 +40,7 @@ export default function ListsCard() {
             className="rounded-full border-2 border-orange-500 hover:border-sky-500 block m-auto"
             onClick={() =>
               router.push(
-                "http://localhost:3000/lists?listId=WANT_TO_READ"
+                "/lists?listId=WANT_TO_READ"
               )
             }
           >
@@ -48,7 +48,7 @@ export default function ListsCard() {
           </Button>
           <Button
             className="rounded-full border-2 border-orange-500 hover:border-sky-500 block m-auto"
-            onClick={() => router.push("http://localhost:3000/lists")}
+            onClick={() => router.push("/lists")}
           >
             All lists
           </Button>

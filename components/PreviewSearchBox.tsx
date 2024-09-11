@@ -9,6 +9,8 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { HTMLAttributes, useCallback, useRef, useState } from "react";
 import BookNavigationWrapper from "./BookNavigationWrapper";
+import { actionGetBooksByGoogleId } from "@/actions/books";
+import { DbBook } from "@/models/book";
 
 interface Option {
   label: string;
@@ -36,7 +38,23 @@ export default function PreviewSearchBox() {
 
     try {
       const result = await actionSearchBooksGoogle(query, 0);
-      setResults(result.books);
+
+      const googleBooksIds: string[] = result.books.map(
+        (book) => book.googleBooksId
+      );
+      const booksInDb = await actionGetBooksByGoogleId(googleBooksIds);
+      const resultWithBooksInDb = result.books.map((book) => {
+        const bookInDb = booksInDb.find(
+          (dbBook: DbBook) => dbBook.googleBooksId === book.googleBooksId
+        );
+        return {
+          ...book,
+          ...(bookInDb ? bookInDb : {}),
+          bookStatuses: bookInDb ? bookInDb.bookStatuses : []
+        };
+      });
+
+      setResults(resultWithBooksInDb);
 
       const totalItems =
         result.totalItems >= FIXED_TOTAL_ITEMS
@@ -51,14 +69,14 @@ export default function PreviewSearchBox() {
         }`,
         imageUrl: book.smallCover,
         googleBooksId: book.googleBooksId,
-        index,
+        index
       }));
 
       mappedOptions.push({
         label: "See all results",
         imageUrl: "",
         googleBooksId: "",
-        index: 5,
+        index: 5
       });
 
       setPreviewResults(mappedOptions);
@@ -69,10 +87,7 @@ export default function PreviewSearchBox() {
 
   const debouncedSearchBooks = useCallback(debounce(searchBooks, 300), []);
 
-  const handleInputChange = (
-    _event: React.SyntheticEvent,
-    query: string
-  ) => {
+  const handleInputChange = (_event: React.SyntheticEvent, query: string) => {
     setInputValue(query);
     debouncedSearchBooks(query);
   };
@@ -160,18 +175,18 @@ export default function PreviewSearchBox() {
             sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": {
-                  borderColor: "white",
+                  borderColor: "white"
                 },
                 "&:hover fieldset": {
-                  borderColor: "white",
+                  borderColor: "white"
                 },
                 "&.Mui-focused fieldset": {
-                  borderColor: "white",
-                },
-              },
+                  borderColor: "white"
+                }
+              }
             }}
             InputLabelProps={{
-              shrink: false,
+              shrink: false
             }}
           />
         )}
