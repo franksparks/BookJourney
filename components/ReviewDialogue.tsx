@@ -87,6 +87,11 @@ export default function ReviewDialogue({
       await actionDeleteReview(bookReview?.id!);
       setBookReview(null);
       setCommentBookReview("");
+    } else {
+      const review: Review = await actionGetReviewByGoogleBookIdAndUserId(bookInDb!.googleBooksId, dbUser.id)
+      await actionDeleteReview(review.id);
+      setBookReview(null);
+      setCommentBookReview("");
     }
   }, [bookReview]);
 
