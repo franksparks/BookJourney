@@ -87,12 +87,12 @@ export default function Reviews({
     }
   }, [userBookReview, bookInDb]);
 
-  const fetchBookDetailsReviews = useCallback(async () => { 
-    if (!bookReviews){
+  const fetchBookDetailsReviews = useCallback(async () => {
+    if (!bookReviews) {
       setLoading(false);
-      return
-    } 
-    
+      return;
+    }
+
     setLoading(true);
     const userIds: string[] = bookReviews.map((review) => review.userId);
     const users: User[] = await actionGetUsersByIds(userIds);
@@ -128,7 +128,6 @@ export default function Reviews({
         })
       );
 
-     
       setBookDetailsReviews(reviews);
       setLoading(false);
     }
@@ -153,9 +152,9 @@ export default function Reviews({
 
   return (
     <>
-      {userBookReview !== null && (
+      <div className="font-bold mb-4">{"My Review"}</div>
+      {userBookReview !== null && !loading && (
         <>
-          <div className="font-bold mb-4">{"My Review"}</div>
           <div className="flex">
             <div className="basis-1/6">
               {user?.imageUrl ? (
@@ -181,17 +180,20 @@ export default function Reviews({
         </>
       )}
 
-      { dbUser && loading && (
+      {userBookReview === null && dbUser && !loading && (
+        <div>{"You have not reviewed this book."}</div>
+      )}
+
+      {dbUser && loading && (
         <>
           {[...Array(2)].map((_, index) => (
             <Skeleton key={index} className="h-10 w-1/2" />
           ))}
         </>
       )}
-
+      <div className="font-bold mt-8 mb-4">{"Other Reviews"}</div>
       {paginatedReviews && paginatedReviews.length > 0 && (
         <>
-          <div className="font-bold mt-8 mb-4">{"Other Reviews"}</div>
           {paginatedReviews.map((review, index) => (
             <div className="flex mb-4" key={index}>
               <div className="basis-1/6">
@@ -213,7 +215,20 @@ export default function Reviews({
           ))}
         </>
       )}
-      {bookDetailsReviews && bookDetailsReviews.length > 0 && (
+      {bookReviews === null ||
+        (bookReviews.length <= 0 && dbUser && !loading && (
+          <div>{"This book does not have reviews."}</div>
+        ))}
+
+      {dbUser && loading && (
+        <>
+          {[...Array(2)].map((_, index) => (
+            <Skeleton key={index} className="h-10 w-1/2" />
+          ))}
+        </>
+      )}
+
+      {bookDetailsReviews && bookDetailsReviews.length > 0 && !loading && (
         <ParametrizedPagination
           setPage={setPage}
           page={page}
