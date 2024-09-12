@@ -32,6 +32,7 @@ export default function BookToListInjector({ book }: BookToListInjectorProps) {
   const [selectedLists, setSelectedLists] = useState<Set<string>>(new Set());
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [firstInteraction, setFirstInteraction] = useState(true);
+  const [loading, setLoading] = useState(true);
   const logged = dbUser ? true : false;
 
   useEffect(() => {
@@ -51,6 +52,7 @@ export default function BookToListInjector({ book }: BookToListInjectorProps) {
   };
 
   const getBookLists = async () => {
+    setLoading(true);
     if ("lists" in book) {
       let bookLists;
       if (firstInteraction) {
@@ -75,6 +77,7 @@ export default function BookToListInjector({ book }: BookToListInjectorProps) {
     } else {
       setBookLists(null);
     }
+    setLoading(false);
   };
 
   const toggleListSelection = (listId: string) => {
