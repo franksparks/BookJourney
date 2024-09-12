@@ -159,7 +159,7 @@ export default function BookCard({
           </div>
         </Tooltip>
         <Tooltip arrow title={book.authors[0]} placement="bottom">
-          <p className="text-slate-500">
+          <p className="text-slate-500 line-clamp-2">
             {book.authors && book.authors.length > 0
               ? book.authors[0]
               : "Author not available"}
