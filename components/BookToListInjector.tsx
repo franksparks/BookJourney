@@ -31,7 +31,7 @@ export default function BookToListInjector({ book }: BookToListInjectorProps) {
   const [bookLists, setBookLists] = useState<List[] | null>(null);
   const [selectedLists, setSelectedLists] = useState<Set<string>>(new Set());
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [firsInteraction, setFirstInteraction] = useState(true);
+  const [firstInteraction, setFirstInteraction] = useState(true);
   const logged = dbUser ? true : false;
 
   useEffect(() => {
@@ -42,12 +42,14 @@ export default function BookToListInjector({ book }: BookToListInjectorProps) {
   }, [dbUser, book]);
 
   const getUserLists = async () => {
+    if(firstInteraction) {
     const userLists = dbUser ? await actionGetListsByUserId(dbUser.id!) : null;
     setUserLists(userLists?.length ? userLists : null);
+    }
   };
 
   const getBookLists = async () => {
-    if ("lists" in book && firsInteraction) {
+    if ("lists" in book && firstInteraction) {
       console.log("if");
       const listsIds = book.lists.map((list) => list.listId);
       if (book.lists.length > 0) {
@@ -59,7 +61,7 @@ export default function BookToListInjector({ book }: BookToListInjectorProps) {
         setSelectedLists(selected);
       }
       setFirstInteraction(false);
-    } else if("lists" in book && !firsInteraction) {
+    } else if("lists" in book && !firstInteraction) {
         const bookLists = await actionGetListsByBookIdAndUserId(book.id!, dbUser.id!)
         if (book.lists.length > 0) {
           const selected = new Set<string>(
