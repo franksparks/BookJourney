@@ -5,15 +5,13 @@ import { List } from "@/models/list";
 import { Book, DbBook } from "@/models/book";
 import BookCardAdvanced from "../BookCardAdvanced";
 import { ReadStatus } from "@prisma/client";
-import { actionGetBookStatusByStatusAndUserId } from "@/actions/book-status";
 import {
-  actionGetBookListsByListId,
   actionDeleteBookListByBookIdAndListId,
+  actionGetBooksByListId,
 } from "@/actions/book-list";
 import Modal from "../ui/confirmation-modal";
 import { usePathname } from "next/navigation";
-
-        
+import { actionGetBooksByStatusAndUserId } from "@/actions/book-status";
 
 interface BooksListProps {
   list: List | null;
