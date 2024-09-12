@@ -32,12 +32,16 @@ export default function ReviewDialogue({
   const [open, setOpen] = useState(false);
 
   const fetchReview = useCallback(async () => {
-
     let review: Review | null;
 
-    if (dbUser && "reviews" in bookInDb! && (bookInDb as DbBook).reviews !== undefined) {
-
-      const result = (bookInDb as DbBook).reviews.filter(review => review.userId == dbUser.id)
+    if (
+      dbUser &&
+      "reviews" in bookInDb! &&
+      (bookInDb as DbBook).reviews !== undefined
+    ) {
+      const result = (bookInDb as DbBook).reviews.filter(
+        (review) => review.userId == dbUser.id
+      );
       review = result[0];
       if (review) {
         setBookReview(review);
@@ -56,14 +60,13 @@ export default function ReviewDialogue({
   }, [dbUser, bookInDb, bookReview, commentBookReview]);
 
   const saveReview = useCallback(async () => {
-
     let book: Book;
     if (bookInDb?.id === undefined) {
-      book = await actionGetBookByGoogleId(bookInDb?.googleBooksId!)
-      console.log(book)
+      book = await actionGetBookByGoogleId(bookInDb?.googleBooksId!);
+      console.log(book);
     } else {
       book = bookInDb;
-      console.log(book)
+      console.log(book);
     }
     if (bookReview === null || bookReview === undefined) {
       const review = await actionInsertReview(
@@ -83,12 +86,15 @@ export default function ReviewDialogue({
   }, [commentBookReview]);
 
   const deleteReview = useCallback(async () => {
-    let reviewId: string
+    let reviewId: string;
     if (!bookReview) {
-      const review: Review = await actionGetReviewByGoogleBookIdAndUserId(bookInDb!.googleBooksId, dbUser.id)
-      reviewId = review.id
+      const review: Review = await actionGetReviewByGoogleBookIdAndUserId(
+        bookInDb!.googleBooksId,
+        dbUser.id
+      );
+      reviewId = review.id;
     } else {
-      reviewId = bookReview?.id
+      reviewId = bookReview?.id;
     }
     await actionDeleteReview(reviewId);
     setBookReview(null);
@@ -139,8 +145,14 @@ export default function ReviewDialogue({
         ></TextareaAutosize>
         <DialogActions>
           <Button onClick={handleSave}>Save</Button>
-          {bookReview && <Button onClick={handleDelete}>Delete</Button>}
-          <Button onClick={handleClose}>Close</Button>
+          {bookReview && (
+            <Button onClick={handleDelete} variant={"destructive"}>
+              Delete
+            </Button>
+          )}
+          <Button onClick={handleClose} variant={"cancel"}>
+            Cancel
+          </Button>
         </DialogActions>
       </Dialog>
     </>
