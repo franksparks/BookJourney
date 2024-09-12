@@ -42,34 +42,36 @@ export default function BookToListInjector({ book }: BookToListInjectorProps) {
   }, [dbUser, book]);
 
   const getUserLists = async () => {
-    if(firstInteraction) {
-    const userLists = dbUser ? await actionGetListsByUserId(dbUser.id!) : null;
-    setUserLists(userLists?.length ? userLists : null);
+    if (firstInteraction) {
+      const userLists = dbUser
+        ? await actionGetListsByUserId(dbUser.id!)
+        : null;
+      setUserLists(userLists?.length ? userLists : null);
     }
   };
 
   const getBookLists = async () => {
-    if ("lists" in book && firstInteraction) {
-      console.log("if");
-      const listsIds = book.lists.map((list) => list.listId);
-      if (book.lists.length > 0) {
-        const bookLists = await actionGetListsById(listsIds);
+    if ("lists" in book) {
+      let bookLists;
+      if (firstInteraction) {
+        const listsIds = book.lists.map((list) => list.listId);
+        if (book.lists.length > 0) {
+          bookLists = await actionGetListsById(listsIds);
+        }
+        setFirstInteraction(false);
+      } else {
+        bookLists = await actionGetListsByBookIdAndUserId(book.id!, dbUser.id!);
+      }
+
+      if (book.lists.length > 0 && bookLists) {
         const selected = new Set<string>(
           bookLists.map((list: List) => list.id)
         );
-        setBookLists(bookLists?.length ? bookLists : null);
+        setBookLists(bookLists.length ? bookLists : null);
         setSelectedLists(selected);
+      } else {
+        setBookLists(null);
       }
-      setFirstInteraction(false);
-    } else if("lists" in book && !firstInteraction) {
-        const bookLists = await actionGetListsByBookIdAndUserId(book.id!, dbUser.id!)
-        if (book.lists.length > 0) {
-          const selected = new Set<string>(
-            bookLists.map((list: List) => list.id)
-          );
-          setBookLists(bookLists?.length ? bookLists : null);
-          setSelectedLists(selected);
-        }
     } else {
       setBookLists(null);
     }
