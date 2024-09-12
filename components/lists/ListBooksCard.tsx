@@ -12,6 +12,7 @@ import {
 import Modal from "../ui/confirmation-modal";
 import { usePathname } from "next/navigation";
 import { actionGetBooksByStatusAndUserId } from "@/actions/book-status";
+import { Skeleton } from "@mui/material";
 
 interface BooksListProps {
   list: List | null;
@@ -136,7 +137,13 @@ export default function ListBooksCard({
         <strong>{list?.book_count}</strong> Books in <i>{list?.name}</i>
       </h1>
       <div ref={containerRef} className="flex-grow overflow-y-auto">
-        {books.length > 0 ? (
+        {books.length === 0 ? (
+          <div className="flex flex-col gap-2">
+            {[...Array(5)].map((_, index) => (
+              <Skeleton key={index} className="w-1/3 h-24 mx-auto" />
+            ))}
+          </div>
+        ) : books.length > 0 ? (
           books.map((book) => (
             <div key={`${book.id}-book`} className="mb-2">
               <BookCardAdvanced
