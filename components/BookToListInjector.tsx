@@ -83,7 +83,7 @@ export default function BookToListInjector({ book }: BookToListInjectorProps) {
       const dbBook = await actionGetBookByGoogleId(book.googleBooksId);
 
       if (dbBook === null) {
-        const newBook = await actionInsertBook(book);
+        const newBook = await actionInsertBook(book as Book);
 
         await actionUpdateBookLists(newBook.id!, Array.from(selectedLists));
       }
