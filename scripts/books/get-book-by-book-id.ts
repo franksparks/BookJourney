@@ -1,7 +1,7 @@
 import { actionGetBookById } from "@/actions/books";
 
 if (process.argv.length != 3) {
-  console.error("Usage: bun get-book-by-id.ts <book_id>");
+  console.error("Usage: bun get-book-by-book-id.ts <book_id>");
   process.exit(1);
 }
 
