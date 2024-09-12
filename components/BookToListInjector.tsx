@@ -20,6 +20,7 @@ import {
   DialogTrigger
 } from "./ui/dialog";
 import { Tooltip } from "@mui/material";
+import { Skeleton } from "./ui/skeleton";
 
 type BookToListInjectorProps = {
   book: DbBook | Book;
@@ -110,26 +111,34 @@ export default function BookToListInjector({ book }: BookToListInjectorProps) {
 
   return (
     <div>
-      {logged && (
-        <ul>
-          {bookLists && bookLists.length > 0 ? (
-            <>
-              <p className="mt-2">
-                Book stored on{" "}
-                {bookLists.length === 1 ? "this list" : "these lists"}:
-              </p>
+      <ul>
+        {logged && !loading && (
+          <>
+            {bookLists && bookLists.length > 0 ? (
+              <>
+                <p className="mt-2">
+                  Book stored on{" "}
+                  {bookLists.length === 1 ? "this list" : "these lists"}:
+                </p>
 
-              {bookLists.map((list: List, index) => (
-                <li className=" flex justify-center mt-2" key={index}>
-                  {list.name}
-                </li>
-              ))}
-            </>
-          ) : (
-            <p>Book not added to any list yet.</p>
-          )}
-        </ul>
-      )}
+                {bookLists.map((list: List, index) => (
+                  <li className=" flex justify-center mt-2" key={index}>
+                    {list.name}
+                  </li>
+                ))}
+              </>
+            ) : (
+              <p>Book not added to any list yet.</p>
+            )}
+          </>
+        )}
+        {logged && loading && (
+          <>
+            {" "}
+            <Skeleton className="h-10 w-1/2" />
+          </>
+        )}
+      </ul>
       <div className="flex justify-center mt-4">
         {dbUser === null ? (
           <Tooltip title="Login to perform this action." arrow>
