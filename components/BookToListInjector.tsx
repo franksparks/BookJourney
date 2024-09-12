@@ -8,7 +8,7 @@ import {
   actionGetListsByUserId,
 } from "@/actions/lists";
 import { useDbUser } from "@/app/context/db-user-context";
-import { Book } from "@/models/book";
+import { DbBook, Book } from "@/models/book";
 import { List } from "@/models/list";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
@@ -23,7 +23,7 @@ import {
 import { Tooltip } from "@mui/material";
 
 type BookToListInjectorProps = {
-  book: Book;
+  book: DbBook | Book;
 };
 
 export default function BookToListInjector({
@@ -53,11 +53,11 @@ export default function BookToListInjector({
   };
 
   const getBookLists = async () => {
-    const dbBook = await actionGetBookByGoogleId(book.googleBooksId);
+    const dbBook: DbBook = await actionGetBookByGoogleId(book.googleBooksId);
 
     if (dbBook) {
       const bookLists = dbUser
-        ? await actionGetListsByBookIdAndUserId(dbBook.id, dbUser.id!)
+        ? await actionGetListsByBookIdAndUserId(dbBook.id!, dbUser.id!)
         : null;
 
       const selected = new Set<string>(
@@ -88,7 +88,7 @@ export default function BookToListInjector({
       const dbBook = await actionGetBookByGoogleId(book.googleBooksId);
 
       if (dbBook === null) {
-        const newBook = await actionInsertBook(book);
+        const newBook = await actionInsertBook(book as Book);
 
         await actionUpdateBookLists(
           newBook.id!,
