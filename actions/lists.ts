@@ -9,6 +9,7 @@ import {
   dbUpdateList,
   dbGetListByNameAndUserId,
   dbGetListsBookCountByUserId,
+  dbGetListsById,
 } from "@/db/lists";
 import { List, Prisma } from "@prisma/client";
 
@@ -16,6 +17,12 @@ export const actionGetListById = async (id: string) => {
   const result = await dbGetListById(id);
   return result;
 };
+
+export const actionGetListsById = async (ids: string[]) => {
+  const result = await dbGetListsById(ids);
+  return result;
+};
+
 export const actionInsertList = async (
   list: Prisma.ListCreateInput,
   userId: string

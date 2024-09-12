@@ -7,15 +7,20 @@ export const dbGetListById = catchErrors(async (id: string) => {
   return result;
 });
 
+export const dbGetListsById = catchErrors(async (ids: string[]) => {
+  const result = await db.list.findMany({ where: { id: { in: ids } } });
+  return result;
+});
+
 export const dbInsertList = catchErrors(
   async (list: Prisma.ListCreateInput, userId: string) => {
     const result = await db.list.create({
       data: {
         ...list,
         user: {
-          connect: { id: userId },
-        },
-      },
+          connect: { id: userId }
+        }
+      }
     });
     return result;
   }
@@ -27,11 +32,10 @@ export const dbGetListsByUserId = catchErrors(async (userId: string) => {
     include: {
       books: {
         include: {
-          book: true,
-        },
-      },
-      
-    },
+          book: true
+        }
+      }
+    }
   });
   return result;
 });
@@ -40,24 +44,25 @@ export const dbGetListsBookCountByUserId = catchErrors(
   async (userId: string) => {
     const result = await db.list.findMany({
       where: { userId },
-      include: { 
+      include: {
         _count: {
           select: {
             books: true
           }
         }
-      },
+      }
     });
     return result;
   }
-)
+);
 
 export const dbGetListByNameAndUserId = catchErrors(
   async (name: string, userId: string) => {
     return await db.list.findFirst({
-      where: { name, userId },
+      where: { name, userId }
     });
-});
+  }
+);
 
 export const dbGetListsByBookIdAndUserId = catchErrors(
   async (bookId: string, userId: string) => {
@@ -66,25 +71,23 @@ export const dbGetListsByBookIdAndUserId = catchErrors(
         userId: userId,
         books: {
           some: {
-            bookId: bookId,
-          },
-        },
-      },
+            bookId: bookId
+          }
+        }
+      }
     });
     return result;
   }
 );
 
-export const dbUpdateList = catchErrors(
-  async (id: string, name: string) => {
-    const result = await db.list.update({ where: { id }, data: { name } });
-    return result;
-  }
-);
+export const dbUpdateList = catchErrors(async (id: string, name: string) => {
+  const result = await db.list.update({ where: { id }, data: { name } });
+  return result;
+});
 
 export const dbDeleteList = catchErrors(async (id: string) => {
   const resultBookLists = await db.bookList.deleteMany({
-    where: { listId: id },
+    where: { listId: id }
   });
   const result = await db.list.delete({ where: { id } });
   return { ...resultBookLists, ...result };

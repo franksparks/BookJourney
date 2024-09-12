@@ -5,4 +5,5 @@ export type BookList = {
   listId: string;
   bookId: string;
   book: Book;
+  userId?: string;
 };
