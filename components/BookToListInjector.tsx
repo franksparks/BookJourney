@@ -1,14 +1,11 @@
 import { actionUpdateBookLists } from "@/actions/book-list";
-import {
-  actionGetBookByGoogleId,
-  actionInsertBook,
-} from "@/actions/books";
+import { actionGetBookByGoogleId, actionInsertBook } from "@/actions/books";
 import {
   actionGetListsByBookIdAndUserId,
-  actionGetListsByUserId,
+  actionGetListsByUserId
 } from "@/actions/lists";
 import { useDbUser } from "@/app/context/db-user-context";
-import { Book } from "@/models/book";
+import { Book, DbBook } from "@/models/book";
 import { List } from "@/models/list";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
@@ -18,23 +15,20 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from "./ui/dialog";
 import { Tooltip } from "@mui/material";
+import { dbGetBookByGoogleId } from "../db/books";
 
 type BookToListInjectorProps = {
-  book: Book;
+  book: Book | DbBook;
 };
 
-export default function BookToListInjector({
-  book,
-}: BookToListInjectorProps) {
+export default function BookToListInjector({ book }: BookToListInjectorProps) {
   const { dbUser } = useDbUser();
   const [userLists, setUserLists] = useState<List[] | null>(null);
   const [bookLists, setBookLists] = useState<List[] | null>(null);
-  const [selectedLists, setSelectedLists] = useState<Set<string>>(
-    new Set()
-  );
+  const [selectedLists, setSelectedLists] = useState<Set<string>>(new Set());
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const logged = dbUser ? true : false;
 
@@ -46,23 +40,24 @@ export default function BookToListInjector({
   }, [dbUser, book]);
 
   const getUserLists = async () => {
-    const userLists = dbUser
-      ? await actionGetListsByUserId(dbUser.id!)
-      : null;
+    const userLists = dbUser ? await actionGetListsByUserId(dbUser.id!) : null;
     setUserLists(userLists?.length ? userLists : null);
   };
 
   const getBookLists = async () => {
-    const dbBook = await actionGetBookByGoogleId(book.googleBooksId);
+    let dbBook;
 
+    if ("lists" in book) {
+      dbBook = book;
+    } else {
+      dbBook = await actionGetBookByGoogleId(book.googleBooksId);
+    }
     if (dbBook) {
       const bookLists = dbUser
-        ? await actionGetListsByBookIdAndUserId(dbBook.id, dbUser.id!)
+        ? await actionGetListsByBookIdAndUserId(dbBook.id!, dbUser.id!)
         : null;
 
-      const selected = new Set<string>(
-        bookLists.map((list: List) => list.id)
-      );
+      const selected = new Set<string>(bookLists.map((list: List) => list.id));
 
       setBookLists(bookLists?.length ? bookLists : null);
       setSelectedLists(selected);
@@ -90,10 +85,7 @@ export default function BookToListInjector({
       if (dbBook === null) {
         const newBook = await actionInsertBook(book);
 
-        await actionUpdateBookLists(
-          newBook.id!,
-          Array.from(selectedLists)
-        );
+        await actionUpdateBookLists(newBook.id!, Array.from(selectedLists));
       }
     } else {
       await actionUpdateBookLists(book.id, Array.from(selectedLists));
