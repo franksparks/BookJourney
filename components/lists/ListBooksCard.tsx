@@ -5,14 +5,27 @@ import { List } from "@/models/list";
 import { Book, DbBook } from "@/models/book";
 import BookCardAdvanced from "../BookCardAdvanced";
 import { ReadStatus } from "@prisma/client";
-import { actionGetBooksByListId } from "@/actions/book-list";
+import {
+  actionDeleteBookListByBookIdAndListId,
+  actionGetBooksByListId,
+} from "@/actions/book-list";
+import Modal from "../ui/confirmation-modal";
+import { usePathname } from "next/navigation";
 import { actionGetBooksByStatusAndUserId } from "@/actions/book-status";
 
 interface BooksListProps {
   list: List | null;
+  lists: List[];
+  setLists: (lists: List[]) => void;
+  setSelectedList: (list: List | null) => void;
 }
 
-export default function ListBooksCard({ list }: BooksListProps) {
+export default function ListBooksCard({
+  list,
+  lists,
+  setLists,
+  setSelectedList,
+}: BooksListProps) {
   const [page, setPage] = useState(1);
   const pageSize = 10;
   const totalPages = list?.book_count
@@ -21,7 +34,10 @@ export default function ListBooksCard({ list }: BooksListProps) {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [bookToDelete, setBookToDelete] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const pathname = usePathname();
 
   useEffect(() => {
     if (list) {
@@ -93,16 +109,46 @@ export default function ListBooksCard({ list }: BooksListProps) {
     }
   };
 
+  const handleOnDelete = (id: string) => {
+    setBookToDelete(id);
+    setIsModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (bookToDelete && list) {
+      setSelectedList(null);
+      await actionDeleteBookListByBookIdAndListId(bookToDelete, list.id);
+      const listIndex = lists.findIndex((l) => l.id === list.id);
+      const allLists = lists;
+      allLists[listIndex].book_count =
+        (allLists[listIndex].book_count ?? 0) - 1;
+      setLists(allLists);
+      setSelectedList(allLists[listIndex]);
+      setBooks(books.filter((book) => book.id !== bookToDelete));
+      setBookToDelete(null);
+      setIsModalOpen(false);
+    }
+  };
+
   return (
-    <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-orange-500 text-slate-100 h-full flex flex-col">
+    <div className="rounded-3xl shadow-xl shadow-orange-700 p-8 bg-orange-500 text-slate-100 h-full flex flex-col">
       <h1 className="font-light text-center border-b-2">
         <strong>{list?.book_count}</strong> Books in <i>{list?.name}</i>
       </h1>
       <div ref={containerRef} className="flex-grow overflow-y-auto">
         {books.length > 0 ? (
           books.map((book) => (
-            <div key={book.id} className="mb-2">
-              <BookCardAdvanced book={book} />
+            <div key={`${book.id}-book`} className="mb-2">
+              <BookCardAdvanced
+                book={book}
+                onDelete={() => handleOnDelete(book.id ?? "")}
+                deleteVisible={
+                  pathname === "/lists" &&
+                  !Object.values(ReadStatus).includes(
+                    list?.id as ReadStatus
+                  )
+                }
+              />
             </div>
           ))
         ) : (
@@ -110,6 +156,13 @@ export default function ListBooksCard({ list }: BooksListProps) {
         )}
       </div>
       {loading && <div className="text-center">Loading more books...</div>}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={() => confirmDelete()}
+        title="Delete Book"
+        message="Are you sure you want to delete this book from list?"
+      />
       {!hasMore && (
         <div className="text-center">No more books to load.</div>
       )}

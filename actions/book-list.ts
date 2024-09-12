@@ -2,6 +2,7 @@
 
 import {
   dbDeleteBookList,
+  dbDeleteBookListsByBookIdAndListId,
   dbGetBookListsByBookIdAndListId,
   dbGetBooksByListId,
   dbInsertBookList,
@@ -40,3 +41,8 @@ export const actionDeleteBookList = async (id: string) => {
   const result = await dbDeleteBookList(id);
   return result;
 };
+
+export const actionDeleteBookListByBookIdAndListId = async (bookId: string, listId: string) => {
+  const result = await dbDeleteBookListsByBookIdAndListId(bookId, listId);
+  return result;
+}

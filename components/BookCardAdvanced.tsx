@@ -5,17 +5,27 @@ import { Tooltip } from "@mui/material";
 import Image from "next/image";
 import BookNavigationWrapper from "./BookNavigationWrapper";
 import ReadingStatusDropwdown from "./ReadingStatusDropdown";
+import { TrashIcon } from "@radix-ui/react-icons";
+import { usePathname } from "next/navigation";
+import { Button } from "./ui/button";
 
 type bookCardAdvancedProps = {
+  deleteVisible: boolean;
+  onDelete: (bookId: string) => void;
   book: DbBook | Book;
 };
 
-export default function BookCardAdvanced({ book }: bookCardAdvancedProps) {
+export default function BookCardAdvanced({
+  book,
+  deleteVisible,
+  onDelete,
+}: bookCardAdvancedProps) {
   const { dbUser } = useDbUser();
-
   const logged = dbUser ? true : false;
+  const pathname = usePathname();
+
   return (
-    <div className="flex flex-row justify-between bg-sky-50 rounded-lg mx-auto shadow-md shadow-sky-800 hover:bg-sky-200 transition duration-500 max-w-xl">
+    <div className="relative flex flex-row justify-between bg-sky-50 rounded-lg mx-auto shadow-md shadow-sky-800 hover:bg-sky-200 transition duration-500 max-w-xl">
       <div className="w-1/3 flex items-center justify-center min-w-fit">
         <BookNavigationWrapper id={book.googleBooksId}>
           {book.smallCover ? (
@@ -39,6 +49,7 @@ export default function BookCardAdvanced({ book }: bookCardAdvancedProps) {
           )}
         </BookNavigationWrapper>
       </div>
+
       <div className="flex flex-col justify-center w-2/3 gap-2 m-2 mr-5 cursor-default">
         <BookNavigationWrapper id={book.googleBooksId}>
           <Tooltip arrow title={book.title} placement="top-start">
@@ -55,7 +66,12 @@ export default function BookCardAdvanced({ book }: bookCardAdvancedProps) {
               : "Unknown"}
           </div>
         </Tooltip>
-        <ReadingStatusDropwdown book={book} logged={logged} />
+        <div className="flex" >
+          <ReadingStatusDropwdown book={book} logged={logged} />
+          <Button onClick={() => onDelete(book.googleBooksId)} className={`bg-red-500 text-white rounded-full hover:bg-red-700 transition duration-300 p-1 pr-2 h-8 mt-auto mb-auto ${deleteVisible ? 'flex' : 'hidden'}`}>
+            <TrashIcon className="w-5 h-5 mt-0.5" /> Remove
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -64,3 +64,12 @@ export const dbDeleteBookList = catchErrors(async (id: string) => {
   const result = await db.bookList.delete({ where: { id } });
   return result;
 });
+
+export const dbDeleteBookListsByBookIdAndListId = catchErrors(
+  async (bookId: string, listId: string) => {
+    const result = await db.bookList.deleteMany({
+      where: { bookId: bookId, listId: listId },
+    });
+    return result;
+  }
+)

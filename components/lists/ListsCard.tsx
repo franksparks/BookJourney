@@ -17,14 +17,26 @@ import { CheckIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Button } from "../ui/button";
+import { Tooltip } from "@mui/material";
 
-export default function ListsCard({ selectedList, setSelectedList }: any) {
+interface ListsCardProps {
+  lists: List[];
+  setLists: (lists: List[]) => void;
+  selectedList: List | null;
+  setSelectedList: (list: List | null) => void;
+}
+
+export default function ListsCard({
+  lists,
+  setLists,
+  selectedList,
+  setSelectedList,
+}: ListsCardProps) {
   const { dbUser } = useDbUser();
   const router = useRouter();
   const searchParams = useSearchParams();
   const listId = searchParams!.get("listId");
   const pathname = usePathname();
-  const [lists, setLists] = useState<List[]>([]);
   const [showInput, setShowInput] = useState<boolean>(false);
   const [newListName, setNewListName] = useState<string>("");
   const [editingListId, setEditingListId] = useState<string | null>(null);
@@ -80,7 +92,7 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
         book_count: list._count.books,
       });
     }
-    if (setSelectedList) handlePreselectedList(allLists);
+    handlePreselectedList(allLists);
     setLists(allLists);
   };
 
@@ -192,13 +204,13 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
   };
 
   return (
-    <div className="flex flex-col justify-start rounded-xl shadow-lg shadow-orange-700 bg-sky-600 p-8  h-full">
+    <div className="flex flex-col justify-start rounded-xl shadow-lg shadow-sky-600 bg-sky-600 p-8  h-full">
       <h1 className="font-light text-orange-50 text-center border-b-2">
         My Lists
       </h1>
 
       <>
-        <ul>
+        <ul className="flex-grow overflow-y-auto">
           {lists.length > 0 &&
             lists.map((list) =>
               list.id === "--divider--" ? (
@@ -245,19 +257,24 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
                     </div>
                   ) : (
                     <>
-                      <li
-                        onClick={() => handleSelectList(list)}
-                        className={`transition transform hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none hover:cursor-pointer flex ${
-                          selectedList?.id === list.id ? "font-bold" : ""
-                        }`}
+                      <Tooltip
+                        title={`${list.name} - (${list.book_count ?? 0})`}
+                        placement="top"
                       >
-                        {list.name} - ({list.book_count ?? 0})
-                      </li>
+                        <li
+                          onClick={() => handleSelectList(list)}
+                          className={`truncate w-full transition transform hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none hover:cursor-pointer ${
+                            selectedList?.id === list.id ? "font-bold" : ""
+                          }`}
+                        >
+                          {list.name} - ({list.book_count ?? 0})
+                        </li>
+                      </Tooltip>
                       {!Object.values(ReadStatus).includes(
                         list.id as ReadStatus
                       ) && (
                         <Button
-                          className="p-2text-white  transition-colors duration-300 ml-auto mr-3"
+                          className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-800 transition-colors duration-300 ml-auto mr-3 h-8"
                           onClick={() => handleEditList(list)}
                         >
                           Edit List
@@ -267,6 +284,7 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
                         list.id as ReadStatus
                       ) && (
                         <Button
+                          className="h-8"
                           variant={"destructive"}
                           onClick={() => handleDeleteList(list.id)}
                         >
@@ -313,17 +331,14 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
               )}
             </>
           ) : (
-            <div className="ml-auto">
-              {pathname!.includes("/lists") && (
+            <div className="ml-auto mt-2">
+              {pathname.includes("/lists") && (
                 <Button onClick={handleAddList}>New list</Button>
               )}
             </div>
           )}
-          {/* Move button to bottom of the div */}
         </div>
       </>
-
-      {/* Modal for deletion confirmation */}
       <Modal
         isOpen={!!deletingListId}
         onClose={cancelDeleteList}
