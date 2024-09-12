@@ -6,7 +6,10 @@ import { Book } from "@/models/book";
 import BookCardAdvanced from "../BookCardAdvanced";
 import { ReadStatus } from "@prisma/client";
 import { actionGetBookStatusByStatusAndUserId } from "@/actions/book-status";
-import { actionGetBookListsByListId, actionDeleteBookListByBookIdAndListId } from "@/actions/book-list";
+import {
+  actionGetBookListsByListId,
+  actionDeleteBookListByBookIdAndListId,
+} from "@/actions/book-list";
 import Modal from "../ui/confirmation-modal";
 import { usePathname } from "next/navigation";
 
@@ -17,7 +20,12 @@ interface BooksListProps {
   setSelectedList: (list: List | null) => void;
 }
 
-export default function ListBooksCard({ list, lists, setLists, setSelectedList }: BooksListProps) {
+export default function ListBooksCard({
+  list,
+  lists,
+  setLists,
+  setSelectedList,
+}: BooksListProps) {
   const [page, setPage] = useState(1);
   const pageSize = 10;
   const totalPages = list?.book_count
@@ -104,14 +112,15 @@ export default function ListBooksCard({ list, lists, setLists, setSelectedList }
     setBookToDelete(id);
     setIsModalOpen(true);
   };
-  
+
   const confirmDelete = async () => {
     if (bookToDelete && list) {
       setSelectedList(null);
       await actionDeleteBookListByBookIdAndListId(bookToDelete, list.id);
       const listIndex = lists.findIndex((l) => l.id === list.id);
       const allLists = lists;
-      allLists[listIndex].book_count = (allLists[listIndex].book_count ?? 0) - 1;
+      allLists[listIndex].book_count =
+        (allLists[listIndex].book_count ?? 0) - 1;
       setLists(allLists);
       setSelectedList(allLists[listIndex]);
       setBooks(books.filter((book) => book.id !== bookToDelete));
@@ -121,7 +130,7 @@ export default function ListBooksCard({ list, lists, setLists, setSelectedList }
   };
 
   return (
-    <div className="rounded-3xl shadow-xl shadow-sky-200 p-8 bg-orange-500 text-slate-100 h-full flex flex-col">
+    <div className="rounded-3xl shadow-xl shadow-orange-700 p-8 bg-orange-500 text-slate-100 h-full flex flex-col">
       <h1 className="font-light text-center border-b-2">
         <strong>{list?.book_count}</strong> Books in <i>{list?.name}</i>
       </h1>
@@ -129,7 +138,16 @@ export default function ListBooksCard({ list, lists, setLists, setSelectedList }
         {books.length > 0 ? (
           books.map((book) => (
             <div key={`${book.id}-book`} className="mb-2">
-              <BookCardAdvanced book={book} onDelete={() => handleOnDelete(book.id ?? "")} deleteVisible={pathname === "/lists" && !Object.values(ReadStatus).includes(list?.id as ReadStatus)} />
+              <BookCardAdvanced
+                book={book}
+                onDelete={() => handleOnDelete(book.id ?? "")}
+                deleteVisible={
+                  pathname === "/lists" &&
+                  !Object.values(ReadStatus).includes(
+                    list?.id as ReadStatus
+                  )
+                }
+              />
             </div>
           ))
         ) : (

@@ -26,7 +26,12 @@ interface ListsCardProps {
   setSelectedList: (list: List | null) => void;
 }
 
-export default function ListsCard({ lists, setLists, selectedList, setSelectedList }: ListsCardProps) {
+export default function ListsCard({
+  lists,
+  setLists,
+  selectedList,
+  setSelectedList,
+}: ListsCardProps) {
   const { dbUser } = useDbUser();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -199,7 +204,7 @@ export default function ListsCard({ lists, setLists, selectedList, setSelectedLi
   };
 
   return (
-    <div className="flex flex-col justify-start rounded-xl shadow-lg shadow-orange-700 bg-sky-600 p-8  h-full">
+    <div className="flex flex-col justify-start rounded-xl shadow-lg shadow-sky-600 bg-sky-600 p-8  h-full">
       <h1 className="font-light text-orange-50 text-center border-b-2">
         My Lists
       </h1>
@@ -252,16 +257,19 @@ export default function ListsCard({ lists, setLists, selectedList, setSelectedLi
                     </div>
                   ) : (
                     <>
-                    <Tooltip title={`${list.name} - (${list.book_count ?? 0})`} placement="top">
-                      <li
-                        onClick={() => handleSelectList(list)}
-                        className={`truncate w-full transition transform hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none hover:cursor-pointer ${
-                          selectedList?.id === list.id ? "font-bold" : ""
-                        }`}
+                      <Tooltip
+                        title={`${list.name} - (${list.book_count ?? 0})`}
+                        placement="top"
                       >
-                        {list.name} - ({list.book_count ?? 0})
-                      </li>
-                    </Tooltip>
+                        <li
+                          onClick={() => handleSelectList(list)}
+                          className={`truncate w-full transition transform hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none hover:cursor-pointer ${
+                            selectedList?.id === list.id ? "font-bold" : ""
+                          }`}
+                        >
+                          {list.name} - ({list.book_count ?? 0})
+                        </li>
+                      </Tooltip>
                       {!Object.values(ReadStatus).includes(
                         list.id as ReadStatus
                       ) && (
