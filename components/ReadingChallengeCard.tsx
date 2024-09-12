@@ -308,11 +308,6 @@ export default function ReadingChallengeCard({
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
-
-                {/*Todo: Redirect to a list of the read books this year*/}
-                <Button className="cursor-not-allowed">
-                  View challenge
-                </Button>
               </div>
             </div>
           )}

@@ -14,12 +14,12 @@ export default function ListsCard() {
         My Lists
       </h1>
       {!dbUser && (
-        <div className="flex flex-col justify-center items-center h-full w-full">
+        <div className="flex flex-col justify-center items-center w-full">
           <p className="mb-2">Login to create and view lists!</p>
         </div>
       )}
       {dbUser && (
-        <div className="flex flex-col w-full h-full justify-evenly">
+        <div className="flex flex-col w-full justify-evenly">
           <div className="flex flex-row justify-around">
             <Button
               className="text-lg p-6"

@@ -127,7 +127,7 @@ export default function BookCard({
   };
 
   return (
-    <div className="flex flex-row m-4 h-36 w-11/12 max-w-4xl hover:scale-105 shadow-lg shadow-sky-800 rounded-lg text-sky-800 bg-sky-100 hover:bg-sky-50 cursor-default transition duration-500 ">
+    <div className="flex flex-row m-4 h-auto w-11/12 max-w-4xl hover:scale-105 shadow-lg shadow-sky-800 rounded-lg text-sky-800 bg-sky-100 hover:bg-sky-50 cursor-default transition duration-500 ">
       <div className="flex justify-center items-center p-4 w-1/4">
         <BookNavigationWrapper id={book.googleBooksId}>
           {book.smallCover != null ? (
