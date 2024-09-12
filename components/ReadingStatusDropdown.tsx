@@ -30,7 +30,7 @@ type ReadingStatusDropwdownProps = {
   logged: boolean;
 };
 
-export default function ReadingStatusDropwdown({
+export default function ReadingStatusDropdown({
   book,
   logged,
 }: ReadingStatusDropwdownProps) {

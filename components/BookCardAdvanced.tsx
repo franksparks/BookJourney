@@ -4,7 +4,7 @@ import { Book, DbBook } from "@/models/book";
 import { Tooltip } from "@mui/material";
 import Image from "next/image";
 import BookNavigationWrapper from "./BookNavigationWrapper";
-import ReadingStatusDropwdown from "./ReadingStatusDropdown";
+import ReadingStatusDropdown from "./ReadingStatusDropdown";
 import { TrashIcon } from "@radix-ui/react-icons";
 import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
@@ -66,9 +66,14 @@ export default function BookCardAdvanced({
               : "Unknown"}
           </div>
         </Tooltip>
-        <div className="flex" >
-          <ReadingStatusDropwdown book={book} logged={logged} />
-          <Button onClick={() => onDelete(book.googleBooksId)} className={`bg-red-500 text-white rounded-full hover:bg-red-700 transition duration-300 p-1 pr-2 h-8 mt-auto mb-auto ${deleteVisible ? 'flex' : 'hidden'}`}>
+        <div className="flex z-50">
+          <ReadingStatusDropdown book={book} logged={logged} />
+          <Button
+            onClick={() => onDelete(book.googleBooksId)}
+            className={`bg-red-500 text-white rounded-full hover:bg-red-700 transition duration-300 p-1 pr-2 h-8 mt-auto mb-auto ${
+              deleteVisible ? "flex" : "hidden"
+            }`}
+          >
             <TrashIcon className="w-5 h-5 mt-0.5" /> Remove
           </Button>
         </div>
