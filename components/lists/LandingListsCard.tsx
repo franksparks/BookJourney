@@ -19,39 +19,43 @@ export default function ListsCard() {
         </div>
       )}
       {dbUser && (
-        <div className="flex-grow overflow-y-auto">
-          <Button
-            className="rounded-full border-2 border-orange-500 hover:border-sky-500 block m-auto"
-            onClick={() =>
-              router.push("/lists?listId=READ")
-            }
-          >
-            Read books
-          </Button>
-          <Button
-            className="rounded-full border-2 border-orange-500 hover:border-sky-500 block m-auto"
-            onClick={() =>
-              router.push("/lists?listId=READING")
-            }
-          >
-            Books you are reading
-          </Button>
-          <Button
-            className="rounded-full border-2 border-orange-500 hover:border-sky-500 block m-auto"
-            onClick={() =>
-              router.push(
-                "/lists?listId=WANT_TO_READ"
-              )
-            }
-          >
-            Books you want to read
-          </Button>
-          <Button
-            className="rounded-full border-2 border-orange-500 hover:border-sky-500 block m-auto"
-            onClick={() => router.push("/lists")}
-          >
-            All lists
-          </Button>
+        <div className="flex flex-col w-full h-full justify-evenly">
+          <div className="flex flex-row justify-around">
+            <Button
+              className="text-lg p-6"
+              onClick={() =>
+                router.push("http://localhost:3000/lists?listId=READ")
+              }
+            >
+              Read books
+            </Button>
+            <Button
+              className="text-lg p-6"
+              onClick={() =>
+                router.push("http://localhost:3000/lists?listId=READING")
+              }
+            >
+              Books you are reading
+            </Button>
+          </div>
+          <div className="flex flex-row justify-around">
+            <Button
+              className="text-lg p-6"
+              onClick={() =>
+                router.push(
+                  "http://localhost:3000/lists?listId=WANT_TO_READ"
+                )
+              }
+            >
+              Books you want to read
+            </Button>
+            <Button
+              className="text-lg p-6"
+              onClick={() => router.push("http://localhost:3000/lists")}
+            >
+              All lists
+            </Button>
+          </div>
         </div>
       )}
     </div>
