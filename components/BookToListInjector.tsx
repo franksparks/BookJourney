@@ -19,6 +19,7 @@ import {
 } from "./ui/dialog";
 import { Tooltip } from "@mui/material";
 import { dbGetBookByGoogleId } from "../db/books";
+import { Skeleton } from "./ui/skeleton";
 
 type BookToListInjectorProps = {
   book: Book | DbBook;
@@ -30,6 +31,7 @@ export default function BookToListInjector({ book }: BookToListInjectorProps) {
   const [bookLists, setBookLists] = useState<List[] | null>(null);
   const [selectedLists, setSelectedLists] = useState<Set<string>>(new Set());
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const logged = dbUser ? true : false;
 
   useEffect(() => {
@@ -46,7 +48,7 @@ export default function BookToListInjector({ book }: BookToListInjectorProps) {
 
   const getBookLists = async () => {
     let dbBook;
-
+    setLoading(true);
     if ("lists" in book) {
       dbBook = book;
     } else {
@@ -64,6 +66,7 @@ export default function BookToListInjector({ book }: BookToListInjectorProps) {
     } else {
       setBookLists(null);
     }
+    setLoading(false);
   };
 
   const toggleListSelection = (listId: string) => {
@@ -98,21 +101,31 @@ export default function BookToListInjector({ book }: BookToListInjectorProps) {
     <div>
       {logged && (
         <ul>
-          {bookLists && bookLists.length > 0 ? (
+          {logged && !loading && (
             <>
-              <p className="mt-2">
-                Book stored on{" "}
-                {bookLists.length === 1 ? "this list" : "these lists"}:
-              </p>
+              {bookLists && bookLists.length > 0 ? (
+                <>
+                  <p className="mt-2">
+                    Book stored on{" "}
+                    {bookLists.length === 1 ? "this list" : "these lists"}:
+                  </p>
 
-              {bookLists.map((list: List, index) => (
-                <li className=" flex justify-center mt-2" key={index}>
-                  {list.name}
-                </li>
-              ))}
+                  {bookLists.map((list: List, index) => (
+                    <li className=" flex justify-center mt-2" key={index}>
+                      {list.name}
+                    </li>
+                  ))}
+                </>
+              ) : (
+                <p>Book not added to any list yet.</p>
+              )}
             </>
-          ) : (
-            <p>Book not added to any list yet.</p>
+          )}
+          {logged && loading && (
+            <>
+              {" "}
+              <Skeleton className="h-10 w-1/2" />
+            </>
           )}
         </ul>
       )}
