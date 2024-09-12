@@ -117,6 +117,8 @@ export default function BookCard({
   const handleStopReading = async () => {
     await actionUpdateBookStatus(status.id, ReadStatus.WANT_TO_READ);
     onStatusChange();
+    setIsDialogOpen(false);
+
     toast({
       title: "Book moved back to 'Want to read'!",
       className: "bg-orange-500 text-white",
