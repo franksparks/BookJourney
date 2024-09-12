@@ -168,7 +168,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
       </div>
       <div className="flex w-screen justify-start flex-col mr-4">
         <div className="flex flex-row">
-          <h1 className="mr-4">{book.title}</h1>
+          <h1 className="mr-4">{book.title || "Title not available"}</h1>
           {logged && <ReadRating value={book.ratingAverage!} />}
         </div>
         {logged && (
