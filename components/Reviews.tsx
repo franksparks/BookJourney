@@ -72,6 +72,7 @@ export default function Reviews({
             { userReview: [], otherMembersReviews: [] }
           );
 
+        setUserBookReview(userReview[0]);
         setBookReviews(otherMembersReviews);
       }
     }
