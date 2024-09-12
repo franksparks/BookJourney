@@ -3,7 +3,7 @@
 import {
   dbDeleteBookList,
   dbGetBookListsByBookIdAndListId,
-  dbGetBookListsByListId,
+  dbGetBooksByListId,
   dbInsertBookList,
   dbUpdateBookLists,
 } from "@/db/book-list";
@@ -23,8 +23,8 @@ export const actionInsertBookList = async (
   return console.log("This book is already in the list.");
 };
 
-export const actionGetBookListsByListId = async (listId: string, page = 1, pageSize = 10) => {
-  const result = await dbGetBookListsByListId(listId, page, pageSize);
+export const actionGetBooksByListId = async (listId: string, page = 1, pageSize = 10) => {
+  const result = await dbGetBooksByListId(listId, page, pageSize);
   return result;
 };
 

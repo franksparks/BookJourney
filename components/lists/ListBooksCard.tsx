@@ -2,11 +2,11 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { List } from "@/models/list";
-import { Book } from "@/models/book";
+import { Book, DbBook } from "@/models/book";
 import BookCardAdvanced from "../BookCardAdvanced";
 import { ReadStatus } from "@prisma/client";
-import { actionGetBookStatusByStatusAndUserId } from "@/actions/book-status";
-import { actionGetBookListsByListId } from "@/actions/book-list";
+import { actionGetBooksByListId } from "@/actions/book-list";
+import { actionGetBooksByStatusAndUserId } from "@/actions/book-status";
 
 interface BooksListProps {
   list: List | null;
@@ -58,7 +58,7 @@ export default function ListBooksCard({ list }: BooksListProps) {
   const loadBooks = async (list: List, page: number) => {
     setLoading(true);
     if (Object.values(ReadStatus).includes(list.id as ReadStatus)) {
-      const statusBooks = await actionGetBookStatusByStatusAndUserId(
+      const statusBooks: DbBook[] = await actionGetBooksByStatusAndUserId(
         list.userId,
         list.id as ReadStatus,
         page,
@@ -68,9 +68,10 @@ export default function ListBooksCard({ list }: BooksListProps) {
         ...prevBooks,
         ...statusBooks.map((status: any) => status.book),
       ]);
+
       setHasMore(page < totalPages);
     } else {
-      const listBooks = await actionGetBookListsByListId(
+      const listBooks: DbBook[] = await actionGetBooksByListId(
         list.id,
         page,
         pageSize

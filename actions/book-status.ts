@@ -9,7 +9,7 @@ import {
   dbGetBooksByUserIdAndReadingStatus,
   dbGetBookStatusByUserId,
   dbGetBookStatusCountByUserId,
-  dbGetBookStatusByStatusAndUserId
+  dbGetBooksByStatusAndUserId,
 } from "@/db/book-status";
 import { BookStatus } from "@/models/book-status";
 import { Prisma, ReadStatus } from "@prisma/client";
@@ -74,13 +74,13 @@ export const actionGetBooksByUserIdAndReadingStatus = async (
   return result;
 };
 
-export const actionGetBookStatusByStatusAndUserId = async (
+export const actionGetBooksByStatusAndUserId = async (
   userId: string,
   status: ReadStatus,
   page: number = 1,
   pageSize: number = 10
 ) => {
-  const result = await dbGetBookStatusByStatusAndUserId(userId, status, page, pageSize);
+  const result = await dbGetBooksByStatusAndUserId(userId, status, page, pageSize);
   return result;
 };
 

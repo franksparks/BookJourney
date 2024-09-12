@@ -22,7 +22,7 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
   const { dbUser } = useDbUser();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const listId = searchParams.get("listId");
+  const listId = searchParams!.get("listId");
   const pathname = usePathname();
   const [lists, setLists] = useState<List[]>([]);
   const [showInput, setShowInput] = useState<boolean>(false);
@@ -314,7 +314,7 @@ export default function ListsCard({ selectedList, setSelectedList }: any) {
             </>
           ) : (
             <div className="ml-auto">
-              {pathname.includes("/lists") && (
+              {pathname!.includes("/lists") && (
                 <Button onClick={handleAddList}>New list</Button>
               )}
             </div>
