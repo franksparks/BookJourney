@@ -38,18 +38,20 @@ type Accumulator = {
 export default function Reviews({
   bookInDb,
   numericBookRating,
-  bookReview
+  bookReview,
 }: ReviewsProps) {
   const { user } = useUser();
   const { dbUser } = useDbUser();
-  const [userBookReview, setUserBookReview] = useState<Review | null>(null);
+  const [userBookReview, setUserBookReview] = useState<Review | null>(
+    null
+  );
   const [bookReviews, setBookReviews] = useState<Review[] | null>(null);
   const [bookDetailsReviews, setBookDetailsReviews] = useState<
     BookDetailsReview[] | null
   >(null);
-  const [paginatedReviews, setPaginatedReviews] = useState<BookDetailsReview[]>(
-    []
-  );
+  const [paginatedReviews, setPaginatedReviews] = useState<
+    BookDetailsReview[]
+  >([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
 
@@ -101,11 +103,15 @@ export default function Reviews({
     if (clerkUsers) {
       const reviews: BookDetailsReview[] = await Promise.all(
         bookReviews.map(async (review) => {
-          const currentUser = users.filter((user) => review.userId === user.id);
-          const clerkUser = clerkUsers.filter(
-            (ckUser: { id: string }) => currentUser[0].clerkId === ckUser.id
+          const currentUser = users.filter(
+            (user) => review.userId === user.id
           );
-          const { username = undefined, imageUrl: userAvatar } = clerkUser[0];
+          const clerkUser = clerkUsers.filter(
+            (ckUser: { id: string }) =>
+              currentUser[0].clerkId === ckUser.id
+          );
+          const { username = undefined, imageUrl: userAvatar } =
+            clerkUser[0];
 
           (bookInDb as DbBook).ratings.map((userRating) =>
             console.log(userRating.user)
@@ -124,7 +130,7 @@ export default function Reviews({
             rating: numericRating,
             userAvatar,
             username,
-            creationDate
+            creationDate,
           };
         })
       );
@@ -156,27 +162,22 @@ export default function Reviews({
       <div className="font-bold mb-4">{"My Review"}</div>
       {userBookReview !== null && !loading && (
         <>
-          <div className="flex">
-            <div className="basis-1/6">
-              {user?.imageUrl ? (
-                <Image
-                  className="w-8 h-8 mb-2 rounded-full"
-                  src={user?.imageUrl}
-                  alt="cover"
-                  width={60}
-                  height={100}
-                />
-              ) : (
-                <p>To do</p>
-              )}
-
-              <div>{user?.username}</div>
-            </div>
-            <div className="flex flex-col">
-              <ReadRating value={numericBookRating!} size={"small"} />
-              <div>{format(userBookReview.createdAt!, "dd/MM/yyyy")}</div>
-              <div className="mt-2">{userBookReview.comment}</div>
-            </div>
+          <div className="flex flex-row basis-1/6 gap-2">
+            {user?.imageUrl ? (
+              <Image
+                className="w-8 h-8 mb-2 rounded-full"
+                src={user?.imageUrl}
+                alt="cover"
+                width={60}
+                height={100}
+              />
+            ) : (
+              <p>To do</p>
+            )}
+            {user?.username}
+            <ReadRating value={numericBookRating!} size={"small"} />
+            <div>on {format(userBookReview.createdAt!, "dd/MM/yyyy")}</div>
+            <div> {userBookReview.comment}</div>
           </div>
         </>
       )}
@@ -192,33 +193,29 @@ export default function Reviews({
           ))}
         </>
       )}
-      <div className="font-bold mt-8 mb-4">{"Other Reviews"}</div>
+      <div className="font-bold mb-4">{"Other Reviews"}</div>
       {paginatedReviews && paginatedReviews.length > 0 && (
         <>
           {paginatedReviews.map((review, index) => (
-            <div className="flex mb-4" key={index}>
-              <div className="basis-1/6">
-                <Image
-                  className={"w-8 h-8 mb-2 rounded-full"}
-                  src={review.userAvatar}
-                  alt="user avatar picture"
-                  width={60}
-                  height={100}
-                />
-                <div>{review.username}</div>
-              </div>
-              <div className="flex flex-col">
-                <ReadRating value={review.rating} size={"small"} />
-                <div>{format(review.creationDate!, "dd/MM/yyyy")}</div>
-                <div className="mt-2">{review.comment}</div>
-              </div>
+            <div className="flex flex-row basis-1/6 gap-4" key={index}>
+              <Image
+                className={"w-8 h-8 mb-2 rounded-full"}
+                src={review.userAvatar}
+                alt="user avatar picture"
+                width={60}
+                height={100}
+              />
+              <ReadRating value={review.rating} size={"small"} />
+              {review.username}
+              <div>on {format(review.creationDate!, "dd/MM/yyyy")}: </div>
+              <div className="italic">{review.comment}</div>
             </div>
           ))}
         </>
       )}
-      {(bookReviews === null || bookReviews.length<=0) && dbUser && !loading && (
-          <div>{"This book does not have reviews."}</div>
-        )}
+      {(bookReviews === null || bookReviews.length <= 0) &&
+        dbUser &&
+        !loading && <div>{"This book does not have reviews."}</div>}
 
       {dbUser && loading && (
         <>
