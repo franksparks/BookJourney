@@ -1,14 +1,11 @@
 import { actionUpdateBookLists } from "@/actions/book-list";
-import {
-  actionGetBookByGoogleId,
-  actionInsertBook,
-} from "@/actions/books";
+import { actionGetBookByGoogleId, actionInsertBook } from "@/actions/books";
 import {
   actionGetListsByBookIdAndUserId,
-  actionGetListsByUserId,
+  actionGetListsByUserId
 } from "@/actions/lists";
 import { useDbUser } from "@/app/context/db-user-context";
-import { Book } from "@/models/book";
+import { Book, DbBook } from "@/models/book";
 import { List } from "@/models/list";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
@@ -18,24 +15,23 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from "./ui/dialog";
 import { Tooltip } from "@mui/material";
+import { dbGetBookByGoogleId } from "../db/books";
+import { Skeleton } from "./ui/skeleton";
 
 type BookToListInjectorProps = {
-  book: Book;
+  book: Book | DbBook;
 };
 
-export default function BookToListInjector({
-  book,
-}: BookToListInjectorProps) {
+export default function BookToListInjector({ book }: BookToListInjectorProps) {
   const { dbUser } = useDbUser();
   const [userLists, setUserLists] = useState<List[] | null>(null);
   const [bookLists, setBookLists] = useState<List[] | null>(null);
-  const [selectedLists, setSelectedLists] = useState<Set<string>>(
-    new Set()
-  );
+  const [selectedLists, setSelectedLists] = useState<Set<string>>(new Set());
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const logged = dbUser ? true : false;
 
   useEffect(() => {
@@ -46,29 +42,31 @@ export default function BookToListInjector({
   }, [dbUser, book]);
 
   const getUserLists = async () => {
-    const userLists = dbUser
-      ? await actionGetListsByUserId(dbUser.id!)
-      : null;
+    const userLists = dbUser ? await actionGetListsByUserId(dbUser.id!) : null;
     setUserLists(userLists?.length ? userLists : null);
   };
 
   const getBookLists = async () => {
-    const dbBook = await actionGetBookByGoogleId(book.googleBooksId);
-
+    let dbBook;
+    setLoading(true);
+    if ("lists" in book) {
+      dbBook = book;
+    } else {
+      dbBook = await actionGetBookByGoogleId(book.googleBooksId);
+    }
     if (dbBook) {
       const bookLists = dbUser
-        ? await actionGetListsByBookIdAndUserId(dbBook.id, dbUser.id!)
+        ? await actionGetListsByBookIdAndUserId(dbBook.id!, dbUser.id!)
         : null;
 
-      const selected = new Set<string>(
-        bookLists.map((list: List) => list.id)
-      );
+      const selected = new Set<string>(bookLists.map((list: List) => list.id));
 
       setBookLists(bookLists?.length ? bookLists : null);
       setSelectedLists(selected);
     } else {
       setBookLists(null);
     }
+    setLoading(false);
   };
 
   const toggleListSelection = (listId: string) => {
@@ -88,12 +86,9 @@ export default function BookToListInjector({
       const dbBook = await actionGetBookByGoogleId(book.googleBooksId);
 
       if (dbBook === null) {
-        const newBook = await actionInsertBook(book);
+        const newBook = await actionInsertBook(book as Book);
 
-        await actionUpdateBookLists(
-          newBook.id!,
-          Array.from(selectedLists)
-        );
+        await actionUpdateBookLists(newBook.id!, Array.from(selectedLists));
       }
     } else {
       await actionUpdateBookLists(book.id, Array.from(selectedLists));
@@ -106,21 +101,31 @@ export default function BookToListInjector({
     <div>
       {logged && (
         <ul>
-          {bookLists && bookLists.length > 0 ? (
+          {logged && !loading && (
             <>
-              <p className="mt-2">
-                Book stored on{" "}
-                {bookLists.length === 1 ? "this list" : "these lists"}:
-              </p>
+              {bookLists && bookLists.length > 0 ? (
+                <>
+                  <p className="mt-2">
+                    Book stored on{" "}
+                    {bookLists.length === 1 ? "this list" : "these lists"}:
+                  </p>
 
-              {bookLists.map((list: List, index) => (
-                <li className=" flex justify-center mt-2" key={index}>
-                  {list.name}
-                </li>
-              ))}
+                  {bookLists.map((list: List, index) => (
+                    <li className=" flex justify-center mt-2" key={index}>
+                      {list.name}
+                    </li>
+                  ))}
+                </>
+              ) : (
+                <p>Book not added to any list yet.</p>
+              )}
             </>
-          ) : (
-            <p>Book not added to any list yet.</p>
+          )}
+          {logged && loading && (
+            <>
+              {" "}
+              <Skeleton className="h-10 w-1/2" />
+            </>
           )}
         </ul>
       )}
