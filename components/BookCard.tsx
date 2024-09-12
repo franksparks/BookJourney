@@ -213,7 +213,7 @@ export default function BookCard({
             <DialogTrigger asChild>
               <Button>Update progress</Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="max-w-xl">
               <DialogHeader>
                 <DialogTitle>Update progress</DialogTitle>
                 <DialogDescription>
@@ -282,6 +282,12 @@ export default function BookCard({
               </div>
               <DialogFooter>
                 <div className="flex justify-center space-x-4">
+                  <Button
+                    variant={"destructive"}
+                    onClick={handleStopReading}
+                  >
+                    Stop reading
+                  </Button>
                   <Button onClick={handleAddReadingActivity}>
                     Save activity
                   </Button>
@@ -295,10 +301,12 @@ export default function BookCard({
                     Book Finished!
                   </Button>
                   <Button
-                    variant={"destructive"}
-                    onClick={handleStopReading}
+                    variant={"cancel"}
+                    onClick={() => {
+                      setIsDialogOpen(false);
+                    }}
                   >
-                    Stop reading
+                    Cancel
                   </Button>
                 </div>
               </DialogFooter>

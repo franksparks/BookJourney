@@ -273,10 +273,7 @@ export default function ListsCard({
                       {!Object.values(ReadStatus).includes(
                         list.id as ReadStatus
                       ) && (
-                        <Button
-                          className="p-2 bg-blue-600 text-white rounded-full hover:bg-blue-800 transition-colors duration-300 ml-auto mr-3 h-8"
-                          onClick={() => handleEditList(list)}
-                        >
+                        <Button onClick={() => handleEditList(list)}>
                           Edit List
                         </Button>
                       )}
@@ -284,7 +281,6 @@ export default function ListsCard({
                         list.id as ReadStatus
                       ) && (
                         <Button
-                          className="h-8"
                           variant={"destructive"}
                           onClick={() => handleDeleteList(list.id)}
                         >
