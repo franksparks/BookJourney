@@ -19,19 +19,35 @@ export default function ListsCard() {
         </div>
       )}
       {dbUser && (
-        <div className="flex-grow overflow-y-auto">
-          <Button onClick={() => router.push("/lists?listId=READ")}>
-            Read books
-          </Button>
-          <Button onClick={() => router.push("/lists?listId=READING")}>
-            Books you are reading
-          </Button>
-          <Button
-            onClick={() => router.push("/lists?listId=WANT_TO_READ")}
-          >
-            Books you want to read
-          </Button>
-          <Button onClick={() => router.push("/lists")}>All lists</Button>
+        <div className="flex flex-col w-full h-full justify-evenly">
+          <div className="flex flex-row justify-around">
+            <Button
+              className="text-lg p-6"
+              onClick={() => router.push("/lists?listId=READ")}
+            >
+              Read books
+            </Button>
+            <Button
+              className="text-lg p-6"
+              onClick={() => router.push("/lists?listId=READING")}
+            >
+              Books you are reading
+            </Button>
+          </div>
+          <div className="flex flex-row justify-around">
+            <Button
+              className="text-lg p-6"
+              onClick={() => router.push("/lists?listId=WANT_TO_READ")}
+            >
+              Books you want to read
+            </Button>
+            <Button
+              className="text-lg p-6"
+              onClick={() => router.push("/lists")}
+            >
+              All lists
+            </Button>
+          </div>
         </div>
       )}
     </div>
