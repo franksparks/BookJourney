@@ -25,6 +25,7 @@ import {
   DialogTrigger,
 } from "./ui/dialog";
 import { Input } from "./ui/input";
+import { Tooltip } from "@mui/material";
 
 interface ReadingChallengeCardProps {
   bookRead: boolean;
@@ -138,6 +139,7 @@ export default function ReadingChallengeCard({
         <h1 className="font-light text-orange-50 text-center mb-4">
           {year} Reading Challenge
         </h1>
+
         <div className="flex flex-row items-center h-full">
           {dbUser === null ? (
             <div className="flex flex-col justify-center items-center h-full w-full">

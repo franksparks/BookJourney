@@ -9,24 +9,20 @@ export const dbInsertBookStatus = catchErrors(
   }
 );
 
-export const dbGetBookStatusById = catchErrors(
-  async (bookStatusId: string) => {
-    const result = await db.bookStatus.findUnique({
-      where: { id: bookStatusId },
-    });
-    return result;
-  }
-);
+export const dbGetBookStatusById = catchErrors(async (bookStatusId: string) => {
+  const result = await db.bookStatus.findUnique({
+    where: { id: bookStatusId }
+  });
+  return result;
+});
 
-export const dbGetBookStatusByUserId = catchErrors(
-  async (userId: string) => {
-    const result = await db.bookStatus.findMany({
-      where: { userId },
-      include: { book: true },
-    });
-    return result;
-  }
-)
+export const dbGetBookStatusByUserId = catchErrors(async (userId: string) => {
+  const result = await db.bookStatus.findMany({
+    where: { userId },
+    include: { book: true }
+  });
+  return result;
+});
 
 export const dbGetBookStatusCountByUserId = catchErrors(
   async (userId: string) => {
@@ -38,18 +34,18 @@ export const dbGetBookStatusCountByUserId = catchErrors(
       where: {
         userId
       }
-    })
+    });
     return result;
   }
-)
+);
 
 export const dbGetBookStatusByBookIdAndUserId = catchErrors(
   async (bookId: string, userId: string) => {
     const result = await db.bookStatus.findFirst({
       where: {
         bookId: bookId,
-        userId: userId,
-      },
+        userId: userId
+      }
     });
     return result;
   }
@@ -59,29 +55,44 @@ export const dbGetBooksByUserIdAndReadingStatus = catchErrors(
   async (userId: string, status: ReadStatus) => {
     const result = await db.bookStatus.findMany({
       where: { userId, status },
-      include: { book: true },
+      include: { book: true }
     });
     return result;
   }
 );
 
-export const dbGetBookStatusByStatusAndUserId = catchErrors(
-  async (userId: string, status: ReadStatus, page: number = 1, pageSize: number = 10) => {
+export const dbGetBooksByStatusAndUserId = catchErrors(
+  async (
+    userId: string,
+    status: ReadStatus,
+    page: number = 1,
+    pageSize: number = 10
+  ) => {
     const result = await db.bookStatus.findMany({
       where: { userId, status },
-      include: { book: true },
+      include: {
+        book: {
+          include: {
+            reviews: true,
+            ratings: true,
+            lists: true,
+            bookStatuses: true,
+            readingActivity: true
+          }
+        }
+      },
       skip: (page - 1) * pageSize,
-      take: pageSize,
+      take: pageSize
     });
     return result;
   }
-)
+);
 
 export const dbUpdateBookStatus = catchErrors(
   async (id: string, status: ReadStatus) => {
     const result = await db.bookStatus.update({
       where: { id },
-      data: { status },
+      data: { status }
     });
     return result;
   }

@@ -54,7 +54,7 @@ export default function BookCardAdvanced({
         <BookNavigationWrapper id={book.googleBooksId}>
           <Tooltip arrow title={book.title} placement="top-start">
             <b className="text-base line-clamp-1 text-sky-700">{`${capitalizeFirstLetter(
-              book.title
+              book.title || "Title not available"
             )}`}</b>
           </Tooltip>
         </BookNavigationWrapper>

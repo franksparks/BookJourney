@@ -35,7 +35,7 @@ export default function ListsCard({
   const { dbUser } = useDbUser();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const listId = searchParams.get("listId");
+  const listId = searchParams!.get("listId");
   const pathname = usePathname();
   const [showInput, setShowInput] = useState<boolean>(false);
   const [newListName, setNewListName] = useState<string>("");
