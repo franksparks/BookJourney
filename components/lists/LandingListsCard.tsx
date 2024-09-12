@@ -23,17 +23,13 @@ export default function ListsCard() {
           <div className="flex flex-row justify-around">
             <Button
               className="text-lg p-6"
-              onClick={() =>
-                router.push("http://localhost:3000/lists?listId=READ")
-              }
+              onClick={() => router.push("/lists?listId=READ")}
             >
               Read books
             </Button>
             <Button
               className="text-lg p-6"
-              onClick={() =>
-                router.push("http://localhost:3000/lists?listId=READING")
-              }
+              onClick={() => router.push("/lists?listId=READING")}
             >
               Books you are reading
             </Button>
@@ -41,17 +37,13 @@ export default function ListsCard() {
           <div className="flex flex-row justify-around">
             <Button
               className="text-lg p-6"
-              onClick={() =>
-                router.push(
-                  "http://localhost:3000/lists?listId=WANT_TO_READ"
-                )
-              }
+              onClick={() => router.push("/lists?listId=WANT_TO_READ")}
             >
               Books you want to read
             </Button>
             <Button
               className="text-lg p-6"
-              onClick={() => router.push("http://localhost:3000/lists")}
+              onClick={() => router.push("/lists")}
             >
               All lists
             </Button>

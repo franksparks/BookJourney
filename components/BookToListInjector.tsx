@@ -149,8 +149,13 @@ export default function BookToListInjector({
                           type="checkbox"
                           checked={selectedLists.has(list.id)}
                           onChange={() => toggleListSelection(list.id)}
-                        />
-                        {list.name}
+                        />{" "}
+                        <span
+                          className="italic
+                        "
+                        >
+                          {list.name}
+                        </span>
                       </label>
                     </li>
                   ))

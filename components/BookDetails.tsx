@@ -4,7 +4,7 @@ import { actionInsertBook } from "@/actions/books";
 import {
   actionDeleteRating,
   actionInsertRating,
-  actionUpdateRating
+  actionUpdateRating,
 } from "@/actions/ratings";
 import { useDbUser } from "@/app/context/db-user-context";
 import { Book, DbBook } from "@/models/book";
@@ -29,7 +29,9 @@ type BookDetailsProps = {
 
 export default function BookDetails({ book }: BookDetailsProps) {
   const { dbUser } = useDbUser();
-  const [numericBookRating, setNumericBookRating] = useState<number | null>(0);
+  const [numericBookRating, setNumericBookRating] = useState<
+    number | null
+  >(0);
   const [bookInDb, setBookInDb] = useState<DbBook | null>(null);
   const [bookRating, setBookRating] = useState<Rating | null>(null);
   const [bookReview, setBookReview] = useState<Review | null>(null);
@@ -75,14 +77,14 @@ export default function BookDetails({ book }: BookDetailsProps) {
       rating: stringRating as RatingValue,
       book: {
         connect: {
-          id: bookInDb?.id
-        }
+          id: bookInDb?.id,
+        },
       },
       user: {
         connect: {
-          id: dbUser.id
-        }
-      }
+          id: dbUser.id,
+        },
+      },
     };
 
     const rating = await actionInsertRating(ratingCreateInput);
@@ -136,7 +138,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
             sizes="100vw"
             className="w-full h-auto mb-8"
           />
-          <div>
+          <div className="z-50">
             <ReadingStatusDropdown book={book} logged={logged} />
           </div>
           <div className="flex justify-center mt-7">
@@ -148,7 +150,9 @@ export default function BookDetails({ book }: BookDetailsProps) {
             />
           </div>
           {!bookRating && (
-            <div className="flex justify-center mt-2">{"Rate this book"}</div>
+            <div className="flex justify-center mt-2">
+              {"Rate this book"}
+            </div>
           )}
           {bookRating && (
             <div className="flex justify-center mt-2">
@@ -172,7 +176,9 @@ export default function BookDetails({ book }: BookDetailsProps) {
           {logged && <ReadRating value={book.ratingAverage!} />}
         </div>
         {logged && (
-          <h2>{`Average: ${book.ratingAverage || "N.A."} - Number of ratings: ${
+          <h2>{`Average: ${
+            book.ratingAverage || "N.A."
+          } - Number of ratings: ${
             "ratings" in book ? book.ratings.length : "N.A."
           }`}</h2>
         )}

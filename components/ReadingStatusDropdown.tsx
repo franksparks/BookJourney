@@ -25,15 +25,15 @@ import { Skeleton } from "./ui/skeleton";
 import { useToast } from "./ui/use-toast";
 import { Tooltip } from "@mui/material";
 
-type ReadingStatusDropwdownProps = {
+type ReadingStatusDropdownProps = {
   book: Book | DbBook;
   logged: boolean;
 };
 
-export default function ReadingStatusDropwdown({
+export default function ReadingStatusDropdown({
   book,
   logged,
-}: ReadingStatusDropwdownProps) {
+}: ReadingStatusDropdownProps) {
   const { dbUser } = useDbUser();
   const [currentStatus, setStatus] = useState<BookStatus | null>(null);
   const [loading, setLoading] = useState(false);

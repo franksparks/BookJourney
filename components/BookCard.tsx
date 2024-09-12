@@ -161,7 +161,7 @@ export default function BookCard({
           </div>
         </Tooltip>
         <Tooltip arrow title={book.authors[0]} placement="bottom">
-          <p className="text-slate-500">
+          <p className="text-slate-500 line-clamp-2">
             {book.authors && book.authors.length > 0
               ? book.authors[0]
               : "Author not available"}
@@ -215,7 +215,7 @@ export default function BookCard({
             <DialogTrigger asChild>
               <Button>Update progress</Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="max-w-xl">
               <DialogHeader>
                 <DialogTitle>Update progress</DialogTitle>
                 <DialogDescription>
@@ -284,6 +284,12 @@ export default function BookCard({
               </div>
               <DialogFooter>
                 <div className="flex justify-center space-x-4">
+                  <Button
+                    variant={"destructive"}
+                    onClick={handleStopReading}
+                  >
+                    Stop reading
+                  </Button>
                   <Button onClick={handleAddReadingActivity}>
                     Save activity
                   </Button>
@@ -297,10 +303,12 @@ export default function BookCard({
                     Book Finished!
                   </Button>
                   <Button
-                    variant={"destructive"}
-                    onClick={handleStopReading}
+                    variant={"cancel"}
+                    onClick={() => {
+                      setIsDialogOpen(false);
+                    }}
                   >
-                    Stop reading
+                    Cancel
                   </Button>
                 </div>
               </DialogFooter>
