@@ -210,11 +210,10 @@ export default function ReadingChallengeCard({
                 />
               </div>
               <div className="flex flex-col justify-center items-center">
-                <p className="mb-2 text-2xl">
-                  <span className="text-3xl">{readBooks.length}</span>{" "}
-                  books completed
+                <p className="text-2xl">
+                  <span>{readBooks.length}</span> books completed
                 </p>
-                <p className="mb-2">
+                <p className="mb-2 text-sm">
                   {readBooks.length}/{currentChallenge.goal} (
                   {(
                     (readBooks.length / currentChallenge.goal) *
