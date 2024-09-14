@@ -176,8 +176,15 @@ export default function Reviews({
             )}
             {user?.username}
             <ReadRating value={numericBookRating!} size={"small"} />
-            <div>on {format(userBookReview.createdAt!, "dd/MM/yyyy")}</div>
-            <div> {userBookReview.comment}</div>
+
+            <div> {userBookReview?.comment}</div>
+            {userBookReview?.createdAt ? (
+              <div>
+                on {format(userBookReview?.createdAt!, "dd/MM/yyyy")}
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         </>
       )}
