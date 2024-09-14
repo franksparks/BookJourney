@@ -29,7 +29,9 @@ type BookDetailsProps = {
 
 export default function BookDetails({ book }: BookDetailsProps) {
   const { dbUser } = useDbUser();
-  const [numericBookRating, setNumericBookRating] = useState<number | null>(0);
+  const [numericBookRating, setNumericBookRating] = useState<
+    number | null
+  >(0);
   const [bookInDb, setBookInDb] = useState<DbBook | null>(null);
   const [bookRating, setBookRating] = useState<Rating | null>(null);
   const [bookReview, setBookReview] = useState<Review | null>(null);
@@ -148,7 +150,9 @@ export default function BookDetails({ book }: BookDetailsProps) {
             />
           </div>
           {!bookRating && (
-            <div className="flex justify-center mt-2">{"Rate this book"}</div>
+            <div className="flex justify-center mt-2">
+              {"Rate this book"}
+            </div>
           )}
           {bookRating && (
             <div className="flex justify-center mt-2">
@@ -171,12 +175,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
           <h1 className="mr-4">{book.title || "Title not available"}</h1>
           {logged && <ReadRating value={book.ratingAverage!} />}
         </div>
-        {logged && (
-          <h2>{`Average: ${book.ratingAverage || "N.A."} - Number of ratings: ${
-            "ratings" in book ? book.ratings.length : "N.A."
-          }`}</h2>
-        )}
-        <Separator className="my-4" />
+
         {(book.authors &&
           book.authors.map((author, index) => (
             <h2
@@ -188,26 +187,32 @@ export default function BookDetails({ book }: BookDetailsProps) {
             </h2>
           ))) || <h2> {"Unknown author"} </h2>}
         {book.description && <ReadMore text={book.description} />}
-        {book.categories && (
-          <>
-            <div className="mt-8 mb-4 font-bold">{"Genres"}</div>
-            <div className="flex h-5 items-center space-x-4">
-              {book.categories.map((category, index) => (
-                <React.Fragment key={`category-${index}`}>
-                  <Separator orientation="vertical" />
-                  <div>{category}</div>
-                  <Separator orientation="vertical" />
-                </React.Fragment>
-              ))}
-            </div>
-          </>
-        )}
         <div className="mt-8 flex flex-row w-full justify-between items-center">
-          <div className="font-bold">{"This edition"}</div>
+          <div className="flex items-center gap-2">
+            <div className="font-bold">{"Genre"}</div>
+            {book.categories.length > 0 ? (
+              <>
+                <div className="flex h-5 items-center space-x-4">
+                  {book.categories.map((category, index) => (
+                    <React.Fragment key={`category-${index}`}>
+                      <div>{category}</div>
+                    </React.Fragment>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div>Not available</div>
+            )}
+          </div>
           {book.pages !== 0 && (
             <div className="flex items-center gap-2">
               <div className="font-semibold">Pages</div>
-              <Image src={"/pages.svg"} alt="pages" width={40} height={40} />
+              <Image
+                src={"/pages.svg"}
+                alt="pages"
+                width={40}
+                height={40}
+              />
               <div>{book.pages}</div>
             </div>
           )}
@@ -237,7 +242,13 @@ export default function BookDetails({ book }: BookDetailsProps) {
           )}
         </div>
         <Separator className="my-4" />
-
+        {logged && (
+          <h2>{`Average: ${
+            book.ratingAverage || "N.A."
+          } - Number of ratings: ${
+            "ratings" in book ? book.ratings.length : "N.A."
+          }`}</h2>
+        )}
         <Reviews
           bookInDb={book}
           numericBookRating={numericBookRating}
