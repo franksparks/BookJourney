@@ -13,7 +13,7 @@ import { actionGetBooksByGoogleId } from "@/actions/books";
 const queryMap: { [key: string]: string } = {
   author: ":inauthor:",
   title: ":intitle:",
-  all: ""
+  all: "",
 };
 
 const calculateIndex = (page: number): number => {
@@ -30,7 +30,7 @@ export default function Home() {
     previewSearch,
     setPreviewSearch,
     setTotalItems,
-    totalItems
+    totalItems,
   } = useBooksSearchContext();
   const [advancedResults, setAdvancedResults] = useState<DbBook[]>([]);
   const [advancedTotalItems, setAdvancedTotalItems] = useState(0);
@@ -45,43 +45,45 @@ export default function Home() {
     query: string,
     queryMap?: { [key: string]: string }
   ) => {
-      const index = calculateIndex(page);
+    const index = calculateIndex(page);
 
-      const queryString = queryMap ? `${queryMap[radioValue]}${query}` : query;
+    const queryString = queryMap
+      ? `${queryMap[radioValue]}${query}`
+      : query;
 
-      const result = await actionSearchBooksGoogle(queryString, index);
+    const result = await actionSearchBooksGoogle(queryString, index);
 
-      const googleBooksIds: string[] = result.books.map(
-        (book) => book.googleBooksId
+    const googleBooksIds: string[] = result.books.map(
+      (book) => book.googleBooksId
+    );
+    const booksInDb = await actionGetBooksByGoogleId(googleBooksIds);
+
+    const resultWithBooksInDb = result.books.map((book) => {
+      const bookInDb = booksInDb.find(
+        (dbBook: DbBook) => dbBook.googleBooksId === book.googleBooksId
       );
-      const booksInDb = await actionGetBooksByGoogleId(googleBooksIds);
-      
-      const resultWithBooksInDb = result.books.map((book) => {
-        const bookInDb = booksInDb.find(
-          (dbBook: DbBook) => dbBook.googleBooksId === book.googleBooksId
-        );
-        return {
-          ...book,
-          ...(bookInDb ? bookInDb : {}),
-          bookStatuses: bookInDb ? bookInDb.bookStatuses : []
-        };
-      });
+      return {
+        ...book,
+        ...(bookInDb ? bookInDb : {}),
+        bookStatuses: bookInDb ? bookInDb.bookStatuses : [],
+      };
+    });
 
-      setResults(resultWithBooksInDb);
-      const totalItems =
-        result.totalItems >= FIXED_TOTAL_ITEMS
-          ? FIXED_TOTAL_ITEMS
-          : result.totalItems;
-      setTotalItems(totalItems);
-      setAdvancedResults(resultWithBooksInDb);
+    setResults(resultWithBooksInDb);
+    const totalItems =
+      result.totalItems >= FIXED_TOTAL_ITEMS
+        ? FIXED_TOTAL_ITEMS
+        : result.totalItems;
+    setTotalItems(totalItems);
+    setAdvancedResults(resultWithBooksInDb);
 
-      if (advancedTotalItems === 0) {
-        setAdvancedTotalItems(totalItems);
-      }
-      if (queryMap && query) {
-        router.push(`/search?q=${encodeURIComponent(query)}`);
-      }
-    };
+    if (advancedTotalItems === 0) {
+      setAdvancedTotalItems(totalItems);
+    }
+    if (queryMap && query) {
+      router.push(`/search?q=${encodeURIComponent(query)}`);
+    }
+  };
 
   useEffect(() => {
     const urlQuery = searchParams?.get("q");
@@ -116,8 +118,8 @@ export default function Home() {
   return (
     <Suspense>
       <main className="flex justify-center flex-col items-center h-full">
-        <div className="flex justify-center flex-col items-center bg-sky-600 m-3 rounded-3xl w-5/6 min-w-fit">
-          <div className="bg-slate-300 mt-4 rounded-md min-w-fit shadow-md shadow-sky-800">
+        <div className="flex justify-center flex-col items-center bg-sky-600 m-3 rounded-3xl w-5/6 min-w-fit h-full">
+          <div className="bg-slate-300 mt-4 rounded-md min-w-fit shadow-md shadow-sky-800 ">
             <SearchBox
               advancedQuery={advancedQuery}
               setAdvancedQuery={setAdvancedQuery}
