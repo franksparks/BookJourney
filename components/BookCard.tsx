@@ -132,7 +132,7 @@ export default function BookCard({
         <BookNavigationWrapper id={book.googleBooksId}>
           {book.smallCover != null ? (
             <Image
-              className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000 w-12 h-auto xl:w-24"
+              className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000 w-12 h-auto"
               src={book.smallCover}
               alt="cover"
               width="0"
@@ -142,7 +142,7 @@ export default function BookCard({
             />
           ) : (
             <Image
-              className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000 w-12 h-auto xl:w-24"
+              className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000 w-12 h-auto"
               src={"/default_cover.jpg"}
               alt="cover"
               width={60}
