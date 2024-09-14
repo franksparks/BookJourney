@@ -132,7 +132,7 @@ export default function BookCard({
         <BookNavigationWrapper id={book.googleBooksId}>
           {book.smallCover != null ? (
             <Image
-              className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000 w-16 h-auto"
+              className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000 w-16 h-auto xl:w-24"
               src={book.smallCover}
               alt="cover"
               width="0"
@@ -156,14 +156,12 @@ export default function BookCard({
         <Tooltip arrow title={book.title} placement="top">
           <div>
             <BookNavigationWrapper id={book.googleBooksId}>
-              <p className="italic md:line-clamp-1 line-clamp-2">
-                {book.title}
-              </p>
+              <p className="italic line-clamp-1">{book.title}</p>
             </BookNavigationWrapper>
           </div>
         </Tooltip>
         <Tooltip arrow title={book.authors[0]} placement="bottom">
-          <p className="text-slate-500 md:line-clamp-1 line-clamp-2">
+          <p className="text-slate-500 line-clamp-1">
             {book.authors && book.authors.length > 0
               ? book.authors[0]
               : "Author not available"}

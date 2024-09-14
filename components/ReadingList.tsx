@@ -25,7 +25,22 @@ export default function ReadingList({
 
   const [readingList, setReadingList] = useState<BookStatus[]>([]);
   const [currentPage, setCurrentPage] = useState(0); // State for pagination
-  const booksPerPage = 3;
+
+  const [booksPerPage, setBooksPerPage] = useState(3);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width > 1536) {
+        setBooksPerPage(4);
+      } else {
+        setBooksPerPage(3);
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     getReadingList();
@@ -93,12 +108,14 @@ export default function ReadingList({
                   onStatusChange={handleStatusChange}
                 />
               ))}
-              <Button
-                disabled={dbUser === null}
-                onClick={() => router.push("/lists?listId=READING")}
-              >
-                View More
-              </Button>
+              <div className="flex items-center justify-center h-full">
+                <Button
+                  disabled={dbUser === null}
+                  onClick={() => router.push("/lists?listId=READING")}
+                >
+                  View More
+                </Button>
+              </div>
             </>
           )}
 
