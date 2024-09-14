@@ -243,7 +243,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
         </div>
         <Separator className="my-4" />
         {logged && (
-          <h2>{`Average: ${
+          <h2>{`Rating average: ${
             book.ratingAverage || "N.A."
           } - Number of ratings: ${
             "ratings" in book ? book.ratings.length : "N.A."

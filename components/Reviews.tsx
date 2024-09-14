@@ -197,7 +197,7 @@ export default function Reviews({
       {paginatedReviews && paginatedReviews.length > 0 && (
         <>
           {paginatedReviews.map((review, index) => (
-            <div className="flex flex-row basis-1/6 gap-4" key={index}>
+            <div className="flex flex-row basis-1/6" key={index}>
               <Image
                 className={"w-8 h-8 mb-2 rounded-full"}
                 src={review.userAvatar}
@@ -205,10 +205,11 @@ export default function Reviews({
                 width={60}
                 height={100}
               />
-              <ReadRating value={review.rating} size={"small"} />
-              {review.username}
+              <ReadRating value={review.rating} size={"small"} />{" "}
+              {review.username ? review.username : <div>A user </div>}{" "}
               <div>on {format(review.creationDate!, "dd/MM/yyyy")}: </div>
-              <div className="italic">{review.comment}</div>
+              {"  "}
+              <div className="italic"> {review.comment}</div>
             </div>
           ))}
         </>
