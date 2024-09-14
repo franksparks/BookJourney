@@ -11,9 +11,12 @@ export default function ParametrizedPagination({
   setPage,
   page,
   totalItems,
-  numItemsPerPage
+  numItemsPerPage,
 }: ParametrizedPaginationProps) {
-  const handleChange = (_event: React.ChangeEvent<unknown>, value: number) => {
+  const handleChange = (
+    _event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
     setPage(value);
   };
   const numberOfPages = Math.ceil(totalItems / numItemsPerPage);
@@ -27,15 +30,16 @@ export default function ParametrizedPagination({
       variant="outlined"
       sx={{
         "& .MuiPaginationItem-root": {
-          color: "#ffffff"
+          backgroundColor: "#93c5fd",
+          color: "#000000",
         },
         "& .MuiPaginationItem-root.Mui-selected": {
           backgroundColor: "#F97316",
-          color: "#ffffff"
+          color: "#ffffff",
         },
         "& .MuiPaginationItem-root.Mui-disabled": {
-          color: "#e5e7eb"
-        }
+          color: "#93c5fd",
+        },
       }}
     />
   );

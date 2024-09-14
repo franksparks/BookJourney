@@ -25,7 +25,7 @@ export default function BookCardAdvanced({
   const pathname = usePathname();
 
   return (
-    <div className="relative flex flex-row justify-between bg-sky-50 rounded-lg mx-auto shadow-md shadow-sky-800 hover:bg-sky-200 transition duration-500 max-w-xl">
+    <div className="relative flex flex-row justify-between bg-sky-50 rounded-lg mx-auto shadow-md shadow-sky-800 hover:bg-sky-200 transition duration-500 max-w-xl h-full">
       <div className="w-1/3 flex items-center justify-center min-w-fit">
         <BookNavigationWrapper id={book.googleBooksId}>
           {book.smallCover ? (
@@ -39,18 +39,18 @@ export default function BookCardAdvanced({
             />
           ) : (
             <Image
+              className="shadow-lg shadow-sky-600 rounded hover:scale-110 transition duration-1000 w-16 h-auto"
               src={"/default_cover.jpg"}
               alt={book.title}
               width="0"
               height="0"
               sizes="75vw"
-              className="rounded w-16 h-auto"
             />
           )}
         </BookNavigationWrapper>
       </div>
 
-      <div className="flex flex-col justify-center w-2/3 gap-2 m-2 mr-5 cursor-default">
+      <div className="flex flex-col justify-center w-2/3 m-2 mr-5 cursor-default">
         <BookNavigationWrapper id={book.googleBooksId}>
           <Tooltip arrow title={book.title} placement="top-start">
             <b className="text-base line-clamp-1 text-sky-700">{`${capitalizeFirstLetter(

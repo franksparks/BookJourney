@@ -35,12 +35,12 @@ export default function BookCardWantToRead({
   };
 
   return (
-    <div className="flex flex-row h-36 max-w-4xl hover:scale-105 shadow-lg shadow-orange-700 rounded-lg text-slate-600 bg-slate-50 hover:bg-orange-50 cursor-default transition duration-500 w-full m-4">
+    <div className="flex flex-row h-5/6 max-w-4xl hover:scale-105 shadow-lg shadow-orange-700 rounded-lg text-slate-600 bg-slate-50 hover:bg-orange-50 cursor-default transition duration-500 w-full m-4">
       <div className="flex justify-center items-center p-4">
         <BookNavigationWrapper id={book.googleBooksId}>
           {book.smallCover != null ? (
             <Image
-              className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000 w-16 h-auto"
+              className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000 w-auto h-16"
               src={book.smallCover}
               alt="cover"
               width="0"
@@ -49,7 +49,7 @@ export default function BookCardWantToRead({
             />
           ) : (
             <Image
-              className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000"
+              className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000 w-auto h-16"
               src={"/default_cover.jpg"}
               alt="cover"
               width={60}
@@ -62,12 +62,12 @@ export default function BookCardWantToRead({
       <div className="flex flex-col justify-center gap-1 p-1 flex-grow w-1/2">
         <Tooltip arrow title={book.title} placement="top">
           <BookNavigationWrapper id={book.googleBooksId}>
-            <p className="italic line-clamp-2">{book.title}</p>
+            <p className="italic md:line-clamp-1 line-clamp-2">{book.title}</p>
           </BookNavigationWrapper>
         </Tooltip>
 
         <Tooltip arrow title={book.authors[0]} placement="bottom">
-          <p className="text-slate-500">
+          <p className="text-slate-500 md:line-clamp-1 line-clamp-2">
             {book.authors && book.authors.length > 0
               ? book.authors[0]
               : "Author not available"}
