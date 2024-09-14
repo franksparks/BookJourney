@@ -110,6 +110,7 @@ export default function ReadingList({
               ))}
               <div className="flex items-center justify-center h-full">
                 <Button
+                  className="text-lg"
                   disabled={dbUser === null}
                   onClick={() => router.push("/lists?listId=READING")}
                 >

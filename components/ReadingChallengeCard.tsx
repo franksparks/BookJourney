@@ -201,7 +201,7 @@ export default function ReadingChallengeCard({
               <div className="w-3/12">
                 <Image
                   className="hover:scale-105 transition duration-1000 h-auto w-auto"
-                  src={"/book-square-svgrepo-com.svg"}
+                  src={"/challenge.svg"}
                   alt="cover"
                   width="0"
                   height="0"
@@ -241,7 +241,7 @@ export default function ReadingChallengeCard({
               <div className="flex flex-col w-4/12">
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                   <DialogTrigger asChild>
-                    <Button>Edit challenge</Button>
+                    <Button className="text-lg">Edit challenge</Button>
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
@@ -268,7 +268,10 @@ export default function ReadingChallengeCard({
                       </div>
                     </div>
                     <DialogFooter>
-                      <Button onClick={handleEditReadingChallenge}>
+                      <Button
+                        className="text-lg"
+                        onClick={handleEditReadingChallenge}
+                      >
                         Set reading challenge
                       </Button>
 
@@ -289,7 +292,7 @@ export default function ReadingChallengeCard({
                   onOpenChange={setConfirmationIsDialogOpen}
                 >
                   <DialogTrigger asChild>
-                    <Button variant={"destructive"}>
+                    <Button className="text-lg" variant={"destructive"}>
                       Delete challenge
                     </Button>
                   </DialogTrigger>
