@@ -30,8 +30,8 @@ export default function ReadingList({
 
   useEffect(() => {
     const handleResize = () => {
-      const width = window.innerWidth;
-      if (width > 1536) {
+      const height = window.innerHeight;
+      if (height > 1000) {
         setBooksPerPage(4);
       } else {
         setBooksPerPage(3);
