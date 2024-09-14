@@ -51,7 +51,9 @@ export default function UserLists() {
             </div>
           </div>
         ))}
-      {dbUser && lists.length == 0 && <div>Create a list to store books!</div>}
+      {dbUser && lists.length == 0 && (
+        <div>Create a list to store books!</div>
+      )}
       {!dbUser && <div>Login to see your lists here!</div>}
     </div>
   );
