@@ -198,9 +198,9 @@ export default function ReadingChallengeCard({
             </div>
           ) : (
             <div className="flex flex-row w-full h-full justify-around items-center">
-              <div>
+              <div className="w-1/4">
                 <Image
-                  className="hover:scale-105 transition duration-1000 h-auto xl:w-24"
+                  className="hover:scale-105 transition duration-1000 h-auto w-auto"
                   src={"/book-square-svgrepo-com.svg"}
                   alt="cover"
                   width="0"
@@ -210,8 +210,9 @@ export default function ReadingChallengeCard({
                 />
               </div>
               <div className="flex flex-col justify-center items-center">
-                <p className="text-xl">
-                  <span>{readBooks.length}</span> books completed
+                <p className="mb-2 text-2xl">
+                  <span className="text-3xl">{readBooks.length}</span>{" "}
+                  books read!
                 </p>
                 <p className="mb-2 text-sm">
                   {readBooks.length}/{currentChallenge.goal} (
