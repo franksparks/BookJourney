@@ -10,11 +10,14 @@ export default function ReadRating({ value, size }: ReadRatingProps) {
   const ratingSize = size ? size : "small";
 
   return (
-    <Rating
-      name="read-only"
-      value={value}
-      readOnly
-      size={ratingSize as OverridableStringUnion<"small" | "large">}
-    />
+    <div className="flex flex-row">
+      <Rating
+        className=""
+        name="read-only"
+        value={value}
+        readOnly
+        size={ratingSize as OverridableStringUnion<"small" | "large">}
+      />
+    </div>
   );
 }

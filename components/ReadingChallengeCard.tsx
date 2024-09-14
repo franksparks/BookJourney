@@ -135,8 +135,8 @@ export default function ReadingChallengeCard({
     <>
       {showConfetti && <Confetti />}
 
-      <div className="flex flex-col justify-start rounded-xl shadow-lg shadow-orange-700 p-8 bg-orange-500 text-white h-1/3">
-        <h1 className="font-light text-orange-50 text-center mb-4">
+      <div className="flex flex-col justify-start rounded-xl shadow-lg shadow-orange-700 pl-8 pr-8 pt-4 bg-orange-500 text-white h-1/3">
+        <h1 className="font-light text-orange-50 text-center  border-b-2">
           {year} Reading Challenge
         </h1>
 
@@ -198,12 +198,35 @@ export default function ReadingChallengeCard({
             </div>
           ) : (
             <div className="flex flex-row w-full h-full justify-around items-center">
-              <div className="flex flex-col justify-center items-center">
+              <div className="w-3/12">
+                {readBooks.length >= currentChallenge.goal ? (
+                  <Image
+                    className="hover:scale-105 transition duration-1000 h-auto w-auto"
+                    src={"/challenge-completed.svg"}
+                    alt="cover"
+                    width="0"
+                    height="0"
+                    sizes="100vw"
+                    priority={false}
+                  />
+                ) : (
+                  <Image
+                    className="hover:scale-105 transition duration-1000 h-auto w-auto"
+                    src={"/challenge.svg"}
+                    alt="cover"
+                    width="0"
+                    height="0"
+                    sizes="100vw"
+                    priority={false}
+                  />
+                )}
+              </div>
+              <div className="flex flex-col justify-center items-center w-5/12">
                 <p className="mb-2 text-2xl">
                   <span className="text-3xl">{readBooks.length}</span>{" "}
-                  books completed
+                  books read!
                 </p>
-                <p className="mb-2">
+                <p className="mb-2 text-sm">
                   {readBooks.length}/{currentChallenge.goal} (
                   {(
                     (readBooks.length / currentChallenge.goal) *
@@ -227,10 +250,10 @@ export default function ReadingChallengeCard({
                   ></div>
                 </div>
               </div>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col w-4/12 gap-6">
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                   <DialogTrigger asChild>
-                    <Button>Edit challenge</Button>
+                    <Button className="text-lg">Edit challenge</Button>
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
@@ -257,7 +280,10 @@ export default function ReadingChallengeCard({
                       </div>
                     </div>
                     <DialogFooter>
-                      <Button onClick={handleEditReadingChallenge}>
+                      <Button
+                        className="text-lg"
+                        onClick={handleEditReadingChallenge}
+                      >
                         Set reading challenge
                       </Button>
 
@@ -278,8 +304,8 @@ export default function ReadingChallengeCard({
                   onOpenChange={setConfirmationIsDialogOpen}
                 >
                   <DialogTrigger asChild>
-                    <Button variant={"destructive"}>
-                      Delete reading challenge
+                    <Button className="text-lg" variant={"destructive"}>
+                      Delete challenge
                     </Button>
                   </DialogTrigger>
                   <DialogContent>
@@ -308,11 +334,6 @@ export default function ReadingChallengeCard({
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
-
-                {/*Todo: Redirect to a list of the read books this year*/}
-                <Button className="cursor-not-allowed">
-                  View challenge
-                </Button>
               </div>
             </div>
           )}
