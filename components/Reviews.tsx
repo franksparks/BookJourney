@@ -159,7 +159,7 @@ export default function Reviews({
 
   return (
     <>
-      <div className="font-bold mt-4">{"My Review"}</div>
+      <div className="font-bold mt-4 mb-2">{"My Review"}</div>
       {userBookReview !== null && !loading && (
         <>
           <div className="flex flex-row basis-1/6 gap-2">
@@ -193,7 +193,7 @@ export default function Reviews({
           ))}
         </>
       )}
-      <div className="font-bold mt-4">{"Other Reviews"}</div>
+      <div className="font-bold mt-4 mb-2">{"Other Reviews"}</div>
       {paginatedReviews && paginatedReviews.length > 0 && (
         <>
           {paginatedReviews.map((review, index) => (
