@@ -39,12 +39,12 @@ export default function BookCardAdvanced({
             />
           ) : (
             <Image
+              className="shadow-lg shadow-sky-600 rounded hover:scale-110 transition duration-1000 w-16 h-auto"
               src={"/default_cover.jpg"}
               alt={book.title}
               width="0"
               height="0"
               sizes="75vw"
-              className="rounded w-16 h-auto"
             />
           )}
         </BookNavigationWrapper>
