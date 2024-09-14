@@ -198,6 +198,17 @@ export default function ReadingChallengeCard({
             </div>
           ) : (
             <div className="flex flex-row w-full h-full justify-around items-center">
+              <div>
+                <Image
+                  className="hover:scale-105 transition duration-1000 h-auto xl:w-24"
+                  src={"/book-square-svgrepo-com.svg"}
+                  alt="cover"
+                  width="0"
+                  height="0"
+                  sizes="100vw"
+                  priority={false}
+                />
+              </div>
               <div className="flex flex-col justify-center items-center">
                 <p className="mb-2 text-2xl">
                   <span className="text-3xl">{readBooks.length}</span>{" "}
