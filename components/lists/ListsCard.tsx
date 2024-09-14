@@ -18,6 +18,11 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Tooltip } from "@mui/material";
+import ReadStatusIcon from "../../assets/read_status.png";
+import ReadingStatusIcon from "../../assets/reading_status.png";
+import AbandonedStatusIcon from "../../assets/abandoned_status.png";
+import WantToReadStatusIcon from "../../assets/want_to_read_status.png";
+import BookGif from "../../assets/book-gif.gif";
 
 interface ListsCardProps {
   lists: List[];
@@ -41,9 +46,7 @@ export default function ListsCard({
   const [newListName, setNewListName] = useState<string>("");
   const [editingListId, setEditingListId] = useState<string | null>(null);
   const [editingListName, setEditingListName] = useState<string>("");
-  const [deletingListId, setDeletingListId] = useState<string | null>(
-    null
-  );
+  const [deletingListId, setDeletingListId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -65,9 +68,7 @@ export default function ListsCard({
 
   const getLists = async () => {
     const listsResult = await actionGetListsBookCountByUserId(dbUser!.id);
-    const statusResult = await actionGetBookStatusCountByUserId(
-      dbUser!.id
-    );
+    const statusResult = await actionGetBookStatusCountByUserId(dbUser!.id);
     const allLists: List[] = [];
     for (const bookStatus of statusResult) {
       allLists.push({
@@ -156,10 +157,13 @@ export default function ListsCard({
       setErrorMessage("List already exists");
       return;
     }
-    await actionUpdateList(editingListId!, editingListName);
+    const result = await actionUpdateList(editingListId!, editingListName);
+    if (selectedList?.id === editingListId) {
+      setSelectedList(result);
+    }
     setEditingListId(null);
     setEditingListName("");
-    getLists();
+    setLists(lists.map((list) => (list.id === editingListId ? result : list)));
   };
 
   const handleCancelEdit = () => {
@@ -174,8 +178,11 @@ export default function ListsCard({
   const confirmDeleteList = async () => {
     if (deletingListId) {
       await actionDeleteList(deletingListId);
+      setLists(lists.filter((list) => list.id !== deletingListId));
+      if (selectedList?.id === deletingListId) {
+        setSelectedList(lists[0]);
+      }
       setDeletingListId(null);
-      getLists();
     }
   };
 
@@ -219,9 +226,7 @@ export default function ListsCard({
                 <div
                   className={`text-white items-center mb-4 ${
                     pathname === "/" &&
-                    !Object.values(ReadStatus).includes(
-                      list.id as ReadStatus
-                    )
+                    !Object.values(ReadStatus).includes(list.id as ReadStatus)
                       ? "hidden"
                       : "flex"
                   }`}
@@ -257,6 +262,22 @@ export default function ListsCard({
                     </div>
                   ) : (
                     <>
+                    {Object.values(ReadStatus).includes(
+                          list.id as ReadStatus
+                        ) ? (
+                          <img
+                            src={
+                              list.id === ReadStatus.READ
+                                ? ReadStatusIcon.src
+                                : list.id === ReadStatus.READING
+                                ? ReadingStatusIcon.src
+                                : list.id === ReadStatus.WANT_TO_READ
+                                ? WantToReadStatusIcon.src
+                                : AbandonedStatusIcon.src
+                            }
+                            className="h-10 w-10"
+                          />
+                        ) : <img src={BookGif.src} className="h-7 w-7 mr-3" />}
                       <Tooltip
                         title={`${list.name} - (${list.book_count ?? 0})`}
                         placement="top"
