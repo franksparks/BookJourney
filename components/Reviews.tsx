@@ -205,10 +205,17 @@ export default function Reviews({
                 width={60}
                 height={100}
               />
-              <ReadRating value={review.rating} size={"small"} />{" "}
-              {review.username ? review.username : <div>A user </div>}{" "}
-              <div>on {format(review.creationDate!, "dd/MM/yyyy")}: </div>
-              {"  "}
+              <ReadRating value={review.rating} size={"small"} />
+              &nbsp;
+              {review.username ? (
+                <div className="font-bold">{review.username} user</div>
+              ) : (
+                <div className="font-bold">A user </div>
+              )}
+              <div>
+                &nbsp;on {format(review.creationDate!, "dd/MM/yyyy")}{" "}
+                said:&nbsp;
+              </div>
               <div className="italic"> {review.comment}</div>
             </div>
           ))}
