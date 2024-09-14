@@ -10,8 +10,9 @@ import {
   actionGetBooksByListId,
 } from "@/actions/book-list";
 import Modal from "../ui/confirmation-modal";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { actionGetBooksByStatusAndUserId } from "@/actions/book-status";
+
 
 interface BooksListProps {
   list: List | null;
@@ -38,6 +39,7 @@ export default function ListBooksCard({
   const [bookToDelete, setBookToDelete] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     if (list) {
@@ -130,6 +132,13 @@ export default function ListBooksCard({
     }
   };
 
+  const handleStatusChange = async () => {
+    if (list && pathname === "/lists") {
+      router.push(`/lists?listId=${list.id}`);
+      window.location.reload();
+    }
+  };
+
   return (
     <div className="rounded-3xl shadow-xl shadow-orange-700 p-8 bg-orange-500 text-slate-100 h-full flex flex-col">
       <h1 className="font-light text-center border-b-2">
@@ -137,11 +146,12 @@ export default function ListBooksCard({
       </h1>
       <div ref={containerRef} className="flex-grow overflow-y-auto">
         {books.length > 0 ? (
-          books.map((book) => (
-            <div key={`${book.id}-book`} className="mb-2">
+          books.map((book, index) => (
+            <div key={`${book.id}-book-${index}`} className="mb-2">
               <BookCardAdvanced
                 book={book}
                 onDelete={() => handleOnDelete(book.id ?? "")}
+                onStatusChange={handleStatusChange}
                 deleteVisible={
                   pathname === "/lists" &&
                   !Object.values(ReadStatus).includes(

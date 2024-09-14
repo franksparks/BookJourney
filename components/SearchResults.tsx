@@ -10,7 +10,7 @@ export default function SearchResult({ books }: SearchResultProps) {
     <div className="grid grid-cols-2 grid-rows-5 gap-4 m-4 w-4/5">
       {books.map((book: DbBook, index) => (
         <div key={index}>
-          <BookCardAdvanced book={book} deleteVisible={false} onDelete={() => {}} />
+          <BookCardAdvanced book={book} deleteVisible={false} onDelete={() => {}} onStatusChange={() => {}} />
         </div>
       ))}
     </div>
