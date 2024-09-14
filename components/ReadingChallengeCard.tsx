@@ -210,7 +210,7 @@ export default function ReadingChallengeCard({
                 />
               </div>
               <div className="flex flex-col justify-center items-center">
-                <p className="text-2xl">
+                <p className="text-xl">
                   <span>{readBooks.length}</span> books completed
                 </p>
                 <p className="mb-2 text-sm">
