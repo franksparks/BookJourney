@@ -9,7 +9,7 @@ export default function ListsCard() {
   const router = useRouter();
 
   return (
-    <div className="flex flex-col justify-start rounded-xl shadow-lg shadow-orange-700 bg-orange-500 p-8 text-orange-50 h-1/3">
+    <div className="flex flex-col justify-start rounded-xl shadow-lg shadow-orange-700 bg-orange-500 pl-8 pr-8 pt-4 text-orange-50 h-1/3">
       <h1 className="font-light text-orange-50 text-center border-b-2">
         My Lists
       </h1>
