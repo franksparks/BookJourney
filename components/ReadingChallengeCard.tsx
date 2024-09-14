@@ -199,15 +199,27 @@ export default function ReadingChallengeCard({
           ) : (
             <div className="flex flex-row w-full h-full justify-around items-center">
               <div className="w-3/12">
-                <Image
-                  className="hover:scale-105 transition duration-1000 h-auto w-auto"
-                  src={"/challenge.svg"}
-                  alt="cover"
-                  width="0"
-                  height="0"
-                  sizes="100vw"
-                  priority={false}
-                />
+                {readBooks.length >= currentChallenge.goal ? (
+                  <Image
+                    className="hover:scale-105 transition duration-1000 h-auto w-auto"
+                    src={"/challenge-completed.svg"}
+                    alt="cover"
+                    width="0"
+                    height="0"
+                    sizes="100vw"
+                    priority={false}
+                  />
+                ) : (
+                  <Image
+                    className="hover:scale-105 transition duration-1000 h-auto w-auto"
+                    src={"/challenge.svg"}
+                    alt="cover"
+                    width="0"
+                    height="0"
+                    sizes="100vw"
+                    priority={false}
+                  />
+                )}
               </div>
               <div className="flex flex-col justify-center items-center w-5/12">
                 <p className="mb-2 text-2xl">
@@ -238,7 +250,7 @@ export default function ReadingChallengeCard({
                   ></div>
                 </div>
               </div>
-              <div className="flex flex-col w-4/12">
+              <div className="flex flex-col w-4/12 gap-6">
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                   <DialogTrigger asChild>
                     <Button className="text-lg">Edit challenge</Button>
