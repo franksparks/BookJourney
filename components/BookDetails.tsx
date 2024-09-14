@@ -136,7 +136,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
             width="0"
             height="0"
             sizes="100vw"
-            className="rounded w-full h-auto mb-8 shadow-lg shadow-sky-600"
+            className="rounded h-72 w-auto  mb-8 shadow-lg shadow-sky-600"
           />
           <div className="z-50">
             <ReadingStatusDropdown book={book} logged={logged} />
