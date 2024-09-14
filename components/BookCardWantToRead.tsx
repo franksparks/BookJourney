@@ -35,12 +35,12 @@ export default function BookCardWantToRead({
   };
 
   return (
-    <div className="flex flex-row h-auto max-w-4xl hover:scale-105 shadow-lg shadow-orange-700 rounded-lg text-slate-600 bg-slate-50 hover:bg-orange-50 cursor-default transition duration-500 w-full m-4">
+    <div className="flex flex-row h-3/4 max-w-4xl hover:scale-105 shadow-lg shadow-orange-700 rounded-lg text-slate-600 bg-slate-50 hover:bg-orange-50 cursor-default transition duration-500 w-full m-4">
       <div className="flex justify-center items-center p-4">
         <BookNavigationWrapper id={book.googleBooksId}>
           {book.smallCover != null ? (
             <Image
-              className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000 w-16 h-auto"
+              className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000 w-auto h-24"
               src={book.smallCover}
               alt="cover"
               width="0"
@@ -49,7 +49,7 @@ export default function BookCardWantToRead({
             />
           ) : (
             <Image
-              className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000"
+              className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000 w-auto h-24"
               src={"/default_cover.jpg"}
               alt="cover"
               width={60}
