@@ -198,7 +198,7 @@ export default function ReadingChallengeCard({
             </div>
           ) : (
             <div className="flex flex-row w-full h-full justify-around items-center">
-              <div className="w-1/4">
+              <div className="w-3/12">
                 <Image
                   className="hover:scale-105 transition duration-1000 h-auto w-auto"
                   src={"/book-square-svgrepo-com.svg"}
@@ -209,7 +209,7 @@ export default function ReadingChallengeCard({
                   priority={false}
                 />
               </div>
-              <div className="flex flex-col justify-center items-center">
+              <div className="flex flex-col justify-center items-center w-5/12">
                 <p className="mb-2 text-2xl">
                   <span className="text-3xl">{readBooks.length}</span>{" "}
                   books read!
@@ -238,7 +238,7 @@ export default function ReadingChallengeCard({
                   ></div>
                 </div>
               </div>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col w-4/12">
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                   <DialogTrigger asChild>
                     <Button>Edit challenge</Button>
@@ -290,7 +290,7 @@ export default function ReadingChallengeCard({
                 >
                   <DialogTrigger asChild>
                     <Button variant={"destructive"}>
-                      Delete reading challenge
+                      Delete challenge
                     </Button>
                   </DialogTrigger>
                   <DialogContent>
