@@ -142,7 +142,7 @@ export default function BookCard({
             />
           ) : (
             <Image
-              className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000"
+              className="shadow-md shadow-sky-700 rounded hover:scale-105 transition duration-1000 w-16 h-auto xl:w-24"
               src={"/default_cover.jpg"}
               alt="cover"
               width={60}
@@ -169,8 +169,8 @@ export default function BookCard({
         </Tooltip>
       </div>
 
-      <div className="flex flex-col *:justify-center items-center p-2 ">
-        <div>
+      <div className="flex flex-col justify-center items-center p-2 ">
+        <div className="w-full text-center">
           {book.pages === 0 ? (
             ""
           ) : currentReadingActivity === undefined ||
