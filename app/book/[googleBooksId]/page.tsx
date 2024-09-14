@@ -21,12 +21,13 @@ export default function Page({ params }: PageProps) {
     let foundBook: Book = results.find(
       (book: Book) => book.googleBooksId === googleBooksId
     );
-    
+
     const bookInDb = await actionGetBookByGoogleId(googleBooksId);
 
     if (!foundBook) {
       foundBook =
-        bookInDb ?? (await actionSearchBooksGoogle(googleBooksId, 0)).books[0];
+        bookInDb ??
+        (await actionSearchBooksGoogle(googleBooksId, 0)).books[0];
     } else {
       foundBook = bookInDb ?? foundBook;
     }
@@ -38,5 +39,11 @@ export default function Page({ params }: PageProps) {
     getBook();
   }, [googleBooksId, setBook]);
 
-  return book && <BookDetails book={book} />;
+  return (
+    book && (
+      <div className="flex justify-center items-center h-full">
+        <BookDetails book={book} />
+      </div>
+    )
+  );
 }
