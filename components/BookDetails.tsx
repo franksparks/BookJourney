@@ -29,9 +29,7 @@ type BookDetailsProps = {
 
 export default function BookDetails({ book }: BookDetailsProps) {
   const { dbUser } = useDbUser();
-  const [numericBookRating, setNumericBookRating] = useState<
-    number | null
-  >(0);
+  const [numericBookRating, setNumericBookRating] = useState<number | null>(0);
   const [bookInDb, setBookInDb] = useState<DbBook | null>(null);
   const [bookRating, setBookRating] = useState<Rating | null>(null);
   const [bookReview, setBookReview] = useState<Review | null>(null);
@@ -127,16 +125,16 @@ export default function BookDetails({ book }: BookDetailsProps) {
   }, [numericBookRating, bookInDb]);
 
   return (
-    <div className="flex justify-center mt-10 ">
+    <div className="flex justify-center m-8 bg-sky-50 shadow-lg shadow-sky-600 p-12 rounded-3xl">
       <div className="flex justify-center basis-1/4">
-        <div className="flex flex-col">
+        <div className="flex flex-col items-center">
           <Image
             src={book.cover || "/default_cover.jpg"}
             alt="cover"
             width="0"
             height="0"
             sizes="100vw"
-            className="w-full h-auto mb-8"
+            className="rounded w-full h-auto mb-8 shadow-lg shadow-sky-600"
           />
           <div className="z-50">
             <ReadingStatusDropdown book={book} logged={logged} />
@@ -150,9 +148,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
             />
           </div>
           {!bookRating && (
-            <div className="flex justify-center mt-2">
-              {"Rate this book"}
-            </div>
+            <div className="flex justify-center mt-2">{"Rate this book"}</div>
           )}
           {bookRating && (
             <div className="flex justify-center mt-2">
@@ -170,22 +166,26 @@ export default function BookDetails({ book }: BookDetailsProps) {
           </div>
         </div>
       </div>
-      <div className="flex w-screen justify-start flex-col mr-4">
+      <div className="flex justify-start flex-col mr-4 w-3/4">
         <div className="flex flex-row">
           <h1 className="mr-4">{book.title || "Title not available"}</h1>
           {logged && <ReadRating value={book.ratingAverage!} />}
         </div>
         {logged && (
-          <h2>{`Average: ${
-            book.ratingAverage || "N.A."
-          } - Number of ratings: ${
+          <h2>{`Average: ${book.ratingAverage || "N.A."} - Number of ratings: ${
             "ratings" in book ? book.ratings.length : "N.A."
           }`}</h2>
         )}
         <Separator className="my-4" />
         {(book.authors &&
           book.authors.map((author, index) => (
-            <h2 key={`author-${index}`}> {author} </h2>
+            <h2
+              className="text-3xl italic text-slate-600"
+              key={`author-${index}`}
+            >
+              {" "}
+              {author}{" "}
+            </h2>
           ))) || <h2> {"Unknown author"} </h2>}
         {book.description && <ReadMore text={book.description} />}
         {book.categories && (
@@ -202,35 +202,42 @@ export default function BookDetails({ book }: BookDetailsProps) {
             </div>
           </>
         )}
-        {
-          <>
-            <div className="mt-8 font-bold">{"This edition"}</div>
-            <Separator className="my-4" />
-          </>
-        }
-        <div className="grid gap-4">
+        <div className="mt-8 flex flex-row w-full justify-between items-center">
+          <div className="font-bold">{"This edition"}</div>
           {book.pages !== 0 && (
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
               <div className="font-semibold">Pages</div>
-              <div className="ml-11">{book.pages}</div>
+              <Image src={"/pages.svg"} alt="pages" width={40} height={40} />
+              <div>{book.pages}</div>
             </div>
           )}
           {book.language && (
-            <div className="flex items-center">
+            <div className="flex items-center gap-4">
               <div className="font-semibold">Published</div>
-              <div className="ml-4">{book.publishedDate}</div>
+              <Image
+                src={"/calendar.svg"}
+                alt="calendar"
+                width={40}
+                height={40}
+              />
+              <div>{book.publishedDate}</div>
             </div>
           )}
           {book.language && (
-            <div className="flex items-center">
+            <div className="flex items-center gap-4 mr-12">
               <div className="font-semibold">Language</div>
-              <div className="ml-4">{book.language.toUpperCase()}</div>
+              <Image
+                src={"/language.svg"}
+                alt="language"
+                width={40}
+                height={40}
+              />
+              <div>{book.language.toUpperCase()}</div>
             </div>
           )}
         </div>
-        <>
-          <Separator className="my-4" />
-        </>
+        <Separator className="my-4" />
+
         <Reviews
           bookInDb={book}
           numericBookRating={numericBookRating}
