@@ -139,7 +139,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
             className="rounded h-72 w-auto  mb-8 shadow-lg shadow-sky-600"
           />
           <div className="z-50">
-            <ReadingStatusDropdown book={book} logged={logged} />
+            <ReadingStatusDropdown book={book} logged={logged} handleStatusChange={() => {}} />
           </div>
           <div className="flex justify-center mt-7">
             <ControlledRating
