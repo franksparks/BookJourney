@@ -62,7 +62,9 @@ export default function BookCardWantToRead({
       <div className="flex flex-col justify-center gap-1 p-1 flex-grow w-1/2">
         <Tooltip arrow title={book.title} placement="top">
           <BookNavigationWrapper id={book.googleBooksId}>
-            <p className="italic md:line-clamp-1 line-clamp-2">{book.title}</p>
+            <p className="italic md:line-clamp-1 line-clamp-2">
+              {book.title}
+            </p>
           </BookNavigationWrapper>
         </Tooltip>
 
