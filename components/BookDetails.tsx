@@ -22,6 +22,8 @@ import ReviewDialogue from "./ReviewDialogue";
 import Reviews from "./Reviews";
 import { Separator } from "./ui/separator";
 import React from "react";
+import { Tooltip } from "@mui/material";
+import { capitalizeFirstLetter } from "@/lib/capitalize";
 
 type BookDetailsProps = {
   book: Book | DbBook;
@@ -29,7 +31,9 @@ type BookDetailsProps = {
 
 export default function BookDetails({ book }: BookDetailsProps) {
   const { dbUser } = useDbUser();
-  const [numericBookRating, setNumericBookRating] = useState<number | null>(0);
+  const [numericBookRating, setNumericBookRating] = useState<
+    number | null
+  >(0);
   const [bookInDb, setBookInDb] = useState<DbBook | null>(null);
   const [bookRating, setBookRating] = useState<Rating | null>(null);
   const [bookReview, setBookReview] = useState<Review | null>(null);
@@ -169,7 +173,9 @@ export default function BookDetails({ book }: BookDetailsProps) {
             />
           </div>
           {!bookRating && (
-            <div className="flex justify-center mt-2">{"Rate this book"}</div>
+            <div className="flex justify-center mt-2">
+              {"Rate this book"}
+            </div>
           )}
           {bookRating && (
             <div className="flex justify-center mt-2">
@@ -189,9 +195,23 @@ export default function BookDetails({ book }: BookDetailsProps) {
       </div>
       <div className="flex justify-start flex-col mr-4 w-3/4">
         <div className="flex flex-row">
-          <p className="mr-4 text-3xl font-bold">
-            {book.title || "Title not available"}
-          </p>
+          <Tooltip
+            arrow
+            title={`${capitalizeFirstLetter(
+              book.title || "Title not available"
+            )} by ${
+              book.authors && book.authors.length > 0
+                ? capitalizeFirstLetter(book.authors.join(" "))
+                : "Unknown"
+            }`}
+            placement="top-start"
+          >
+            <p className="mr-4 text-3xl font-bold">
+              {book.title && book.title.length > 60
+                ? `${book.title.slice(0, 60)}...`
+                : book.title || "Title not available"}
+            </p>
+          </Tooltip>
           <p className="text-2xl italic text-slate-600">by&nbsp;</p>
           {(book.authors &&
             book.authors.map((author, index) => (
@@ -227,7 +247,12 @@ export default function BookDetails({ book }: BookDetailsProps) {
           {book.pages !== 0 && (
             <div className="flex items-center gap-2">
               <div className="font-semibold">Pages</div>
-              <Image src={"/pages.svg"} alt="pages" width={40} height={40} />
+              <Image
+                src={"/pages.svg"}
+                alt="pages"
+                width={40}
+                height={40}
+              />
               <div>{book.pages}</div>
             </div>
           )}
