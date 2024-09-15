@@ -142,8 +142,8 @@ export default function ListsCard({
   };
 
   const handleEditList = (list: List) => {
-    setEditingListId(list.id);
     setEditingListName(list.name);
+    setEditingListId(list.id);
   };
 
   const handleSaveEdit = async () => {
@@ -234,7 +234,7 @@ export default function ListsCard({
                           type="text"
                           value={editingListName}
                           onChange={handleEditListName}
-                          className="p-2 border rounded w-full"
+                          className="p-2 border rounded w-full text-black"
                         />
                         <button
                           aria-label="close"

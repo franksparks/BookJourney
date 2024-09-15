@@ -24,16 +24,20 @@ import { Button } from "./ui/button";
 import { Skeleton } from "./ui/skeleton";
 import { useToast } from "./ui/use-toast";
 import { Tooltip } from "@mui/material";
+import { usePathname } from "next/navigation";
 
 type ReadingStatusDropdownProps = {
   book: Book | DbBook;
+  handleStatusChange: () => void;
   logged: boolean;
 };
 
 export default function ReadingStatusDropdown({
   book,
+  handleStatusChange,
   logged,
 }: ReadingStatusDropdownProps) {
+  const pathname = usePathname();
   const { dbUser } = useDbUser();
   const [currentStatus, setStatus] = useState<BookStatus | null>(null);
   const [loading, setLoading] = useState(false);
@@ -112,6 +116,7 @@ export default function ReadingStatusDropdown({
         duration: 5000,
       });
     }
+    handleStatusChange();
   };
 
   const getSelectedLabel = () => {

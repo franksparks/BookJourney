@@ -11,12 +11,14 @@ import { Button } from "./ui/button";
 
 type bookCardAdvancedProps = {
   deleteVisible: boolean;
+  onStatusChange: () => void;
   onDelete: (bookId: string) => void;
   book: DbBook | Book;
 };
 
 export default function BookCardAdvanced({
   book,
+  onStatusChange,
   deleteVisible,
   onDelete,
 }: bookCardAdvancedProps) {
@@ -67,7 +69,7 @@ export default function BookCardAdvanced({
           </div>
         </Tooltip>
         <div className="flex z-50">
-          <ReadingStatusDropdown book={book} logged={logged} />
+          <ReadingStatusDropdown book={book} logged={logged} handleStatusChange={onStatusChange} />
           <Button
             onClick={() => onDelete(book.googleBooksId)}
             className={`bg-red-500 text-white rounded-full hover:bg-red-700 transition duration-300 p-1 pr-2 h-8 mt-auto mb-auto ${
