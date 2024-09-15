@@ -96,16 +96,28 @@ export default function BookCardAdvanced({
         ) : (
           <>
             <BookNavigationWrapper id={book.googleBooksId}>
-              <Tooltip arrow title={book.title} placement="top-start">
-                <b className="text-base line-clamp-1 text-sky-700">
-                  {`${capitalizeFirstLetter(
-                    book.title || "Title not available"
-                  )}`}{" "}
+              <Tooltip
+                arrow
+                title={`${capitalizeFirstLetter(
+                  book.title || "Title not available"
+                )} by ${
+                  book.authors && book.authors.length > 0
+                    ? capitalizeFirstLetter(book.authors.join(" "))
+                    : "Unknown"
+                }`}
+                placement="top-start"
+              >
+                <p className="text-base line-clamp-1 text-sky-700">
+                  <span className="font-bold">
+                    {`${capitalizeFirstLetter(
+                      book.title || "Title not available"
+                    )}`}{" "}
+                  </span>
                   by{" "}
                   {book.authors && book.authors.length > 0
                     ? capitalizeFirstLetter(book.authors.join(" "))
                     : "Unknown"}
-                </b>
+                </p>
               </Tooltip>
             </BookNavigationWrapper>
           </>
