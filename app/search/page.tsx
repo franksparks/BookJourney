@@ -135,12 +135,14 @@ export default function Home() {
             <SearchResults books={advancedResults} />
           )}
           {advancedResults.length !== 0 && (
-            <ParametrizedPagination
-              setPage={handlePageChange}
-              page={page}
-              totalItems={advancedTotalItems}
-              numItemsPerPage={10}
-            />
+            <div className="m-2">
+              <ParametrizedPagination
+                setPage={handlePageChange}
+                page={page}
+                totalItems={advancedTotalItems}
+                numItemsPerPage={10}
+              />
+            </div>
           )}
         </div>
       </main>
