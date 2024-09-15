@@ -8,8 +8,8 @@ interface ReadMoreProps {
 
 export default function ReadMore({
   text,
-  initialWords = 36, // Se muestran 36 palabras inicialmente
-  maxWords = 100, // Se muestran hasta 100 palabras al hacer clic en "Show more"
+  initialWords = 36,
+  maxWords = 100,
 }: ReadMoreProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const splittedText = text.split(" ");
