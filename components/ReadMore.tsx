@@ -9,7 +9,7 @@ interface ReadMoreProps {
 export default function ReadMore({
   text,
   initialWords = 36,
-  maxWords = 100,
+  maxWords = 75,
 }: ReadMoreProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const splittedText = text.split(" ");
