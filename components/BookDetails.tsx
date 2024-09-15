@@ -37,6 +37,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
   const [bookReview, setBookReview] = useState<Review | null>(null);
   const [firstInteraction, setFirstInteraction] = useState(true);
   const logged = dbUser ? true : false;
+  const [imageSize, setImageSize] = useState("small");
 
   const fetchRating = useCallback(async () => {
     if (dbUser && "ratings" in book) {
@@ -110,6 +111,20 @@ export default function BookDetails({ book }: BookDetailsProps) {
   }, [fetchRating]);
 
   useEffect(() => {
+    const handleResize = () => {
+      const height = window.innerHeight;
+      if (height > 1000) {
+        setImageSize("large");
+      } else {
+        setImageSize("small");
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
     if (!firstInteraction) {
       if (bookInDb === null) {
         addBookToDb();
@@ -136,10 +151,16 @@ export default function BookDetails({ book }: BookDetailsProps) {
             width="0"
             height="0"
             sizes="100vw"
-            className="rounded h-72 w-auto  mb-8 shadow-lg shadow-sky-600"
+            className={`rounded w-auto  mb-8 shadow-lg shadow-sky-600 ${
+              imageSize === "large" ? "h-72" : "h-36"
+            } `}
           />
           <div className="z-50">
-            <ReadingStatusDropdown book={book} logged={logged} handleStatusChange={() => {}} />
+            <ReadingStatusDropdown
+              book={book}
+              logged={logged}
+              handleStatusChange={() => {}}
+            />
           </div>
           <div className="flex justify-center mt-7">
             <ControlledRating
@@ -187,12 +208,12 @@ export default function BookDetails({ book }: BookDetailsProps) {
             </h2>
           ))) || <h2> {"Unknown author"} </h2>}
         {book.description && <ReadMore text={book.description} />}
-        <div className="mt-8 flex flex-row w-full justify-between items-center">
+        <div className="mt-2 flex flex-row w-full justify-between items-center">
           <div className="flex items-center gap-2">
             <div className="font-bold">{"Genre"}</div>
             {book.categories?.length > 0 ? (
               <>
-                <div className="flex h-5 items-center space-x-4">
+                <div className="flex h-2 items-center space-x-4">
                   {book.categories.map((category, index) => (
                     <React.Fragment key={`category-${index}`}>
                       <div>{category}</div>
@@ -241,7 +262,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
             </div>
           )}
         </div>
-        <Separator className="my-4" />
+        <Separator className="my-2" />
         {logged && (
           <h2>{`Rating average: ${
             book.ratingAverage || "N.A."
