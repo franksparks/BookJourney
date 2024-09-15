@@ -41,7 +41,7 @@ export default function Page({ params }: PageProps) {
 
   return (
     book && (
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center h-full">
         <BookDetails book={book} />
       </div>
     )
