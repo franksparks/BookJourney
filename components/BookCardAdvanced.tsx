@@ -8,6 +8,7 @@ import ReadingStatusDropdown from "./ReadingStatusDropdown";
 import { TrashIcon } from "@radix-ui/react-icons";
 import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
+import { useEffect, useState } from "react";
 
 type bookCardAdvancedProps = {
   deleteVisible: boolean;
@@ -26,13 +27,32 @@ export default function BookCardAdvanced({
   const logged = dbUser ? true : false;
   const pathname = usePathname();
 
+  const [imageSize, setImageSize] = useState("small");
+
+  useEffect(() => {
+    const handleResize = () => {
+      const height = window.innerHeight;
+      if (height > 1000) {
+        setImageSize("large");
+      } else {
+        setImageSize("small");
+      }
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
-    <div className="relative flex flex-row justify-between bg-sky-50 rounded-lg mx-auto shadow-md shadow-sky-800 hover:bg-sky-200 transition duration-500 max-w-xl h-full">
+    <div className="relative flex flex-row justify-between bg-sky-50 rounded-lg mx-auto shadow-md shadow-sky-800 hover:bg-sky-200 transition duration-500 max-w-xl">
       <div className="w-1/3 flex items-center justify-center min-w-fit">
         <BookNavigationWrapper id={book.googleBooksId}>
           {book.smallCover ? (
             <Image
-              className="shadow-lg shadow-sky-600 rounded hover:scale-110 transition duration-1000 w-16 h-auto"
+              className={`shadow-lg shadow-sky-600 rounded hover:scale-110 transition duration-1000 ${
+                imageSize === "large" ? "w-20" : "w-10"
+              } h-auto m-2`}
               src={book.smallCover}
               alt={book.title}
               width="0"
@@ -41,7 +61,9 @@ export default function BookCardAdvanced({
             />
           ) : (
             <Image
-              className="shadow-lg shadow-sky-600 rounded hover:scale-110 transition duration-1000 w-16 h-auto"
+              className={`shadow-lg shadow-sky-600 rounded hover:scale-110 transition duration-1000 ${
+                imageSize === "large" ? "w-20" : "w-10"
+              } h-auto m-2`}
               src={"/default_cover.jpg"}
               alt={book.title}
               width="0"
@@ -69,7 +91,11 @@ export default function BookCardAdvanced({
           </div>
         </Tooltip>
         <div className="flex z-50">
-          <ReadingStatusDropdown book={book} logged={logged} handleStatusChange={onStatusChange} />
+          <ReadingStatusDropdown
+            book={book}
+            logged={logged}
+            handleStatusChange={onStatusChange}
+          />
           <Button
             onClick={() => onDelete(book.googleBooksId)}
             className={`bg-red-500 text-white rounded-full hover:bg-red-700 transition duration-300 p-1 pr-2 h-8 mt-auto mb-auto ${
