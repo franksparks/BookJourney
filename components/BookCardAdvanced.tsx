@@ -51,8 +51,8 @@ export default function BookCardAdvanced({
           {book.smallCover ? (
             <Image
               className={`shadow-lg shadow-sky-600 rounded hover:scale-110 transition duration-1000 ${
-                imageSize === "large" ? "w-20" : "w-10"
-              } h-auto m-2`}
+                imageSize === "large" ? "h-28" : "h-16"
+              } w-auto m-2`}
               src={book.smallCover}
               alt={book.title}
               width="0"
@@ -62,8 +62,8 @@ export default function BookCardAdvanced({
           ) : (
             <Image
               className={`shadow-lg shadow-sky-600 rounded hover:scale-110 transition duration-1000 ${
-                imageSize === "large" ? "w-20" : "w-10"
-              } h-auto m-2`}
+                imageSize === "large" ? "h-28" : "h-16"
+              } w-auto m-2`}
               src={"/default_cover.jpg"}
               alt={book.title}
               width="0"
