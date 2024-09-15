@@ -5,7 +5,10 @@ interface ReadMoreProps {
   amountOfWords?: number;
 }
 
-export default function ReadMore({ text, amountOfWords = 36 }: ReadMoreProps) {
+export default function ReadMore({
+  text,
+  amountOfWords = 36,
+}: ReadMoreProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const splittedText = text.split(" ");
   const itCanOverflow = splittedText.length > amountOfWords;
@@ -25,7 +28,8 @@ export default function ReadMore({ text, amountOfWords = 36 }: ReadMoreProps) {
       {beginText}
       {itCanOverflow && (
         <>
-          {!isExpanded && <span>... </span>}
+          {!isExpanded ? <span>... </span> : " "}
+
           <span
             className={`${!isExpanded && "hidden"}`}
             aria-hidden={!isExpanded}
