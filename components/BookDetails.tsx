@@ -190,7 +190,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
         <div className="mt-8 flex flex-row w-full justify-between items-center">
           <div className="flex items-center gap-2">
             <div className="font-bold">{"Genre"}</div>
-            {book.categories.length > 0 ? (
+            {book.categories?.length > 0 ? (
               <>
                 <div className="flex h-5 items-center space-x-4">
                   {book.categories.map((category, index) => (
