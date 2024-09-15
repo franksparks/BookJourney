@@ -32,7 +32,7 @@ export default function BookCardAdvanced({
   useEffect(() => {
     const handleResize = () => {
       const height = window.innerHeight;
-      if (height > 600) {
+      if (height > 1000) {
         setImageSize("large");
       } else {
         setImageSize("small");
