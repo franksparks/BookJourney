@@ -28,21 +28,21 @@ export default function ListsCard() {
             className="text-lg p-6 w-full"
             onClick={() => router.push("/lists?listId=READ")}
           >
-            <img src={ReadStatusIcon.src} className="w-10 h-10"/>
+            <img src={ReadStatusIcon.src} className="w-10 h-10 filter invert"/>
             Read books
           </Button>
           <Button
             className="text-lg p-6 w-full"
             onClick={() => router.push("/lists?listId=READING")}
           >
-            <img src={ReadingStatusIcon.src} className="w-10 h-10"/>
+            <img src={ReadingStatusIcon.src} className="w-10 h-10 filter invert"/>
             Books you are reading
           </Button>
           <Button
             className="text-lg p-6 w-full"
             onClick={() => router.push("/lists?listId=WANT_TO_READ")}
           >
-            <img src={WantToReadStatusIcon.src} className="w-10 h-10"/>
+            <img src={WantToReadStatusIcon.src} className="w-10 h-10 filter invert"/>
             Books you want to read
           </Button>
           <Button

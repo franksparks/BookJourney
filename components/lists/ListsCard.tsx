@@ -275,7 +275,7 @@ export default function ListsCard({
                                 ? WantToReadStatusIcon.src
                                 : AbandonedStatusIcon.src
                             }
-                            className="h-10 w-10"
+                            className="h-10 w-10 filter invert"
                           />
                         ) : <img src={BookGif.src} className="h-7 w-7 mr-3" />}
                       <Tooltip
