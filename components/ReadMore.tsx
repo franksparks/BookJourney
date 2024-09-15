@@ -24,7 +24,7 @@ export default function ReadMore({
   };
 
   return (
-    <div className="mt-6">
+    <div className="mt-2">
       {beginText}
       {itCanOverflow && (
         <>

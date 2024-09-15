@@ -152,7 +152,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
             height="0"
             sizes="100vw"
             className={`rounded w-auto  mb-8 shadow-lg shadow-sky-600 ${
-              imageSize === "large" ? "h-72" : "h-36"
+              imageSize === "large" ? "h-72" : "h-48"
             } `}
           />
           <div className="z-50">
@@ -194,19 +194,20 @@ export default function BookDetails({ book }: BookDetailsProps) {
       <div className="flex justify-start flex-col mr-4 w-3/4">
         <div className="flex flex-row">
           <h1 className="mr-4">{book.title || "Title not available"}</h1>
+          <p className="text-2xl italic text-slate-600">by&nbsp;</p>
+          {(book.authors &&
+            book.authors.map((author, index) => (
+              <h2
+                className="text-2xl italic text-slate-600"
+                key={`author-${index}`}
+              >
+                {" "}
+                {author}{" "}
+              </h2>
+            ))) || <h2> {"Unknown author"} </h2>}
           {logged && <ReadRating value={book.ratingAverage!} />}
         </div>
 
-        {(book.authors &&
-          book.authors.map((author, index) => (
-            <h2
-              className="text-3xl italic text-slate-600"
-              key={`author-${index}`}
-            >
-              {" "}
-              {author}{" "}
-            </h2>
-          ))) || <h2> {"Unknown author"} </h2>}
         {book.description && <ReadMore text={book.description} />}
         <div className="mt-2 flex flex-row w-full justify-between items-center">
           <div className="flex items-center gap-2">
