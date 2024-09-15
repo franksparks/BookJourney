@@ -5,10 +5,7 @@ interface ReadMoreProps {
   amountOfWords?: number;
 }
 
-export default function ReadMore({
-  text,
-  amountOfWords = 36,
-}: ReadMoreProps) {
+export default function ReadMore({ text, amountOfWords = 36 }: ReadMoreProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const splittedText = text.split(" ");
   const itCanOverflow = splittedText.length > amountOfWords;
@@ -24,7 +21,7 @@ export default function ReadMore({
   };
 
   return (
-    <div className="mt-2">
+    <div>
       {beginText}
       {itCanOverflow && (
         <>
