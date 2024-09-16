@@ -66,7 +66,7 @@ export default function BookCardAdvanced({
               : "Unknown"}
           </div>
         </Tooltip>
-        <div className="flex z-5">
+        <div className="flex">
           <ReadingStatusDropdown book={book} logged={logged} />
           <Button
             onClick={() => onDelete(book.googleBooksId)}

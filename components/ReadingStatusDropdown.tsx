@@ -24,6 +24,10 @@ import { Button } from "./ui/button";
 import { Skeleton } from "./ui/skeleton";
 import { useToast } from "./ui/use-toast";
 import { Tooltip } from "@mui/material";
+import ReadStatusIcon from "../assets/read_status.png";
+import ReadingStatusIcon from "../assets/reading_status.png";
+import AbandonedStatusIcon from "../assets/abandoned_status.png";
+import WantToReadStatusIcon from "../assets/want_to_read_status.png";
 
 type ReadingStatusDropdownProps = {
   book: Book | DbBook;
@@ -140,9 +144,22 @@ export default function ReadingStatusDropdown({
     return <Skeleton className="h-10 w-1/2" />;
   }
 
+  const returnIcon = () => {
+    if (currentStatus?.status === ReadStatus.READ) {
+      return ReadStatusIcon.src;
+    } else if (currentStatus?.status === ReadStatus.READING) {
+      return ReadingStatusIcon.src;
+    } else if (currentStatus?.status === ReadStatus.ABANDONED) {
+      return AbandonedStatusIcon.src;
+    } else if (currentStatus?.status === ReadStatus.WANT_TO_READ) {
+      return WantToReadStatusIcon.src;
+    }
+    return ReadStatusIcon.src;
+  };
+
   return (
     <>
-      <div className="w-full">
+      <div className="w-full inline-flex">
         <DropdownMenu>
           {dbUser === null ? (
             <Tooltip title="Login to perform this action." arrow>
@@ -164,12 +181,18 @@ export default function ReadingStatusDropdown({
                 if (getSelectedLabel() === "Want to read")
                   handleDropdownClick(ReadStatus.WANT_TO_READ);
               }}
-              className={
+              className={ 'w-40 flex' + (
                 currentStatus
                   ? "rounded-r-none bg-blue-300 hover:bg-blue-300 text-black cursor-not-allowed"
                   : "rounded-r-none"
-              }
+          )}
             >
+              <img
+                      src={
+                        returnIcon()
+                      }
+                      className="h-7 w-7 filter invert"
+                    />
               {getSelectedLabel()}
             </Button>
           )}
@@ -193,26 +216,40 @@ export default function ReadingStatusDropdown({
               <DropdownMenuTrigger asChild>
                 <Button
                   disabled={!logged}
-                  className="rounded-l-none"
+                  className="rounded-r-none"
                   variant={"dropdown"}
                 >
                   &#9660;
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="flex flex-col">
+              <DropdownMenuContent className="flex flex-col z-10" style={{ marginLeft: '-160px', width: '210px'}}>
                 {getDropdownItems().map((item: any, index: number) => (
                   <DropdownMenuItem
                     key={index}
-                    className={
+                    className={`w-full flex ${
                       index === 0 && String(currentStatus) === item.value
                         ? "rounded-l-none bg-blue-200"
                         : "rounded-l-none"
-                    }
+                    }`}
                     onClick={() => {
                       handleDropdownClick(item.value);
                     }}
                   >
-                    <Button>{item.label}</Button>
+                    <Button className="w-full">
+                    <img
+                      src={
+                        item.value === ReadStatus.READ
+                          ? ReadStatusIcon.src
+                          : item.value === ReadStatus.READING
+                          ? ReadingStatusIcon.src
+                          : item.value === ReadStatus.WANT_TO_READ
+                          ? WantToReadStatusIcon.src
+                          : AbandonedStatusIcon.src
+                      }
+                      className="h-8 w-8 filter invert"
+                    />
+                    {item.label}
+                    </Button>
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>

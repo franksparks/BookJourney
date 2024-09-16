@@ -22,7 +22,7 @@ import ReadStatusIcon from "../../assets/read_status.png";
 import ReadingStatusIcon from "../../assets/reading_status.png";
 import AbandonedStatusIcon from "../../assets/abandoned_status.png";
 import WantToReadStatusIcon from "../../assets/want_to_read_status.png";
-import BookGif from "../../assets/book-gif.gif";
+import BookPile from '../../assets/bookpile_icon.png'
 
 interface ListsCardProps {
   lists: List[];
@@ -262,6 +262,12 @@ export default function ListsCard({
                     </div>
                   ) : (
                     <>
+                    <Tooltip
+                        title={<text>{list.name} - ({list.book_count ?? 0})</text>}
+                        placement="top"
+                        className="flex mr-auto"
+                      >
+                        <>
                     {Object.values(ReadStatus).includes(
                           list.id as ReadStatus
                         ) ? (
@@ -277,11 +283,8 @@ export default function ListsCard({
                             }
                             className="h-10 w-10 filter invert"
                           />
-                        ) : <img src={BookGif.src} className="h-7 w-7 mr-3" />}
-                      <Tooltip
-                        title={`${list.name} - (${list.book_count ?? 0})`}
-                        placement="top"
-                      >
+                        ) : <img src={BookPile.src} className="h-9 w-7 ml-2 mr-1" />}
+                      
                         <li
                           onClick={() => handleSelectList(list)}
                           className={`truncate w-full transition transform hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none hover:cursor-pointer ${
@@ -290,6 +293,7 @@ export default function ListsCard({
                         >
                           {list.name} - ({list.book_count ?? 0})
                         </li>
+                        </>
                       </Tooltip>
                       {!Object.values(ReadStatus).includes(
                         list.id as ReadStatus
