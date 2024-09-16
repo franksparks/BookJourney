@@ -2,7 +2,7 @@ import { actionUpdateBookLists } from "@/actions/book-list";
 import { actionGetBookByGoogleId, actionInsertBook } from "@/actions/books";
 import {
   actionGetListsByBookIdAndUserId,
-  actionGetListsByUserId
+  actionGetListsByUserId,
 } from "@/actions/lists";
 import { useDbUser } from "@/app/context/db-user-context";
 import { Book, DbBook } from "@/models/book";
@@ -15,7 +15,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
 } from "./ui/dialog";
 import { Tooltip } from "@mui/material";
 import { dbGetBookByGoogleId } from "../db/books";
@@ -101,26 +101,29 @@ export default function BookToListInjector({ book }: BookToListInjectorProps) {
     <div>
       {logged && (
         <ul>
-          {logged && !loading && (
+          {bookLists && bookLists.length > 0 ? (
             <>
-              {bookLists && bookLists.length > 0 ? (
-                <>
-                  <p className="mt-2">
-                    Book stored on{" "}
-                    {bookLists.length === 1 ? "this list" : "these lists"}:
-                  </p>
+              <p className="mt-2">
+                Book stored on{" "}
+                {bookLists.length === 1 ? "this list" : "these lists"}:
+              </p>
 
-                  {bookLists.map((list: List, index) => (
-                    <li className=" flex justify-center mt-2" key={index}>
-                      {list.name}
-                    </li>
-                  ))}
-                </>
-              ) : (
-                <p>Book not added to any list yet.</p>
+              {bookLists.slice(0, 3).map((list: List, index) => (
+                <li className="flex justify-center mt-2" key={index}>
+                  {list.name}
+                </li>
+              ))}
+
+              {bookLists.length > 3 && (
+                <li className="flex justify-center mt-2">
+                  and {bookLists.length - 3} more
+                </li>
               )}
             </>
+          ) : (
+            <p>Book not added to any list yet.</p>
           )}
+
           {logged && loading && (
             <>
               {" "}
