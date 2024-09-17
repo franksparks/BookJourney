@@ -14,6 +14,7 @@ export default function SearchResult({ books }: SearchResultProps) {
             book={book}
             deleteVisible={false}
             onDelete={() => {}}
+            onStatusChange={() => {}}
           />
         </div>
       ))}

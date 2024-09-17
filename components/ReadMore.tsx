@@ -2,17 +2,27 @@ import { useState } from "react";
 
 interface ReadMoreProps {
   text: string;
-  amountOfWords?: number;
+  initialWords?: number;
+  maxWords?: number;
 }
 
-export default function ReadMore({ text, amountOfWords = 36 }: ReadMoreProps) {
+export default function ReadMore({
+  text,
+  initialWords = 36,
+  maxWords = 75,
+}: ReadMoreProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const splittedText = text.split(" ");
-  const itCanOverflow = splittedText.length > amountOfWords;
+
+  const itCanOverflow = splittedText.length > initialWords;
+  const maxLengthExceeded = splittedText.length > maxWords;
+
   const beginText = itCanOverflow
-    ? splittedText.slice(0, amountOfWords - 1).join(" ")
+    ? splittedText.slice(0, initialWords).join(" ")
     : text;
-  const endText = splittedText.slice(amountOfWords - 1).join(" ");
+
+  const fullText = splittedText.slice(0, maxWords).join(" ");
+  const remainingText = splittedText.slice(maxWords).join(" ");
 
   const handleKeyboard = (e: { code: string }) => {
     if (e.code === "Space" || e.code === "Enter") {
@@ -21,17 +31,15 @@ export default function ReadMore({ text, amountOfWords = 36 }: ReadMoreProps) {
   };
 
   return (
-    <div className="mt-6">
-      {beginText}
+    <div className="mt-2">
+      {!isExpanded ? beginText : fullText}
+
       {itCanOverflow && (
         <>
-          {!isExpanded && <span>... </span>}
-          <span
-            className={`${!isExpanded && "hidden"}`}
-            aria-hidden={!isExpanded}
-          >
-            {endText}
-          </span>
+          {!isExpanded ? <span>... </span> : null}
+
+          {isExpanded && maxLengthExceeded && <span>... </span>}
+
           <span
             className="text-orange-500 ml-2"
             role="button"

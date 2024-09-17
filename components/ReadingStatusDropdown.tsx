@@ -28,16 +28,20 @@ import ReadStatusIcon from "../assets/read_status.png";
 import ReadingStatusIcon from "../assets/reading_status.png";
 import AbandonedStatusIcon from "../assets/abandoned_status.png";
 import WantToReadStatusIcon from "../assets/want_to_read_status.png";
+import { usePathname } from "next/navigation";
 
 type ReadingStatusDropdownProps = {
   book: Book | DbBook;
+  handleStatusChange: () => void;
   logged: boolean;
 };
 
 export default function ReadingStatusDropdown({
   book,
+  handleStatusChange,
   logged,
 }: ReadingStatusDropdownProps) {
+  const pathname = usePathname();
   const { dbUser } = useDbUser();
   const [currentStatus, setStatus] = useState<BookStatus | null>(null);
   const [loading, setLoading] = useState(false);
@@ -116,6 +120,7 @@ export default function ReadingStatusDropdown({
         duration: 5000,
       });
     }
+    handleStatusChange();
   };
 
   const getSelectedLabel = () => {

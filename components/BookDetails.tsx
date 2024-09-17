@@ -22,6 +22,8 @@ import ReviewDialogue from "./ReviewDialogue";
 import Reviews from "./Reviews";
 import { Separator } from "./ui/separator";
 import React from "react";
+import { Tooltip } from "@mui/material";
+import { capitalizeFirstLetter } from "@/lib/capitalize";
 
 type BookDetailsProps = {
   book: Book | DbBook;
@@ -37,6 +39,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
   const [bookReview, setBookReview] = useState<Review | null>(null);
   const [firstInteraction, setFirstInteraction] = useState(true);
   const logged = dbUser ? true : false;
+  const [imageSize, setImageSize] = useState("small");
 
   const fetchRating = useCallback(async () => {
     if (dbUser && "ratings" in book) {
@@ -110,6 +113,20 @@ export default function BookDetails({ book }: BookDetailsProps) {
   }, [fetchRating]);
 
   useEffect(() => {
+    const handleResize = () => {
+      const height = window.innerHeight;
+      if (height > 1000) {
+        setImageSize("large");
+      } else {
+        setImageSize("small");
+      }
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
     if (!firstInteraction) {
       if (bookInDb === null) {
         addBookToDb();
@@ -127,7 +144,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
   }, [numericBookRating, bookInDb]);
 
   return (
-    <div className="flex justify-center m-8 bg-sky-50 shadow-lg shadow-sky-600 p-12 rounded-3xl">
+    <div className="flex justify-center m-2 ml-8 mr-8 bg-sky-50 shadow-lg shadow-sky-600 p-4 rounded-3xl">
       <div className="flex justify-center basis-1/4">
         <div className="flex flex-col items-center">
           <Image
@@ -136,10 +153,16 @@ export default function BookDetails({ book }: BookDetailsProps) {
             width="0"
             height="0"
             sizes="100vw"
-            className="rounded h-72 w-auto  mb-8 shadow-lg shadow-sky-600"
+            className={`rounded w-auto  mb-8 shadow-lg shadow-sky-600 ${
+              imageSize === "large" ? "h-72" : "h-48"
+            } `}
           />
           <div className="z-50">
-            <ReadingStatusDropdown book={book} logged={logged} />
+            <ReadingStatusDropdown
+              book={book}
+              logged={logged}
+              handleStatusChange={() => {}}
+            />
           </div>
           <div className="flex justify-center mt-7">
             <ControlledRating
@@ -172,27 +195,44 @@ export default function BookDetails({ book }: BookDetailsProps) {
       </div>
       <div className="flex justify-start flex-col mr-4 w-3/4">
         <div className="flex flex-row">
-          <h1 className="mr-4">{book.title || "Title not available"}</h1>
+          <Tooltip
+            arrow
+            title={`${capitalizeFirstLetter(
+              book.title || "Title not available"
+            )} by ${
+              book.authors && book.authors.length > 0
+                ? capitalizeFirstLetter(book.authors.join(" "))
+                : "Unknown"
+            }`}
+            placement="top-start"
+          >
+            <p className="mr-4 text-3xl font-bold">
+              {book.title && book.title.length > 60
+                ? `${book.title.slice(0, 60)}...`
+                : book.title || "Title not available"}
+            </p>
+          </Tooltip>
+          <p className="text-2xl italic text-slate-600">by&nbsp;</p>
+          {(book.authors &&
+            book.authors.map((author, index) => (
+              <h2
+                className="text-2xl italic text-slate-600"
+                key={`author-${index}`}
+              >
+                {" "}
+                {author}{" "}
+              </h2>
+            ))) || <h2> {"Unknown author"} </h2>}
           {logged && <ReadRating value={book.ratingAverage!} />}
         </div>
 
-        {(book.authors &&
-          book.authors.map((author, index) => (
-            <h2
-              className="text-3xl italic text-slate-600"
-              key={`author-${index}`}
-            >
-              {" "}
-              {author}{" "}
-            </h2>
-          ))) || <h2> {"Unknown author"} </h2>}
         {book.description && <ReadMore text={book.description} />}
-        <div className="mt-8 flex flex-row w-full justify-between items-center">
+        <div className="mt-2 flex flex-row w-full justify-between items-center">
           <div className="flex items-center gap-2">
             <div className="font-bold">{"Genre"}</div>
-            {book.categories.length > 0 ? (
+            {book.categories?.length > 0 ? (
               <>
-                <div className="flex h-5 items-center space-x-4">
+                <div className="flex h-2 items-center space-x-4">
                   {book.categories.map((category, index) => (
                     <React.Fragment key={`category-${index}`}>
                       <div>{category}</div>
@@ -241,7 +281,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
             </div>
           )}
         </div>
-        <Separator className="my-4" />
+        <Separator className="my-2" />
         {logged && (
           <h2>{`Rating average: ${
             book.ratingAverage || "N.A."
