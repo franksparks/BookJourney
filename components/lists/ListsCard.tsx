@@ -129,10 +129,10 @@ export default function ListsCard({
       setErrorMessage("List already exists");
       return;
     }
-    await actionInsertList(newList, dbUser!.id);
+    const result = await actionInsertList(newList, dbUser!.id);
     setNewListName("");
     setShowInput(false);
-    getLists();
+    setLists([...lists, result]);
   };
 
   const handleSelectList = (list: List) => {
