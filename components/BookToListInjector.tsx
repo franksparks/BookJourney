@@ -116,12 +116,12 @@ export default function BookToListInjector({ book }: BookToListInjectorProps) {
               </ul>
               {bookLists.length > 3 && (
                 <p className="text-sm text-center mt-2">
-                  and {bookLists.length - 3} more.
+                  and {bookLists.length - 3} more
                 </p>
               )}
             </>
           ) : (
-            <p className="mt-2 text-sm">Book not added to any list yet.</p>
+            <p className="mt-2 text-sm">Book not added to any list yet</p>
           )}
         </>
       )}
