@@ -2,6 +2,7 @@
 
 import { actionGetBooksByUserIdAndReadingStatus } from "@/actions/book-status";
 import { useDbUser } from "@/app/context/db-user-context";
+import { getResponsiveValues } from "@/lib/utils";
 import { BookStatus } from "@/models/book-status";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -30,13 +31,10 @@ export default function ReadingList({
 
   useEffect(() => {
     const handleResize = () => {
-      const height = window.innerHeight;
-      if (height > 1000) {
-        setBooksPerPage(4);
-      } else {
-        setBooksPerPage(3);
-      }
+      const { booksPerPage } = getResponsiveValues();
+      setBooksPerPage(booksPerPage);
     };
+
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
