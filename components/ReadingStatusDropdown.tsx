@@ -196,7 +196,7 @@ export default function ReadingStatusDropdown({
                       src={
                         returnIcon()
                       }
-                      className="h-7 w-7 filter invert"
+                      className="h-6 w-6 mr-1 filter invert"
                     />
               {getSelectedLabel()}
             </Button>
@@ -251,7 +251,7 @@ export default function ReadingStatusDropdown({
                           ? WantToReadStatusIcon.src
                           : AbandonedStatusIcon.src
                       }
-                      className="h-8 w-8"
+                      className="h-6 w-6 mr-1"
                     />
                     {item.label}
                     </Button>

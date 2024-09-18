@@ -285,9 +285,9 @@ export default function ListsCard({
                                 ? WantToReadStatusIcon.src
                                 : AbandonedStatusIcon.src
                             }
-                            className="h-8 w-8"
+                            className="h-6 w-6 mr-2"
                           />
-                        ) : <img src={BookPile.src} className="h-9 w-7 ml-2 mr-1" />}
+                        ) : <img src={BookPile.src} className="h-6 w-6 mr-2" />}
                       
                         <li
                           onClick={() => handleSelectList(list)}
