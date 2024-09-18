@@ -11,21 +11,21 @@
 
 BookJourney allows the users to track their reading activity.
 
-In order to get books information [GoogleBooksAPI](https://developers.google.com/books?hl=es-419) is being used.
-
 Users can store books as "Want to read", "Reading" or "Read" status. But users can define their own lists as well.
 
-To promote reading, user can set a Reading Challenge for the current year.
+To promote reading, user can set a Reading Challenge for the current year (something happens on completion!).
 
-Users can set ratings and reviews to the books.
+Also, users can set ratings and reviews to the books.
+
+Books information is retrieved from [GoogleBooksAPI](https://developers.google.com/books?hl=es-419).
 
 ### Serveless application
 
-BookJourney does not have an API, we are running serverless by running actions directly.
+BookJourney does not have an API, we are running serverless by running actions to the database directly.
 
 ### Database
 
-We are using [MongoDB](https://www.mongodb.com) as provider.
+We are using [MongoDB](https://www.mongodb.com) as provider via Prisma ORM.
 
 ### Prisma schema
 
@@ -43,3 +43,18 @@ Steps to run the project:
    1. MongoDB
    2. Clerk
 4. ⁠Generate the database<code>bun x prisma db push</code>
+5. Run local <code>bun run dev</code>
+
+### Screenshots:
+
+Lorem Ipsum
+
+### Possible next steps:
+
+- Display authors bio (this information is not provided by Google books API).
+- Display user reading data (books read on a given year, pages read on a given year, longest book read, shortest book read...)
+  - Reading activity is being stored already.
+- Provide book recommendations based on the authors and genres of the books read.
+- Implement some usage for the "Abandoned" status.
+  - Most abandoned book from the users, percentage, etc.
+- Add social functionalities like follow other users, like reviews and reading activities, etc.
