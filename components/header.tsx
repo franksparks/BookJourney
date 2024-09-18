@@ -16,7 +16,6 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import PreviewSearchBox from "./PreviewSearchBox";
 import { Button } from "./ui/button";
-import BookGif from "../assets/book-gif.gif";
 
 export default function Header() {
   const { user } = useUser();
@@ -44,7 +43,6 @@ export default function Header() {
           onClick={() => router.push("/")}
           className="flex items-center gap-x-1 cursor-pointer mt-2"
         >
-          <img src={BookGif.src} className="w-11 h-11 mb-3 mr-2" />
           <h1 className="text-white text-4xl font-thin">book</h1>
           <h1 className="text-orange-500 text-4xl tracking-wide">
             journey

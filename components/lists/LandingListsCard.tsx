@@ -3,10 +3,9 @@
 import { useDbUser } from "@/app/context/db-user-context";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
-import ReadStatusIcon from "../../assets/read_status.png"
-import ReadingStatusIcon from "../../assets/reading_status.png"
-import AbandonedStatusIcon from "../../assets/abandoned_status.png"
-import WantToReadStatusIcon from "../../assets/want_to_read_status.png";
+import ReadStatusIcon from "../../assets/icons/read.svg";
+import ReadingStatusIcon from "../../assets/icons/reading.svg";
+import WantToReadStatusIcon from "../../assets/icons/pending.svg";
 
 export default function ListsCard() {
   const { dbUser } = useDbUser();
@@ -28,21 +27,21 @@ export default function ListsCard() {
             className="text-lg p-6 w-full"
             onClick={() => router.push("/lists?listId=READ")}
           >
-            <img src={ReadStatusIcon.src} className="w-10 h-10 filter invert"/>
+            <img src={ReadStatusIcon.src} className="w-8 h-8 mr-2"/>
             Read books
           </Button>
           <Button
             className="text-lg p-6 w-full"
             onClick={() => router.push("/lists?listId=READING")}
           >
-            <img src={ReadingStatusIcon.src} className="w-10 h-10 filter invert"/>
+            <img src={ReadingStatusIcon.src} className="w-8 h-8 mr-2"/>
             Books you are reading
           </Button>
           <Button
             className="text-lg p-6 w-full"
             onClick={() => router.push("/lists?listId=WANT_TO_READ")}
           >
-            <img src={WantToReadStatusIcon.src} className="w-10 h-10 filter invert"/>
+            <img src={WantToReadStatusIcon.src} className="w-8 h-8 mr-2"/>
             Books you want to read
           </Button>
           <Button

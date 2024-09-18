@@ -18,11 +18,11 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Tooltip } from "@mui/material";
-import ReadStatusIcon from "../../assets/read_status.png";
-import ReadingStatusIcon from "../../assets/reading_status.png";
-import AbandonedStatusIcon from "../../assets/abandoned_status.png";
-import WantToReadStatusIcon from "../../assets/want_to_read_status.png";
-import BookPile from '../../assets/bookpile_icon.png'
+import ReadStatusIcon from "../../assets/icons/read.svg";
+import ReadingStatusIcon from "../../assets/icons/reading.svg";
+import WantToReadStatusIcon from "../../assets/icons/pending.svg";
+import AbandonedStatusIcon from "../../assets/icons/cancel.svg";
+import BookPile from "../../assets/icons/book.svg";
 
 interface ListsCardProps {
   lists: List[];
@@ -163,6 +163,10 @@ export default function ListsCard({
     }
     setEditingListId(null);
     setEditingListName("");
+    const actual = lists.find((list) => list.id === editingListId);
+    if (actual) {
+      result.book_count = actual?.book_count;
+    }
     setLists(lists.map((list) => (list.id === editingListId ? result : list)));
   };
 
@@ -281,7 +285,7 @@ export default function ListsCard({
                                 ? WantToReadStatusIcon.src
                                 : AbandonedStatusIcon.src
                             }
-                            className="h-10 w-10 filter invert"
+                            className="h-8 w-8"
                           />
                         ) : <img src={BookPile.src} className="h-9 w-7 ml-2 mr-1" />}
                       

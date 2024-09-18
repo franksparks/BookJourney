@@ -24,10 +24,10 @@ import { Button } from "./ui/button";
 import { Skeleton } from "./ui/skeleton";
 import { useToast } from "./ui/use-toast";
 import { Tooltip } from "@mui/material";
-import ReadStatusIcon from "../assets/read_status.png";
-import ReadingStatusIcon from "../assets/reading_status.png";
-import AbandonedStatusIcon from "../assets/abandoned_status.png";
-import WantToReadStatusIcon from "../assets/want_to_read_status.png";
+import ReadStatusIcon from "../assets/icons/read.svg";
+import ReadingStatusIcon from "../assets/icons/reading.svg";
+import WantToReadStatusIcon from "../assets/icons/pending.svg";
+import AbandonedStatusIcon from "../assets/icons/cancel.svg";
 import { usePathname } from "next/navigation";
 
 type ReadingStatusDropdownProps = {
@@ -251,7 +251,7 @@ export default function ReadingStatusDropdown({
                           ? WantToReadStatusIcon.src
                           : AbandonedStatusIcon.src
                       }
-                      className="h-8 w-8 filter invert"
+                      className="h-8 w-8"
                     />
                     {item.label}
                     </Button>
