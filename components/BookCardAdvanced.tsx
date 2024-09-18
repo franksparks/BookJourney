@@ -1,14 +1,15 @@
 import { useDbUser } from "@/app/context/db-user-context";
 import { capitalizeFirstLetter } from "@/lib/capitalize";
+import { getResponsiveValues } from "@/lib/utils";
 import { Book, DbBook } from "@/models/book";
 import { Tooltip } from "@mui/material";
+import { TrashIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import BookNavigationWrapper from "./BookNavigationWrapper";
 import ReadingStatusDropdown from "./ReadingStatusDropdown";
-import { TrashIcon } from "@radix-ui/react-icons";
-import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
-import { useEffect, useState } from "react";
 
 type bookCardAdvancedProps = {
   deleteVisible: boolean;
@@ -31,12 +32,8 @@ export default function BookCardAdvanced({
 
   useEffect(() => {
     const handleResize = () => {
-      const height = window.innerHeight;
-      if (height > 1000) {
-        setImageSize("large");
-      } else {
-        setImageSize("small");
-      }
+      const { imageSize } = getResponsiveValues();
+      setImageSize(imageSize);
     };
 
     handleResize();
