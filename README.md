@@ -37,7 +37,7 @@ Detailed model via [Prismaliser](https://prismaliser.app/)
 
 Steps to run the project:
 
-1. ⁠⁠Clone this repository
+1. ⁠⁠Clone this repository.
 2. ⁠Install dependencies -> <code>bun install</code>
 3. ⁠Set up a .env file with credentials for:
    1. MongoDB
