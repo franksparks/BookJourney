@@ -100,37 +100,30 @@ export default function BookToListInjector({ book }: BookToListInjectorProps) {
   return (
     <div>
       {logged && (
-        <ul>
+        <>
           {bookLists && bookLists.length > 0 ? (
             <>
-              <p className="mt-2">
+              <p className="mt-2 text-sm">
                 Book stored on{" "}
                 {bookLists.length === 1 ? "this list" : "these lists"}:
               </p>
-
-              {bookLists.slice(0, 3).map((list: List, index) => (
-                <li className="flex justify-center mt-2" key={index}>
-                  {list.name}
-                </li>
-              ))}
-
+              <ul className="list-disc pl-5">
+                {bookLists.slice(0, 3).map((list: List, index) => (
+                  <li className="mt-2 text-sm" key={index}>
+                    {list.name}
+                  </li>
+                ))}
+              </ul>
               {bookLists.length > 3 && (
-                <li className="flex justify-center mt-2">
-                  and {bookLists.length - 3} more
-                </li>
+                <p className="text-sm text-center mt-2">
+                  and {bookLists.length - 3} more.
+                </p>
               )}
             </>
           ) : (
-            <p>Book not added to any list yet.</p>
+            <p className="mt-2 text-sm">Book not added to any list yet.</p>
           )}
-
-          {logged && loading && (
-            <>
-              {" "}
-              <Skeleton className="h-10 w-1/2" />
-            </>
-          )}
-        </ul>
+        </>
       )}
       <div className="flex justify-center mt-4">
         {dbUser === null ? (
