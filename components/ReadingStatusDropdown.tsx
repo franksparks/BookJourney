@@ -186,10 +186,11 @@ export default function ReadingStatusDropdown({
                 if (getSelectedLabel() === "Want to read")
                   handleDropdownClick(ReadStatus.WANT_TO_READ);
               }}
+              style={{ borderRadius: "6px 0px 0px 6px"}}
               className={ 'w-40 flex' + (
                 currentStatus
-                  ? "rounded-r-none bg-blue-300 hover:bg-blue-300 text-black cursor-not-allowed"
-                  : "rounded-r-none"
+                  ? "bg-blue-300 hover:bg-blue-300 text-black cursor-not-allowed"
+                  : ""
           )}
             >
               <img
@@ -221,7 +222,7 @@ export default function ReadingStatusDropdown({
               <DropdownMenuTrigger asChild>
                 <Button
                   disabled={!logged}
-                  className="rounded-r-none"
+                  className="rounded-l-none rounded-r-md"
                   variant={"dropdown"}
                 >
                   &#9660;
