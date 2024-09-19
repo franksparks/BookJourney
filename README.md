@@ -29,7 +29,7 @@ We are using [MongoDB](https://www.mongodb.com) as provider.
 
 ### Prisma schema
 
-Detailed model via [Prismaliser](https://prismaliser.app/)
+Detailed model via [Prismaliser](https://prismaliser.app/):
 
 <img src="./public/prismaliser.png"/>
 
