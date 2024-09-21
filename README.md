@@ -50,10 +50,22 @@ Steps to run the project:
 
 ### Screenshots
 
-Main screen
+- Main screen
+<img width="2128" alt="Screenshot 2024-09-21 at 15 11 41" src="https://github.com/user-attachments/assets/5db02d70-3a5d-4714-ab46-c4d53b87e2f3">
 
-Book details screen
+- Updating reading activity
+<img width="577" alt="Screenshot 2024-09-21 at 15 14 09" src="https://github.com/user-attachments/assets/c049305e-0c9b-4941-af68-a0b0c49a42f6">
 
-Advanced Search screen
+- Book details screen
+<img width="2122" alt="Screenshot 2024-09-21 at 15 11 59" src="https://github.com/user-attachments/assets/05fbb8b3-8780-4828-8192-db8fb20d69f3">
 
-User lists screen
+- Advanced Search screen
+<img width="2124" alt="Screenshot 2024-09-21 at 15 12 34" src="https://github.com/user-attachments/assets/a113b123-9de5-4258-ad49-06bcc6aa082c">
+
+- User lists screen
+<img width="2127" alt="Screenshot 2024-09-21 at 15 12 59" src="https://github.com/user-attachments/assets/5dbf5e12-6c10-4253-b6b5-090546d99c03">
+
+- Completed Reading Challenge (congratulations!)
+<img width="2120" alt="Screenshot 2024-09-21 at 15 13 39" src="https://github.com/user-attachments/assets/03e3e023-3e9e-4a8f-89ca-a89c4c442b4e">
+
+  
