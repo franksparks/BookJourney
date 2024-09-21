@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import PreviewSearchBox from "./PreviewSearchBox";
 import { Button } from "./ui/button";
+import Image from "next/image";
 
 export default function Header() {
   const { user } = useUser();
@@ -43,13 +44,18 @@ export default function Header() {
           onClick={() => router.push("/")}
           className="flex items-center gap-x-1 cursor-pointer mt-2"
         >
+          <Image
+            src={"/logo.png"}
+            alt="logo"
+            width={140}
+            height={1000}
+            className="-mt-2"
+          />
           <h1 className="text-white text-4xl font-thin">book</h1>
-          <h1 className="text-orange-500 text-4xl tracking-wide">
-            journey
-          </h1>
+          <h1 className="text-orange-500 text-4xl tracking-wide">journey</h1>
         </div>
         <PreviewSearchBox />
-        <div style={{ minWidth: "150px" }}>
+        <div style={{ minWidth: "150px" }} className="mr-24">
           <ClerkLoading>
             <Loader className="h-6 w-6 text-white animate-spin" />
           </ClerkLoading>

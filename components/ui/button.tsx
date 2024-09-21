@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-sky-600 text-primary-foreground hover:bg-orange-600 transition duration-500 ease-out rounded-full border-orange-500 border-2 hover:border-sky-700",
+          "bg-sky-600 text-primary-foreground hover:bg-orange-600 transition duration-500 ease-out rounded-full border-orange-500 border-2 hover:border-sky-700 shadow-md",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90 rounded-full border-orange-500 bg-red-600 hover:bg-red-800 border-2",
         dropdown:

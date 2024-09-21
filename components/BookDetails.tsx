@@ -31,9 +31,7 @@ type BookDetailsProps = {
 
 export default function BookDetails({ book }: BookDetailsProps) {
   const { dbUser } = useDbUser();
-  const [numericBookRating, setNumericBookRating] = useState<
-    number | null
-  >(0);
+  const [numericBookRating, setNumericBookRating] = useState<number | null>(0);
   const [bookInDb, setBookInDb] = useState<DbBook | null>(null);
   const [bookRating, setBookRating] = useState<Rating | null>(null);
   const [bookReview, setBookReview] = useState<Review | null>(null);
@@ -144,9 +142,9 @@ export default function BookDetails({ book }: BookDetailsProps) {
   }, [numericBookRating, bookInDb]);
 
   return (
-    <div className="flex justify-center m-2 ml-8 mr-8 bg-sky-50 shadow-lg shadow-sky-600 p-4 rounded-3xl">
+    <div className="flex justify-center m-2 ml-8 mr-8 bg-sky-50 shadow-lg shadow-sky-600 p-4 rounded-3xl max-h-full">
       <div className="flex justify-center basis-1/4">
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center mt-8">
           <Image
             src={book.cover || "/default_cover.jpg"}
             alt="cover"
@@ -173,9 +171,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
             />
           </div>
           {!bookRating && (
-            <div className="flex justify-center mt-2">
-              {"Rate this book"}
-            </div>
+            <div className="flex justify-center mt-2">{"Rate this book"}</div>
           )}
           {bookRating && (
             <div className="flex justify-center mt-2">
@@ -188,7 +184,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
               />
             </div>
           )}
-          <div className="flex justify-center mt-2">
+          <div className="flex justify-center mt-2 mb-4">
             <BookToListInjector book={book} />
           </div>
         </div>
@@ -247,12 +243,7 @@ export default function BookDetails({ book }: BookDetailsProps) {
           {book.pages !== 0 && (
             <div className="flex items-center gap-2">
               <div className="font-semibold">Pages</div>
-              <Image
-                src={"/pages.svg"}
-                alt="pages"
-                width={40}
-                height={40}
-              />
+              <Image src={"/pages.svg"} alt="pages" width={40} height={40} />
               <div>{book.pages}</div>
             </div>
           )}
