@@ -18,6 +18,11 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Tooltip } from "@mui/material";
+import ReadStatusIcon from "../../assets/icons/read.svg";
+import ReadingStatusIcon from "../../assets/icons/reading.svg";
+import WantToReadStatusIcon from "../../assets/icons/pending.svg";
+import AbandonedStatusIcon from "../../assets/icons/cancel.svg";
+import BookPile from "../../assets/icons/book.svg";
 
 interface ListsCardProps {
   lists: List[];
@@ -41,9 +46,7 @@ export default function ListsCard({
   const [newListName, setNewListName] = useState<string>("");
   const [editingListId, setEditingListId] = useState<string | null>(null);
   const [editingListName, setEditingListName] = useState<string>("");
-  const [deletingListId, setDeletingListId] = useState<string | null>(
-    null
-  );
+  const [deletingListId, setDeletingListId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -65,9 +68,7 @@ export default function ListsCard({
 
   const getLists = async () => {
     const listsResult = await actionGetListsBookCountByUserId(dbUser!.id);
-    const statusResult = await actionGetBookStatusCountByUserId(
-      dbUser!.id
-    );
+    const statusResult = await actionGetBookStatusCountByUserId(dbUser!.id);
     const allLists: List[] = [];
     for (const bookStatus of statusResult) {
       allLists.push({
@@ -128,10 +129,10 @@ export default function ListsCard({
       setErrorMessage("List already exists");
       return;
     }
-    await actionInsertList(newList, dbUser!.id);
+    const result = await actionInsertList(newList, dbUser!.id);
     setNewListName("");
     setShowInput(false);
-    getLists();
+    setLists([...lists, result]);
   };
 
   const handleSelectList = (list: List) => {
@@ -156,10 +157,17 @@ export default function ListsCard({
       setErrorMessage("List already exists");
       return;
     }
-    await actionUpdateList(editingListId!, editingListName);
+    const result = await actionUpdateList(editingListId!, editingListName);
+    if (selectedList?.id === editingListId) {
+      setSelectedList(result);
+    }
     setEditingListId(null);
     setEditingListName("");
-    getLists();
+    const actual = lists.find((list) => list.id === editingListId);
+    if (actual) {
+      result.book_count = actual?.book_count;
+    }
+    setLists(lists.map((list) => (list.id === editingListId ? result : list)));
   };
 
   const handleCancelEdit = () => {
@@ -174,8 +182,11 @@ export default function ListsCard({
   const confirmDeleteList = async () => {
     if (deletingListId) {
       await actionDeleteList(deletingListId);
+      setLists(lists.filter((list) => list.id !== deletingListId));
+      if (selectedList?.id === deletingListId) {
+        setSelectedList(lists[0]);
+      }
       setDeletingListId(null);
-      getLists();
     }
   };
 
@@ -219,9 +230,7 @@ export default function ListsCard({
                 <div
                   className={`text-white items-center mb-4 ${
                     pathname === "/" &&
-                    !Object.values(ReadStatus).includes(
-                      list.id as ReadStatus
-                    )
+                    !Object.values(ReadStatus).includes(list.id as ReadStatus)
                       ? "hidden"
                       : "flex"
                   }`}
@@ -257,10 +266,29 @@ export default function ListsCard({
                     </div>
                   ) : (
                     <>
-                      <Tooltip
-                        title={`${list.name} - (${list.book_count ?? 0})`}
+                    <Tooltip
+                        title={<text>{list.name} - ({list.book_count ?? 0})</text>}
                         placement="top"
+                        className="flex mr-auto"
                       >
+                        <>
+                    {Object.values(ReadStatus).includes(
+                          list.id as ReadStatus
+                        ) ? (
+                          <img
+                            src={
+                              list.id === ReadStatus.READ
+                                ? ReadStatusIcon.src
+                                : list.id === ReadStatus.READING
+                                ? ReadingStatusIcon.src
+                                : list.id === ReadStatus.WANT_TO_READ
+                                ? WantToReadStatusIcon.src
+                                : AbandonedStatusIcon.src
+                            }
+                            className="h-6 w-6 mr-2"
+                          />
+                        ) : <img src={BookPile.src} className="h-6 w-6 mr-2" />}
+                      
                         <li
                           onClick={() => handleSelectList(list)}
                           className={`truncate w-full transition transform hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:transform-none hover:cursor-pointer ${
@@ -269,6 +297,7 @@ export default function ListsCard({
                         >
                           {list.name} - ({list.book_count ?? 0})
                         </li>
+                        </>
                       </Tooltip>
                       {!Object.values(ReadStatus).includes(
                         list.id as ReadStatus

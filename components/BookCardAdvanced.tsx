@@ -120,7 +120,7 @@ export default function BookCardAdvanced({
           </>
         )}
 
-        <div className="flex z-50">
+        <div className="flex">
           <ReadingStatusDropdown
             book={book}
             logged={logged}
