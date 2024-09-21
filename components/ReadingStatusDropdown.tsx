@@ -197,7 +197,7 @@ export default function ReadingStatusDropdown({
                       src={
                         returnIcon()
                       }
-                      className="h-6 w-6 mr-1 filter invert"
+                      className={`h-6 w-6 mr-1 ${!currentStatus ? '' : 'filter invert'}`}
                     />
               {getSelectedLabel()}
             </Button>
