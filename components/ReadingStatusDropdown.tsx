@@ -187,7 +187,7 @@ export default function ReadingStatusDropdown({
                   handleDropdownClick(ReadStatus.WANT_TO_READ);
               }}
               style={{ borderRadius: "6px 0px 0px 6px"}}
-              className={ 'w-40 flex' + (
+              className={ 'w-40 flex mr-1 ' + (
                 currentStatus
                   ? "bg-blue-300 hover:bg-blue-300 text-black cursor-not-allowed"
                   : ""
