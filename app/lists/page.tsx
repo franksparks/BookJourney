@@ -9,8 +9,8 @@ export default function Page() {
   const [lists, setLists] = useState<List[]>([]);
 
   return (
-    <main className="p-2 bg-sky-50 h-full">
-      <div className="flex justify-center p-4 bg-sky-50 h-full">
+    <main className="p-2 bg-transparent h-full">
+      <div className="flex justify-center p-4 bg-transparent h-full">
         <div className="w-1/3 p-2">
           <ListsCard
             lists={lists}

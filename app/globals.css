@@ -75,7 +75,6 @@
   }
 }
 
-/* Ensure the particles cover the entire screen */
 .particles-background {
   position: fixed;
   top: 0;
@@ -83,12 +82,11 @@
   width: 100%;
   height: 100%;
   z-index: 0;
-  pointer-events: none; /* This makes sure particles don’t block interactions */
+  pointer-events: none;
 }
 
-/* Make sure the main tag content is above the background */
 main {
   position: relative;
   z-index: 1;
-  background: transparent; /* Ensure transparency so particles are visible */
+  background: transparent !important;
 }

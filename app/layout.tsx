@@ -135,7 +135,6 @@ import { useCallback } from "react";
 import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
 import type { Container, Engine } from "tsparticles-engine";
-
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({
@@ -143,14 +142,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Particles initialization
+
   const particlesInit = useCallback(async (engine: Engine) => {
     await loadSlim(engine);
   }, []);
 
-  const particlesLoaded = useCallback(async (container: Container | undefined) => {
-    await console.log(container);
-  }, []);
+  const particlesLoaded = useCallback(
+    async (container: Container | undefined) => {
+      await console.log(container);
+    },
+    []
+  );
 
   return (
     <ClerkProvider>
@@ -167,7 +169,7 @@ export default function RootLayout({
                 options={{
                   background: {
                     color: {
-                      value: "#0d47a1",
+                      value: "#e0f2fe",
                     },
                   },
                   fpsLimit: 120,
@@ -185,7 +187,7 @@ export default function RootLayout({
                     },
                     modes: {
                       push: {
-                        quantity: 4,
+                        quantity: 2,
                       },
                       repulse: {
                         distance: 200,
@@ -204,6 +206,16 @@ export default function RootLayout({
                       opacity: 0.5,
                       width: 1,
                     },
+                    number: {
+                      density: {
+                        enable: true,
+                        area: 800,
+                      },
+                      value: 20,
+                    },
+                    opacity: {
+                      value: 0.5,
+                    },
                     move: {
                       direction: "none",
                       enable: true,
@@ -211,33 +223,30 @@ export default function RootLayout({
                         default: "bounce",
                       },
                       random: false,
-                      speed: 6,
+                      speed: 2,
                       straight: false,
                     },
-                    number: {
-                      density: {
-                        enable: true,
-                        area: 800,
-                      },
-                      value: 80,
-                    },
-                    opacity: {
-                      value: 0.5,
-                    },
                     shape: {
-                      type: "circle",
+                      type: "image",
+                      image: [
+                        { src: '/orange-book.png', width: 40, height: 40 },
+                        { src: '/blue-book.png', width: 40, height: 40 }
+                      ],
                     },
                     size: {
-                      value: { min: 1, max: 5 },
+                      value: { min: 20, max: 40 },
                     },
                   },
                   detectRetina: true,
                 }}
               />
+
               {/* Content */}
               <div className="relative z-10 flex flex-col h-screen">
                 <Header />
-                <main>{children}</main>
+                <main style={{ height: "calc(100% - 130px)", zIndex: 10 }}>
+                  {children}
+                </main>
                 <Toaster />
                 <Footer />
               </div>
