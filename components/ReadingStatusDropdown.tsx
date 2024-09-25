@@ -24,6 +24,10 @@ import { Button } from "./ui/button";
 import { Skeleton } from "./ui/skeleton";
 import { useToast } from "./ui/use-toast";
 import { Tooltip } from "@mui/material";
+import ReadStatusIcon from "../assets/icons/read.svg";
+import ReadingStatusIcon from "../assets/icons/reading.svg";
+import WantToReadStatusIcon from "../assets/icons/pending.svg";
+import AbandonedStatusIcon from "../assets/icons/cancel.svg";
 import { usePathname } from "next/navigation";
 
 type ReadingStatusDropdownProps = {
@@ -145,9 +149,22 @@ export default function ReadingStatusDropdown({
     return <Skeleton className="h-10 w-1/2" />;
   }
 
+  const returnIcon = () => {
+    if (currentStatus?.status === ReadStatus.READ) {
+      return ReadStatusIcon.src;
+    } else if (currentStatus?.status === ReadStatus.READING) {
+      return ReadingStatusIcon.src;
+    } else if (currentStatus?.status === ReadStatus.ABANDONED) {
+      return AbandonedStatusIcon.src;
+    } else if (currentStatus?.status === ReadStatus.WANT_TO_READ) {
+      return WantToReadStatusIcon.src;
+    }
+    return ReadStatusIcon.src;
+  };
+
   return (
     <>
-      <div className="w-full">
+      <div className="w-full inline-flex">
         <DropdownMenu>
           {dbUser === null ? (
             <Tooltip title="Login to perform this action." arrow>
@@ -169,12 +186,19 @@ export default function ReadingStatusDropdown({
                 if (getSelectedLabel() === "Want to read")
                   handleDropdownClick(ReadStatus.WANT_TO_READ);
               }}
-              className={
+              style={{ borderRadius: "6px 0px 0px 6px"}}
+              className={ 'w-40 flex mr-1 ' + (
                 currentStatus
-                  ? "rounded-r-none bg-blue-300 hover:bg-blue-300 text-black cursor-not-allowed"
-                  : "rounded-r-none"
-              }
+                  ? "bg-blue-300 hover:bg-blue-300 text-black cursor-not-allowed"
+                  : ""
+          )}
             >
+              <img
+                      src={
+                        returnIcon()
+                      }
+                      className={`h-6 w-6 mr-1 ${!currentStatus ? '' : 'filter invert'}`}
+                    />
               {getSelectedLabel()}
             </Button>
           )}
@@ -198,26 +222,40 @@ export default function ReadingStatusDropdown({
               <DropdownMenuTrigger asChild>
                 <Button
                   disabled={!logged}
-                  className="rounded-l-none"
+                  className="rounded-l-none rounded-r-md"
                   variant={"dropdown"}
                 >
                   &#9660;
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="flex flex-col">
+              <DropdownMenuContent className="flex flex-col z-10" style={{ marginLeft: '-160px', width: '210px'}}>
                 {getDropdownItems().map((item: any, index: number) => (
                   <DropdownMenuItem
                     key={index}
-                    className={
+                    className={`w-full flex ${
                       index === 0 && String(currentStatus) === item.value
                         ? "rounded-l-none bg-blue-200"
                         : "rounded-l-none"
-                    }
+                    }`}
                     onClick={() => {
                       handleDropdownClick(item.value);
                     }}
                   >
-                    <Button>{item.label}</Button>
+                    <Button className="w-full">
+                    <img
+                      src={
+                        item.value === ReadStatus.READ
+                          ? ReadStatusIcon.src
+                          : item.value === ReadStatus.READING
+                          ? ReadingStatusIcon.src
+                          : item.value === ReadStatus.WANT_TO_READ
+                          ? WantToReadStatusIcon.src
+                          : AbandonedStatusIcon.src
+                      }
+                      className="h-6 w-6 mr-1"
+                    />
+                    {item.label}
+                    </Button>
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
